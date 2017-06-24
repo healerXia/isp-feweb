@@ -75,53 +75,13 @@
                <span class="fRight MR20" v-if="showMes.collapse1">收起&nbsp;<Icon type="chevron-up"></Icon></span>
                 <span class="fRight MR20" v-else="showMes.collapse1">展开&nbsp;<Icon type="chevron-down"></Icon></span>
               <div class="tableBox" slot="content">
-                <div class="nextTitle MB15">
-                  2017-07
-                  <ul class="indentify">
-                    <li><span class="square notUse"></span><span>不可用</span></li>
-                    <li><span class="square hadUse"></span><span>已使用</span></li>
-                    <li><span class="square hadOrder"></span><span>已预订</span></li>
-                  </ul>    
-                </div>  
-                <Schedule :tableData="tableData"></Schedule>  
-                <div class="price">
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
-                </div>     
+                <Schedule :tableData="tableData"></Schedule>                    
               </div>           
-              <div class="tableBox" slot="content">
-                <div class="nextTitle MB15">
-                  2017-08
-                  <ul class="indentify">
-                    <li><span class="square notUse"></span><span>不可用</span></li>
-                    <li><span class="square hadUse"></span><span>已使用</span></li>
-                    <li><span class="square hadOrder"></span><span>已预订</span></li>
-                  </ul>
-                </div>
-                
-                <Schedule :tableData="tableData"></Schedule>      
-                <div class="price">
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
-                </div>    
+              <div class="tableBox" slot="content">                
+                <Schedule :tableData="tableData"></Schedule>        
               </div>     
-              <div class="tableBox" slot="content">
-                <div class="nextTitle MB15">
-                  2017-09
-                  <ul class="indentify">
-                    <li><span class="square notUse"></span><span>不可用</span></li>
-                    <li><span class="square hadUse"></span><span>已使用</span></li>
-                    <li><span class="square hadOrder"></span><span>已预订</span></li>
-                  </ul>
-                </div>
-                <Schedule :tableData="tableData"></Schedule>  
-                <div class="price">
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
-                </div>        
+              <div class="tableBox" slot="content">        
+                <Schedule :tableData="tableData"></Schedule>         
               </div>
               <div class="totalPrice" slot="content">
                   <span>购买净总价：3000元</span>
@@ -292,7 +252,42 @@ export default {
             },
           ]
         },
-        tableDatas:[],
+        tableDatas:[
+          {
+            yearMonth:201706,
+            data:[
+              {
+                "yearMonth": 201706,
+                "adPosId": 2,
+                "adName": "易车网/易车网车型对比栏目/全屏",
+                "price": 8000,
+                "useStyle": 4001,
+                "priceUnit": 0,
+                "brandId": 20001,
+                "areaId": 10,
+                "adCityId": 201,                
+                "listNumber": [
+                   "1",1,1,1,1,
+                ]
+              },
+              {
+                "yearMonth": 201706,
+                "adPosId": 2,
+                "adName": "易车网/易车网车型对比栏目/全屏",
+                "price": 8000,
+                "useStyle": 4001,
+                "priceUnit": 0,
+                "brandId": 20001,
+                "areaId": 10,
+                "adCityId": 201,                
+                "listNumber": [
+                   "1",1,1,1,1,
+                ]
+              }
+            ]            
+          }
+        ],
+
         adverMes:{//广告信息
           adOrderCode:"AO12132dfh2323",//订单编号
           beginTime:"2017-01-01",//开始时间
