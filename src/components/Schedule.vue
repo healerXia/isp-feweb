@@ -1,5 +1,14 @@
 <!-- 项目预算的组件-->
 <template lang="html">
+<div>
+        <div class="nextTitle MB15">
+                  2017-09
+                  <ul class="indentify">
+                    <li><span class="square notUse"></span><span>不可用</span></li>
+                    <li><span class="square hadUse"></span><span>已使用</span></li>
+                    <li><span class="square hadOrder"></span><span>已预订</span></li>
+                  </ul>
+                </div>
         <table class="comTale">
             <thead>
                 <tr>
@@ -21,6 +30,12 @@
                 </tr>
             </tbody>
         </table>
+         <div class="price">
+          <span>购买净总价：3000元</span>
+          <span>购买净总价：3000元</span>
+          <span>购买净总价：3000元</span>
+        </div> 
+        </div>
 </template>
 <script>
     export default {

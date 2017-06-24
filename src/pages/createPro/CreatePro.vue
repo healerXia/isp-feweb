@@ -243,11 +243,11 @@
               showSerial:false,//投放车型
               showPromotionWay:true,//是否显示投放方式
               dateErrShow:false,//投放周期错误信息是否显示
-              loading1:true,//代理公司的loading
+              loading1:false,//代理公司的loading
               loading2:true,//投放品牌的loading
               loading3:true,//投放车型的loading
               loading4:true,//责任销售的loading
-              loading5:true,//客户的loading
+              loading5:false,//客户的loading
             },
             mulCheck:{//多选下拉
               serial:[],
@@ -456,24 +456,8 @@
           this.$http.get(config.urlList.getCustomer).then((res) => {
             if(res.data.errorCode===0){
               this.custOptionT=res.data.result.resultList;
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
-            }).catch((err) => {
-          })
-          this.$http.get(config.urlList.getCustomer+'?custId='+custid).then((res) => {
-            if(res.data.errorCode===0){
-              this.custOption=res.data.result.resultList.slice(0,10)
-              this.judge.loading5=false
-              setTimeout(()=>{
-                if(custid!=""){
-                  this.formValidate.custId=custid
-                }
-              },0)
+              this.custOption=this.custOptionT.slice(0,10)
+              this.loading5=false
             }
             else {
               this.$Modal.info({
@@ -487,6 +471,8 @@
           this.$http.get(config.urlList.getagentCust).then((res) => {
             if(res.data.errorCode===0){
               this.agentOptionT=res.data.result;
+              this.agentOption=this.agentOptionT.slice(0,10)
+              this.loading1=false
             }
             else {
               this.$Modal.info({
@@ -496,24 +482,47 @@
             }
             }).catch((err) => {
           })
-          this.$http.get(config.urlList.getagentCust+"?id="+agentid).then((res) => {
-            if(res.data.errorCode===0){
-              this.agentOption=res.data.result.slice(0,10)
-              this.judge.loading1=false
-              setTimeout(()=>{
-                if(agentid!=""){
-                  this.singleCheck.agentId=parseInt(agentid)//代理公司
-                }
-              },0)
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
-            }).catch((err) => {
-          })
+          if(custid!=""){
+            this.$http.get(config.urlList.getCustomer+'?custId='+custid).then((res) => {
+              if(res.data.errorCode===0){
+                this.custOption=res.data.result.resultList.slice(0,10)
+                this.judge.loading5=false
+                setTimeout(()=>{
+                  if(custid!=""){
+                    this.formValidate.custId=custid
+                  }
+                },0)
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+              }).catch((err) => {
+            })
+          }
+          if(agentid!=""){
+              this.$http.get(config.urlList.getagentCust+"?id="+agentid).then((res) => {
+              if(res.data.errorCode===0){
+                this.agentOption=res.data.result.slice(0,10)
+                this.judge.loading1=false
+                setTimeout(()=>{
+                  if(agentid!=""){
+                    this.singleCheck.agentId=parseInt(agentid)//代理公司
+                  }
+                },0)
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+              }).catch((err) => {
+            })
+          }
+         
         },
         disBegin (date) {//开始时间
           return date && date.valueOf() > new Date(this.searchData.createTime1)
