@@ -471,6 +471,12 @@ export default {
                        }
 
                        for (let k = 0; k < 31; k++ ) {
+                           if (dayStates[k] == 'SKU_STATUS_LOCKED' || dayStates[k] == 'SKU_STATUS_SALED' || dayStates[k] == 'SKU_STATUS_RUNNING') {
+                               dayStates[k] = '2'
+                           }
+                           if (dayStates[k] == 'SKU_STATUS_NONE' || dayStates[k] =='SKU_STATUS_DELETE' || dayStates[k] == 'SKU_STATUS_IDLE') {
+                               dayStates[k]  = '1';
+                           }
                            if (!dayStates[k]) {
                                dayStates[k]  = '3';
                            }
