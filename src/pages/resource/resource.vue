@@ -691,16 +691,18 @@ export default {
                 pageSize: this.searchInfo.pageSize,
                 // 媒体名称id
                 mediaId: this.searchInfo.mediaId,
+                // 页面名称
+                //channelId: this.searchInfo.pageName,
                 // 页面类型
-                labelTypeId:  this.searchInfo.labelTypeId,
+                adTagId:  this.searchInfo.labelTypeId,
                 // 广告类型
-                placeTypeList: this.searchInfo.Type
+                //placeTypeList: this.searchInfo.Type,
                 // 投放车型
-                //modelIdList: this.searchInfo.serialId,
-                // 投放地区
-                //cityIdList: this.searchInfo.cityId,
-                // 投放品牌
-                //brandIdList: this.searchInfo.brandId
+                // modelIdList: this.searchInfo.serialId,
+                // // 投放地区
+                // cityIdList: this.searchInfo.cityId,
+                // // 投放品牌
+                // brandIdList: this.searchInfo.brandId
 
             }).then((res) => {
                 if (res.data.errorCode == 0) {
