@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="save">
-                <Button type="primary" @click='save'>保存方案</Button>
+                <Button type="primary" @click='save' :disabled='saveStatus'>保存方案</Button>
                 <Button type="primary" @click='generate'>生成价格</Button>
             </div>
         </div>
@@ -64,6 +64,8 @@ import DateRow from 'component/DateRow'
 export default {
     data() {
         return {
+            adOrderCode: '',
+            saveStatus: false,
             proMess: {},
             priceList:[],
             // 元数据
@@ -478,6 +480,7 @@ export default {
         },
         // 保存方案
         save() {
+            this.saveStatus = true;
             let self = this;
             this.initSubmitData();
             let str = JSON.stringify(this.submitList);
@@ -501,6 +504,7 @@ export default {
                         //      self.$router.push({path: 'orderList', query: {id: self.proMess.id}});
                         // }
                     });
+                    this.adOrderCode = res.data.result;
                     window.localStorage.setItem('adOrderCode', res.data.result);
                 }
                 else {
@@ -508,9 +512,11 @@ export default {
                         title: '提示',
                         content: res.data.errorMsg
                     });
+                    this.saveStatus = false;
                 }
             }).catch((err) => {
-                console.log(err)
+                console.log(err);
+                this.saveStatus = false;
             })
         },
         // 生成价格
@@ -534,7 +540,15 @@ export default {
            let str = JSON.stringify(this.submitList);
            let datas = JSON.parse(str);
            let self = this;
-           this.$http.post('/isp-kongming/adorder/insert', {
+           let url = '';
+           if (this.adOrderCode) {
+               url = '/isp-kongming/adorder/orderUpdate';
+           }
+           else {
+               url = '/isp-kongming/adorder/insert';
+           }
+           this.$http.post(url, {
+                "action": 0,
                 "ProjectId": this.proMess.id,
                 "ProjectName": this.proMess.projectName,
                 "detailList": datas

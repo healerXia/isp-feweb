@@ -475,6 +475,7 @@ export default {
                                dayStates[k]  = '3';
                            }
                        }
+
                        monthData.kprice = (total/30).toFixed(1);
                        monthData.state = dayStates.join(',');
                        monthData.skuIdList = skuIdList;
