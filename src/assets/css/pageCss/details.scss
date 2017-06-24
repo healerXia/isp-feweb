@@ -27,32 +27,7 @@
 			}
 		}
 		
-		.indentify{
-			float: right;
-			li{
-				float: left;
-				height: 20px;
-				line-height: 20px;			
-				span{
-					vertical-align: middle;
-					display: inline-block;
-					height: 30px;
-					line-height: 30px;
-					color: #7B8497;
-					font-size: 12px;
-					padding: 0
-				}
-				.square{
-					border-radius: 2px;
-					margin:0 20px;
-					width: 18px;
-					height:18px;
-				}
-				.notUse{background-color: #F5F6F7}
-				.hadUse{background-color: #FEECFF}
-				.hadOrder{background-color: #ECF4FF }
-			}
-		}
+		
 		.totalPrice{
 			text-align: right;
 			width: 100%;
@@ -71,7 +46,7 @@
 			}
 			.chars{width: 100%;height: 400px}
 		}
-		.ivu-collapse{
+		.ivu-collapse{//收缩条的样式
 			margin-bottom: 15px;
 			border: none;
 			background-color: #F9FAFC ;
@@ -81,11 +56,15 @@
 					line-height: 56px;
 					font-size: 14px;
 					color: #333;
+					padding-left: 20px;
     				.ivu-icon-arrow-right-b{
     					display: none;
     				}
 				}
 			}
+		}
+		.ivu-collapse-content{
+			padding: 0
 		}
 		.hasNoOrder{
 			overflow: hidden;

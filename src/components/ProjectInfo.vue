@@ -20,7 +20,7 @@
             <div class="modul">
               <div class="nextTitle MB5 MT18">基本信息</div>
               <ul class="messShow">
-                <li><span>项目名称：</span><span>{{proMess.projectName}}</span></li>
+                <li><span>项目名称：</span><span class="liWid">{{proMess.projectName}}</span></li>
                 <li>
                   <span>项目预算：</span>
                   <span>
@@ -57,14 +57,14 @@
                 </li>
                 <li v-else-if="proMess.serialIds!=''">
                   <span>投放车型：</span>
-                  <span>
+                  <span class='liWid'>
                     {{proMess.serialNames}}
                     ({{proMess.brandNames}})
                   </span>                     
                 </li>
                 <li v-else-if="proMess.serialIds==''">
                   <span>投放品牌：</span>
-                  <span>{{proMess.brandNames}}</span>        
+                  <span class='liWid'>{{proMess.brandNames}}</span>        
                 </li>
                 <li>
                   <span>签署地区：</span>
@@ -126,11 +126,13 @@ export default {
                 width: 100%;
                 overflow: hidden;
                 display: block;
-                li{float: left;color: #7B8497;width: 500px;margin-bottom: 6px}
+                li{
+                  float: left;color: #7B8497;width: 500px;margin-bottom: 6px;
+                  span{display: inline-block;float: left}
+                  .liWid{width: 300px;}
+                }
             }
-            .liWid{
-                // li{width: 200px !important;}
-            }
+            
         }
 
     }
