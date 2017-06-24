@@ -1,0 +1,555 @@
+<template lang="html">
+  <div class="details">
+      <div class="conBox bgF9FAFC">
+        <ProjectInfo :proMess="projectData" :edit="true" :id="proid" v-on:edit="edit"></ProjectInfo>
+      </div>
+      <div class="conBox" v-if="noOrder">
+        <div class='hasNoOrder pL30'>
+            <div class="title MB20 MT15">
+              <h1 class="MR15">订单信息</h1>
+              <router-link 
+              :to="{path:'resource'}" >
+                新增订单         
+              </router-link>
+            </div>
+            <div class="contentBox">
+              <div class="orderMess">
+                 <div class="noorder">
+                    <div class="noOrderImg">
+                       <img src="../../assets/images/no_order.png" alt=""/>
+                       <p>暂无订单</p>
+                    </div>
+                 </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="conBox MT20" v-else>
+        <div class="title MB20 pL30">
+          <h1 class="MR15">订单信息</h1>
+          <router-link 
+          :to="{path:'resource',query: {id:$router.currentRoute.query.id}}"> 
+           编辑排期                
+          </router-link>
+          <router-link 
+          :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}"> 
+           编辑价格                
+          </router-link>
+        </div>
+        <div class="modul pL30">
+          <div class="nextTitle MB5">广告信息</div>
+          <ul class="messShow liWid fontColor">
+            <li>
+              <Row>
+                <Col span="8">订单编号：</Col>
+                <Col span="15">
+                  <span>{{adverMes.adOrderCode}}</span>
+                  <a href="">导出PDF</a>
+                </Col>
+              </Row>
+            </li>
+            <li class='ML40'>
+              <Row>
+                <Col span="8">投放周期：</Col>
+                <Col span="15">
+                  {{adverMes.beginDate}}至{{adverMes.endDate}}
+                </Col>
+              </Row>
+            </li>
+            <li class="ML40">
+              <Row>
+                <Col span="8">折扣信息：</Col>
+                <Col span="15">
+                  {{adverMes.discountMess}}折
+                </Col>
+              </Row>
+            </li>
+          </ul>
+          <ul class="messShow liWid MT5 fontColor">
+            <li>
+              <Row>
+                <Col span="8">成交价格：</Col>
+                <Col span="15"  class="colorRed">
+                  {{adverMes.sellAllPrice}}元
+                </Col>
+              </Row>             
+            </li>
+            <li class='ML40'>
+              <Row>
+                <Col span="8">订单状态：</Col>
+                <Col span="15">
+                  {{adverMes.orderStatus}}
+                </Col>
+              </Row>              
+            </li>
+            <li class="ML40">
+              <Row>
+                <Col span="8">创建时间：</Col>
+                <Col span="15">
+                  {{adverMes.createTime}}
+                </Col>
+              </Row>             
+            </li>
+          </ul>
+        </div>
+        <div class="MT15">
+          <Collapse v-model="showMes.value1"  @on-change="showCollapse1">           
+            <Panel name="1">
+              <span>广告位信息</span>
+               <span class="fRight MR20" v-if="showMes.collapse1">收起&nbsp;<Icon type="chevron-up"></Icon></span>
+                <span class="fRight MR20" v-else="showMes.collapse1">展开&nbsp;<Icon type="chevron-down"></Icon></span>
+              <div class="tableBox" slot="content">
+                <div class="nextTitle MB15">
+                  2017-07
+                  <ul class="indentify">
+                    <li><span class="square notUse"></span><span>不可用</span></li>
+                    <li><span class="square hadUse"></span><span>已使用</span></li>
+                    <li><span class="square hadOrder"></span><span>已预订</span></li>
+                  </ul>    
+                </div>  
+                <Schedule :tableData="tableData"></Schedule>  
+                <div class="price">
+                  <span>购买净总价：3000元</span>
+                  <span>购买净总价：3000元</span>
+                  <span>购买净总价：3000元</span>
+                </div>     
+              </div>           
+              <div class="tableBox" slot="content">
+                <div class="nextTitle MB15">
+                  2017-08
+                  <ul class="indentify">
+                    <li><span class="square notUse"></span><span>不可用</span></li>
+                    <li><span class="square hadUse"></span><span>已使用</span></li>
+                    <li><span class="square hadOrder"></span><span>已预订</span></li>
+                  </ul>
+                </div>
+                
+                <Schedule :tableData="tableData"></Schedule>      
+                <div class="price">
+                  <span>购买净总价：3000元</span>
+                  <span>购买净总价：3000元</span>
+                  <span>购买净总价：3000元</span>
+                </div>    
+              </div>     
+              <div class="tableBox" slot="content">
+                <div class="nextTitle MB15">
+                  2017-09
+                  <ul class="indentify">
+                    <li><span class="square notUse"></span><span>不可用</span></li>
+                    <li><span class="square hadUse"></span><span>已使用</span></li>
+                    <li><span class="square hadOrder"></span><span>已预订</span></li>
+                  </ul>
+                </div>
+                <Schedule :tableData="tableData"></Schedule>  
+                <div class="price">
+                  <span>购买净总价：3000元</span>
+                  <span>购买净总价：3000元</span>
+                  <span>购买净总价：3000元</span>
+                </div>        
+              </div>
+              <div class="totalPrice" slot="content">
+                  <span>购买净总价：3000元</span>
+                  <span>购买净总价：3000元</span>
+                  <span>购买净总价：3000元</span>
+                </div>   
+            </Panel>
+          </Collapse>
+        </div>
+        <div>
+          <Collapse v-model="showMes.value2"  @on-change="showCollapse2">
+            <Panel name="1">
+              <span>投放信息</span>
+               <span class="fRight MR20" v-if="showMes.collapse2">收起&nbsp;<Icon type="chevron-up"></Icon></span>
+                <span class="fRight MR20" v-else="showMes.collapse2">展开&nbsp;<Icon type="chevron-down"></Icon></span>
+              <div class="tableBox" slot="content">
+                <div class="nextTitle MB15">数据表</div>
+                <table>
+                  <thead>
+                    <tr>
+                      <td v-for="th in dataTable.thead">{{th}}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="tbody in dataTable.tbody">
+                      <td v-for="item in tbody">{{item}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tableBox" slot="content">
+                <div class="nextTitle MB15 MT15">统计图</div>
+                <div id="lineChart" class="chars">             
+                </div>
+              </div>
+            </Panel>
+          </Collapse>
+        </div>
+        <div>
+          <Collapse v-model="showMes.value3" @on-change="showCollapse3">
+             <Panel name="1">
+                <span>特批信息</span>
+                 <span class="fRight MR20" v-if="showMes.collapse3">收起&nbsp;<Icon type="chevron-up"></Icon></span>
+                <span class="fRight MR20" v-else="showMes.collapse3">展开&nbsp;<Icon type="chevron-down"></Icon></span>
+                <div class="tableBox" slot="content">
+                  <div class="nextTitle MB15">申请特批信息</div>
+                  <table>
+                     <thead>
+                      <tr>
+                        <td v-for="th in callSpecialMes.thead">{{th}}</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(tbody,index) in callSpecialMes.tbodyData">
+                        <td v-for="item in callSpecialMes.theadKey">{{tbody[item]}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="tableBox" slot="content">
+                  <div class="nextTitle MB15 MT15">特批审批记录</div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <td v-for="th in speApprovalRecord.thead">{{th}}</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(tbody,index) in speApprovalRecord.tbodyData">
+                        <td v-if="index<9">0{{index+1}}</td>
+                        <td v-else-if="index>=9">{{index+1}}</td>
+                        <td v-for="item in speApprovalRecord.theadKey">{{tbody[item]}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+             </Panel>
+          </Collapse>          
+        </div>
+        <div>
+          <Collapse v-model="showMes.value4" @on-change="showCollapse4">
+             <Panel name="1">
+                <span>审批信息</span>
+                <span class="fRight MR20" v-if="showMes.collapse4">收起&nbsp;<Icon type="chevron-up"></Icon></span>
+                <span class="fRight MR20" v-else="showMes.collapse4">展开&nbsp;<Icon type="chevron-down"></Icon></span>
+                <div class="tableBox" slot="content">
+                  <div class="nextTitle MB15">审批记录</div>
+                  <table>
+                    <thead>
+                      <tr>
+                        <td v-for="th in approvalRecord.thead">{{th}}</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(tbody,index) in approvalRecord.tbodyData">
+                        <td v-if="index<9">0{{index+1}}</td>
+                        <td v-else-if="index>=9">{{index+1}}</td>
+                        <td v-for="item in approvalRecord.theadKey">{{tbody[item]}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+             </Panel>
+          </Collapse>          
+        </div>
+      </div>
+  </div>
+</template>
+
+<script>
+import Schedule from 'components/Schedule';
+import ProjectInfo from 'component/ProjectInfo';
+import countCharts from 'component/countCharts';
+import config from './config.js';
+import echarts from 'echarts/lib/echarts';
+import legend from 'echarts/lib/component/legend';
+
+
+export default {
+    components:{
+        Schedule,
+        countCharts,
+        ProjectInfo
+    },
+    data() {
+      return {
+        noOrder:false,
+        showMes:{//收缩板
+          collapse1:false,
+          collapse2:false,
+          collapse3:false,
+          collapse4:false,
+          value1:"",
+          value2:"1",
+          value3:"",
+          value4:"",
+        },
+        projectData:{
+          id:0,
+          custName:"大众",//客户名称
+          agentCustName: "易车",//代理公司
+          projectName:'一汽大众',//项目名称
+          budgetAmount:"10000",//投放预算
+          beginDate:"2017-01-01",//开始时间
+          endDate:"2017-03-01",//结束时间
+          expectUvCount:"1000",//曝光预期
+          expectPvCount:"1000",//点击预期
+          putWayNames:"内部投放,外部投放",//投放方式
+          businessTypeName:"新车",//业务类型
+          promotionWayName:"推广方式",//推广方式
+          serialNames:"大切诺基,帕杰罗速跑",//投放车型
+          brandNames:"品牌投放",//投放品牌
+          provinceName:"北京市",
+          cityName:"北京",
+          areaName:"昌平区",
+          dutyUserName:"责任类型",
+          contractCode:"NO.00000"//关联合同号
+        },
+        thead:["广告位名称","用途","刊例价"],
+        theadkey:['adName','useStyle','price','listNumber'],  
+        tableData:{
+          tbody:[
+            {
+              adName:"易车网/易车网车型对比栏目/全屏",
+              useStyle:"销售",
+              price:" 3000",              
+              listNumber:[0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1]            
+            },
+          ]
+        },
+        tableDatas:[],
+        adverMes:{//广告信息
+          adOrderCode:"AO12132dfh2323",//订单编号
+          beginDate:"2017-01-01",//开始时间
+          endDate:"2017-09-09",//结束时间
+          createTime:"2017-09-09",//创建时间
+          orderStatus:"审核中",//订单状态,
+          sellAllPrice:"1000",//成交价格
+          discountMess:"0.5"//折扣信息
+        },
+        dataTable:{//数据表
+           thead:["总曝光量","总点击量","点击率"],
+           tbody:[
+             {
+                expectUvCount:"-",
+                clickCount:"-",
+                clickRate:"-"
+             }
+             
+           ]
+        },
+        callSpecialMes:{//申请特批信息
+          theadKey:['project','remark','attachment','applicant','appliyTime','status'],
+          thead:['项目','备注','附件','申请人','申请时间','状态'],
+          tbodyData:[
+            {
+              project:"-",
+              remark:"-",
+              attachment:"-",
+              applicant:"-",
+              appliyTime:"-",
+              status:"-"
+            }
+          ]
+        },
+        speApprovalRecord:{//特批审批记录
+          theadKey:['people','result','time','notes'],
+          thead:['序号','审批人','处理结果','审批时间','批注'],
+          tbodyData:[
+            {
+              people:"-",
+              result:"-",
+              time:"-",
+              notes:"-"
+            }
+          ]
+        },
+        approvalRecord:{//审批记录
+          theadKey:['people','result','time','notes'],
+          thead:['序号','审批人','处理结果','审批时间','批注'],
+          tbodyData:[
+            {
+              people:"-",
+              result:"-",
+              time:"-",
+              notes:"-"
+            }
+          ]
+        }
+      }
+    },
+    created() {
+      let customerTime = Date.parse(new Date());
+      let id = this.$router.currentRoute.query.id
+      //获取项目信息
+      this.$http.get(config.urlList.getInfo+"?id="+id).then((res) => {
+        if(res.data.errorCode === 0) {
+          this.projectData=res.data.result;
+          window.localStorage.setItem('projectData', JSON.stringify(this.projectData));//小阳哥写的
+        }
+        else {
+          this.$Modal.info({
+              title: '提示',
+              content: res.data.errorMsg
+          });
+        }
+        }).catch((err) => {
+      })
+
+      //获取排期信息
+      this.$http.get(config.urlList.getAdOrderDetailUnite+`?${customerTime}`).then((res) => {
+        if(res.data.errorCode === 0) {
+          this.tableData.tbody=res.data.result
+        }
+        else {
+          this.$Modal.info({
+              title: '提示',
+              content: res.data.errorMsg
+          });
+        }
+        }).catch((err) => {
+          console.log(err);
+      })
+
+      //获取订单中广告信息
+      this.$http.get(config.urlList.getOrder+"?projectId="+id).then((res)=>{
+        console.log(res)
+          if(res.data.result.resultList.length==0){
+            console.log(res)
+            // this.noOrder=true
+          }else{
+            this.showMes.value2=""
+            this.createCharts();
+            this.noOrder=false
+          }
+      }).catch((err) => {
+          console.log(err);
+      })     
+    },
+    methods: {
+      createCharts(){
+        var polar={
+          title: {
+              text: '111'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+          grid: {
+            top: '10%',
+            left: '3%',
+            right: '3%',
+            bottom:'3%',
+            containLabel: true
+          },
+          legend: {
+            right:"3%",
+            top:"top",
+            data:['曝光量','点击量'],
+          },
+          xAxis: {
+              boundaryGap: false,
+              data: ['00.00','02.00','04.00','06.00','08.00','10.00','12.00','14.00','16.00','18.00','20.00','22.00','24.00'],
+              axisLine:{
+                lineStyle:{
+                  color:'#7B8497'
+                }
+              },
+              axisTick:{
+                show:false,
+                alignWithLabel:true
+              },
+              axisLabel:{
+                textStyle:{
+                  color:'#7B8497',
+                }
+              },
+              splitLine:{
+                show:true,
+                lineStyle:{
+                  type:"dashed"
+                }
+              }
+          },
+          yAxis: {
+                  type: 'value',
+                  max: 1000,
+                  axisLine:{
+                    show:false
+                  },
+                  axisTick:{
+                    show:false
+                  },
+                  axisLabel:{
+                    margin:20,
+                    textStyle:{
+                      color:'#7B8497',
+                    }
+                  }
+           },
+          
+          series: [
+             {
+                name: '曝光量',
+                type: 'line',
+                lineStyle: {
+                    normal: {
+                        color: '#E36776'
+                    }
+                },
+                itemStyle:{
+                  normal:{
+                    color: '#E36776'
+                  }
+                },
+                symbolSize: 10,
+                // data: [5, 20, 36, 10, 10, 20,5, 20, 36, 10, 10, 20,20]
+            },
+            {
+                name: '点击量',
+                type: 'line',
+                lineStyle: {
+                    normal: {
+                        color: '#3D70FB'
+                    }
+                },
+                 itemStyle:{
+                  normal:{
+                    color: '#3D70FB'
+                  }
+                },
+                symbolSize: 10,
+                // data: [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
+            }
+          ]
+        }    
+        setTimeout(()=>{
+          var myChart = echarts.init(document.getElementById('lineChart'));
+          myChart.setOption(polar);
+        },0)  
+        setTimeout(()=>{
+          this.showMes.value2=""
+        },10) 
+      },
+      edit(){
+        let id=this.$router.currentRoute.query.id
+        this.$router.push({path:"createPro", query: {id: id}})
+      },
+      showCollapse1(){
+        this.showMes.collapse1=!this.showMes.collapse1
+      },
+      showCollapse2(){
+        this.showMes.collapse2=!this.showMes.collapse2
+      },
+      showCollapse3(){
+        this.showMes.collapse3=!this.showMes.collapse3
+      },
+      showCollapse4(){
+        this.showMes.collapse4=!this.showMes.collapse4
+      }
+    }
+}
+
+</script>
+<style lang='scss'>
+@import '../../assets/css/pageCss/details.scss';
+</style>

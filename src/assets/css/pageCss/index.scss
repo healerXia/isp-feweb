@@ -1,0 +1,7 @@
+@import "../variable";
+
+.index {
+    color: pink;
+    height: $fs_30;
+    background: url('#{$bgUrl}logo_color.png') no-repeat;
+}

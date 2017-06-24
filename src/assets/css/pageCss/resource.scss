@@ -1,0 +1,187 @@
+.resource-box {
+    width: 1126px;
+    padding-left: 20px;
+    min-height: 750px;
+
+    .labelList {
+        margin-right: 26px;
+        color: #333333;
+
+        &:hover {
+            color: #39f;
+        }
+
+        &.active {
+            color: #39f;
+        }
+    }
+
+
+
+    .searchBtn {
+        width: 100px;
+        height: 30px;
+        background: rgba(67,115,243,1);
+
+        &:hover {
+            background: rgba(67,115,243,.8);
+        }
+
+        &.active {
+            background: #ccc;
+        }
+    }
+
+    .jump {
+        width: 120px;
+        height: 40px;
+        background: rgba(67,115,243,1);
+
+        &:hover {
+            background: rgba(67,115,243,.8);
+        }
+    }
+
+    .line {
+        text-align: center;
+        width: 40px;
+    }
+
+    .query-ad {
+        font-size: 12px;
+        line-height: 28px;
+
+        .query-ad-title {
+            font-size: 16px;
+            color: #354052;
+            line-height: 22px;
+            padding-bottom: 32px;
+        }
+
+    }
+
+    .searchInput {
+        width: 400px;
+    }
+
+    .result {
+        padding-bottom: 20px;
+
+
+        &.bottom {
+            margin-top: 60px;
+        }
+
+        .title {
+            margin-bottom: 20px;
+            padding: 0 20px;
+            height: 40px;
+            line-height: 40px;
+            background: rgba(67,115,243, .1);
+        }
+
+        .paging {
+            margin-right: 60px;
+
+
+            .pages {
+                margin-right: 25px;
+            }
+
+            .prev {
+                margin-right: 14px;
+                &.active {
+                    color: #ccc;
+                }
+            }
+
+            .next {
+                &.active {
+                    color: #ccc;
+                }
+            }
+        }
+
+        .table-list {
+            .ad-name {
+                margin-right: 0;
+            }
+
+            .ad-listName {
+                display: inline-block;
+                max-width: 300px;
+                text-overflow: ellipsis;
+                white-space:nowrap;
+                overflow: hidden;
+            }
+
+            .item {
+                margin-bottom: 18px;
+            }
+
+            .item-title {
+                line-height: 34px;
+            }
+
+            .table-title {
+                background: rgba(249,249,249,1);
+            }
+
+            .dateTable {
+                width: 100%;
+                text-align: center;
+                font-size: 12px;
+                border: 1px solid #E9E9E9;
+
+                td {
+                    border: 1px solid #E9E9E9;
+                }
+
+
+                .dateTd {
+                    height: 28px;
+                    width: 18px;
+                    border: 1px solid #E9E9E9;
+                }
+
+                .delIco {
+                    width: 30px;
+                    font-size: 14px;
+                    color: #999;
+                    line-height: 26px;
+                }
+
+                .hasCheckTd {
+                    height: 28px;
+                    width: 20px;
+
+                    &.default {
+                        background: #f4f4f4;
+                    }
+
+                    &.select {
+                        background: rgba(67,115,243,.5);
+                    }
+
+                    &.hasSel {
+                        background: rgba(67,115,243,.2);
+                    }
+
+                }
+
+                .allMoth {
+                    width: 34px;
+                }
+
+                .monthBtn {
+                    margin-right: 10px;
+                    color: #ccc;
+
+                    &.active {
+                        color: #39f;
+                    }
+                }
+            }
+        }
+    }
+}

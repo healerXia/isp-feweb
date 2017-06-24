@@ -1,0 +1,136 @@
+.projectList{
+	$height: 38px;
+	$formWidth:280px;
+	.searchOrder{
+		background-color: #F9FAFC;
+		padding: 50px 0 50px 30px;
+		overflow: hidden;
+		ul{
+			width: 100%;
+			li{
+				width: 100%;
+				float: left;
+				div.inputBox{
+					float: left;
+					height: $height;
+					.formLabel{
+						height: $height;line-height: 32px;
+						display: inline-block;
+						float: left;text-align: right;
+						padding-right: 15px;
+						font-size: 12px;
+						color: #7B8497 
+					}
+					.space{
+					    width: 40px;
+					    display: inline-block;
+					    text-align: center;
+					    line-height:$height;
+					    height: $height;
+					    float: left;
+					}
+					input{height: $height;}
+					.btns{
+						display: block;
+						width: 120px !important;
+						height: $height !important;
+						color: #fff;
+						background: #3C6FFB ;
+						border-radius: 2px;
+						border:none;
+						line-height: 38px;
+						text-align: center;
+						cursor: pointer;
+					}
+				}
+			}
+		}
+		.ivu-input-wrapper{//改变input
+			display: inline-block;
+			width: $formWidth;
+			float: left;
+		}
+		.ivu-checkbox-group{//改变checkBox
+			line-height: $height
+		}
+		.ivu-select-selection{//改变select
+			width: $formWidth
+		}
+		.ivu-date-picker{float: left}
+		.ivu-date-picker-editor,.ivu-date-picker-editor input{
+			width: 221px
+		}
+	}
+	.listTable{
+		width: 100%;
+		padding: 30px;
+		.exportBtn{
+			border-radius: 2px;
+			padding-left: 12px;
+			box-sizing:border-box;
+			display: block;
+			width: 140px;
+			height: 32px;
+			border: 1px solid #B6BAC0;
+			line-height: 32px;
+			font-size: 14px;
+			color: #333;
+			margin-bottom: 15px;
+			float: left;
+			cursor: pointer;
+			span{
+				color: #B6BAC0; 
+				padding:0 14px;
+			}
+
+		}
+		.ivu-page{
+			.ivu-page-item{
+				border:none;
+				width: 28px;
+				height: 28px;
+				line-height: 26px
+			}
+			.ivu-page-options-elevator{height: 28px;margin-top: -2px}
+			.ivu-page-item-jump-next, .ivu-page-item-jump-prev, .ivu-page-next, .ivu-page-prev {
+				border:none;
+				width: 28px;
+				height: 28px;
+				line-height: 26px
+			}
+			.ivu-page-options-elevator input{
+				height: 28px !important;
+				width: 48px;
+			}
+			.ivu-select-selection .ivu-select-selected-value{
+				height: 28px;
+				line-height: 26px;
+			}
+			.ivu-select-single .ivu-select-selection {
+				height:28px;
+				.ivu-select-placeholder,.ivu-select-selected-value{line-height:28px !important}
+			}
+		}
+		table{
+			width: 100%;
+			border-collapse:collapse;
+			thead{
+				background: #F9FAFC;
+				tr{
+					td{color: #7B8497 }
+				}
+			}
+			tbody{
+				tr{
+					td{color: #333 }
+				}
+				tr:nth-of-type(even){
+					background-color: #F9FAFC;
+					box-shadow: 0 1px 0 0 #DEE1E5;
+					border-top:1px solid #DEE1E5;
+				}
+			}
+			td{font-size: 14px;height: 56px;padding-left: 30px}
+		}
+	}
+}

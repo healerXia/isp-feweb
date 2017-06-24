@@ -1,0 +1,130 @@
+.details{
+	.conBox{
+		width: 100%;
+		font-size: 12px;
+		color: #333;
+		.title{
+			h1{font-size: 14px;color: #354052;font-weight: normal;display: inline-block;}
+			span{font-size: 12px;color:#39f;cursor: pointer;}
+		}
+		.nextTitle{
+			font-size: 12px;
+			color: #333;
+			span{
+				color: #3D70FB;
+				padding-right: 15px
+			}
+		},
+		.modul{
+			width: 100%;
+			overflow: hidden;
+			.fontColor{li{color: #333 !important}}
+			.messShow{
+				width: 100%;
+				overflow: hidden;
+				display: block;
+				li{float: left;color: #7B8497}
+			}
+			.liWid{
+				li{width: 250px !important;}
+			}
+		}
+		
+		.indentify{
+			float: right;
+			li{
+				float: left;
+				height: 20px;
+				line-height: 20px;			
+				span{
+					vertical-align: middle;
+					display: inline-block;
+					height: 30px;
+					line-height: 30px;
+					color: #7B8497;
+					font-size: 12px;
+					padding: 0
+				}
+				.square{
+					border-radius: 2px;
+					margin:0 20px;
+					width: 18px;
+					height:18px;
+				}
+				.notUse{background-color: #F5F6F7}
+				.hadUse{background-color: #FEECFF}
+				.hadOrder{background-color: #ECF4FF }
+			}
+		}
+		.totalPrice{
+			text-align: right;
+			width: 100%;
+			padding-top: 10px;
+			font-size: 14px;
+			color: #666;
+			margin-top: 15px;
+			border-top: 1px solid #E9E9E9 ;
+		}
+		.tableBox{
+			overflow: hidden;
+			.price{
+				float: right;
+				margin-top: 10px;
+				color: #666
+			}
+			.chars{width: 100%;height: 400px}
+		}
+		.ivu-collapse{
+			margin-bottom: 15px;
+			border: none;
+			background-color: #F9FAFC ;
+			.ivu-collapse-item{
+				.ivu-collapse-header {
+					height: 56px;
+					line-height: 56px;
+					font-size: 14px;
+					color: #333;
+    				.ivu-icon-arrow-right-b{
+    					display: none;
+    				}
+				}
+			}
+		}
+		.hasNoOrder{
+			overflow: hidden;
+			.contentBox{
+			 	width: 100%;
+				height: 400px;
+		   		.orderMess{
+			        position: relative;
+			        width: 100%;
+			        .noorder{
+			          	text-align: center;
+			          	width: 100%;
+			          	height: 300px;
+			          	padding-top:140px;
+			          	.noOrderImg{
+			            display: inline-block;
+				            p{
+				              font-size: 12px;
+				              color: #ccc;
+				            }
+			          	}
+			        }
+		      	}
+		    }
+		}
+	}
+	table{
+		width: 100%;
+		border-collapse:collapse;
+		thead{
+			background-color: #F9FAFC ;
+		}
+		td{ 
+			padding: 5px 30px;
+			border:#DEE1E5 solid 1px;
+		}
+	}
+	
+}

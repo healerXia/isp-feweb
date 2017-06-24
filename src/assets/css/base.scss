@@ -1,0 +1,104 @@
+@import './reset';
+@import './mixin';
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    min-width: 1366px;
+    overflow: auto;
+}
+
+
+body {
+    font-size: $font-size;
+}
+
+.ivu-col {
+    background: #fff;
+}
+
+.borderB{width: 100%;height: 30px;border-bottom: 1px solid #444}
+.MT20{margin-top: 20px}
+.MT5{margin-top: 5px}
+.MT10{margin-top: 10px}
+.MT15{margin-top: 15px}
+.MT18{margin-top: 18px}
+.MT30{margin-top: 30px}
+.MT50{margin-top: 50px}
+.MT25{margin-top: 25px}
+.MT35{margin-top: 35px}
+.MT20{margin-top: 20px}
+.MB20{margin-bottom: 20px}
+.MB10{margin-bottom: 10px}
+.MB15{margin-bottom: 15px}
+.MB5{margin-bottom: 5px}
+.ML5{margin-left: 5px }
+.ML15{margin-left: 15px }
+.ML10{margin-left: 10px }
+.ML20{margin-left: 20px }
+.ML30{margin-left: 30px }
+.ML40{margin-left: 40px}
+.ML53{margin-left: 53px }
+.MR10{margin-right: 10px}
+.MR11{margin-right: 11px}
+.MR15{margin-right: 15px}
+.MR20{margin-right: 20px}
+.MR5{margin-right: 5px}
+.MRL5{margin: 0 5px}
+.bg4373F3{
+  background-color: #4373F3 !important;
+  border-color: #4373F3 !important;
+}
+.bgccc{
+  background-color: #CCC !important;
+  border-color: #CCC !important;
+}
+.bgCancle{
+  background-color: #484E58  !important;
+  border-color: #484E58  !important;
+}
+.bgF9FAFC {
+  background:#F9FAFC ;
+  .ivu-col{ background:#F9FAFC ;}
+}
+.btn{
+  width: 120px !important;
+  height: 40px !important;
+  line-height: 20px !important;
+  font-size: 14px !important;
+}
+.colorRed{color: red;}
+.fontSize12{font-size: 12px}
+.fontSize14{font-size: 14px}
+
+.w127{width: 126px !important;overflow: hidden;}
+.w200{width: 200px !important;}
+.w50{width: 50px !important;overflow: hidden;}
+.h100{height: 100px;width: 100%}
+.inlineBlock{display: inline-block;}
+.pLR20{padding: 0 20px}
+.pT50{padding-top: 50px}
+.pB44{padding-bottom: 44px}
+.pL30{padding-left: 30px}
+.pT30{padding-top: 30px}
+
+.ivu-form-item-error-tip {
+    position: static;
+    padding-top: 0;
+    float: left;
+    padding-left: 4px;
+    line-height: 32px;
+    height:32px;
+}
+.fRight{float: right;}
+.cycle .ivu-form-item-error-tip{display: none !important;}
+.maxWid{max-width: 1166px}
+.createPro{
+  .ivu-select-single .ivu-select-selection{height: 38px;line-height: 38px}
+  .ivu-input{height: 38px}
+  .ivu-select-multiple .ivu-select-input{height: 38px}
+  .ivu-form-item-error-tip{height: 38px;line-height: 38px;padding-left: 19px}
+}
+
+  

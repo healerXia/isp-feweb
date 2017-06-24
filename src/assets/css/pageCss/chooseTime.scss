@@ -1,0 +1,53 @@
+.chooseTime {
+    .chooseTime-box {
+        margin-top: 30px;
+        width: 1126px;
+        padding-left: 20px;
+    }
+
+    .delIco {
+        width: 20px;
+        font-size: 14px;
+        color: #999;
+        line-height: 26px;
+    }
+
+    .dateTable-title {
+        background: #f9f9f9;
+    }
+
+    .dateTable {
+        width: 1106px;
+        text-align: center;
+        font-size: 12px;
+        border: 1px solid #E9E9E9;
+
+        td {
+            border: 1px solid #E9E9E9;
+        }
+
+        .allMoth {
+            width: 34px;
+        }
+    }
+
+    .price {
+        margin-top: 10px;
+    }
+
+    .tableList {
+        margin-top: 30px;
+
+        .item {
+            margin-bottom: 14px;
+        }
+
+        .title {
+            margin-bottom: 20px;
+            padding: 0 20px;
+            height: 40px;
+            line-height: 40px;
+            background: rgba(67,115,243, .1);
+        }
+    }
+}

@@ -1,0 +1,64 @@
+.createPro{
+  width: 100%;
+  .content{
+    width: 100%;
+    .createInput {
+        width: 398px;
+    }
+    .dateInput {
+        width: 178px;
+    }
+    .contentBox{
+      padding-left: 30px;
+      width: 100%;
+      .title{
+        font-size: 14px;
+        color: #354052;
+      }
+      .formBox{
+        $inputH:32px;
+        width: 100%;
+        box-sizing: border-box;
+        input,.ivu-select{width: 400px; float: left;}
+        .budget{
+          .unit{
+            float: left;
+            margin-left: 5px;
+          }
+          .unit+ .ivu-form-item-error-tip{
+            left: 430px;
+          }
+        }
+        .cycle{
+          input{width:180px};       
+          .space{
+            width: 35px;
+            display: inline-block;
+            text-align: center;
+            line-height: $inputH;
+            height: $inputH
+          }
+        }
+      }
+    }
+  }
+  // .ivu-input-wrapper {
+  //   display: inline-block;
+  //   width: 180px;
+  //   position: relative;
+  //   vertical-align: middle;
+  // }
+  .ivu-form-item .ivu-form-item {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+  .ivu-input-number {
+    width: 400px
+  }
+  .ivu-form .ivu-form-item-label{
+    padding: 12px 12px 10px 0;
+  }
+  .ivu-radio-wrapper,.ivu-checkbox-wrapper{//单选按钮间距
+    margin-right: 20px;
+  }
+}
