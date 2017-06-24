@@ -771,7 +771,7 @@ export default {
                 this.loading1 = true;
                 setTimeout(() => {
                     this.$http.post('/isp-kongming/ad/channelSelect', {
-                        labelTypeId: -1,
+                        tagId: 0,
                         name: query
                     }).then((res) => {
                         if (res.data.errorCode == 0) {
