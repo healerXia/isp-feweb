@@ -162,9 +162,6 @@ export default {
                let year = Object.assign([], this.pageData.adStateList).reverse();
                this.first = year.slice(0,6);
                this.second = year.slice(6);
-               console.log(this.first);
-               console.log(this.second);
-               console.log(this.pageData);
            }
            else {
                this.$Modal.info({
