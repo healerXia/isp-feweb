@@ -38,57 +38,33 @@
         </div>
         <div class="modul pL30">
           <div class="nextTitle MB5">广告信息</div>
-          <ul class="messShow liWid fontColor">
+          <ul class="messShow fontColor">
             <li>
-              <Row>
-                <Col span="8">订单编号：</Col>
-                <Col span="15">
-                  <span>{{adverMes.adOrderCode}}</span>
-                  <a href="">导出PDF</a>
-                </Col>
-              </Row>
+              <span>订单编号：</span>         
+              <span>{{adverMes.adOrderCode}}</span>
+              <a href="">导出PDF</a>     
             </li>
-            <li class='ML40'>
-              <Row>
-                <Col span="8">投放周期：</Col>
-                <Col span="15">
-                  {{adverMes.beginDate}}至{{adverMes.endDate}}
-                </Col>
-              </Row>
-            </li>
-            <li class="ML40">
-              <Row>
-                <Col span="8">折扣信息：</Col>
-                <Col span="15">
-                  {{adverMes.discountMess}}折
-                </Col>
-              </Row>
-            </li>
-          </ul>
-          <ul class="messShow liWid MT5 fontColor">
             <li>
-              <Row>
-                <Col span="8">成交价格：</Col>
-                <Col span="15"  class="colorRed">
-                  {{adverMes.sellAllPrice}}元
-                </Col>
-              </Row>             
+              <span>投放周期：</span>
+              <span>
+                {{adverMes.beginTime}}至{{adverMes.endTime}}
+              </span>
             </li>
-            <li class='ML40'>
-              <Row>
-                <Col span="8">订单状态：</Col>
-                <Col span="15">
-                  {{adverMes.orderStatus}}
-                </Col>
-              </Row>              
+            <li>
+              <span>折扣信息：</span>
+              <span>{{adverMes.discountMess}}折</span>
             </li>
-            <li class="ML40">
-              <Row>
-                <Col span="8">创建时间：</Col>
-                <Col span="15">
-                  {{adverMes.createTime}}
-                </Col>
-              </Row>             
+             <li>
+                <span>成交价格：</span>
+                <span class="colorRed">{{adverMes.realitySellAllPrice}}元</span>         
+            </li>
+             <li >
+              <span>订单状态：</span>
+              <span> {{adverMes.statusName}}</span>            
+            </li>
+            <li>
+              <span>创建时间：</span>
+              <span>{{adverMes.createTime}}</span>      
             </li>
           </ul>
         </div>
@@ -319,11 +295,11 @@ export default {
         tableDatas:[],
         adverMes:{//广告信息
           adOrderCode:"AO12132dfh2323",//订单编号
-          beginDate:"2017-01-01",//开始时间
-          endDate:"2017-09-09",//结束时间
+          beginTime:"2017-01-01",//开始时间
+          endTime:"2017-09-09",//结束时间
           createTime:"2017-09-09",//创建时间
-          orderStatus:"审核中",//订单状态,
-          sellAllPrice:"1000",//成交价格
+          statusName:"审核中",//订单状态,
+          realitySellAllPrice:"1000",//成交价格
           discountMess:"0.5"//折扣信息
         },
         dataTable:{//数据表
@@ -412,11 +388,10 @@ export default {
 
       //获取订单中广告信息
       this.$http.get(config.urlList.getOrder+"?projectId="+id).then((res)=>{
-        console.log(res)
           if(res.data.result.resultList.length==0){
-            console.log(res)
-            // this.noOrder=true
+            this.noOrder=true
           }else{
+            this.adverMes=res.data.result.resultList[0]
             this.showMes.value2=""
             this.createCharts();
             this.noOrder=false
