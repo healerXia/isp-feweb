@@ -151,7 +151,7 @@
                                  <Checkbox class='fl' v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="font-size:14px; margin-right:10px">
                                      <span class="ad-name">名称:</span>
                                  </Checkbox>
-                                 <span class='ad-listName fl'>{{adNames}}</span>
+                                 <span class='ad-listName fl'>{{adNames}}/{{searchData.pageName}}/{{i.name}}</span>
                                  <a href="javascript:;" @click='viewAd(i.width, i.height, i)'>查看</a>
                             </div>
                             <div class="fr">
@@ -258,6 +258,8 @@ export default {
                 typeList: []
             },
             searchData: {
+                // 页面名称
+                pageName: '',
                 // 页面名称集合
                 pageNameList: [],
                 // 车型集合
@@ -511,7 +513,8 @@ export default {
             this.render();
         },
         // 选择页面名称
-        selectPageName() {
+        selectPageName(obj) {
+            this.searchData.pageName = obj.label;
             this.resetSearchInfo();
             this.initAdType();
         },
@@ -676,7 +679,7 @@ export default {
                 // 开始时间
                 beginTime: `${this.searchInfo.beginTime}-01`,
                 // 结束时间
-                endTime: `${this.searchInfo.endTime}-01`,
+                endTime: `${this.searchInfo.endTime}-31`,
                 pageIndex: this.searchInfo.pageIndex,
                 pageSize: this.searchInfo.pageSize,
                 // 媒体名称id
@@ -684,7 +687,7 @@ export default {
                 // 页面类型
                 labelTypeId:  this.searchInfo.labelTypeId,
                 // 广告类型
-                placeTypeList: this.searchInfo.Type,
+                placeTypeList: this.searchInfo.Type
                 // 投放车型
                 //modelIdList: this.searchInfo.serialId,
                 // 投放地区

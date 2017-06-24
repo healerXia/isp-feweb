@@ -185,6 +185,15 @@ export default {
             //每页可显示月份为maxMonthNum
         }
         this.num = this.num.sort();
+
+        for (let i = 0; i < this.num.length; i++) {
+            let data = this.pageList[this.num[i]];
+            for (let j = 0; j < data.length; j++) {
+                 console.log(data[j]);
+                 data[j].useStyle = 4001;
+            }
+        }
+        console.log(this.pageList);
     },
     methods: {
         // 数据拆分
