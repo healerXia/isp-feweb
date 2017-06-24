@@ -118,14 +118,14 @@ import urlList from './config.js';
         for (let i = 0; i< priceList.length; i++) {
             this.tableData.mess.push({
                 time: priceList[i].time,
-                aTotal: priceList[i].total,
-                bTotal: priceList[i].delivery,
-                cTotal: priceList[i].exchange,
-                dTotal: priceList[i].per,
+                aTotal: priceList[i].total.toFixed(2),
+                bTotal: priceList[i].delivery.toFixed(2),
+                cTotal: priceList[i].exchange.toFixed(2),
+                dTotal: priceList[i].per.toFixed(2),
                 distribution: priceList[i].proportion
             })
 
-            
+
             aTotal += parseInt(priceList[i].total);
             bTotal += parseInt(priceList[i].delivery);
             cTotal += parseInt(priceList[i].exchange);
@@ -134,10 +134,10 @@ import urlList from './config.js';
         let str = this.ratio(aTotal, bTotal);
         this.tableData.mess.push({
             time: '合计',
-            aTotal: aTotal,
-            bTotal: bTotal,
-            cTotal: cTotal,
-            dTotal: dTotal,
+            aTotal: aTotal.toFixed(2),
+            bTotal: bTotal.toFixed(2),
+            cTotal: cTotal.toFixed(2),
+            dTotal: dTotal.toFixed(2),
             distribution: str
         })
         this.total =  aTotal;
