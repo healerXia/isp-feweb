@@ -1,0 +1,465 @@
+{
+    "errorCode": 0,
+    "errorMsg": "OK",
+    "result": [
+        {
+            "kid": null,
+            "adPlaceId": 2,
+            "name": "中部通栏4",
+            "channelId": 1006,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 80,
+            "width": 990,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [],
+            "materialTemplateIdList": [
+                3,
+                2,
+                4
+            ],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        },
+        {
+            "kid": null,
+            "adPlaceId": 3,
+            "name": "顶部通栏",
+            "channelId": 2,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 80,
+            "width": 990,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [],
+            "materialTemplateIdList": [],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "7"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "8"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "9"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "0"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "1"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "2"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "3"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "4"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 99900,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        },
+        {
+            "kid": null,
+            "adPlaceId": 7,
+            "name": "顶部通栏",
+            "channelId": 6,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 80,
+            "width": 990,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [],
+            "materialTemplateIdList": [
+                6
+            ],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        },
+        {
+            "kid": null,
+            "adPlaceId": 10,
+            "name": "中部通栏2",
+            "channelId": 1001,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 80,
+            "width": 990,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [],
+            "materialTemplateIdList": [],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        },
+        {
+            "kid": null,
+            "adPlaceId": 11,
+            "name": "顶部通栏（商城）",
+            "channelId": 1044,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 80,
+            "width": 720,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [],
+            "materialTemplateIdList": [],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        },
+        {
+            "kid": null,
+            "adPlaceId": 13,
+            "name": "中部通栏",
+            "channelId": 8,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 80,
+            "width": 720,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [
+                10000094,
+                10000095
+            ],
+            "materialTemplateIdList": [],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        },
+        {
+            "kid": null,
+            "adPlaceId": 16,
+            "name": "按钮02",
+            "channelId": 10,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 180,
+            "width": 240,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [],
+            "materialTemplateIdList": [],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        },
+        {
+            "kid": null,
+            "adPlaceId": 17,
+            "name": "中部通栏",
+            "channelId": 11,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 80,
+            "width": 990,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [],
+            "materialTemplateIdList": [],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        },
+        {
+            "kid": null,
+            "adPlaceId": 18,
+            "name": "右侧按钮3",
+            "channelId": 1006,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 80,
+            "width": 230,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [],
+            "materialTemplateIdList": [],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        },
+        {
+            "kid": null,
+            "adPlaceId": 19,
+            "name": "一屏右侧大按钮",
+            "channelId": 1001,
+            "mediaId": 1000,
+            "platform": 0,
+            "pSize": null,
+            "height": 120,
+            "width": 220,
+            "feeType": null,
+            "creator": null,
+            "remark": null,
+            "cityId": 0,
+            "adType": 0,
+            "labelTypeId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "beginTime": "2000-01-01 00:00:01",
+            "endTime": "2037-12-31 23:59:59",
+            "extInfo": null,
+            "materialIdList": [],
+            "materialTemplateIdList": [],
+            "adStateList": [
+                {
+                    "2017-06": [
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "6"
+                        },
+                        {
+                            "skuStatus": "SKU_STATUS_IDLE",
+                            "skuPrice": 998800,
+                            "day": "5"
+                        }
+                    ]
+                }
+            ],
+            "curDate": null
+        }
+    ]
+}
