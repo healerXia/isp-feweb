@@ -132,16 +132,16 @@ import config from './config.js';
             }
           ],
           orderStatusArr:[
-            {Name:"编辑中",Value:1},
-            {Name:"待初审",Value:2},
-            {Name:"待复审",Value:3},
-            {Name:"待确认",Value:4},
-            {Name:"初审驳回",Value:5},
-            {Name:"复审驳回",Value:6},
-            {Name:"确认驳回",Value:7},
-            {Name:"确认通过",Value:8},
-            {Name:"终止",Value:9},
-            {Name:"过期撤销",Value:10}
+            {Name:"待初审",Value:1000},
+            {Name:"待复审",Value:1001},
+            {Name:"初审驳回",Value:1002},
+            {Name:"确认通过",Value:1003},
+            {Name:"确认驳回",Value:1004},
+            {Name:"过期撤销",Value:1006},
+            {Name:"终止",Value:1007},
+            {Name:"待确认",Value:1013},
+            {Name:"复审驳回",Value:1014},
+            {Name:"编辑中",Value:1011}, 
           ],
           projectTypeArr:[
            {Name:"广告",Value:1}
@@ -175,13 +175,13 @@ import config from './config.js';
           thead:["订单类型","订单编号","客户名称","项目名称","责任销售","创建时间","订单状态"],
           tbody:[
              {
-              'orderType':"广告订单",
-              'adOrderCode':"111",
+              'orderType':"-",
+              'adOrderCode':"-",
               'custName':"max",
-              'projectName':"北京博瑞祥浓汽车销售服务有限公司",
-              'dutyUserName':"赵斌",
-              'beginDate':"2013-02-01",
-              'orderStatus':"yes"
+              'projectName':"-",
+              'dutyUserName':"-",
+              'beginDate':"-",
+              'orderStatus':"-"
              }
           ]
         }
@@ -215,6 +215,7 @@ import config from './config.js';
         }
       },
       bDateChange(value){
+        console.log(Date.parse(this.searchData.createTime2))
         if(value==""){
           this.searchData.createTime1=""
         }else{
@@ -222,10 +223,11 @@ import config from './config.js';
         }
       },
       disBegin(date){
-          return date && date.valueOf() >new Date(this.searchData.createTime2)
+          return date && date.valueOf()>Date.parse(this.searchData.createTime2)
+
       },
       disEnd(date){
-          return date && date.valueOf()< new Date(this.searchData.createTime1);
+          return date && date.valueOf()< Date.parse(this.searchData.createTime1)-86400000;
       },
       toParam(objs){
         var str=""
@@ -249,6 +251,7 @@ import config from './config.js';
             emulateJSON:true
           }).then((res)=>{
             if(res.data.errorCode===0){
+              console.log(res.data.result.totalCount)
               this.totalPages=res.data.result.totalCount;
               this.tableData.tbody=res.data.result.resultList
             }

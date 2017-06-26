@@ -473,9 +473,7 @@
           this.$http.get(config.urlList.getagentCust).then((res) => {
             if(res.data.errorCode===0){
               this.agentOptionT=res.data.result;
-              if(agentid!=""){
-                 this.agentOption=this.agentOptionT.slice(0,10)
-              }
+              this.agentOption=this.agentOptionT.slice(0,10)
               this.judge.loading1=false
             }
             else {
@@ -490,12 +488,13 @@
             this.$http.get(config.urlList.getCustomer+'?custId='+custid).then((res) => {
               if(res.data.errorCode===0){
                 this.custOption=res.data.result.resultList.slice(0,10)
-                this.judge.loading5=false
+                
                 setTimeout(()=>{
                   if(custid!=""){
                     this.formValidate.custId=custid
                   }
                 },0)
+                this.judge.loading5=false
               }
               else {
                 this.$Modal.info({
@@ -547,16 +546,16 @@
             this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
             this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放方式
             this.mulCheck.putWay=this.toArr(this.formValidate.putWays)//投放公司
-            this.singleCheck.dutyId=parseInt(this.formValidate.dutyUserId)//责任销售
+            this.singleCheck.dutyId=this.formValidate.dutyUserId?parseInt(this.formValidate.dutyUserId):""//责任销售
             this.formValidate.endDate=new Date(this.formValidate.endDate)
             this.formValidate.beginDate=new Date(this.formValidate.beginDate)
             let arr =this.toArr(this.formValidate.promotionRate);
             for(var i=0;i<arr.length;i++){
               this['value'+(i+1)]=arr[i]
              }
-             this.provinceId=data.provinceId
-             this.addressId.cityId=data.cityId
-             this.addressId.areaId=data.areaId
+             this.provinceId=data.provinceId?data.provinceId:""
+             this.addressId.cityId=data.cityId?data.cityId:""
+             this.addressId.areaId=data.areaId?data.areaId:""
         },
         checkCust(value){//选择客户名称
            this.agentOption=this.agentOptionT.slice(0,10)
@@ -868,6 +867,9 @@
               this.judge.submitDiasbled=false
             }            
           })
+          setTimeout(()=>{
+            this.judge.submitDiasbled=false
+          },2100)
         },
         handleSubmit (name) {//保存按钮
           this.areaCheck()//地区验证
@@ -960,6 +962,9 @@
               this.judge.submitDiasbled=false
             }
           })
+          setTimeout(()=>{
+            this.judge.submitDiasbled=false
+          },2100)
         },
         handleReset (name) {//表单重置
           this.$refs[name].resetFields();
