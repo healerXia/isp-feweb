@@ -8,7 +8,7 @@
             <div class="title MB20 MT15">
               <h1 class="MR15">订单信息</h1>
               <router-link 
-              :to="{path:'resource'}" >
+              :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
                 新增订单         
               </router-link>
             </div>
@@ -24,11 +24,11 @@
             </div>
         </div>
       </div>
-      <div class="conBox MT20" v-else>
-        <div class="title MB20 pL30">
+      <div class="conBox MT20 pL30 pR30" v-else>
+        <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
           <router-link 
-          :to="{path:'resource',query: {id:$router.currentRoute.query.id}}"> 
+          :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
            编辑排期                
           </router-link>
           <router-link 
@@ -36,7 +36,7 @@
            编辑价格                
           </router-link>
         </div>
-        <div class="modul pL30">
+        <div class="modul">
           <div class="nextTitle MB5">广告信息</div>
           <ul class="messShow fontColor">
             <li>
@@ -52,7 +52,7 @@
             </li>
             <li>
               <span>折扣信息：</span>
-              <span>{{adverMes.discountMess}}折</span>
+              <span>{{adverMes.valid}}折</span>
             </li>
              <li>
                 <span>成交价格：</span>
@@ -74,14 +74,8 @@
               <span>广告位信息</span>
                <span class="fRight MR20" v-if="showMes.collapse1">收起&nbsp;<Icon type="chevron-up"></Icon></span>
                 <span class="fRight MR20" v-else="showMes.collapse1">展开&nbsp;<Icon type="chevron-down"></Icon></span>
-              <div class="tableBox" slot="content">
-                <Schedule :tableData="tableData"></Schedule>                    
-              </div>           
-              <div class="tableBox" slot="content">                
-                <Schedule :tableData="tableData"></Schedule>        
-              </div>     
-              <div class="tableBox" slot="content">        
-                <Schedule :tableData="tableData"></Schedule>         
+              <div class="tableBox" slot="content" v-for="tableData in tableDatas">
+                <Schedule :tableData="tableData"></Schedule>  
               </div>
               <div class="totalPrice" slot="content">
                   <span>购买净总价：3000元</span>
@@ -198,8 +192,6 @@ import countCharts from 'component/countCharts';
 import config from './config.js';
 import echarts from 'echarts/lib/echarts';
 import legend from 'echarts/lib/component/legend';
-
-
 export default {
     components:{
         Schedule,
@@ -242,16 +234,6 @@ export default {
         },
         thead:["广告位名称","用途","刊例价"],
         theadkey:['adName','useStyle','price','listNumber'],  
-        tableData:{
-          tbody:[
-            {
-              adName:"易车网/易车网车型对比栏目/全屏",
-              useStyle:"销售",
-              price:" 3000",              
-              listNumber:[0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1]            
-            },
-          ]
-        },
         tableDatas:[
           {
             yearMonth:201706,
@@ -267,7 +249,7 @@ export default {
                 "areaId": 10,
                 "adCityId": 201,                
                 "listNumber": [
-                   "1",1,1,1,1,
+                   0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1 
                 ]
               },
               {
@@ -281,13 +263,45 @@ export default {
                 "areaId": 10,
                 "adCityId": 201,                
                 "listNumber": [
-                   "1",1,1,1,1,
+                  0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1     
+                ]
+              }
+            ]            
+          },
+          {
+            yearMonth:201706,
+            data:[
+              {
+                "yearMonth": 201706,
+                "adPosId": 2,
+                "adName": "易车网/易车网车型对比栏目/全屏",
+                "price": 8000,
+                "useStyle": 4001,
+                "priceUnit": 0,
+                "brandId": 20001,
+                "areaId": 10,
+                "adCityId": 201,                
+                "listNumber": [
+                  0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1 
+                ]
+              },
+              {
+                "yearMonth": 201706,
+                "adPosId": 2,
+                "adName": "易车网/易车网车型对比栏目/全屏",
+                "price": 8000,
+                "useStyle": 4001,
+                "priceUnit": 0,
+                "brandId": 20001,
+                "areaId": 10,
+                "adCityId": 201,                
+                "listNumber": [
+                   0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1 
                 ]
               }
             ]            
           }
         ],
-
         adverMes:{//广告信息
           adOrderCode:"AO12132dfh2323",//订单编号
           beginTime:"2017-01-01",//开始时间
@@ -295,7 +309,7 @@ export default {
           createTime:"2017-09-09",//创建时间
           statusName:"审核中",//订单状态,
           realitySellAllPrice:"1000",//成交价格
-          discountMess:"0.5"//折扣信息
+          valid:"0.5"//折扣信息
         },
         dataTable:{//数据表
            thead:["总曝光量","总点击量","点击率"],
@@ -369,7 +383,7 @@ export default {
       //获取排期信息
       this.$http.get(config.urlList.getAdOrderDetailUnite+`?${customerTime}`).then((res) => {
         if(res.data.errorCode === 0) {
-          this.tableData.tbody=res.data.result
+          
         }
         else {
           this.$Modal.info({
@@ -406,8 +420,8 @@ export default {
           },
           grid: {
             top: '10%',
-            left: '3%',
-            right: '3%',
+            left: '10',
+            right: '30',
             bottom:'3%',
             containLabel: true
           },

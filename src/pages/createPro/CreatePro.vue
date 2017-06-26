@@ -243,11 +243,11 @@
               showSerial:false,//投放车型
               showPromotionWay:true,//是否显示投放方式
               dateErrShow:false,//投放周期错误信息是否显示
-              loading1:false,//代理公司的loading
+              loading1:true,//代理公司的loading
               loading2:true,//投放品牌的loading
               loading3:true,//投放车型的loading
               loading4:true,//责任销售的loading
-              loading5:false,//客户的loading
+              loading5:true,//客户的loading
             },
             mulCheck:{//多选下拉
               serial:[],
@@ -456,8 +456,10 @@
           this.$http.get(config.urlList.getCustomer).then((res) => {
             if(res.data.errorCode===0){
               this.custOptionT=res.data.result.resultList;
-              this.custOption=this.custOptionT.slice(0,10)
-              this.loading5=false
+              if(custid==""){
+                this.custOption=this.custOptionT.slice(0,10)
+              }
+              this.judge.loading5=false
             }
             else {
               this.$Modal.info({
@@ -471,8 +473,10 @@
           this.$http.get(config.urlList.getagentCust).then((res) => {
             if(res.data.errorCode===0){
               this.agentOptionT=res.data.result;
-              this.agentOption=this.agentOptionT.slice(0,10)
-              this.loading1=false
+              if(agentid!=""){
+                 this.agentOption=this.agentOptionT.slice(0,10)
+              }
+              this.judge.loading1=false
             }
             else {
               this.$Modal.info({
