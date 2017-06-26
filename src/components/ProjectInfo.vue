@@ -24,7 +24,8 @@
                 <li>
                   <span>项目预算：</span>
                   <span>
-                    {{(proMess.budgetAmount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+                    {{(proMess.budgetAmount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元
+                    </span>
                 </li>
                 <li>
                   <span>投放周期：</span>
@@ -35,8 +36,16 @@
             <div class="modul">
               <div class="nextTitle MB5 MT18">投放KPI</div>
               <ul class="messShow">
-                <li><span>曝光预期：</span><span>{{proMess.expectUvCount}}</span></li>
-                <li><span>点击预期：</span><span>{{proMess.expectPvCount}}</span></li>
+                <li><span>曝光预期：</span>
+                <span v-if="proMess.expectUvCount!=null">
+                  {{(proMess.expectUvCount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                </span>
+                </li>
+                <li><span>点击预期：</span>
+                  <span v-if="proMess.expectPvCount!=null">
+                    {{(proMess.expectPvCount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                  </span>
+                </li>
               </ul>
             </div>
             <div class="model">

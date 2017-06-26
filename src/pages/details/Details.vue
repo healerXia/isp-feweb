@@ -3,7 +3,7 @@
       <div class="conBox bgF9FAFC">
         <ProjectInfo :proMess="projectData" :edit="true" :id="proid" v-on:edit="edit"></ProjectInfo>
       </div>
-      <div class="conBox" v-if="noOrder">
+      <div class="conBox" v-show="noOrder">
         <div class='hasNoOrder pL30'>
             <div class="title MB20 MT15">
               <h1 class="MR15">订单信息</h1>
@@ -24,7 +24,7 @@
             </div>
         </div>
       </div>
-      <div class="conBox MT20 pL30 pR30" v-else>
+      <div class="conBox MT20 pL30 pR30" v-show="!noOrder">
         <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
           <router-link 
@@ -420,13 +420,13 @@ export default {
           },
           grid: {
             top: '10%',
-            left: '10',
-            right: '30',
+            left: -20,
+            right: 20,
             bottom:'3%',
             containLabel: true
           },
           legend: {
-            right:"3%",
+            right:"0%",
             top:"top",
             data:['曝光量','点击量'],
           },
