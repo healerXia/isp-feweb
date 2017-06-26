@@ -22,9 +22,9 @@
                         {{tbodys[item]}}
                      </td> 
                      <td v-for="n in tbodys.listNumber" class="cell">
-                        <span v-if="n==0" class="status status1"></span>
-                        <span v-else-if="n==1" class="status status2"></span>
-                        <span v-else-if="n==2" class="status status3"></span>
+                        <span v-if="n=='0'" class="status status1"></span>
+                        <span v-else-if="n=='1'" class="status status2"></span>
+                        <span v-else-if="n=='2'" class="status status3"></span>
                         <span v-else class="status"></span>
                     </td> 
                 </tr>
@@ -32,8 +32,8 @@
         </table>
          <div class="price">
           <span>购买净总价：3000元</span>
-          <span>购买净总价：3000元</span>
-          <span>购买净总价：3000元</span>
+          <span>配送总价：3000元</span>
+          <span>配送比率：1:6</span>
         </div> 
         </div>
 </template>

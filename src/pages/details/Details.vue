@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="details">
       <div class="conBox bgF9FAFC">
-        <ProjectInfo :proMess="projectData" :edit="true" :id="proid" v-on:edit="edit"></ProjectInfo>
+        <ProjectInfo v-bind:proMess="projectData" :edit="true" :id="proid" v-on:edit="edit"></ProjectInfo>
       </div>
       <div class="conBox" v-show="noOrder">
         <div class='hasNoOrder pL30'>
@@ -27,14 +27,14 @@
       <div class="conBox MT20 pL30 pR30" v-show="!noOrder">
         <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
-          <router-link 
+         <!--  <router-link 
           :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
            编辑排期                
           </router-link>
           <router-link 
           :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}"> 
            编辑价格                
-          </router-link>
+          </router-link> -->
         </div>
         <div class="modul">
           <div class="nextTitle MB5">广告信息</div>
@@ -224,8 +224,8 @@ export default {
           putWayNames:"内部投放,外部投放",//投放方式
           businessTypeName:"新车",//业务类型
           promotionWayName:"推广方式",//推广方式
-          serialNames:"大切诺基,帕杰罗速跑",//投放车型
-          brandNames:"品牌投放",//投放品牌
+          serialNames:"",//投放车型
+          brandNames:"",//投放品牌
           provinceName:"北京市",
           cityName:"北京",
           areaName:"昌平区",
@@ -234,74 +234,7 @@ export default {
         },
         thead:["广告位名称","用途","刊例价"],
         theadkey:['adName','useStyle','price','listNumber'],  
-        tableDatas:[
-          {
-            yearMonth:201706,
-            data:[
-              {
-                "yearMonth": 201706,
-                "adPosId": 2,
-                "adName": "易车网/易车网车型对比栏目/全屏",
-                "price": 8000,
-                "useStyle": 4001,
-                "priceUnit": 0,
-                "brandId": 20001,
-                "areaId": 10,
-                "adCityId": 201,                
-                "listNumber": [
-                   0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1 
-                ]
-              },
-              {
-                "yearMonth": 201706,
-                "adPosId": 2,
-                "adName": "易车网/易车网车型对比栏目/全屏",
-                "price": 8000,
-                "useStyle": 4001,
-                "priceUnit": 0,
-                "brandId": 20001,
-                "areaId": 10,
-                "adCityId": 201,                
-                "listNumber": [
-                  0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1     
-                ]
-              }
-            ]            
-          },
-          {
-            yearMonth:201706,
-            data:[
-              {
-                "yearMonth": 201706,
-                "adPosId": 2,
-                "adName": "易车网/易车网车型对比栏目/全屏",
-                "price": 8000,
-                "useStyle": 4001,
-                "priceUnit": 0,
-                "brandId": 20001,
-                "areaId": 10,
-                "adCityId": 201,                
-                "listNumber": [
-                  0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1 
-                ]
-              },
-              {
-                "yearMonth": 201706,
-                "adPosId": 2,
-                "adName": "易车网/易车网车型对比栏目/全屏",
-                "price": 8000,
-                "useStyle": 4001,
-                "priceUnit": 0,
-                "brandId": 20001,
-                "areaId": 10,
-                "adCityId": 201,                
-                "listNumber": [
-                   0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1 
-                ]
-              }
-            ]            
-          }
-        ],
+        tableDatas:[{"data":[{"id":411,"orderYearMonth":201706,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","0","0","1","0","1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":412,"orderYearMonth":201706,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","0","0","0","1","0","0","0","0","1","0","1","0","0","0","0","0","1","0","0","0"]}],"yearMonth":201706},{"data":[{"id":421,"orderYearMonth":201707,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","1","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":422,"orderYearMonth":201707,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201707},{"data":[{"id":431,"orderYearMonth":201708,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":432,"orderYearMonth":201708,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201708}],
         adverMes:{//广告信息
           adOrderCode:"AO12132dfh2323",//订单编号
           beginTime:"2017-01-01",//开始时间
@@ -380,30 +313,29 @@ export default {
         }).catch((err) => {
       })
 
-      //获取排期信息
-      this.$http.get(config.urlList.getAdOrderDetailUnite+`?${customerTime}`).then((res) => {
-        if(res.data.errorCode === 0) {
-          
-        }
-        else {
-          this.$Modal.info({
-              title: '提示',
-              content: res.data.errorMsg
-          });
-        }
-        }).catch((err) => {
-          console.log(err);
-      })
-
       //获取订单中广告信息
       this.$http.get(config.urlList.getOrder+"?projectId="+id).then((res)=>{
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
             this.adverMes=res.data.result.resultList[0]
-            this.showMes.value2=""
-            this.createCharts();
-            this.noOrder=false
+             //获取排期信息
+            this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
+              if(res.data.errorCode === 0) {
+                console.log(res)
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+              }).catch((err) => {
+                console.log(err);
+            })
+            this.showMes.value2=""//收缩板关闭
+            this.createCharts();//创建echars
+            this.noOrder=false//不显示 无订单
           }
       }).catch((err) => {
           console.log(err);
@@ -420,7 +352,7 @@ export default {
           },
           grid: {
             top: '10%',
-            left: -20,
+            left: 20,
             right: 20,
             bottom:'3%',
             containLabel: true
@@ -486,7 +418,7 @@ export default {
                   }
                 },
                 symbolSize: 10,
-                // data: [5, 20, 36, 10, 10, 20,5, 20, 36, 10, 10, 20,20]
+                data: [5, 20, 36, 10, 10, 20,5, 20, 36, 10, 10, 20,20]
             },
             {
                 name: '点击量',
@@ -502,7 +434,7 @@ export default {
                   }
                 },
                 symbolSize: 10,
-                // data: [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
+                data: [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
             }
           ]
         }    

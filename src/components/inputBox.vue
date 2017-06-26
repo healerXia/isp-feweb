@@ -145,7 +145,7 @@
             display: inline-block;
             height: $height;
             line-height:$height;
-            color: red;
+            color: #EF6464;
             font-size: 12px
         }
         .errorBorder>input{

@@ -67,8 +67,7 @@
                 <li v-else-if="proMess.serialIds!=''">
                   <span>投放车型：</span>
                   <span class='liWid'>
-                    {{proMess.serialNames}}
-                    ({{proMess.brandNames}})
+                    {{serialBrand}}
                   </span>                     
                 </li>
                 <li v-else-if="proMess.serialIds==''">
@@ -98,6 +97,28 @@
 <script>
 export default {
     props:['proMess','edit','id'],
+    data(){
+      return{
+        serialBrand:"",
+        serialNameArr:[],
+        brandNameArr:[]
+      }
+    },
+    watch:{
+      proMess:{
+        handler:function(){
+          if(this.proMess.brandNames!=[]){
+            this.brandNameArr=this.proMess.brandNames.split(",")
+            this.serialNameArr=this.proMess.serialNames.split(",")
+            for(let i=0;i<this.serialNameArr.length;i++){
+              this.serialBrand=this.serialBrand+this.serialNameArr[i]+"("+this.brandNameArr[i]+"),"
+            }
+            this.serialBrand=this.serialBrand.replace(/(,)$/,"")
+          }
+          
+        }
+      }     
+    },
     methods:{
         editPro(){
             this.$emit('edit','edit')
