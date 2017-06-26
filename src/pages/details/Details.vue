@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="details">
       <div class="conBox bgF9FAFC">
-        <ProjectInfo v-bind:proMess="projectData" :edit="true" :id="proid" v-on:edit="edit"></ProjectInfo>
+        <ProjectInfo v-bind:proMess="projectData" :edit="editPro" :id="proid" v-on:edit="edit"></ProjectInfo>
       </div>
       <div class="conBox" v-show="noOrder">
         <div class='hasNoOrder pL30'>
@@ -200,6 +200,7 @@ export default {
     },
     data() {
       return {
+        editPro:true,
         noOrder:false,
         showMes:{//收缩板
           collapse1:false,
@@ -234,7 +235,16 @@ export default {
         },
         thead:["广告位名称","用途","刊例价"],
         theadkey:['adName','useStyle','price','listNumber'],  
-        tableDatas:[{"data":[{"id":411,"orderYearMonth":201706,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","0","0","1","0","1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":412,"orderYearMonth":201706,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","0","0","0","1","0","0","0","0","1","0","1","0","0","0","0","0","1","0","0","0"]}],"yearMonth":201706},{"data":[{"id":421,"orderYearMonth":201707,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","1","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":422,"orderYearMonth":201707,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201707},{"data":[{"id":431,"orderYearMonth":201708,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":432,"orderYearMonth":201708,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201708}],
+        tableDatas:[
+        {"data":[{"id":411,"orderYearMonth":201706,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","0","0","1","0","1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":412,"orderYearMonth":201706,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","0","0","0","1","0","0","0","0","1","0","1","0","0","0","0","0","1","0","0","0"]}],"yearMonth":201706},
+
+        {"data":[
+          {"id":421,"orderYearMonth":201707,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","1","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},
+          {"id":422,"orderYearMonth":201707,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}
+        ],
+        "yearMonth":201707},
+
+        {"data":[{"id":431,"orderYearMonth":201708,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":432,"orderYearMonth":201708,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201708}],
         adverMes:{//广告信息
           adOrderCode:"AO12132dfh2323",//订单编号
           beginTime:"2017-01-01",//开始时间
@@ -296,6 +306,12 @@ export default {
       }
     },
     created() {
+      if(this.$router.currentRoute.query.edit=='edit'){
+        console.log(this.$router.currentRoute.query.edit)
+        this.editPro=false
+      }else{
+        this.editPro=true
+      }
       let customerTime = Date.parse(new Date());
       let id = this.$router.currentRoute.query.id
       //获取项目信息
@@ -320,9 +336,10 @@ export default {
           }else{
             this.adverMes=res.data.result.resultList[0]
              //获取排期信息
-            this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
+            this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode=AO20170606049398").then((res) => {
               if(res.data.errorCode === 0) {
-                console.log(res)
+                // console.log(res)
+                // this.tableDatas=res.data.result
               }
               else {
                 this.$Modal.info({
@@ -333,8 +350,8 @@ export default {
               }).catch((err) => {
                 console.log(err);
             })
-            this.showMes.value2=""//收缩板关闭
             this.createCharts();//创建echars
+            this.showMes.value2=""//收缩板关闭
             this.noOrder=false//不显示 无订单
           }
       }).catch((err) => {

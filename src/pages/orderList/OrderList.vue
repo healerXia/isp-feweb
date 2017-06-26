@@ -83,8 +83,13 @@
                 <td v-for='key in tableData.theadKey'>
                   <span v-if="key!='adOrderCode'">{{tbodyData[key]}}</span>
                    <router-link
+                    :to="{path:'details',query: {id:tbodyData.projectId,edit:'edit'}}"
+                    v-if="key=='adOrderCode'&& tbodyData.status=='1003'">
+                      {{tbodyData[key]}}
+                    </router-link>
+                     <router-link
                     :to="{path:'details',query: {id:tbodyData.projectId}}"
-                    v-if="key=='adOrderCode'">
+                    v-else-if="key=='adOrderCode'&& tableData.theadKey.status!='1003'">
                       {{tbodyData[key]}}
                     </router-link>
                 </td>

@@ -159,7 +159,7 @@ export default {
                 li{
                   float: left;color: #7B8497;width: 500px;margin-bottom: 6px;
                   span{display: inline-block;float: left}
-                  .liWid{width: 300px;}
+                  .liWid{width: 300px;word-wrap: break-word;}
                 }
                 li.hide{display: none;}
             }
