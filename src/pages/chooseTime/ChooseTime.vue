@@ -563,7 +563,7 @@ export default {
                            title: '提示',
                            content: '方案保存成功',
                            onOk () {
-                                window.localStorage.setItem('adOrderCode', res.data.result);
+                                //window.localStorage.setItem('adOrderCode', res.data.result);
                                 self.$router.push('buildPrice');
                             }
                        });
