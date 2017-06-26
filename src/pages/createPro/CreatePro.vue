@@ -456,7 +456,9 @@
           this.$http.get(config.urlList.getCustomer).then((res) => {
             if(res.data.errorCode===0){
               this.custOptionT=res.data.result.resultList;
-              this.custOption=this.custOptionT.slice(0,10)
+              if(custid==""){
+                this.custOption=this.custOptionT.slice(0,10)
+              }
               this.judge.loading5=false
             }
             else {
@@ -471,7 +473,9 @@
           this.$http.get(config.urlList.getagentCust).then((res) => {
             if(res.data.errorCode===0){
               this.agentOptionT=res.data.result;
-              this.agentOption=this.agentOptionT.slice(0,10)
+              if(agentid!=""){
+                 this.agentOption=this.agentOptionT.slice(0,10)
+              }
               this.judge.loading1=false
             }
             else {

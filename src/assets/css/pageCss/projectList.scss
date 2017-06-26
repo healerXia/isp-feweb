@@ -118,11 +118,13 @@
 				background: #F9FAFC;
 				tr{
 					td{color: #7B8497;min-width: 100px}
+					td:last-child{min-width: 80px !important}
 				}
 			}
 			tbody{
 				tr{
 					td{color: #333 }
+					td:last-child{min-width: 80px !important}
 				}
 				tr:nth-of-type(even){
 					background-color: #F9FAFC;
@@ -130,7 +132,7 @@
 					border-top:1px solid #DEE1E5;
 				}
 			}
-			td{font-size: 14px;height: 56px;padding-left: 30px}
+			td{font-size: 14px;height: 56px;padding-left: 10px;padding-right: 10px}
 		}
 	}
 }

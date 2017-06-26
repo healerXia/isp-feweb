@@ -53,7 +53,7 @@
                   <span>投放方式：</span>                 
                   <span>{{proMess.putWayNames}}</span>
                 </li>
-                <li v-if="proMess.serialIds==''&&proMess.brandIds==''">
+                <li v-if="proMess.serialIds==''&&proMess.brandIds==''" class="hide">
                 </li>
                 <li v-else-if="proMess.serialIds!=''">
                   <span>投放车型：</span>
@@ -131,6 +131,7 @@ export default {
                   span{display: inline-block;float: left}
                   .liWid{width: 300px;}
                 }
+                li.hide{display: none;}
             }
             
         }

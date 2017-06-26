@@ -8,7 +8,7 @@
             <div class="title MB20 MT15">
               <h1 class="MR15">订单信息</h1>
               <router-link 
-              :to="{path:'resource'}" >
+              :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
                 新增订单         
               </router-link>
             </div>
@@ -52,7 +52,7 @@
             </li>
             <li>
               <span>折扣信息：</span>
-              <span>{{adverMes.discountMess}}折</span>
+              <span>{{adverMes.valid}}折</span>
             </li>
              <li>
                 <span>成交价格：</span>
@@ -309,7 +309,7 @@ export default {
           createTime:"2017-09-09",//创建时间
           statusName:"审核中",//订单状态,
           realitySellAllPrice:"1000",//成交价格
-          discountMess:"0.5"//折扣信息
+          valid:"0.5"//折扣信息
         },
         dataTable:{//数据表
            thead:["总曝光量","总点击量","点击率"],
@@ -383,7 +383,7 @@ export default {
       //获取排期信息
       this.$http.get(config.urlList.getAdOrderDetailUnite+`?${customerTime}`).then((res) => {
         if(res.data.errorCode === 0) {
-          this.tableData.tbody=res.data.result
+          
         }
         else {
           this.$Modal.info({
@@ -420,8 +420,8 @@ export default {
           },
           grid: {
             top: '10%',
-            left: '3%',
-            right: '3%',
+            left: '10',
+            right: '30',
             bottom:'3%',
             containLabel: true
           },
