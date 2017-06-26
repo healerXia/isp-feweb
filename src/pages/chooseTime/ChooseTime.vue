@@ -110,15 +110,19 @@ export default {
             let insertList = [];
             // 元数据容器
             let dataList = [];
+
             // 分析导入的数据
             for(let i = 0;i < this.num.length;i++) {
                 let time = this.num[i];
                 insertList = insertData[time];
                 dataList = this.pageList[time];
-                if (dataList) {
+                console.log(insertList);
+                console.log(dataList);
+                if (dataList && insertList) {
                     this.compared(dataList, insertList, time);
+
                 }
-                else {
+                else if (insertList  && !dataList){
                     this.pageList[time] = insertData[time];
                 }
             }
@@ -208,10 +212,10 @@ export default {
             let obj = {};
 
             for (let i = 0; i < newData.length; i++) {
-                id = newData[i].id;
+                id = newData[i].adPlaceId;
                 var isExit = false;
                 for (let k = 0; k < oldData.length; k++) {
-                    if (oldData[k].id == id) {
+                    if (oldData[k].adPlaceId == id) {
                         isExit = true;
                         break;
                     }
@@ -221,6 +225,7 @@ export default {
                     this.pageList[time].push(newData[i]);
                 }
             }
+            // console.log(this.pageList);
         },
         // 计算比率 购买 配送
         ratio(total, delivery) {
@@ -345,6 +350,9 @@ export default {
             })
             window.localStorage.setItem('timePriceList', JSON.stringify(this.priceList));
             window.localStorage.setItem('timePageList', JSON.stringify(this.pageList));
+
+            console.log(this.priceList);
+            console.log(this.pageList);
         },
         // 切换用途
         selectStyle(oldType, newType, list, index, price, date) {
@@ -543,35 +551,61 @@ export default {
            let url = '';
            if (this.adOrderCode) {
                url = '/isp-kongming/adorder/orderUpdate';
+               this.$http.post(url, {
+                    "action": 0,
+                    "ProjectId": this.proMess.id,
+                    "adOrderCode": this.adOrderCode,
+                    "ProjectName": this.proMess.projectName,
+                    "detailList": datas
+                }).then((res) => {
+                   if (res.data.errorCode == 0) {
+                       this.$Modal.success({
+                           title: '提示',
+                           content: '方案保存成功',
+                           onOk () {
+                                window.localStorage.setItem('adOrderCode', res.data.result);
+                                self.$router.push('buildPrice');
+                            }
+                       });
+                   }
+                   else {
+                       this.$Modal.info({
+                           title: '提示',
+                           content: res.data.errorMsg
+                       });
+                   }
+               }).catch((err) => {
+                   console.log(err)
+               })
            }
            else {
                url = '/isp-kongming/adorder/insert';
+               this.$http.post(url, {
+                    "action": 0,
+                    "ProjectId": this.proMess.id,
+                    "ProjectName": this.proMess.projectName,
+                    "detailList": datas
+                }).then((res) => {
+                   if (res.data.errorCode == 0) {
+                       this.$Modal.success({
+                           title: '提示',
+                           content: '方案保存成功',
+                           onOk () {
+                                window.localStorage.setItem('adOrderCode', res.data.result);
+                                self.$router.push('buildPrice');
+                            }
+                       });
+                   }
+                   else {
+                       this.$Modal.info({
+                           title: '提示',
+                           content: res.data.errorMsg
+                       });
+                   }
+               }).catch((err) => {
+                   console.log(err)
+               })
            }
-           this.$http.post(url, {
-                "action": 0,
-                "ProjectId": this.proMess.id,
-                "ProjectName": this.proMess.projectName,
-                "detailList": datas
-            }).then((res) => {
-               if (res.data.errorCode == 0) {
-                   this.$Modal.success({
-                       title: '提示',
-                       content: '方案保存成功',
-                       onOk () {
-                            window.localStorage.setItem('adOrderCode', res.data.result);
-                            self.$router.push('buildPrice');
-                        }
-                   });
-               }
-               else {
-                   this.$Modal.info({
-                       title: '提示',
-                       content: res.data.errorMsg
-                   });
-               }
-           }).catch((err) => {
-               console.log(err)
-           })
         },
         // 新增
         insert(index) {

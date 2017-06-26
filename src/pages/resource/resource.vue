@@ -159,7 +159,7 @@
                             </div>
                             <div class="fr">
                                 <span>
-                                    尺寸：多媒体：{{i.width}}*{{i.height}}px
+                                    尺寸：{{adType[i.adType]}}：{{i.width}}*{{i.height}}px
                                     ≤100k</span>
                             </div>
                         </div>
@@ -260,6 +260,7 @@ export default {
                 // 广告类型集合
                 typeList: []
             },
+            adType: ['图片', '文章', 'flash', '视频', '图片\flash', '图文', '组图', '大图'],
             searchData: {
                 // 页面名称
                 pageName: '',
@@ -379,7 +380,9 @@ export default {
             // 已选广告位月份按钮索引
             monthIndex: 0,
             // 广告位名称组合
-            adNames: ''
+            adNames: '',
+            // 选择时间页面日期集合存储
+            timePageMonth: []
         }
     },
     mounted() {
@@ -490,7 +493,7 @@ export default {
                            }
                        }
 
-                       monthData.kprice = (total/30).toFixed(1);
+                       monthData.kprice = (total/30).toFixed(2);
                        monthData.state = dayStates.join(',');
                        monthData.skuIdList = skuIdList;
                        arr.push(monthData);
@@ -511,7 +514,6 @@ export default {
                 //     adStateList
                 // }
             }
-            console.log(adStateList);
             return adStateList;
         },
         initSearch() {
@@ -685,7 +687,7 @@ export default {
                 // 页面类型
                 adAdTagId:  this.searchInfo.labelTypeId,
                 // 广告类型
-                //placeTypeList: this.searchInfo.Type,
+                placeTypeList: this.searchInfo.Type,
                 // 投放车型
                 modelIdList: this.searchInfo.serialId,
                 // // 投放地区
@@ -705,7 +707,7 @@ export default {
                     for (let i = 0; i< this.tableList.length;i++) {
                         this.$set(this.checkBoxStatus, i, false);
                     }
-                    
+
                     if (datas[0].totalCounts > 0) {
                         this.paging.totalCounts = datas[0].totalCounts;
                     }
@@ -713,6 +715,7 @@ export default {
                     if (this.$router.currentRoute.query.action) {
                         //this.selectTableData = JSON.parse(window.localStorage.getItem('timePageList'));
                         //this.monthList = JSON.parse(window.localStorage.getItem('monthList'));
+                        this.timePageMonth = JSON.parse(window.localStorage.getItem('monthList'));
                         this.action = this.$router.currentRoute.query.action;
                         this.searchInfo.beginTime = this.$router.currentRoute.query.time;
                         this.searchInfo.endTime = this.$router.currentRoute.query.time;
@@ -729,7 +732,7 @@ export default {
                     }
 
 
-                    this.adNames = `${this.searchInfo.mediaName}/${this.searchInfo.pageType}/${this.searchData.pageName}`;
+                    this.adNames = `${this.searchInfo.mediaName}/${this.searchData.pageName}`;
 
                     for (let i = 0; i < datas.length; i++) {
                         if (this.checkBoxList.indexOf(datas[i].adPlaceId) > -1) {
@@ -992,7 +995,7 @@ export default {
                     this.render();
                     this.adName = `${this.searchInfo.mediaName}`;
                 } else {
-                    this.$Message.error('查询失败!');
+                    //this.$Message.error('查询失败!');
                 }
             })
         },
@@ -1093,7 +1096,7 @@ export default {
                             // 广告位名称
                             "name": this.tableList[index].name,
                             // 刊例价格
-                            "price": parseFloat(currentList[i].kprice).toFixed(1),
+                            "price": parseFloat(currentList[i].kprice).toFixed(2),
                             // 用途
                             "useStyle":0,
                             // 刊例价单位
@@ -1120,7 +1123,7 @@ export default {
                             "adStateList": currentList[i].state.split(','),
                             // "id": obj.id,
                             "channelName": this.tableList[index].channelName,
-                            "kprice": parseFloat(currentList[i].kprice).toFixed(1)
+                            "kprice": parseFloat(currentList[i].kprice).toFixed(2)
                         })
                     }
                     else {
@@ -1143,7 +1146,7 @@ export default {
                                 // 广告位名称
                                 "name": this.tableList[index].name,
                                 // 刊例价格
-                                "price": parseFloat(currentList[i].kprice).toFixed(1),
+                                "price": parseFloat(currentList[i].kprice).toFixed(2),
                                 // 用途
                                 "useStyle":0,
                                 // 刊例价单位
@@ -1173,7 +1176,7 @@ export default {
                                 "adStateList": currentList[i].state.split(','),
                                 // "id": obj.id,
                                 "channelName": this.tableList[index].channelName,
-                                "kprice": parseFloat(currentList[i].kprice).toFixed(1)
+                                "kprice": parseFloat(currentList[i].kprice).toFixed(2)
                             })
                         }
                     }
@@ -1372,6 +1375,14 @@ export default {
             if (this.action == 1) {
                 window.localStorage.setItem('insertData', JSON.stringify(this.selectTableData));
             }
+
+            for(let i = 0; i < this.timePageMonth.length; i++) {
+                if (this.monthList.indexOf(this.timePageMonth[i]) < 0) {
+                    this.monthList.push(this.timePageMonth[i]);
+                }
+            }
+
+            this.monthList.sort();
             window.localStorage.setItem('monthList', JSON.stringify(this.monthList));
             window.localStorage.setItem('tableData', JSON.stringify(this.selectTableData));
             window.localStorage.setItem('checkBoxList', JSON.stringify(this.checkBoxList));
@@ -1393,7 +1404,6 @@ export default {
         },
         // 选择广告类型
         checkType(name) {
-            console.log(name);
             this.searchInfo.Type = this.Type.join();
         },
         // 请选择投放城市
