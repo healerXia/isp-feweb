@@ -100,19 +100,22 @@ export default {
     data(){
       return{
         serialBrand:"",
-        serialNameArr:this.proMess.serialNames.split(","),
-        brandNameArr:this.proMess.brandNames.split(",")
+        serialNameArr:[],
+        brandNameArr:[]
       }
     },
     watch:{
       proMess:{
         handler:function(){
-          this.brandNameArr=this.proMess.brandNames.split(",")
-          this.serialNameArr=this.proMess.serialNames.split(",")
-          for(let i=0;i<this.serialNameArr.length;i++){
-            this.serialBrand=this.serialBrand+this.serialNameArr[i]+"("+this.brandNameArr[i]+"),"
+          if(this.proMess.brandNames!=[]){
+            this.brandNameArr=this.proMess.brandNames.split(",")
+            this.serialNameArr=this.proMess.serialNames.split(",")
+            for(let i=0;i<this.serialNameArr.length;i++){
+              this.serialBrand=this.serialBrand+this.serialNameArr[i]+"("+this.brandNameArr[i]+"),"
+            }
+            this.serialBrand=this.serialBrand.replace(/(,)$/,"")
           }
-          this.serialBrand=this.serialBrand.replace(/(,)$/,"")
+          
         }
       }     
     },

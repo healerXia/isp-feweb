@@ -455,7 +455,6 @@
           this.$http.get(config.urlList.getCustomer+'?custName='+custName).then((res) => {
             if(res.data.errorCode===0){            
               this.custOption=res.data.result.resultList.slice(0,10)  
-              console.log(this.custOption)
               setTimeout(()=>{
                 if(custName!=""){
                   this.formValidate.custId=this.custOption[0].custid   
