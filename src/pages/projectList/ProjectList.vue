@@ -148,10 +148,10 @@ import config from './config.js';
         window.location.href="/isp-kongming/project/toExcel?"+this.searchStr
       },
       disBegin(date){
-          return date && date.valueOf() >new Date(this.searchData.createTime2)
+          return date && date.valueOf() >new Date(this.searchData.createTime2);
       },
       disEnd(date){
-          return date && date.valueOf()< new Date(this.searchData.createTime1);
+          return date && date.valueOf()< new Date(this.searchData.createTime1)-86400000;
       },
       toParam(objs){
         var str=""

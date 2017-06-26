@@ -328,41 +328,15 @@
       created() {//页面数据初始化
         //获取客户信息
         let customerTime = Date.parse(new Date());
-        this.$http.get(config.urlList.getCustomer+`?${customerTime}`).then((res) => {
-          if(res.data.errorCode===0){
-            this.custOptionT=res.data.result.resultList;
-            this.custOption=this.custOptionT.slice(0,10)
-            this.judge.loading5=false
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((err) => {
-        })
-
+    
+        if(!this.$router.currentRoute.query.id){
+          this.selectForMess("","")
+        }
         this.$http.get(config.urlList.getDutyUser+`?${customerTime}`).then((res) => {//责任销售
           if(res.data.errorCode===0){
             this.dutyUserArrT=res.data.result;
             this.dutyUserArr=this.dutyUserArrT.slice(0,10)
             this.judge.loading4=false
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((err) => {
-        })
-
-        this.$http.get(config.urlList.getagentCust+`?${customerTime}`).then((res) => {//代理公司
-          if(res.data.errorCode===0){
-            this.agentOptionT=res.data.result;
-            this.agentOption=this.agentOptionT.slice(0,10)
-            this.judge.loading1=false
           }
           else {
             this.$Modal.info({
@@ -474,9 +448,85 @@
 
               }).catch((err) => {})
             }
-          },0)
+        },0)
       },
       methods: {
+        selectForMess(custid,agentid){
+          //获取客户信息
+          this.$http.get(config.urlList.getCustomer).then((res) => {
+            if(res.data.errorCode===0){
+              this.custOptionT=res.data.result.resultList;
+              if(custid==""){
+                this.custOption=this.custOptionT.slice(0,10)
+              }
+              this.judge.loading5=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+          //代理公司
+          this.$http.get(config.urlList.getagentCust).then((res) => {
+            if(res.data.errorCode===0){
+              this.agentOptionT=res.data.result;
+              this.agentOption=this.agentOptionT.slice(0,10)
+              this.judge.loading1=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+          if(custid!=""){
+            this.$http.get(config.urlList.getCustomer+'?custId='+custid).then((res) => {
+              if(res.data.errorCode===0){
+                this.custOption=res.data.result.resultList.slice(0,10)
+                
+                setTimeout(()=>{
+                  if(custid!=""){
+                    this.formValidate.custId=custid
+                  }
+                },0)
+                this.judge.loading5=false
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+              }).catch((err) => {
+            })
+          }
+          if(agentid!=""){
+              this.$http.get(config.urlList.getagentCust+"?id="+agentid).then((res) => {
+              if(res.data.errorCode===0){
+                this.agentOption=res.data.result.slice(0,10)
+                this.judge.loading1=false
+                setTimeout(()=>{
+                  if(agentid!=""){
+                    this.singleCheck.agentId=parseInt(agentid)//代理公司
+                  }
+                },0)
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+              }).catch((err) => {
+            })
+          }
+         
+        },
         disBegin (date) {//开始时间
           return date && date.valueOf() > new Date(this.searchData.createTime1)
         },
@@ -485,44 +535,27 @@
         },
         copyFormValidate(data){//当页面为编辑状态时，将formValidate里的值替换一下
             for(let item in this.formValidate){
-              if(this.formValidate.hasOwnProperty(item)){
-
-                if(item!="areaId"){
+              if(this.formValidate.hasOwnProperty(item)){          
+                if(item!="areaId"&&item!='custId'){
                   this.formValidate[item]=data[item]
                 }
               }
             }
+
+            this.selectForMess(data.custId,data.agentCustId)
             this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
             this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放方式
             this.mulCheck.putWay=this.toArr(this.formValidate.putWays)//投放公司
-            this.singleCheck.agentId=parseInt(this.formValidate.agentCustId)//代理公司
-            this.singleCheck.dutyId=parseInt(this.formValidate.dutyUserId)//责任销售
+            this.singleCheck.dutyId=this.formValidate.dutyUserId?parseInt(this.formValidate.dutyUserId):""//责任销售
             this.formValidate.endDate=new Date(this.formValidate.endDate)
             this.formValidate.beginDate=new Date(this.formValidate.beginDate)
             let arr =this.toArr(this.formValidate.promotionRate);
             for(var i=0;i<arr.length;i++){
               this['value'+(i+1)]=arr[i]
              }
-             this.provinceId=data.provinceId
-             this.addressId.cityId=data.cityId
-             this.addressId.areaId=data.areaId
-        },
-        addOption(optionName,custId,name){
-          for(var i=0;i<this[optionName];i++){
-            if(custId==this[optionName][i].Value){
-              flag=true
-            }
-          }
-          if(!flag){
-            let obj={
-              custname:name,
-              custid:custId
-            }
-            this[optionName].push(obj)
-          }
-          setTimeout(()=>{
-            this.formValidate.custId=this.formValidate.custId
-          },0)
+             this.provinceId=data.provinceId?data.provinceId:""
+             this.addressId.cityId=data.cityId?data.cityId:""
+             this.addressId.areaId=data.areaId?data.areaId:""
         },
         checkCust(value){//选择客户名称
            this.agentOption=this.agentOptionT.slice(0,10)
@@ -751,7 +784,19 @@
               if(!this.lastCheckValue()){//检查地区和复合推广方式和投放预算
                 return
               }
-              this.serialBrandValue()//值的处理
+              if(!this.dateChange(this.formValidate.beginDate,this.formValidate.endDate)){
+                this.$Modal.error({
+                    title: "提示",
+                    content: "表单验证失败！"
+                });
+                this.judge.dateErrShow=true
+                this.judge.submitDiasbled=false
+                return
+              }else{
+                this.judge.dateErrShow=false
+              }
+              this.serialBrandValue()
+
               if(this.$router.currentRoute.query.id){//修改项目
                 this.formValidate.id=this.$router.currentRoute.query.id
                 this.$http.post(config.urlList.editPro,
@@ -814,14 +859,17 @@
                   }).catch((res)=>{this.judge.submitDiasbled=false})
                 }
             }else {
-              this.dateChange(this.formValidate.beginDate,this.formValidate.endDate)
-               this.$Modal.error({
+              this.mustNeedCheck()//必填项验证
+              this.$Modal.error({
                   title: "提示",
                   content: "表单验证失败！"
               });
-            }
-            this.judge.submitDiasbled=false
+              this.judge.submitDiasbled=false
+            }            
           })
+          setTimeout(()=>{
+            this.judge.submitDiasbled=false
+          },2100)
         },
         handleSubmit (name) {//保存按钮
           this.areaCheck()//地区验证
@@ -844,6 +892,7 @@
                 this.judge.dateErrShow=false
               }
               this.serialBrandValue()
+              
               if(this.$router.currentRoute.query.id){//修改项目
                 this.formValidate.id=this.$router.currentRoute.query.id
                 this.$http.post(config.urlList.editPro,
@@ -913,6 +962,9 @@
               this.judge.submitDiasbled=false
             }
           })
+          setTimeout(()=>{
+            this.judge.submitDiasbled=false
+          },2100)
         },
         handleReset (name) {//表单重置
           this.$refs[name].resetFields();

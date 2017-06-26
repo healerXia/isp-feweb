@@ -40,13 +40,14 @@ Vue.prototype.$http = Axios.create({
         let data = JSON.parse(res);
         let url = window.location.href;
             if (data.errorCode == 50000) {
-            Vue.prototype.$Modal.info({
-                title: '提示',
-                content: data.errorMsg,
-                onOk: () => {
-                    window.location.href = `${data.loginUrl}?redirect=${url}`;
-                }
-            });
+                window.location.href = `${data.loginUrl}?redirect=${url}`;
+            // Vue.prototype.$Modal.info({
+            //     title: '提示',
+            //     content: data.errorMsg,
+            //     onOk: () => {
+            //         window.location.href = `${data.loginUrl}?redirect=${url}`;
+            //     }
+            // });
         }
         return data;
     }]

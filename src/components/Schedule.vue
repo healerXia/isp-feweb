@@ -1,5 +1,14 @@
 <!-- 项目预算的组件-->
 <template lang="html">
+    <div class="tabCom">
+        <div class="nextTitle MB15">
+              {{tableData.yearMonth}}
+              <ul class="indentify">
+                <li><span class="square notUse"></span><span>不可用</span></li>
+                <li><span class="square hadUse"></span><span>已使用</span></li>
+                <li><span class="square hadOrder"></span><span>已预订</span></li>
+              </ul>
+        </div>
         <table class="comTale">
             <thead>
                 <tr>
@@ -8,7 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="tbodys in tableData.tbody">
+                <tr v-for="tbodys in tableData.data">
                      <td v-for="item in theadkey" v-if="item!='listNumber'">
                         {{tbodys[item]}}
                      </td> 
@@ -21,6 +30,12 @@
                 </tr>
             </tbody>
         </table>
+         <div class="price">
+          <span>购买净总价：3000元</span>
+          <span>购买净总价：3000元</span>
+          <span>购买净总价：3000元</span>
+        </div> 
+        </div>
 </template>
 <script>
     export default {
@@ -50,43 +65,72 @@
     }
 </script>
 <style lang="scss">
-table.comTale{
-    height: auto;
-    border-collapse:collapse;
-    cellpadding:0;
-    td{ border:#DEE1E5 solid 1px;font-size: 12px;height: 30px;max-width: 100px; padding: 0 5px;  }
-    thead{ 
+.tabCom{
+    .indentify{
+        float: right;
+        li{
+            float: left;
+            height: 20px;
+            line-height: 20px;          
+            span{
+                vertical-align: middle;
+                display: inline-block;
+                height: 30px;
+                line-height: 30px;
+                color: #7B8497 !important;
+                font-size: 12px;
+                padding: 0
+            }
+            .square{
+                border-radius: 2px;
+                margin:0 20px;
+                width: 18px;
+                height:18px;
+            }
+            .notUse{background-color: #EDEFF2}
+            .hadUse{background-color: #6A7088}
+            .hadOrder{background-color: #A8C8EE }
+        }
     }
-    tbody{
-       td{  
-            padding: 0 5px;  
-            padding-right: 0;   
-            white-space: nowrap;
-            text-overflow:ellipsis; 
-            overflow: hidden;
-            .status{ 
-                padding: 0;
-                margin: 0;               
-                width: 100%;height: 100%;
-                display: block;
-            }
-            .status1{
-                background: #F5F6F7;              
-            }
-            .status2{
-                background: #FEECFF;
-            }
-            .status3{
-                background: #ECF4FF;
-            }
+    table.comTale{
+        height: auto;
+        border-collapse:collapse;
+        cellpadding:0;
+        td{ border:#DEE1E5 solid 1px;font-size: 12px;height: 30px;max-width: 100px; padding: 0 5px;  }
+        thead{ 
+        }
+        tbody{
+           td{  
+                padding: 0 5px;  
+                padding-right: 0;   
+                white-space: nowrap;
+                text-overflow:ellipsis; 
+                overflow: hidden;
+                .status{ 
+                    padding: 0;
+                    margin: 0;               
+                    width: 100%;height: 100%;
+                    display: block;
+                }
+                .status1{
+                    background: #EDEFF2;              
+                }
+                .status2{
+                    background: #6A7088 ;
+                }
+                .status3{
+                    background: #A8C8EE;
+                }
 
-       }
-       td.cell{
-            padding: 0;
-            margin: 0;
-            height: 30px;
-            width:25px;
-       }
+           }
+           td.cell{
+                padding: 0;
+                margin: 0;
+                height: 30px;
+                width:25px;
+           }
+        }
     }
 }
+
 </style>

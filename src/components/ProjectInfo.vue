@@ -20,11 +20,12 @@
             <div class="modul">
               <div class="nextTitle MB5 MT18">基本信息</div>
               <ul class="messShow">
-                <li><span>项目名称：</span><span>{{proMess.projectName}}</span></li>
+                <li><span>项目名称：</span><span class="liWid">{{proMess.projectName}}</span></li>
                 <li>
                   <span>项目预算：</span>
                   <span>
-                    {{(proMess.budgetAmount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+                    {{(proMess.budgetAmount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元
+                    </span>
                 </li>
                 <li>
                   <span>投放周期：</span>
@@ -35,8 +36,16 @@
             <div class="modul">
               <div class="nextTitle MB5 MT18">投放KPI</div>
               <ul class="messShow">
-                <li><span>曝光预期：</span><span>{{proMess.expectUvCount}}</span></li>
-                <li><span>点击预期：</span><span>{{proMess.expectPvCount}}</span></li>
+                <li><span>曝光预期：</span>
+                <span v-if="proMess.expectUvCount!=null">
+                  {{(proMess.expectUvCount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                </span>
+                </li>
+                <li><span>点击预期：</span>
+                  <span v-if="proMess.expectPvCount!=null">
+                    {{(proMess.expectPvCount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                  </span>
+                </li>
               </ul>
             </div>
             <div class="model">
@@ -53,18 +62,18 @@
                   <span>投放方式：</span>                 
                   <span>{{proMess.putWayNames}}</span>
                 </li>
-                <li v-if="proMess.serialIds==''&&proMess.brandIds==''">
+                <li v-if="proMess.serialIds==''&&proMess.brandIds==''" class="hide">
                 </li>
                 <li v-else-if="proMess.serialIds!=''">
                   <span>投放车型：</span>
-                  <span>
+                  <span class='liWid'>
                     {{proMess.serialNames}}
                     ({{proMess.brandNames}})
                   </span>                     
                 </li>
                 <li v-else-if="proMess.serialIds==''">
                   <span>投放品牌：</span>
-                  <span>{{proMess.brandNames}}</span>        
+                  <span class='liWid'>{{proMess.brandNames}}</span>        
                 </li>
                 <li>
                   <span>签署地区：</span>
@@ -126,11 +135,14 @@ export default {
                 width: 100%;
                 overflow: hidden;
                 display: block;
-                li{float: left;color: #7B8497;width: 500px;margin-bottom: 6px}
+                li{
+                  float: left;color: #7B8497;width: 500px;margin-bottom: 6px;
+                  span{display: inline-block;float: left}
+                  .liWid{width: 300px;}
+                }
+                li.hide{display: none;}
             }
-            .liWid{
-                // li{width: 200px !important;}
-            }
+            
         }
 
     }

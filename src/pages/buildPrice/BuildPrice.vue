@@ -20,8 +20,8 @@
                     </Form-item>
                     <p class="MB20 fontSize12">实际成交价：<span class="colorRed fontSize14">{{reallyPrice.toFixed(2)}}元</span></p>
                     <Form-item>
-                        <Button type="primary" class="btn bg4373F3" @click="handleSubmit('formValidate', 0)" :disabled='saveStatus'>保存方案</Button>
-                        <Button type="primary" class="btn bg4373F3 ML20" @click="handleSubmit('formValidate', 1)" :disabled='submitStatus'>提交</Button>
+                        <Button type="primary" class="btn bg4373F3" @click="handleSubmit('formValidate', 1)" :disabled='saveStatus'>保存方案</Button>
+                        <Button type="primary" class="btn bg4373F3 ML20" @click="handleSubmit('formValidate', 2)" :disabled='submitStatus'>提交</Button>
                         <Button type="primary" class="btn bgccc ML20" @click="handleReset('formValidate')" >取消</Button>
                     </Form-item>
                 </Form>
@@ -166,13 +166,19 @@ import urlList from './config.js';
             this.$router.push({path: 'details', query: {id: id}});
         },
         handleSubmit (name, id) {
+            if (id == 1) {
+                this.saveStatus = true;
+            }
+
+            if (id == 2) {
+                this.submitStatus = true;
+            }
             let self = this;
             let datas = JSON.parse(window.localStorage.getItem('price'));
             // 浅拷贝
             // let datas = Object.assign([], this.submitData);
             for (let i = 0;i < datas.length; i++) {
                 datas[i].priceUnit = 1;
-
             }
 
             this.$refs[name].validate((valid) => {
@@ -189,7 +195,7 @@ import urlList from './config.js';
                         "detailList": datas
                     }).then((res) => {
                         if (res.data.errorCode === 0) {
-                            if (id == 0) {
+                            if (id == 1) {
                                 this.$Modal.success({
                                     title: '提示',
                                     content: '保存成功',
@@ -197,9 +203,11 @@ import urlList from './config.js';
                                          self.$router.push({path: 'details', query: {id: self.proMess.id}});
                                     }
                                 });
+
+                                this.saveStatus = true;
                             }
 
-                            if (id ==1) {
+                            if (id == 2) {
                                 this.$Modal.success({
                                     title: '提示',
                                     content: '提交成功',
@@ -207,18 +215,42 @@ import urlList from './config.js';
                                          self.$router.push({path: 'details', query: {id: self.proMess.id}});
                                      }
                                 });
+
+                                this.submitStatus = true;
                             }
+
                         }
                         else {
+                            if (id == 1) {
+                                this.saveStatus = false;
+                            }
+
+                            if (id == 2) {
+                                this.submitStatus = false;
+                            }
                             this.$Modal.info({
                                 title: '提示',
                                 content: res.data.errorMsg
                             });
                         }
                     }).catch((err) => {
+                        if (id == 1) {
+                            this.saveStatus = false;
+                        }
+
+                        if (id == 2) {
+                            this.submitStatus = false;
+                        }
                         console.log(err)
                     })
                 } else {
+                    if (id == 1) {
+                        this.saveStatus = false;
+                    }
+
+                    if (id == 2) {
+                        this.submitStatus = false;
+                    }
                     this.$Message.error('表单验证失败!');
                 }
             })
