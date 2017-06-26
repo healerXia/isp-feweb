@@ -27,14 +27,14 @@
       <div class="conBox MT20 pL30 pR30" v-show="!noOrder">
         <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
-          <router-link 
+         <!--  <router-link 
           :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
            编辑排期                
           </router-link>
           <router-link 
           :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}"> 
            编辑价格                
-          </router-link>
+          </router-link> -->
         </div>
         <div class="modul">
           <div class="nextTitle MB5">广告信息</div>
@@ -234,74 +234,7 @@ export default {
         },
         thead:["广告位名称","用途","刊例价"],
         theadkey:['adName','useStyle','price','listNumber'],  
-        tableDatas:[
-          {
-            yearMonth:201706,
-            data:[
-              {
-                "yearMonth": 201706,
-                "adPosId": 2,
-                "adName": "易车网/易车网车型对比栏目/全屏",
-                "price": 8000,
-                "useStyle": 4001,
-                "priceUnit": 0,
-                "brandId": 20001,
-                "areaId": 10,
-                "adCityId": 201,                
-                "listNumber": [
-                   0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1 
-                ]
-              },
-              {
-                "yearMonth": 201706,
-                "adPosId": 2,
-                "adName": "易车网/易车网车型对比栏目/全屏",
-                "price": 8000,
-                "useStyle": 4001,
-                "priceUnit": 0,
-                "brandId": 20001,
-                "areaId": 10,
-                "adCityId": 201,                
-                "listNumber": [
-                  0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1     
-                ]
-              }
-            ]            
-          },
-          {
-            yearMonth:201706,
-            data:[
-              {
-                "yearMonth": 201706,
-                "adPosId": 2,
-                "adName": "易车网/易车网车型对比栏目/全屏",
-                "price": 8000,
-                "useStyle": 4001,
-                "priceUnit": 0,
-                "brandId": 20001,
-                "areaId": 10,
-                "adCityId": 201,                
-                "listNumber": [
-                  0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1 
-                ]
-              },
-              {
-                "yearMonth": 201706,
-                "adPosId": 2,
-                "adName": "易车网/易车网车型对比栏目/全屏",
-                "price": 8000,
-                "useStyle": 4001,
-                "priceUnit": 0,
-                "brandId": 20001,
-                "areaId": 10,
-                "adCityId": 201,                
-                "listNumber": [
-                   0,1,2,1,1,1,0,1,1,1,2,1,1,0,1,1,1,1,1,2,1,1,2,1,1,1,0,1,0,1,1 
-                ]
-              }
-            ]            
-          }
-        ],
+        tableDatas:[{"data":[{"id":411,"orderYearMonth":201706,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","0","0","1","0","1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":412,"orderYearMonth":201706,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","0","0","0","1","0","0","0","0","1","0","1","0","0","0","0","0","1","0","0","0"]}],"yearMonth":201706},{"data":[{"id":421,"orderYearMonth":201707,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","1","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":422,"orderYearMonth":201707,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201707},{"data":[{"id":431,"orderYearMonth":201708,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":432,"orderYearMonth":201708,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201708}],
         adverMes:{//广告信息
           adOrderCode:"AO12132dfh2323",//订单编号
           beginTime:"2017-01-01",//开始时间
@@ -383,7 +316,7 @@ export default {
       //获取排期信息
       this.$http.get(config.urlList.getAdOrderDetailUnite+`?${customerTime}`).then((res) => {
         if(res.data.errorCode === 0) {
-          
+          console.log(res)
         }
         else {
           this.$Modal.info({

@@ -297,7 +297,7 @@
             ruleValidate: {//验证
               projectName: [{required: true, message:'请填写项目名称',trigger:'blur'}],
               beginDate: [{required:true,message:'请填写开始日期',trigger:'change',type:"date"}],
-              custId: [{required:true,message:'请填写客户名称',trigger:'change',type:"string"}],
+              custId: [{required:true,message:'请选择客户名称',trigger:'change',type:"string"}],
               endDate: [{required: true,message:'请填写结束日期',trigger:'change',type:"date"}],
               brandIds:[{required:false}],
               serialIds:[{required:false}]
@@ -317,7 +317,7 @@
             dutyUserArr:[],//责任销售十条数据
             brandOptionT:[],//投放品牌总
             brandOption:[],//投放品牌十条数据
-            custOptionT:[],//客户信息总
+            // custOptionT:[],//客户信息总
             custOption:[],//客户信息十条数据
             budgetAmountArr:[],
             provinceArr:[],//省
@@ -434,8 +434,8 @@
               this.judge.submitDiasbled=true
               this.$http.get(config.urlList.getInfo+"?id="+id).then((res) => {//页面初始化
                 if(res.data.errorCode===0){
-                    this.copyFormValidate(res.data.result)
-                    setTimeout(()=>{
+                    this.copyFormValidate(res.data.result)//数据回填
+                    setTimeout(()=>{//提交按钮开启
                      this.judge.submitDiasbled=false
                     },2000)
                 }
@@ -451,14 +451,16 @@
         },0)
       },
       methods: {
-        selectForMess(custid,agentid){
-          //获取客户信息
-          this.$http.get(config.urlList.getCustomer).then((res) => {
-            if(res.data.errorCode===0){
-              this.custOptionT=res.data.result.resultList;
-              if(custid==""){
-                this.custOption=this.custOptionT.slice(0,10)
-              }
+        selectForMess(custName,agentid){//由于客户信息与代理公司1下拉数据较多，回填时的特别处理        
+          this.$http.get(config.urlList.getCustomer+'?custName='+custName).then((res) => {
+            if(res.data.errorCode===0){            
+              this.custOption=res.data.result.resultList.slice(0,10)  
+              console.log(this.custOption)
+              setTimeout(()=>{
+                if(custName!=""){
+                  this.formValidate.custId=this.custOption[0].custid   
+                }
+              },0)    
               this.judge.loading5=false
             }
             else {
@@ -484,29 +486,8 @@
             }
             }).catch((err) => {
           })
-          if(custid!=""){
-            this.$http.get(config.urlList.getCustomer+'?custId='+custid).then((res) => {
-              if(res.data.errorCode===0){
-                this.custOption=res.data.result.resultList.slice(0,10)
-                
-                setTimeout(()=>{
-                  if(custid!=""){
-                    this.formValidate.custId=custid
-                  }
-                },0)
-                this.judge.loading5=false
-              }
-              else {
-                this.$Modal.info({
-                    title: '提示',
-                    content: res.data.errorMsg
-                });
-              }
-              }).catch((err) => {
-            })
-          }
           if(agentid!=""){
-              this.$http.get(config.urlList.getagentCust+"?id="+agentid).then((res) => {
+            this.$http.get(config.urlList.getagentCust+"?id="+agentid).then((res) => {
               if(res.data.errorCode===0){
                 this.agentOption=res.data.result.slice(0,10)
                 this.judge.loading1=false
@@ -522,10 +503,9 @@
                     content: res.data.errorMsg
                 });
               }
-              }).catch((err) => {
-            })
-          }
-         
+            }).catch((err) => {
+           })
+          }        
         },
         disBegin (date) {//开始时间
           return date && date.valueOf() > new Date(this.searchData.createTime1)
@@ -542,7 +522,7 @@
               }
             }
 
-            this.selectForMess(data.custId,data.agentCustId)
+            this.selectForMess(data.custName,data.agentCustId)
             this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
             this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放方式
             this.mulCheck.putWay=this.toArr(this.formValidate.putWays)//投放公司
@@ -664,7 +644,19 @@
           if(query==""){
             this.formValidate.custId=""
           }
-          this.arrFilter(query,'custOption','custOptionT','loading5')
+          this.$http.get(config.urlList.getCustomer+"?custName="+query)
+          .then((res)=>{
+              if(res.data.errorCode===0){
+                this.loading5=false
+                this.custOption=res.data.result.resultList.slice(0,10);
+              }else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+          }).catch((res)=>{})
+
         },
         brandChoose (query) {//投放品牌过滤
           this.arrFilter(query,'brandOption','brandOptionT','loading2')

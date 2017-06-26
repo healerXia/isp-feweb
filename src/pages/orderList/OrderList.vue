@@ -215,7 +215,6 @@ import config from './config.js';
         }
       },
       bDateChange(value){
-        console.log(Date.parse(this.searchData.createTime2))
         if(value==""){
           this.searchData.createTime1=""
         }else{
@@ -251,7 +250,6 @@ import config from './config.js';
             emulateJSON:true
           }).then((res)=>{
             if(res.data.errorCode===0){
-              console.log(res.data.result.totalCount)
               this.totalPages=res.data.result.totalCount;
               this.tableData.tbody=res.data.result.resultList
             }
