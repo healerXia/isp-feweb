@@ -103,7 +103,9 @@
                 </div>
                 <div class="header-r fr">
                     <span class='fl'>欢迎您，xxxx</span>
-                    <img src="../../assets/images/exit.png" alt="">
+                    <a href="javascript:;" @click='signOut'>
+                        <img src="../../assets/images/exit.png" alt="">
+                    </a>
                 </div>
             </div>
         </Row>
@@ -128,6 +130,17 @@ import LeftSide from 'component/LeftSide';
 export default {
     components: {
         LeftSide
+    },
+    methods: {
+        signOut() {
+            this.$http.get('/common-portal/common/portal/logout').then((res) => {
+                if (res.data.errorCode == 0) {
+
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
     }
 }
 </script>

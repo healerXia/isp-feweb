@@ -22,7 +22,7 @@
                     <Row>
                         <Col span="5">
                             <Form-item prop="beginTime">
-                                <Date-picker  :editable = 'false' :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date" placeholder="选择日期"></Date-picker>
+                                <Date-picker :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date" placeholder="选择日期"></Date-picker>
                             </Form-item>
                         </Col>
                         <Col span="1" style="text-align: center">-</Col>
@@ -289,7 +289,7 @@ export default {
                 disabledDate (date) {
                     let year = new Date().getFullYear();
                     let month = new Date().getMonth();
-                    return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year,11,30).getTime();
+                    return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
                 }
             },
             ruleValidate: {
@@ -382,7 +382,8 @@ export default {
             // 广告位名称组合
             adNames: '',
             // 选择时间页面日期集合存储
-            timePageMonth: []
+            timePageMonth: [],
+            areaId: 1,
         }
     },
     mounted() {
@@ -625,6 +626,7 @@ export default {
         },
         initArea(id) {
             // 初始化地区
+            this.areaId = id;
             this.searchInfo.cityId = '';
             this.$http.post('/isp-kongming/ad/areaInfo',{
                 cityId: id,
@@ -648,7 +650,7 @@ export default {
             // 初始化品牌
             this.searchInfo.brandId = '';
             this.$http.post('/isp-kongming/ad/brandInfo', {
-                brandId: -1,
+                brandId: 0,
                 name: ''
             }).then((res) => {
                 if (res.data.errorCode == 0) {
@@ -848,6 +850,7 @@ export default {
             }
         },
         remoteMethod4 (query) {
+            let self = this;
             if (query == '') {
                 this.loading1 = true;
                 setTimeout(() => {
@@ -860,7 +863,7 @@ export default {
                 setTimeout(() => {
                     this.searchInfo.cityId = '';
                     this.$http.post('/isp-kongming/ad/areaInfo',{
-                        id: id,
+                        id: self.areaId,
                         name: query
                     }).then((res) => {
                         this.loading1 = false;
