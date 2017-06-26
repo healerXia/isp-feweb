@@ -9,7 +9,7 @@
             @mouseup.stop.prevent='fn'
             @mouseover.stop.prevent='fn'
             @mouseleave='moveout'
-            style='user-select:none; width:200px;border: 1px solid #E9E9E9'>易车</td>
+            style='user-select:none; width:200px;border: 1px solid #E9E9E9'>{{adNames}}/{{info.name}}</td>
         <td>
             <Select v-model="useStyle" @on-change='selectData'>
                 <Option v-for="(key, value) in useList" :value="key" :key="value">{{value}}</Option>
@@ -52,6 +52,7 @@ export default {
     },
     data() {
         return {
+            adName: '',
             visibleList: [],
             // 日期选中状态列表
             indexList: [],
@@ -129,6 +130,7 @@ export default {
             }
         }
 
+        this.adNames = window.localStorage.getItem('adName');
 
         // for (let i = 0; i < this.timeData.length; i++) {
         //      let timeName = this.timeData[i];

@@ -67,6 +67,12 @@
     .result {
         padding-bottom: 20px;
 
+        .noResult {
+            p {
+                text-align: center;
+            }
+        }
+
 
         &.bottom {
             margin-top: 60px;

@@ -45,7 +45,7 @@
                     <td></td>
                     <td  v-for='i in 31' class='dateTd'>{{i}}</td>
                 </tr>
-                <tr v-for='i in second' :info = 'pageData' :timeData = 'i.state.split(",")' :time='i.time' is='DailogRow'>
+                <tr v-for='i in first' :info = 'pageData' :timeData = 'i.state.split(",")' :time='i.time' is='DailogRow'>
                     <td>{{i.time}}</td>
                 </tr>
             </table>
@@ -134,7 +134,6 @@ export default {
     // /api/isp-kongming/ad/select_
         this.result = JSON.parse(window.localStorage.getItem('viewAd'));
         let time = this.result.beginTime.split(' ')[0];
-        console.log(time);
         let month = time.split('-');
         console.log(month);
         this.adName = window.localStorage.getItem('adName');
@@ -145,7 +144,7 @@ export default {
         // this.second = year.slice(6);
 
 
-
+        //
        this.$http.post('/isp-kongming/ad/kuAdPlaceBo',{
            // 开始时间
            beginTime: `${time}`,
@@ -213,7 +212,8 @@ export default {
            // 开始时间
            beginTime: `${currentYear}-${currenMonth}-01`,
            // 结束时间
-           endTime: `${month[0]}-01`,
+        //    endTime: `${month[0]}-01`,
+        endTime: `${month[0]}-07-01`,
            // 广告位id
            adPlaceId: this.result.adPlaceId
 
