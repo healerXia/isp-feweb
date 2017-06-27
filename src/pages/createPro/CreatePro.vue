@@ -31,7 +31,7 @@
                  @on-change="checkAgent"
                 :loading="judge.loading1"
                >
-                <Option v-for="option in agentOption" :value="option.Value" :key="new Date()">{{option.Name}}</Option>
+                <Option v-for="option in agentOption" :value="option.value" :key="new Date()">{{option.name}}</Option>
               </Select>
             </Form-item>
             <Form-item label="项目名称:" prop="projectName" >
@@ -66,12 +66,12 @@
           <div class="formBox">
             <Form-item label="业务类型:" prop="businessType">
               <Radio-group v-model="formValidate.businessType">
-                <Radio v-for="line in businessTypeArr" :label="line.Value" :key="line.key">{{line.Name}}</Radio>
+                <Radio v-for="line in businessTypeArr" :label="line.value" :key="line.key">{{line.name}}</Radio>
               </Radio-group>
             </Form-item>
             <Form-item label="推广方式:" prop="promotionWay" v-show="judge.showPromotionWay">
               <Radio-group v-model="formValidate.promotionWay">
-                  <Radio v-for="line in promotionWayArr" :label="line.Value" :key="line.key">{{line.Name}}</Radio>
+                  <Radio v-for="line in promotionWayArr" :label="line.value" :key="line.key">{{line.name}}</Radio>
               </Radio-group><br>
               <div v-show="judge.rateShow">
                 <div class="inlineBlock MR20">
@@ -95,10 +95,10 @@
               <Checkbox-group v-model="mulCheck.putWay" @on-change='checkPutway'>
                 <Checkbox
                   v-for="line in putWayArr"
-                  :label="line.Value"
+                  :label="line.value"
                   :key="line.key"
                   >
-                  {{line.Name}}
+                  {{line.name}}
                 </Checkbox>
               </Checkbox-group>
             </Form-item>
@@ -113,7 +113,7 @@
                  :loading="judge.loading2"
                  @on-change='checkBrand'
                   >
-                <Option v-for="option in brandOption" :value="option.Value" :key="new Date()">{{option.Name}}</Option>
+                <Option v-for="option in brandOption" :value="option.value" :key="new Date()">{{option.name}}</Option>
               </Select>
             </Form-item>
             <Form-item label="投放车型:" prop="serialIds" v-show="judge.showSerial">
@@ -128,7 +128,7 @@
                 @on-change='checkSerial'
                 class='createInput fl'
                >
-                <Option v-for="option in serialOption" :value="option.Value" :key="new Date()">{{option.Name}}</Option>
+                <Option v-for="option in serialOption" :value="option.value" :key="new Date()">{{option.name}}</Option>
               </Select>
             </Form-item>
             <Form-item label="责任销售:" prop="dutyUserId" width=200>
@@ -143,7 +143,7 @@
                 :remote-method="dutyUserIdChoose"
                  @on-change="checkDutyUser"
                >
-                 <Option v-for="option in dutyUserArr" :value="option.Value" :key="new Date()">{{option.Name}}</Option>
+                 <Option v-for="option in dutyUserArr" :value="option.value" :key="new Date()">{{option.name}}</Option>
               </Select>
             </Form-item>
             <Form-item label="签署地区:"  width=200>
@@ -154,7 +154,7 @@
                 filterable
                 @on-change="provinceChange"
                 >
-                <Option v-for="option in provinceArr" :value="option.Value" :key="new Date()">{{option.Name}}</Option>
+                <Option v-for="option in provinceArr" :value="option.value" :key="new Date()">{{option.name}}</Option>
               </Select>
               <Select class="w127 MR11"
                 :clearable="true"
@@ -163,7 +163,7 @@
                 filterable
                 @on-change="cityChange"
                >
-                <Option v-for="option in cityArr" :value="option.Value" :key="new Date()">{{option.Name}}</Option>
+                <Option v-for="option in cityArr" :value="option.value" :key="new Date()">{{option.name}}</Option>
               </Select>
               <Select class="w127 MR10"
                 :clearable="true"
@@ -172,7 +172,7 @@
                 filterable
                 @on-change="areaChange"
                 >
-                <Option v-for="option in areaArr" :value="option.Value" :key="new Date()">{{option.Name}}</Option>
+                <Option v-for="option in areaArr" :value="option.value" :key="new Date()">{{option.name}}</Option>
               </Select>
               <span v-show="judge.areaErrShow" class="colorRed ML5">{{areaErr}}</span>
 
@@ -616,13 +616,8 @@
           if (query != '') {
               this[loading] = true;
                 setTimeout(() => {
-                  this[loading] = false;
-                  if(list=='custOption'){
-                    this[list] = this[listT].filter(item => item.custname.toLowerCase().indexOf(query.toLowerCase()) > -1);
-                  }else{
-                    this[list] = this[listT].filter(item => item.Name.toLowerCase().indexOf(query.toLowerCase()) > -1);
-                  }
-
+                  this[loading] = false;                 
+                  this[list] = this[listT].filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
                 if(this[list].length>10){
                   this[list]=this[list].slice(0,10);
                 }

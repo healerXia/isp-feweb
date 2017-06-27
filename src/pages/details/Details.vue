@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="details">
       <div class="conBox bgF9FAFC">
-        <ProjectInfo v-bind:proMess="projectData" :edit="true" :id="proid" v-on:edit="edit"></ProjectInfo>
+        <ProjectInfo v-bind:proMess="projectData" :edit="editPro" :id="proid" v-on:edit="edit"></ProjectInfo>
       </div>
       <div class="conBox" v-show="noOrder">
         <div class='hasNoOrder pL30'>
@@ -78,9 +78,9 @@
                 <Schedule :tableData="tableData"></Schedule>  
               </div>
               <div class="totalPrice" slot="content">
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
+                  <span>A类购买净总价：3000元</span>
+                  <span>B类购买净总价：3000元</span>
+                  <span>配送比率：3000元</span>
                 </div>   
             </Panel>
           </Collapse>
@@ -200,6 +200,7 @@ export default {
     },
     data() {
       return {
+        editPro:true,
         noOrder:false,
         showMes:{//收缩板
           collapse1:false,
@@ -234,7 +235,8 @@ export default {
         },
         thead:["广告位名称","用途","刊例价"],
         theadkey:['adName','useStyle','price','listNumber'],  
-        tableDatas:[{"data":[{"id":411,"orderYearMonth":201706,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","0","0","1","0","1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":412,"orderYearMonth":201706,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","0","0","0","1","0","0","0","0","1","0","1","0","0","0","0","0","1","0","0","0"]}],"yearMonth":201706},{"data":[{"id":421,"orderYearMonth":201707,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","1","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":422,"orderYearMonth":201707,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201707},{"data":[{"id":431,"orderYearMonth":201708,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":432,"orderYearMonth":201708,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201708}],
+        tableDatas:[
+        ],
         adverMes:{//广告信息
           adOrderCode:"AO12132dfh2323",//订单编号
           beginTime:"2017-01-01",//开始时间
@@ -318,11 +320,17 @@ export default {
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
+            var arr=['1002','1003','1004','1014']
             this.adverMes=res.data.result.resultList[0]
-             //获取排期信息
+            if( Array.indexOf(arr, this.adverMes.status)!=-1){//如果是这这几种状态，就可以编辑
+                this.editPro=true
+            } else{
+               this.editPro=false
+            }
+            //获取排期信息
             this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
               if(res.data.errorCode === 0) {
-                console.log(res)
+                this.tableDatas=res.data.result
               }
               else {
                 this.$Modal.info({
@@ -333,16 +341,32 @@ export default {
               }).catch((err) => {
                 console.log(err);
             })
-            this.showMes.value2=""//收缩板关闭
-            this.createCharts();//创建echars
-            this.noOrder=false//不显示 无订单
+            //获取投放信息统计图数据
+            this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
+              if(res.data.errorCode === 0) {
+                this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);//创建echars
+                this.showMes.value2=""//收缩板关闭
+                this.noOrder=false//不显示 无订单
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+              }).catch((err) => {
+                console.log(err);
+            })  
           }
       }).catch((err) => {
           console.log(err);
       })     
     },
     methods: {
-      createCharts(){
+      createCharts(xAxisArr,pvArr,uvArr){
+        if(xAxisArr.length==0){
+           xAxisArr=['00.00','02.00','04.00','06.00','08.00','10.00','12.00','14.00','16.00','18.00','20.00','22.00','24.00']
+        }      
         var polar={
           title: {
               text: '111'
@@ -353,18 +377,24 @@ export default {
           grid: {
             top: '10%',
             left: 20,
-            right: 20,
+            right: '3%',
             bottom:'3%',
             containLabel: true
           },
           legend: {
             right:"0%",
             top:"top",
-            data:['曝光量','点击量'],
+            data:[
+            {
+              name:'曝光量',
+              icon:"circle"
+            }
+            ,'点击量'
+            ],
           },
           xAxis: {
               boundaryGap: false,
-              data: ['00.00','02.00','04.00','06.00','08.00','10.00','12.00','14.00','16.00','18.00','20.00','22.00','24.00'],
+              data: xAxisArr,
               axisLine:{
                 lineStyle:{
                   color:'#7B8497'
@@ -382,7 +412,8 @@ export default {
               splitLine:{
                 show:true,
                 lineStyle:{
-                  type:"dashed"
+                  type:"dashed",
+                  color:'rgba(61, 112, 251, 0.16)'
                 }
               }
           },
@@ -418,7 +449,7 @@ export default {
                   }
                 },
                 symbolSize: 10,
-                data: [5, 20, 36, 10, 10, 20,5, 20, 36, 10, 10, 20,20]
+                data: pvArr
             },
             {
                 name: '点击量',
@@ -434,7 +465,8 @@ export default {
                   }
                 },
                 symbolSize: 10,
-                data: [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
+                data: uvArr
+                // [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
             }
           ]
         }    
