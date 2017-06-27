@@ -13,7 +13,6 @@
                 filterable
                 remote
                 :remote-method='custChoose'
-                 @on-change="checkCust"
                 :loading="judge.loading5"
                >
                 <Option v-for="option in custOption" :value="option.custid" :key="new Date()">{{option.custname}}</Option>
@@ -183,7 +182,7 @@
             <Form-item>
               <Button type="primary" class="btn bg4373F3" @click="handleSubmit('formValidate')"
               :disabled="judge.submitDiasbled">保存</Button >
-              <Button type="primary" class="btn bg4373F3 ML15" @click="placeOrder('formValidate')" :disabled="judge.submitDiasbled">继续下单</Button>
+              <Button type="primary" class="btn bg4373F3 ML15" @click="placeOrder('formValidate')" :disabled="judge.submitDiasbled" v-if="judge.showOrder">继续下单</Button>
               <Button type="primary" class="btn bgCancle ML15" @click="handleReset('formValidate')">取消</Button>
             </Form-item>
             <div class="h100">
@@ -234,6 +233,7 @@
               noCon:false
             },
             judge:{//页面的各种判断
+              showOrder:true,//显示提交按钮
               submitDiasbled:false,//提交按钮
               orderDiasbled:false,//继续下单按钮
               complexErrShow:false,//复合推广率和不为100是错误信息的显示
@@ -330,7 +330,10 @@
         let customerTime = Date.parse(new Date());
     
         if(!this.$router.currentRoute.query.id){
+          this.judge.showOrder=true
           this.selectForMess("","")
+        }else{//编辑页面不显示继续下单按钮
+          this.judge.showOrder=false
         }
         this.$http.get(config.urlList.getDutyUser+`?${customerTime}`).then((res) => {//责任销售
           if(res.data.errorCode===0){
@@ -451,7 +454,8 @@
         },0)
       },
       methods: {
-        selectForMess(custName,agentid){//由于客户信息与代理公司1下拉数据较多，回填时的特别处理        
+        selectForMess(custName,agentname){//由于客户信息与代理公司下拉数据较多，回填时的特别处理   
+          //客户信息
           this.$http.get(config.urlList.getCustomer+'?custName='+custName).then((res) => {
             if(res.data.errorCode===0){            
               this.custOption=res.data.result.resultList.slice(0,10)  
@@ -470,12 +474,17 @@
             }
             }).catch((err) => {
           })
-          //代理公司
-          this.$http.get(config.urlList.getagentCust).then((res) => {
+
+         //代理公司
+          this.$http.get(config.urlList.getagentCust+"?name="+agentname).then((res) => {
             if(res.data.errorCode===0){
-              this.agentOptionT=res.data.result;
-              this.agentOption=this.agentOptionT.slice(0,10)
+              this.agentOption=res.data.result.slice(0,10)
               this.judge.loading1=false
+              setTimeout(()=>{
+                if(agentname!=""&&this.agentOption.length==1){
+                  this.singleCheck.agentId=parseInt(this.agentOption[0].value)//代理公司
+                }
+              },0)
             }
             else {
               this.$Modal.info({
@@ -483,28 +492,8 @@
                   content: res.data.errorMsg
               });
             }
-            }).catch((err) => {
-          })
-          if(agentid!=""){
-            this.$http.get(config.urlList.getagentCust+"?id="+agentid).then((res) => {
-              if(res.data.errorCode===0){
-                this.agentOption=res.data.result.slice(0,10)
-                this.judge.loading1=false
-                setTimeout(()=>{
-                  if(agentid!=""){
-                    this.singleCheck.agentId=parseInt(agentid)//代理公司
-                  }
-                },0)
-              }
-              else {
-                this.$Modal.info({
-                    title: '提示',
-                    content: res.data.errorMsg
-                });
-              }
-            }).catch((err) => {
-           })
-          }        
+          }).catch((err) => {
+         })                 
         },
         disBegin (date) {//开始时间
           return date && date.valueOf() > new Date(this.searchData.createTime1)
@@ -521,9 +510,12 @@
               }
             }
 
-            this.selectForMess(data.custName,data.agentCustId)
+            this.selectForMess(data.custName,data.agentCustName)
             this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
-            this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放方式
+            if(!this.formValidate.serialIds){//如果投放车型没有值的话，投放品牌才赋值（解决小明的接口bug）
+              this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
+            }
+            // this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
             this.mulCheck.putWay=this.toArr(this.formValidate.putWays)//投放公司
             this.singleCheck.dutyId=this.formValidate.dutyUserId?parseInt(this.formValidate.dutyUserId):""//责任销售
             this.formValidate.endDate=new Date(this.formValidate.endDate)
@@ -536,13 +528,9 @@
              this.addressId.cityId=data.cityId?data.cityId:""
              this.addressId.areaId=data.areaId?data.areaId:""
         },
-        checkCust(value){//选择客户名称
-           this.agentOption=this.agentOptionT.slice(0,10)
-        },
         checkAgent(value){//选择代理公司
           this.formValidate.agentCustId=value.value
           this.formValidate.agentCustName=value.label
-          this.agentOption=this.agentOptionT.slice(0,10)
         },
         checkSerial(value){//选择投放车型
           let arr=[]
@@ -622,7 +610,7 @@
                   this[list]=this[list].slice(0,10);
                 }
               }, 200);
-          } else {
+          }else {
               this[list]=this[listT].slice(0,10);
           }
         },
@@ -632,7 +620,18 @@
             this.formValidate.agentCustName=""
             this.singleCheck.agentId=""
           }
-          this.arrFilter(query,'agentOption','agentOptionT','loading1')
+          this.$http.get(config.urlList.getagentCust+"?name="+query)
+          .then((res)=>{
+              if(res.data.errorCode===0){
+                this.loading5=false
+                this.agentOption=res.data.result.slice(0,10);
+              }else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+          }).catch((res)=>{})
         },
         custChoose (query) {//客户过滤
           if(query==""){
@@ -650,7 +649,6 @@
                 });
               }
           }).catch((res)=>{})
-
         },
         brandChoose (query) {//投放品牌过滤
           this.arrFilter(query,'brandOption','brandOptionT','loading2')
@@ -666,6 +664,7 @@
            this.arrFilter(query,'dutyUserArr','dutyUserArrT','loading4');
         },
         provinceChange(){//省列表change事件
+          this.judge.areaErrShow=false
           this.$http.get(config.urlList.getArea+"?pId="+this.provinceId+"&pageSize=100")
           .then((res)=>{
               if(res.data.errorCode===0){
@@ -691,6 +690,7 @@
           }).catch((res)=>{})
         },
         cityChange(){//市列表change事件
+          this.judge.areaErrShow=false
           if(this.cityId!=""){
             this.$http.post(config.urlList.getArea+"?pId="+this.cityId+"&pageSize=100").
             then((res)=>{
@@ -715,7 +715,7 @@
           }
         },
         areaChange(){//区县列表change事件
-           // this.judge.areaErrShow=false
+           this.judge.areaErrShow=false
         },
         areaCheck(){//签署地区检查
           if(this.cityId==""&&this.formValidate.areaId==""&&this.provinceId!=""){

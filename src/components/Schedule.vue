@@ -19,7 +19,14 @@
             <tbody>
                 <tr v-for="tbodys in tableData.data">
                      <td v-for="item in theadkey" v-if="item!='listNumber'">
-                        {{tbodys[item]}}
+                        <span v-if="item=='useStyle'&&tbodys.useStyle=='4001'">销售</span>
+                        <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4001'">销售</span>
+                        <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4002'">互换</span>
+                        <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4003'">配送</span>
+                        <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4004'">自用</span>
+                        <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4005'">试用</span>
+                        <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4006'">免费</span>
+                        <span v-else>{{tbodys[item]}}</span>
                      </td> 
                      <td v-for="n in tbodys.listNumber" class="cell">
                         <span v-if="n=='0'" class="status status1"></span>
@@ -31,7 +38,7 @@
             </tbody>
         </table>
          <div class="price">
-          <span>购买净总价：3000元</span>
+          <span>购买净总价：{{tableData.data[0].price}}元</span>
           <span>配送总价：3000元</span>
           <span>配送比率：1:6</span>
         </div> 

@@ -148,8 +148,8 @@ import config from './config.js';
            {Name:"广告",Value:1}
           ],
           toDoArr:[
-           {Name:"未终审订单",Value:1},
-           {Name:"未上素材订单",Value:2},
+           {Name:"未终审订单",Value:'1000,1001,1002,1004,1006,1013,1014,1011'},
+           {Name:"未上素材订单",Value:'2'},
           ]
         },
         searchData:{
@@ -232,15 +232,17 @@ import config from './config.js';
       toParam(objs){
         var str=""
         for(let item in objs){
-          let a=objs[item]
-          a=(a+"").replace(/(^\s*)|(\s*$)/,"")
-          str=str+item+"="+a+'&';
+          if(objs[item]){
+            let a=objs[item]
+            a=(a+"").replace(/(^\s*)|(\s*$)/,"")
+            str=str+item+"="+a+'&';
+          }
         }
         str=str.substring(0,str.length-1) ;
         return str;
       },
       checkProType(value){
-        this.selectData.proType=this.toStr(value)
+        this.searchData.proType=this.toStr(value)
       },
       searchMess(){
         this.searchData.pageIndex=1
