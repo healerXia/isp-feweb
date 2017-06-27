@@ -384,7 +384,13 @@ export default {
           legend: {
             right:"0%",
             top:"top",
-            data:['曝光量','点击量'],
+            data:[
+            {
+              name:'曝光量',
+              icon:"circle"
+            }
+            ,'点击量'
+            ],
           },
           xAxis: {
               boundaryGap: false,
@@ -406,7 +412,8 @@ export default {
               splitLine:{
                 show:true,
                 lineStyle:{
-                  type:"dashed"
+                  type:"dashed",
+                  color:'rgba(61, 112, 251, 0.16)'
                 }
               }
           },

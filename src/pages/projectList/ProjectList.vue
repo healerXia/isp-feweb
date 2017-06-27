@@ -85,7 +85,7 @@ import config from './config.js';
         pageSizeOpts:[20],
         totalPages:0,
         searchData:{
-          pageIndex:0,
+          pageIndex:1,
           pageSize:20,
           projectName:"",//项目名称
           custName:"",//客户名称
