@@ -236,15 +236,7 @@ export default {
         thead:["广告位名称","用途","刊例价"],
         theadkey:['adName','useStyle','price','listNumber'],  
         tableDatas:[
-        {"data":[{"id":411,"orderYearMonth":201706,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","0","0","1","0","1","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":412,"orderYearMonth":201706,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","0","0","0","1","0","0","0","0","1","0","1","0","0","0","0","0","1","0","0","0"]}],"yearMonth":201706},
-
-        {"data":[
-          {"id":421,"orderYearMonth":201707,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["1","0","0","0","0","1","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"]},
-          {"id":422,"orderYearMonth":201707,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}
         ],
-        "yearMonth":201707},
-
-        {"data":[{"id":431,"orderYearMonth":201708,"adPosId":11,"adName":"易车网/易车网车型对比栏目/全屏","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]},{"id":432,"orderYearMonth":201708,"adPosId":12,"adName":"易车网/易车网车型对比栏目/测试","price":8000.0,"useStyle":4001,"priceUnit":0,"brandId":20001,"areaId":10,"adCityId":201,"rangeList":[],"listNumber":["0","0","0","0","0","0","0","0","0","0","0","1","0","1","0","0","0","0","1","0","0","0","0","0","0","0","0","0","0","0","0"]}],"yearMonth":201708}],
         adverMes:{//广告信息
           adOrderCode:"AO12132dfh2323",//订单编号
           beginTime:"2017-01-01",//开始时间
@@ -306,12 +298,6 @@ export default {
       }
     },
     created() {
-      if(this.$router.currentRoute.query.edit=='edit'){
-        console.log(this.$router.currentRoute.query.edit)
-        this.editPro=false
-      }else{
-        this.editPro=true
-      }
       let customerTime = Date.parse(new Date());
       let id = this.$router.currentRoute.query.id
       //获取项目信息
@@ -334,12 +320,17 @@ export default {
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
+            var arr=['1002','1003','1004','1014']
             this.adverMes=res.data.result.resultList[0]
-             //获取排期信息
-            this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode=AO20170606049398").then((res) => {
+            if( Array.indexOf(arr, this.adverMes.status)!=-1){//如果是这这几种状态，就可以编辑
+                this.editPro=true
+            } else{
+               this.editPro=false
+            }
+            //获取排期信息
+            this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
               if(res.data.errorCode === 0) {
-                // console.log(res)
-                // this.tableDatas=res.data.result
+                this.tableDatas=res.data.result
               }
               else {
                 this.$Modal.info({
@@ -350,16 +341,32 @@ export default {
               }).catch((err) => {
                 console.log(err);
             })
-            this.createCharts();//创建echars
-            this.showMes.value2=""//收缩板关闭
-            this.noOrder=false//不显示 无订单
+            //获取投放信息统计图数据
+            this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
+              if(res.data.errorCode === 0) {
+                this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);//创建echars
+                this.showMes.value2=""//收缩板关闭
+                this.noOrder=false//不显示 无订单
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+              }).catch((err) => {
+                console.log(err);
+            })  
           }
       }).catch((err) => {
           console.log(err);
       })     
     },
     methods: {
-      createCharts(){
+      createCharts(xAxisArr,pvArr,uvArr){
+        if(xAxisArr.length==0){
+           xAxisArr=['00.00','02.00','04.00','06.00','08.00','10.00','12.00','14.00','16.00','18.00','20.00','22.00','24.00']
+        }      
         var polar={
           title: {
               text: '111'
@@ -370,7 +377,7 @@ export default {
           grid: {
             top: '10%',
             left: 20,
-            right: 20,
+            right: '3%',
             bottom:'3%',
             containLabel: true
           },
@@ -381,7 +388,7 @@ export default {
           },
           xAxis: {
               boundaryGap: false,
-              data: ['00.00','02.00','04.00','06.00','08.00','10.00','12.00','14.00','16.00','18.00','20.00','22.00','24.00'],
+              data: xAxisArr,
               axisLine:{
                 lineStyle:{
                   color:'#7B8497'
@@ -435,7 +442,7 @@ export default {
                   }
                 },
                 symbolSize: 10,
-                data: [5, 20, 36, 10, 10, 20,5, 20, 36, 10, 10, 20,20]
+                data: pvArr
             },
             {
                 name: '点击量',
@@ -451,7 +458,8 @@ export default {
                   }
                 },
                 symbolSize: 10,
-                data: [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
+                data: uvArr
+                // [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
             }
           ]
         }    

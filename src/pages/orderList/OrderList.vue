@@ -84,12 +84,7 @@
                   <span v-if="key!='adOrderCode'">{{tbodyData[key]}}</span>
                    <router-link
                     :to="{path:'details',query: {id:tbodyData.projectId,edit:'edit'}}"
-                    v-if="key=='adOrderCode'&& tbodyData.status=='1003'">
-                      {{tbodyData[key]}}
-                    </router-link>
-                     <router-link
-                    :to="{path:'details',query: {id:tbodyData.projectId}}"
-                    v-else-if="key=='adOrderCode'&& tableData.theadKey.status!='1003'">
+                    v-if="key=='adOrderCode'">
                       {{tbodyData[key]}}
                     </router-link>
                 </td>
@@ -236,7 +231,9 @@ import config from './config.js';
       toParam(objs){
         var str=""
         for(let item in objs){
-          str=str+item+"="+objs[item]+'&';
+          let a=objs[item]
+          a=(a+"").replace(/(^\s*)|(\s*$)/,"")
+          str=str+item+"="+a+'&';
         }
         str=str.substring(0,str.length-1) ;
         return str;
