@@ -47,4 +47,5 @@ export default {
 
 <style lang="css">
 .white{color: white}
+a{width: 100%;height: 100%;display: inline-block;}
 </style>

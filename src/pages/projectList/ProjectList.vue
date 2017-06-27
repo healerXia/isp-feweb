@@ -157,7 +157,11 @@ import config from './config.js';
       toParam(objs){
         var str=""
         for(let item in objs){
-          str=str+item+"="+objs[item]+'&';
+          if(objs[item]){
+            let a=objs[item]
+            a=(a+"").replace(/(^\s*)|(\s*$)/,"")
+            str=str+item+"="+a+'&';
+          }
         }
         str=str.substring(0,str.length-1) ;
         return str;

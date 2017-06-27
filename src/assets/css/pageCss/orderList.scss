@@ -29,6 +29,7 @@
 					    line-height:$height;
 					    height: $height;
 					    float: left;
+					    font-size: 12px;
 					}
 					input{height: $height;}
 					.btns{
@@ -143,7 +144,7 @@
 					border-top:1px solid #DEE1E5;
 				}
 			}
-			td{font-size: 14px;height: 56px;min-width: 120px;word-wrap: break-word;max-width: 200px;padding: 0 10px}
+			td{font-size: 12px;height: 56px;min-width: 120px;word-wrap: break-word;max-width: 200px;padding: 0 10px}
 
 		}
 	}

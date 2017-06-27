@@ -355,6 +355,9 @@ export default {
                 });
               }
               }).catch((err) => {
+                console.log(1)
+                this.showMes.value2=""//收缩板关闭
+                this.noOrder=false//不显示 无订单
                 console.log(err);
             })  
           }
@@ -419,7 +422,6 @@ export default {
           },
           yAxis: {
                   type: 'value',
-                  max: 1000,
                   axisLine:{
                     show:false
                   },
@@ -448,6 +450,9 @@ export default {
                     color: '#E36776'
                   }
                 },
+               
+                  symbol:'circle',
+                
                 symbolSize: 10,
                 data: pvArr,
                 showAllSymbol:true
@@ -460,6 +465,9 @@ export default {
                         color: '#3D70FB'
                     }
                 },
+                 
+                  symbol:'circle',
+                
                  itemStyle:{
                   normal:{
                     color: '#3D70FB'
