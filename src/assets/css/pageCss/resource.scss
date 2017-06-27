@@ -67,6 +67,12 @@
     .result {
         padding-bottom: 20px;
 
+        .noResult {
+            p {
+                text-align: center;
+            }
+        }
+
 
         &.bottom {
             margin-top: 60px;
@@ -109,7 +115,7 @@
 
             .ad-listName {
                 display: inline-block;
-                max-width: 300px;
+                max-width: 400px;
                 text-overflow: ellipsis;
                 white-space:nowrap;
                 overflow: hidden;
