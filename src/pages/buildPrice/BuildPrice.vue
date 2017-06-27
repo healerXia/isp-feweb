@@ -14,8 +14,9 @@
               <Table border :columns="tableData.head" :data="tableData.mess"></Table>
               <div class="discount MT20">
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="70">
-                    <Form-item label="折扣:" prop="discount">
-                        <Input-number class="w200 fl" v-model="formValidate.discount" @on-change='totalPrice' :max="10" :min="5" :step="1"></Input-number>
+                    <Form-item label="折扣:" prop="discount" :error='errorTxt'>
+
+                        <Input-number class="w200 fl" v-model="formValidate.discount" @on-change='totalPrice' :max="10" :min="5" :step="1.1"></Input-number>
                         <span class="char fl">折</span>
                     </Form-item>
                     <p class="MB20 fontSize12">实际成交价：<span class="colorRed fontSize14">{{reallyPrice.toFixed(2)}}元</span></p>
@@ -43,6 +44,7 @@ import urlList from './config.js';
     },
     data() {
       return {
+        errorTxt: '',
         saveStatus: false,
         submitStatus: false,
         reallyPrice:0,
@@ -118,10 +120,10 @@ import urlList from './config.js';
         for (let i = 0; i< priceList.length; i++) {
             this.tableData.mess.push({
                 time: priceList[i].time,
-                aTotal: priceList[i].total.toFixed(2),
-                bTotal: priceList[i].delivery.toFixed(2),
-                cTotal: priceList[i].exchange.toFixed(2),
-                dTotal: priceList[i].per.toFixed(2),
+                aTotal: priceList[i].total.toFixed(2) == 0 ? '-' : priceList[i].total.toFixed(2),
+                bTotal: priceList[i].delivery.toFixed(2) == 0 ? '-' : priceList[i].delivery.toFixed(2),
+                cTotal: priceList[i].exchange.toFixed(2) == 0 ? '-' : priceList[i].exchange.toFixed(2),
+                dTotal: priceList[i].per.toFixed(2) == 0 ? '-' : priceList[i].per.toFixed(2),
                 distribution: priceList[i].proportion
             })
 
@@ -134,10 +136,10 @@ import urlList from './config.js';
         let str = this.ratio(aTotal, bTotal);
         this.tableData.mess.push({
             time: '合计',
-            aTotal: aTotal.toFixed(2),
-            bTotal: bTotal.toFixed(2),
-            cTotal: cTotal.toFixed(2),
-            dTotal: dTotal.toFixed(2),
+            aTotal: aTotal.toFixed(2) == 0 ? '-' : aTotal.toFixed(2),
+            bTotal: bTotal.toFixed(2) == 0 ? '-' : bTotal.toFixed(2),
+            cTotal: cTotal.toFixed(2) == 0 ? '-' : cTotal.toFixed(2),
+            dTotal: dTotal.toFixed(2) == 0 ? '-' : dTotal.toFixed(2),
             distribution: str
         })
         this.total =  aTotal;
@@ -166,6 +168,9 @@ import urlList from './config.js';
             this.$router.push({path: 'details', query: {id: id}});
         },
         handleSubmit (name, id) {
+            if (this.errorTxt != '') {
+                return false;
+            }
             if (id == 1) {
                 this.saveStatus = true;
             }
@@ -255,7 +260,12 @@ import urlList from './config.js';
                 }
             })
         },
-        totalPrice() {
+        totalPrice(num) {
+            if (num) {
+                if (num.toString().split('.')[1].length > 1) {
+                    this.errorTxt = '请输入5-10之间的数字，最多保留一位小数';
+                }
+            }
             if (!isNaN(this.formValidate.discount)) {
                 this.reallyPrice = this.total * this.formValidate.discount / 10;
             }

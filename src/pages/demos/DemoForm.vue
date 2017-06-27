@@ -9,6 +9,10 @@
     </Row>
 </template>
 <script>
+    import 'select2';
+
+
+    console.log(select2);
     export default {
         data() {
             return  {

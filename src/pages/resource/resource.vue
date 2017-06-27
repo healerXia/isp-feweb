@@ -102,7 +102,7 @@
                                 :remote-method="remoteMethod4"
                                 :loading="loading1"
                                 @on-change='checkCity'>
-                                <Option v-for="option in searchList.areaList" :value="option.Name" :key="new Date()">{{option.Name}}</Option>
+                                <Option v-for="option in searchList.areaList" :value="option.value" :key="new Date()">{{option.name}}</Option>
                             </Select>
                         </Form-item>
                     </Col>
@@ -687,7 +687,7 @@ export default {
                 // 页面名称
                 channelId: this.searchInfo.pageName,
                 // 页面类型
-                adAdTagId:  this.searchInfo.labelTypeId,
+                adTagId:  this.searchInfo.labelTypeId,
                 // 广告类型
                 placeTypeList: this.searchInfo.Type,
                 // 投放车型
@@ -703,8 +703,11 @@ export default {
                     // this.paging.count = this.tableList.length;
                     let datas = Object.assign([], res.data.result);
                     for (let i = 0; i < datas.length; i++) {
+                        let str = JSON.stringify(datas[i].adStateList);
+                         datas[i].adStateLists = str;
                          datas[i].adStateList = this.initResult(datas[i]);
                     }
+
                     this.tableList = Object.assign([], datas);
                     for (let i = 0; i< this.tableList.length;i++) {
                         this.$set(this.checkBoxStatus, i, false);
@@ -1124,6 +1127,7 @@ export default {
                             "width": this.tableList[index].width,
                             // 日期
                             "adStateList": currentList[i].state.split(','),
+                            "adStateLists": this.tableList[index].adStateLists,
                             // "id": obj.id,
                             "channelName": this.tableList[index].channelName,
                             "kprice": parseFloat(currentList[i].kprice).toFixed(2)
@@ -1177,6 +1181,7 @@ export default {
                                 "skuIdList": currentList[i].skuIdList,
                                 // 日期
                                 "adStateList": currentList[i].state.split(','),
+                                "adStateLists": this.tableList[index].adStateLists,
                                 // "id": obj.id,
                                 "channelName": this.tableList[index].channelName,
                                 "kprice": parseFloat(currentList[i].kprice).toFixed(2)
@@ -1424,6 +1429,7 @@ export default {
             if (this.Type.length > 0) {
                 this.Type = [];
                 this.searchInfo.typeId = '';
+                console.log(this.Type);
             }
             // 城市
             if (this.cityId.length > 0) {

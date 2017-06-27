@@ -15,7 +15,7 @@
                 <Option v-for="(key, value) in useList" :value="key" :key="value">{{value}}</Option>
             </Select>
         </td>
-        <td>{{info.price}}元/天</td>
+        <td class='priceTd'>{{info.price}}元/天</td>
         <td v-for='(i,index) in info.adStateList'
             :class='["dateTd", {"active": indexList[index]},{"default": i == 3}, {"hasSel": i == 2}]'>
             <span :data-index='index' :data-status='i' class='dateSpan'></span>
@@ -240,6 +240,25 @@ export default {
                     this.$nextTick(() => {
                         let dataTimes = this.info.yearMonth;
                         let dateIndex = parseInt(event.target.getAttribute('data-index')) + 1;
+                        
+                        let dayData = {};
+                        let datas = JSON.parse(this.info.adStateLists);
+                        for (let i = 0; i < datas.length; i++) {
+                            let n = datas[i];
+                            for (let attr in n) {
+                                if (attr == dataTimes) {
+                                    let arr = n[attr];
+
+                                    for (let j = 0; j < arr.length; j++) {
+                                        if (arr[j].day == dateIndex) {
+                                            this.layer.skuPrice = arr[j].skuPrice;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // 宽高
+                        this.layer.pSize = `${this.info.width}*${this.info.height}`;
                         if (dateIndex < 10) {
                             dateIndex = '0' + dateIndex
                         }
@@ -347,6 +366,10 @@ span {
     height: 100%;
     width: 100%;
     display: block;
+}
+
+.priceTd {
+    border: 1px solid #E9E9E9;
 }
 
 .dateTd {
