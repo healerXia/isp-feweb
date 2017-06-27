@@ -58,6 +58,7 @@
             </tbody>
           </table>
            <Page :total="totalPages" class="MT30"
+           :current="searchData.pageIndex"
            :page-size-opts="pageSizeOpts"
            :page-size="20"
            show-elevator

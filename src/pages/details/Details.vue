@@ -387,7 +387,7 @@ export default {
             data:[
             {
               name:'曝光量',
-              icon:"circle"
+            
             }
             ,'点击量'
             ],
@@ -449,7 +449,8 @@ export default {
                   }
                 },
                 symbolSize: 10,
-                data: pvArr
+                data: pvArr,
+                showAllSymbol:true
             },
             {
                 name: '点击量',
