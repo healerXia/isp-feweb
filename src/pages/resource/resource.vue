@@ -685,11 +685,11 @@ export default {
                 // 媒体名称id
                 mediaId: this.searchInfo.mediaId,
                 // 页面名称
-                //channelId: this.searchInfo.pageName,
+                channelId: this.searchInfo.pageName,
                 // 页面类型
                 adTagId:  this.searchInfo.labelTypeId,
                 // 广告类型
-                //placeTypeList: this.searchInfo.Type,
+                placeTypeList: this.searchInfo.Type,
                 // 投放车型
                 modelIdList: this.searchInfo.serialId,
                 // // 投放地区
