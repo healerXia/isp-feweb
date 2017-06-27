@@ -51,7 +51,7 @@ import urlList from './config.js';
         total: 0,
         price: {},
         formValidate:{
-          discount:5,
+          discount:5.0,
         },
         submitData: [],
         proMess:{

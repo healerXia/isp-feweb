@@ -87,7 +87,7 @@
                                 :remote-method="remoteMethod3"
                                 :loading="loading1"
                                 @on-change='checkCar'>
-                                <Option v-for="option in searchList.modelList" :value="option.Name" :key="new Date()">{{option.Name}}</Option>
+                                <Option v-for="option in searchList.modelList" :value="option.value" :key="new Date()">{{option.name}}</Option>
                             </Select>
                         </Form-item>
                     </Col>
@@ -117,7 +117,7 @@
                                 :remote-method="remoteMethod5"
                                 :loading="loading1"
                                 @on-change='checkBrand'>
-                                <Option v-for="option in searchList.brandList" :value="option.Name" :key="new Date()">{{option.Name}}</Option>
+                                <Option v-for="option in searchList.brandList" :value="option.value" :key="new Date()">{{option.name}}</Option>
                             </Select>
                         </Form-item>
                     </Col>
@@ -685,11 +685,11 @@ export default {
                 // 媒体名称id
                 mediaId: this.searchInfo.mediaId,
                 // 页面名称
-                channelId: this.searchInfo.pageName,
+                //channelId: this.searchInfo.pageName,
                 // 页面类型
                 adTagId:  this.searchInfo.labelTypeId,
                 // 广告类型
-                placeTypeList: this.searchInfo.Type,
+                //placeTypeList: this.searchInfo.Type,
                 // 投放车型
                 modelIdList: this.searchInfo.serialId,
                 // // 投放地区
