@@ -118,6 +118,21 @@ import urlList from './config.js';
         let dTotal = 0;
 
         for (let i = 0; i< priceList.length; i++) {
+            if (!priceList[i].total) {
+                priceList[i].total = 0;
+            }
+            if (!priceList[i].delivery) {
+                priceList[i].delivery = 0;
+            }
+            if (!priceList[i].exchange) {
+                priceList[i].exchange = 0;
+            }
+            if (!priceList[i].per) {
+                priceList[i].per = 0;
+            }
+            if (priceList[i].total == 0 && priceList[i].delivery == 0 && priceList[i].exchange == 0 && priceList[i].per == 0) {
+                continue;
+            }
             this.tableData.mess.push({
                 time: priceList[i].time,
                 aTotal: priceList[i].total.toFixed(2) == 0 ? '-' : priceList[i].total.toFixed(2),

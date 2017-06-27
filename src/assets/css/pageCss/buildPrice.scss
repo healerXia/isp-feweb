@@ -1,6 +1,11 @@
 .buildPrice{
   width: 100%;
   min-height: 100%;
+
+  .bgccc {
+       background: #484E58 !important;
+       border-radius: 2px;
+  }
   .content{
     width: 100%;
     .contentBox{
@@ -12,6 +17,8 @@
           font-size: 12px;
         }
       }
+
+
       .proMess{
         margin: 0 auto;
         width: 100%;

@@ -16,12 +16,24 @@
         }
     }
 
+     .ivu-select-single {
+         .ivu-select-selection {
+             height: 38px;
+         }
+     }
+
+     .ivu-input {
+         height: 38px;
+     }
+
 
 
     .searchBtn {
-        width: 100px;
-        height: 30px;
-        background: rgba(67,115,243,1);
+        width: 120px;
+        height: 38px;
+        background: #3C6FFB;
+        border-radius: 2px;
+        margin-right: 8px;
 
         &:hover {
             background: rgba(67,115,243,.8);
@@ -61,7 +73,7 @@
     }
 
     .searchInput {
-        width: 400px;
+        width: 268px;
     }
 
     .result {
@@ -115,10 +127,11 @@
 
             .ad-listName {
                 display: inline-block;
-                max-width: 400px;
+                max-width: 280px;
                 text-overflow: ellipsis;
                 white-space:nowrap;
                 overflow: hidden;
+                font-size: 12px;
             }
 
             .item {

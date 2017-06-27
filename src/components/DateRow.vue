@@ -240,7 +240,7 @@ export default {
                     this.$nextTick(() => {
                         let dataTimes = this.info.yearMonth;
                         let dateIndex = parseInt(event.target.getAttribute('data-index')) + 1;
-                        
+
                         let dayData = {};
                         let datas = JSON.parse(this.info.adStateLists);
                         for (let i = 0; i < datas.length; i++) {
@@ -369,7 +369,7 @@ span {
 }
 
 .priceTd {
-    border: 1px solid #E9E9E9;
+    border: 1px solid #DEE1E5;
 }
 
 .dateTd {
@@ -378,15 +378,15 @@ span {
     width: 20px;
 
     &.default {
-        background: #f4f4f4;
+        background: #EDEFF2;
     }
 
     &.active {
-        background: rgba(67,115,243,.5);
+        background: #A8C8EE;
     }
 
     &.hasSel {
-        background: rgba(67,115,243,.2);
+        background: #6A7088;
     }
 
 }

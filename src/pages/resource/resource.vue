@@ -43,7 +43,7 @@
                 </Form-item>
 
                 <Row>
-                    <Col span="12" style="padding-right:10px">
+                    <Col span="8" style="padding-right:10px">
                         <Form-item label="页面名称：" prop='pageName'>
                             <Select
                                 class="searchInput"
@@ -59,7 +59,7 @@
                             </Select>
                         </Form-item>
                     </Col>
-                    <Col span="12">
+                    <Col span="8">
                         <Form-item label="广告类型：" prop='Type'>
                             <Select
                                 class="searchInput"
@@ -74,9 +74,7 @@
                             </Select>
                         </Form-item>
                     </Col>
-                </Row>
-                 <Row>
-                    <Col v-if='searchInfoTxt[0]' span="12" style="padding-right:10px">
+                    <Col v-if='searchInfoTxt[0]' span="8" style="padding-right:10px">
                         <Form-item label="投放车型：" class='resetSearchInfo' prop='serialId'>
                             <Select
                                 class="searchInput"
@@ -91,7 +89,9 @@
                             </Select>
                         </Form-item>
                     </Col>
-                    <Col v-if='searchInfoTxt[1]' span="12" style="padding-right:10px">
+                </Row>
+                 <Row>
+                    <Col v-if='searchInfoTxt[1]' span="8" style="padding-right:10px">
                         <Form-item label="投放地区：" class='resetSearchInfo' prop='cityId'>
                             <Select
                                 class="searchInput"
@@ -106,7 +106,7 @@
                             </Select>
                         </Form-item>
                     </Col>
-                    <Col v-if='searchInfoTxt[2]' span="12" style="padding-right:10px">
+                    <Col v-if='searchInfoTxt[2]' span="8" style="padding-right:10px">
                         <Form-item label="投放品牌：" class='resetSearchInfo' prop='brandId'>
                             <Select
                                 class="searchInput"
@@ -121,10 +121,13 @@
                             </Select>
                         </Form-item>
                     </Col>
+                    <Col span="8">
+                        <Form-item>
+                            <Button class='searchBtn fr' type="primary"  @click="search('formValidate')">查询</Button>
+                        </Form-item>
+                    </Col>
                 </Row>
-                    <Form-item>
-                        <Button class='searchBtn' type="primary"  @click="search('formValidate')">查询</Button>
-                    </Form-item>
+
                  </Form>
             </div>
             <!-- 查询条件结束 -->
@@ -151,9 +154,12 @@
                     <div v-if='i.adStateList.length > 0'  v-for = "(i, index) in tableList" class="item">
                         <div class="item-title clear">
                             <div class="fl">
-                                 <Checkbox class='fl' v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="font-size:14px; margin-right:10px">
+                                 <!-- <Checkbox class='fl' v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="font-size:14px; margin-right:10px">
                                      <span class="ad-name">名称:</span>
-                                 </Checkbox>
+                                 </Checkbox> -->
+                                 <Radio-group v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="float:left;font-size:14px; margin-right:10px">
+                                    <Radio label="名称"></Radio>
+                                 </Radio-group>
                                  <span class='ad-listName fl'>{{adNames}}/{{i.name}}</span>
                                  <a href="javascript:;" @click='viewAd(i.width, i.height, i)'>查看</a>
                             </div>
@@ -673,6 +679,7 @@ export default {
             this.searchInfo.serialId = this.serialId.join(',');
             this.searchInfo.cityId = this.cityId.join(',');
             this.searchInfo.brandId = this.brandId.join(',');
+            this.paging.totalCounts = 0;
 
             // /isp-kongming/ad/select
             this.$http.post('/isp-kongming/ad/select',{
@@ -685,7 +692,7 @@ export default {
                 // 媒体名称id
                 mediaId: this.searchInfo.mediaId,
                 // 页面名称
-                channelId: this.searchInfo.pageName,
+                //channelId: this.searchInfo.pageName,
                 // 页面类型
                 adTagId:  this.searchInfo.labelTypeId,
                 // 广告类型
