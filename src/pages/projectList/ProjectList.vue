@@ -91,7 +91,7 @@ import config from './config.js';
           custName:"",//客户名称
           agentName:"",//代理公司
           createTime1:"",     //开始时间
-          createTime2:" ",      //结束时间
+          createTime2:"",      //结束时间
           dutyUserName:""//责任销售
         },
         tableData:{
