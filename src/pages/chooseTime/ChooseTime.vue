@@ -48,13 +48,8 @@
                 </div>
             </div>
             <div class="save">
-<<<<<<< HEAD
                 <Button type="primary" @click='save' class="btn bg4373F3">保存方案</Button>
-                <Button type="primary" @click='generate' class="btn bg4373F3 ML20">生成价格</Button>
-=======
-                <Button type="primary" @click='save' :disabled='saveStatus'>保存方案</Button>
-                <Button type="primary" @click='generate'>生成价格</Button>
->>>>>>> feature/charts
+                <Button type="primary" @click='generate' class="btn bg4373F3 ML20">生成价格</Button
             </div>
         </div>
     </div>
