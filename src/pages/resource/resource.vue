@@ -11,7 +11,7 @@
         <!-- 订单信息 -->
         <div class="resource-box">
             <!-- 进度组件 -->
-            <ProjectStep :status = '1'></ProjectStep>
+            <ProjectStep :status = '1' class="MT20"></ProjectStep>
             <!-- 进度组件 -->
 
             <!-- 查询条件 -->

@@ -28,7 +28,7 @@
                 </div>
                 <div class="inputBox ML30">
                   <span class="formLabel">代理公司</span>
-                  <Input v-model="searchData.agentCustName" placeholder="请输入代理公司" ></Input>
+                  <Input v-model="searchData.agentName" placeholder="请输入代理公司" ></Input>
                 </div>
                 <div class="inputBox ML30">
                   <span class="formLabel">项目名称</span>
@@ -83,7 +83,7 @@
                 <td v-for='key in tableData.theadKey'>
                   <span v-if="key!='adOrderCode'">{{tbodyData[key]}}</span>
                    <router-link
-                    :to="{path:'details',query: {id:tbodyData.projectId,edit:'edit'}}"
+                    :to="{path:'details',query: {id:tbodyData.projectId}}"
                     v-if="key=='adOrderCode'">
                       {{tbodyData[key]}}
                     </router-link>
@@ -158,7 +158,7 @@ import config from './config.js';
           adOrderCodeArray:"",//订单编号
           status:"",//订单状态  id
           custName:"",//客户名称
-          agentCustName:"",//代理公司
+          agentName:"",//代理公司
           projectName:"",//项目名称
           contractCode:"",//合同编号
           createTime1:"",      //开始时间

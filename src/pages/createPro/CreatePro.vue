@@ -616,13 +616,8 @@
           if (query != '') {
               this[loading] = true;
                 setTimeout(() => {
-                  this[loading] = false;
-                  if(list=='custOption'){
-                    this[list] = this[listT].filter(item => item.custname.toLowerCase().indexOf(query.toLowerCase()) > -1);
-                  }else{
-                    this[list] = this[listT].filter(item => item.Name.toLowerCase().indexOf(query.toLowerCase()) > -1);
-                  }
-
+                  this[loading] = false;                 
+                  this[list] = this[listT].filter(item => item.Name.toLowerCase().indexOf(query.toLowerCase()) > -1);
                 if(this[list].length>10){
                   this[list]=this[list].slice(0,10);
                 }

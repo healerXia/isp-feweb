@@ -39,7 +39,7 @@
         margin: 15px auto;
     }
     #header {
-        height: 60px;
+        height: 64px;
         background: #fff;
         border: 1px solid #ccc;
 

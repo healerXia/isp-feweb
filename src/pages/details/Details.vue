@@ -78,9 +78,9 @@
                 <Schedule :tableData="tableData"></Schedule>  
               </div>
               <div class="totalPrice" slot="content">
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
-                  <span>购买净总价：3000元</span>
+                  <span>A类购买净总价：3000元</span>
+                  <span>B类购买净总价：3000元</span>
+                  <span>配送比率：3000元</span>
                 </div>   
             </Panel>
           </Collapse>

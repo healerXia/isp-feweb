@@ -31,8 +31,8 @@ export default {
     overflow: hidden;
 
     .step-title {
-        font-size: 20px;
-        color: #354052;
+        font-size: 14px;
+        color: #333;
         line-height: 28px;
         text-align: left;
         margin-bottom: 26px;

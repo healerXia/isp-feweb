@@ -13,7 +13,7 @@
                 </div>
                 <div class="inputBox ML30">
                     <span class="formLabel">代理公司</span>
-                    <Input v-model="searchData.orderType" placeholder="请输入代理公司" ></Input>
+                    <Input v-model="searchData.agentName" placeholder="请输入代理公司" ></Input>
                 </div>
               </li>
               <li class='MT15'>
@@ -89,7 +89,7 @@ import config from './config.js';
           pageSize:20,
           projectName:"",//项目名称
           custName:"",//客户名称
-          agentCustName:"",//代理公司
+          agentName:"",//代理公司
           createTime1:"",     //开始时间
           createTime2:" ",      //结束时间
           dutyUserName:""//责任销售
