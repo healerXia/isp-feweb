@@ -6,6 +6,8 @@
     .labelList {
         margin-right: 26px;
         color: #333333;
+        float: left;
+        width: auto;
 
         &:hover {
             color: #39f;
@@ -21,12 +23,6 @@
              height: 38px;
          }
      }
-
-     .ivu-input {
-         height: 38px;
-     }
-
-
 
     .searchBtn {
         width: 120px;

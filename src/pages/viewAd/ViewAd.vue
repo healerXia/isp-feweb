@@ -118,8 +118,11 @@ export default {
            ],
            exposureList: [
                {
+                   //曝光数
                    displayAmount: '',
+                   //单独点击数
                    singleClick: '',
+                   // 统计数
                    clickAmountDay: '',
                    C: '',
                    D: '',
@@ -370,7 +373,7 @@ export default {
 
         .info  {
             .title {
-                font-size: 20px;
+                font-size: 14px;
                 color: #354052;
                 line-height: 28px;
             }
@@ -399,7 +402,7 @@ export default {
             }
 
             .title {
-                font-size: 20px;
+                font-size: 14px;
                 color: #354052;
                 line-height: 28px;
             }

@@ -91,8 +91,8 @@
                     </Col>
                 </Row>
                  <Row>
-                    <Col v-if='searchInfoTxt[1]' span="8" style="padding-right:10px">
-                        <Form-item label="投放地区：" class='resetSearchInfo' prop='cityId'>
+                    <Col  span="8" style="padding-right:10px">
+                        <Form-item v-if='searchInfoTxt[1]' label="投放地区：" class='resetSearchInfo' prop='cityId'>
                             <Select
                                 class="searchInput"
                                 v-model="cityId"
@@ -106,8 +106,8 @@
                             </Select>
                         </Form-item>
                     </Col>
-                    <Col v-if='searchInfoTxt[2]' span="8" style="padding-right:10px">
-                        <Form-item label="投放品牌：" class='resetSearchInfo' prop='brandId'>
+                    <Col  span="8" style="padding-right:10px">
+                        <Form-item v-if='searchInfoTxt[2]' label="投放品牌：" class='resetSearchInfo' prop='brandId'>
                             <Select
                                 class="searchInput"
                                 v-model="brandId"
@@ -121,7 +121,7 @@
                             </Select>
                         </Form-item>
                     </Col>
-                    <Col span="8">
+                    <Col>
                         <Form-item>
                             <Button class='searchBtn fr' type="primary"  @click="search('formValidate')">查询</Button>
                         </Form-item>
