@@ -138,25 +138,17 @@ export default {
         this.result = JSON.parse(window.localStorage.getItem('viewAd'));
         let time = this.result.beginTime.split(' ')[0];
         let month = time.split('-');
-        console.log(month);
         this.adName = window.localStorage.getItem('adName');
         this.size = window.localStorage.getItem('size');
         // this.pageData = Object.assign({}, this.mockData.result[0]);
         // let year = Object.assign([], this.pageData.adStateList).reverse();
         // this.first = year.slice(0,6);
         // this.second = year.slice(6);
-
-
-        //
-       this.$http.post('/isp-kongming/ad/kuAdPlaceBo',{
-           // 开始时间
-           beginTime: `${time}`,
-           // 结束时间
-           endTime: `${parseInt(month[0])+ 1}-${month[1]}-${month[2]}`,
-           // 广告位id
-           adPlaceId: this.result.adPlaceId
-
-       }).then((res) => {
+        let search = JSON.parse(window.localStorage.getItem('searchInfo'));
+        search.beginTime = `${time}`;
+        search.endTime = `${parseInt(month[0])+ 1}-${month[1]}-${month[2]}`;
+        search.adPlaceId = this.result.adPlaceId;
+       this.$http.post('/isp-kongming/ad/kuAdPlaceBo', search).then((res) => {
            if (res.data.errorCode === 0) {
                let datas = Object.assign({}, res.data.result[0]);
                datas.adStateList = this.initResult(datas);
@@ -178,15 +170,9 @@ export default {
        let currentYear = parseInt(month[0]);
        let currenMonth = month[1];
        // 曝光量
-       this.$http.post('/isp-kongming/ad/amountSelectSum',{
-           // 开始时间
-           beginTime: `${currentYear}-${currenMonth}-01`,
-           // 结束时间
-           endTime: `${currentYear + 1}-${currenMonth}-01`,
-           // 广告位id
-            adPlaceId: this.result.adPlaceId
-
-       }).then((res) => {
+       search.beginTime = `${currentYear}-${currenMonth}-01`
+       search.endTime = `${currentYear + 1}-${currenMonth}-01`;
+       this.$http.post('/isp-kongming/ad/amountSelectSum', search).then((res) => {
            if (res.data.errorCode === 0) {
                let data = res.data.result;
                this.$set(this.exposureList, 0, data);
@@ -211,16 +197,9 @@ export default {
       // displayAmount 曝光量
       let amountDisplay = [];
 
-       this.$http.post('/isp-kongming/ad/amountSelect',{
-           // 开始时间
-           beginTime: `${currentYear}-${currenMonth}-01`,
-           // 结束时间
-        //    endTime: `${month[0]}-01`,
-        endTime: `${month[0]}-07-01`,
-           // 广告位id
-           adPlaceId: this.result.adPlaceId
 
-       }).then((res) => {
+
+       this.$http.post('/isp-kongming/ad/amountSelect', search).then((res) => {
            if (res.data.errorCode === 0) {
                let datas = res.data.result;
                for (let i = 0; i < datas.length; i++) {

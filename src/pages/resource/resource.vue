@@ -22,12 +22,12 @@
                     <Row>
                         <Col span="5">
                             <Form-item prop="beginTime">
-                                <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date" placeholder="选择日期"></Date-picker>                            </Form-item>
+                                <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>                            </Form-item>
                         </Col>
                         <Col span="1" style="text-align: center">-</Col>
                         <Col span="5">
-                            <Form-item prop="endTime">
-                                <Date-picker   :editable = 'false' :value="this.searchInfo.endTime"  @on-change="chooseEndTime"   type="month" :options="date" placeholder="选择日期"></Date-picker>
+                            <Form-item prop="endTime" :error='timeTxt'>
+                                <Date-picker   :editable = 'false' :value="this.searchInfo.endTime"  @on-change="chooseEndTime"   type="month" :options="date2" placeholder="选择日期"></Date-picker>
                             </Form-item>
                         </Col>
                     </Row>
@@ -42,7 +42,7 @@
                 </Form-item>
 
                 <Row>
-                    <Col span="8" style="padding-right:10px">
+                    <Col span="12" style="padding-right:10px">
                         <Form-item label="页面名称：" prop='pageName'>
                             <Select
                                 class="searchInput"
@@ -58,7 +58,7 @@
                             </Select>
                         </Form-item>
                     </Col>
-                    <Col span="8">
+                    <Col span="12">
                         <Form-item label="广告类型：" prop='Type'>
                             <Select
                                 class="searchInput"
@@ -73,66 +73,76 @@
                             </Select>
                         </Form-item>
                     </Col>
-                    <Col v-if='searchInfoTxt[0]' span="8" style="padding-right:10px">
-                        <Form-item label="投放车型：" class='resetSearchInfo' prop='serialId'>
-                            <Select
-                                class="searchInput"
-                                v-model="serialId"
-                                filterable
-                                remote
-                                multiple
-                                :remote-method="remoteMethod3"
-                                :loading="loading1"
-                                @on-change='checkCar'>
-                                <Option v-for="option in searchList.modelList" :value="option.value" :key="new Date()">{{option.name}}</Option>
-                            </Select>
-                        </Form-item>
-                    </Col>
-                </Row>
-                 <Row>
-                    <Col  span="8" style="padding-right:10px">
-                        <Form-item v-if='searchInfoTxt[1]' label="投放地区：" class='resetSearchInfo' prop='cityId'>
-                            <Select
-                                class="searchInput"
-                                v-model="cityId"
-                                filterable
-                                remote
-                                multiple
-                                :remote-method="remoteMethod4"
-                                :loading="loading1"
-                                @on-change='checkCity'>
-                                <Option v-for="option in searchList.areaList" :value="option.value" :key="new Date()">{{option.name}}</Option>
-                            </Select>
-                        </Form-item>
-                    </Col>
-                    <Col  span="8" style="padding-right:10px">
-                        <Form-item v-if='searchInfoTxt[2]' label="投放品牌：" class='resetSearchInfo' prop='brandId'>
-                            <Select
-                                class="searchInput"
-                                v-model="brandId"
-                                filterable
-                                remote
-                                multiple
-                                :remote-method="remoteMethod5"
-                                :loading="loading1"
-                                @on-change='checkBrand'>
-                                <Option v-for="option in searchList.brandList" :value="option.value" :key="new Date()">{{option.name}}</Option>
-                            </Select>
-                        </Form-item>
-                    </Col>
-                    <Col>
-                        <Form-item>
-                            <Button class='searchBtn fr' type="primary"  @click="search('formValidate')">查询</Button>
-                        </Form-item>
-                    </Col>
                 </Row>
 
-                 </Form>
+                <Row>
+                   <Col v-if='searchInfoTxt[0]' span="12" style="padding-right:10px">
+                       <Form-item label="投放车型：" class='resetSearchInfo' prop='serialId'>
+                           <Select
+                               class="searchInput"
+                               v-model="serialId"
+                               filterable
+                               remote
+                               multiple
+                               :remote-method="remoteMethod3"
+                               :loading="loading1"
+                               @on-change='checkCar'>
+                               <Option v-for="option in searchList.modelList" :value="option.value" :key="new Date()">{{option.name}}</Option>
+                           </Select>
+                       </Form-item>
+                   </Col>
+                   <Col v-if='searchInfoTxt[1]' span="12" style="padding-right:10px">
+                       <Form-item label="投放地区：" class='resetSearchInfo' prop='cityId'>
+                           <Select
+                               class="searchInput"
+                               v-model="cityId"
+                               filterable
+                               remote
+                               multiple
+                               :remote-method="remoteMethod4"
+                               :loading="loading1"
+                               @on-change='checkCity'>
+                               <Option v-for="option in searchList.areaList" :value="option.value" :key="new Date()">{{option.name}}</Option>
+                           </Select>
+                       </Form-item>
+                   </Col>
+                   <Col v-if='searchInfoTxt[2]' span="12" style="padding-right:10px">
+                       <Form-item label="投放品牌：" class='resetSearchInfo' prop='brandId'>
+                           <Select
+                               class="searchInput"
+                               v-model="brandId"
+                               filterable
+                               remote
+                               multiple
+                               :remote-method="remoteMethod5"
+                               :loading="loading1"
+                               @on-change='checkBrand'>
+                               <Option v-for="option in searchList.brandList" :value="option.value" :key="new Date()">{{option.name}}</Option>
+                           </Select>
+                       </Form-item>
+                   </Col>
+               </Row>
+                   <Form-item>
+                       <Button class='searchBtn' type="primary"  @click="search('formValidate')">查询</Button>
+                   </Form-item>
+                </Form>
             </div>
             <!-- 查询条件结束 -->
 
             <!-- 查询结果 -->
-            <div class="result clear" v-if ='paging.totalCounts'>
+            <div class="noRes searching">
+                <Row>
+                    <Col v-show='searching' class="demo-spin-col" span="24">
+                        <Spin fix>
+                            <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                            <div>搜索中</div>
+                        </Spin>
+                    </Col>
+                </Row>
+                <p v-if='paging.totalCounts == 0'>无查询结果！</p>
+            </div>
+
+            <div class="result clear" v-if ='paging.totalCounts > 0'>
                 <!-- v-if ='paging.totalCounts' -->
                 <!-- 查询结果头信息 -->
                 <div class="title clear">
@@ -145,21 +155,18 @@
                         <a href="#">列表视图</a>
                     </div> -->
                 </div>
-                <!-- <div class="noResult">
-                    <p>查询无结果</p>
-                </div> -->
                 <!-- 查询结果列表 -->
                 <div class="table-list">
                     <div v-if='i.adStateList.length > 0'  v-for = "(i, index) in tableList" class="item">
                         <div class="item-title clear">
                             <div class="fl">
-                                 <!-- <Checkbox class='fl' v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="font-size:14px; margin-right:10px">
+                                 <Checkbox class='fl' v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="font-size:12px; margin-right:10px">
                                      <span class="ad-name">名称:</span>
-                                 </Checkbox> -->
-                                 <Radio-group v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="float:left;font-size:14px; margin-right:10px">
+                                 </Checkbox>
+                                 <!-- <Radio-group v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="float:left;font-size:14px; margin-right:10px">
                                     <Radio label="名称"></Radio>
-                                 </Radio-group>
-                                 <span class='ad-listName fl'>{{adNames}}/{{i.name}}</span>
+                                 </Radio-group> -->
+                                 <span class='ad-listName fl'>{{i.name}}</span>
                                  <a href="javascript:;" @click='viewAd(i.width, i.height, i)'>查看</a>
                             </div>
                             <div class="fr">
@@ -219,7 +226,7 @@
                                     </a>
                                 </td>
                                 <td class='ad-lis'>
-                                    <span class="">{{adNames}}/{{i.name}}</span>
+                                    <span class="">{{i.name}}</span>
                                 </td>
                                 <!-- 当前月份 -->
                                 <td>{{i.kprice}}元/天</td>
@@ -252,6 +259,15 @@ export default {
     },
     data() {
         return {
+            searching: false,
+            timeTxt: '',
+            // 日期判断
+            date1: {
+                disabledDate: this.disStart
+            },
+            date2: {
+                disabledDate: this.disEnd
+            },
             // 搜索条件初始化数据集合
             searchList: {
                 // 页面名称集合
@@ -290,36 +306,29 @@ export default {
             searchInfoTxt: [true, true, false],
             // 项目基本信息
             proMess: {},
-            date: {
-                disabledDate (date) {
-                    let year = new Date().getFullYear();
-                    let month = new Date().getMonth();
-                    return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
-                }
-            },
             ruleValidate: {
-                    serialId: [
-                        { required: true, type: 'string', message: '请选投放车型', trigger: 'change' }
-                    ],
-                    Type: [
-                        { required: true, type: 'string', message: '请选择广告类型', trigger: 'change' }
-                    ],
-                    beginTime: [
-                        { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
-                    ],
-                    endTime: [
-                        { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
-                    ],
-                    pageName: [
-                        { required: true, type: 'number', message: '请选择页面名称', trigger: 'change' }
-                    ],
-                    brandId: [
-                        { required: true, type: 'string', message: '请选择投放品牌', trigger: 'change' }
-                    ],
-                    cityId: [
-                        { required: true, type: 'string', message: '请选择投放地区', trigger: 'change' }
-                    ]
-                },
+                serialId: [
+                    { required: true, type: 'string', message: '请选投放车型', trigger: 'change' }
+                ],
+                Type: [
+                    { required: true, type: 'string', message: '请选择广告类型', trigger: 'change' }
+                ],
+                beginTime: [
+                    { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
+                ],
+                endTime: [
+                    { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
+                ],
+                pageName: [
+                    { required: true, type: 'number', message: '请选择页面名称', trigger: 'change' }
+                ],
+                brandId: [
+                    { required: true, type: 'string', message: '请选择投放品牌', trigger: 'change' }
+                ],
+                cityId: [
+                    { required: true, type: 'string', message: '请选择投放地区', trigger: 'change' }
+                ]
+            },
             action: 2,
             // 查询开关
             searchOnoff: false,
@@ -374,7 +383,7 @@ export default {
                 // 当前页索引
                 currentIndex: 0,
                 // 总条数
-                totalCounts: 0
+                totalCounts: -1
             },
             // 已选择元数据
             resultList: [],
@@ -384,8 +393,6 @@ export default {
             showSelect: [],
             // 已选广告位月份按钮索引
             monthIndex: 0,
-            // 广告位名称组合
-            adNames: '',
             // 选择时间页面日期集合存储
             timePageMonth: [],
             areaId: 1,
@@ -393,7 +400,7 @@ export default {
     },
     mounted() {
         let timeStap = Date.parse(new Date());
-        this.$http.get(`/isp-kongming/ad/mediaSelect`).then((res) => {
+        this.$http.get(`/isp-kongming/ad/mediaSelect?${timeStap}`).then((res) => {
             if (res.data.errorCode == 0) {
                 this.mediaNameList = res.data.result;
                 this.searchInfo.mediaId = this.mediaNameList[0].mediaId;
@@ -460,6 +467,24 @@ export default {
         this.searchInfoTxt = [false, false, false];
     },
     methods: {
+        // 日期判断
+        disStart(date) {
+            let year = new Date().getFullYear();
+            let month = new Date().getMonth();
+            return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
+        },
+        disEnd(date) {
+            if (this.searchInfo.beginTime) {
+                let year = this.searchInfo.beginTime.split('-')[0];
+                let month = this.searchInfo.beginTime.split('-')[1];
+                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year, 11, 30).getTime();
+            }
+            else {
+                let year = new Date().getFullYear();
+                let month = new Date().getMonth();
+                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
+            }
+        },
         // 格式化数据
         initResult(data) {
             let adStateList = [];
@@ -678,20 +703,38 @@ export default {
             this.searchInfo.serialId = this.serialId.join(',');
             this.searchInfo.cityId = this.cityId.join(',');
             this.searchInfo.brandId = this.brandId.join(',');
-            this.paging.totalCounts = 0;
-
+            // 初始化页数 隐藏无结果选项
+            this.paging.totalCounts = -1;
             // /isp-kongming/ad/select
+            let search = {
+                // 媒体名称id
+                mediaId: this.searchInfo.mediaId,
+                // 页面名称
+                channelId: this.searchInfo.pageName,
+                // 页面类型
+                adTagId:  this.searchInfo.labelTypeId,
+                // 广告类型
+                placeTypeList: this.searchInfo.Type,
+                // 投放车型
+                modelIdList: this.searchInfo.serialId,
+                // // 投放地区
+                cityIdList: this.searchInfo.cityId,
+                // // 投放品牌
+                brandIdList: this.searchInfo.brandId
+            };
+            window.localStorage.setItem('searchInfo', JSON.stringify(search));
             this.$http.post('/isp-kongming/ad/select',{
                 // 开始时间
                 beginTime: `${this.searchInfo.beginTime}-01`,
                 // 结束时间
                 endTime: `${this.searchInfo.endTime}-31`,
                 pageIndex: this.searchInfo.pageIndex,
-                pageSize: this.searchInfo.pageSize,
+                // pageSize: this.searchInfo.pageSize
+                pageSize: 5,
                 // 媒体名称id
                 mediaId: this.searchInfo.mediaId,
                 // 页面名称
-                //channelId: this.searchInfo.pageName,
+                channelId: this.searchInfo.pageName,
                 // 页面类型
                 adTagId:  this.searchInfo.labelTypeId,
                 // 广告类型
@@ -721,7 +764,13 @@ export default {
 
                     if (datas[0].totalCounts > 0) {
                         this.paging.totalCounts = datas[0].totalCounts;
+                        this.searching = false;
                     }
+                    else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
+                        this.paging.totalCounts = 0;
+                        this.searching = false;
+                    }
+
                     // action 1  进行新增操作
                     if (this.$router.currentRoute.query.action) {
                         //this.selectTableData = JSON.parse(window.localStorage.getItem('timePageList'));
@@ -742,9 +791,6 @@ export default {
                         this.searchInfo.Type = this.Type.join(',');
                     }
 
-
-                    this.adNames = `${this.searchInfo.mediaName}/${this.searchData.pageName}`;
-
                     for (let i = 0; i < datas.length; i++) {
                         if (this.checkBoxList.indexOf(datas[i].adPlaceId) > -1) {
                             this.$set(this.checkBoxStatus, i, true);
@@ -753,6 +799,8 @@ export default {
                     this.redrawed();
                 }
                 else {
+                    this.searching = false;
+                    this.paging.totalCounts = -1;
                     this.$Modal.info({
                         title: '提示',
                         content: res.data.rspMsg.errorMsg
@@ -760,6 +808,8 @@ export default {
                 }
             }).catch((err) => {
                 console.log(err);
+                this.searching = false;
+                this.paging.totalCounts = 0;
             })
         },
         remoteMethod1 (query, id) {
@@ -793,7 +843,7 @@ export default {
                 this.loading1 = true;
                 setTimeout(() => {
                     this.loading1 = false;
-                    this.searchList.modelList = Object.assign([], this.searchData.modelList).slice(0, 10);;
+                    this.searchList.typeList = Object.assign([], this.searchData.typeList).slice(0, 10);;
                 },200)
 
             } else {
@@ -906,7 +956,7 @@ export default {
 
                 this.searchInfo.brandId = '';
                 this.$http.post('/isp-kongming/ad/brandInfo', {
-                    brandId: -1,
+                    brandId: 0,
                     name: query
                 }).then((res) => {
                     this.loading1 = false;
@@ -972,7 +1022,7 @@ export default {
                     this.searchInfoTxt = [true, false, false];
                     this.initModels();
                     break;
-                case '省区页':
+                case '按省区发布':
                     this.searchInfoTxt = [false, true, false];
                     this.initArea(2);
                     break;
@@ -997,15 +1047,26 @@ export default {
                     break;
                 case '论坛资源页':
                     this.searchInfoTxt = [false, false, false];
+                    break;
+                case '省区品牌页':
+                    this.searchInfoTxt = [false, true, true];
+                    this.initArea(2);
+                    this.initBrand();
+
             }
             this.initPageName();
             this.redrawed();
         },
         search(name) {
+            if(this.timeTxt) {
+                return false;
+            }
+
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                    this.searching = true;
+                    this.paging.totalCounts = -1;
                     this.render();
-                    this.adName = `${this.searchInfo.mediaName}`;
                 } else {
                     //this.$Message.error('查询失败!');
                 }
@@ -1140,7 +1201,7 @@ export default {
                         })
                     }
                     else {
-                    // 当前日期广告位列表不为空 判断列表中是否有重复ID广告位
+                        // 当前日期广告位列表不为空 判断列表中是否有重复ID广告位
                         let dataStatus = false;
                         for (let i = 0; i < this.selectTableData[time].length; i++) {
                             if (obj.adPlaceId == this.selectTableData[time][i].adPlaceId) {
@@ -1354,8 +1415,21 @@ export default {
            this.searchInfo.beginTime = date;
            this.resetTime();
 
-           if (this.searchInfo.beginTime && this.searchInfo.endTime) {
-            //    this.initSearchInfo();
+           if (this.searchInfo.endTime && this.searchInfo.beginTime) {
+               let endYear = this.searchInfo.endTime.split('-')[0];
+               let endMonth = this.searchInfo.endTime.split('-')[1];
+               let startYear = this.searchInfo.beginTime.split('-')[0];
+               let startMonth = this.searchInfo.beginTime.split('-')[1];
+               if (endYear != startYear && startYear < endYear) {
+                   this.timeTxt = '选择时间不能跨年';
+               }
+               else if (endYear == startYear && startMonth > endMonth){
+                    this.endTime = this.beginTime;
+                    this.timeTxt = '';
+               }
+               else {
+                   this.timeTxt = '';
+               }
            }
 
        },
@@ -1400,7 +1474,7 @@ export default {
             window.localStorage.setItem('monthList', JSON.stringify(this.monthList));
             window.localStorage.setItem('tableData', JSON.stringify(this.selectTableData));
             window.localStorage.setItem('checkBoxList', JSON.stringify(this.checkBoxList));
-            window.localStorage.setItem('adName', this.adNames);
+
 
             this.$router.push({name:'chooseTime',query: {action: this.action}});
         },
@@ -1408,7 +1482,6 @@ export default {
         viewAd(width, height, obj) {
             let size = `${width} * ${height}`;
             this.$router.push('viewAd');
-            window.localStorage.setItem('adName', this.adNames);
             window.localStorage.setItem('size', size);
             window.localStorage.setItem('viewAd', JSON.stringify(obj));
         },

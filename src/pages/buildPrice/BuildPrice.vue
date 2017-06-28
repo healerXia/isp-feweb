@@ -16,7 +16,7 @@
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="70">
                     <Form-item label="折扣:" prop="discount" :error='errorTxt'>
 
-                        <Input-number class="w200 fl" v-model="formValidate.discount" @on-change='totalPrice' :max="10" :min="5" :step="1.1"></Input-number>
+                        <Input-number class="w200 fl" v-model="formValidate.discount" @on-change='totalPrice' :max="10" :min="5" :step="0.1"></Input-number>
                         <span class="char fl">折</span>
                     </Form-item>
                     <p class="MB20 fontSize12">实际成交价：<span class="colorRed fontSize14">{{reallyPrice.toFixed(2)}}元</span></p>
@@ -276,14 +276,14 @@ import urlList from './config.js';
             })
         },
         totalPrice(num) {
+            console.log(1);
             if (num) {
                 if (num.toString().split('.')[1].length > 1) {
                     this.errorTxt = '请输入5-10之间的数字，最多保留一位小数';
+                    return false;
                 }
             }
-            if (!isNaN(this.formValidate.discount)) {
-                this.reallyPrice = this.total * this.formValidate.discount / 10;
-            }
+            this.reallyPrice = this.total * this.formValidate.discount / 10;
         },
         // 计算比率 购买 配送
         ratio(total, delivery) {

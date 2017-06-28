@@ -104,10 +104,11 @@ body {
   .ivu-form-item-error-tip{height: 38px;line-height: 38px;padding-left: 19px}
 }
 
+// 侧导航样式
 .ivu-menu-item-active {
     .ivu-menu-submenu-title {
         position: relative;
-        
+
         &:before {
             content: '';
             width: 5px;
@@ -120,6 +121,7 @@ body {
     }
 }
 
+// 表单样式重置
 
 .ivu-input-icon {
     line-height: 36px;
@@ -130,10 +132,23 @@ body {
     magin: 2px 4px 2px 0;
     height: 30px;
     line-height: 30px;
+
+    .ivu-icon-ios-close-empty {
+        width: 8px;
+    }
 }
 
 .ivu-select-input {
     height: 36px;
+}
+
+
+
+.ivu-select-selection {
+    .ivu-select-selected-value {
+        height: 38px;
+        line-height: 38px !important;
+    }
 }
 
 .ivu-input {
@@ -152,8 +167,6 @@ body {
     line-height: 38px;
     height: 36px;
 }
-
-
 
 .ivu-form-item-content {
     line-height: 36px;

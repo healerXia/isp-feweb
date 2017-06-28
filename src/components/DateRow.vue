@@ -9,9 +9,9 @@
             @mouseup.stop.prevent='fn'
             @mouseover.stop.prevent='fn'
             @mouseleave='moveout'
-            style='user-select:none; width:200px;border: 1px solid #E9E9E9'>{{adNames}}/{{info.name}}</td>
+            style='user-select:none; width:200px;border: 1px solid #E9E9E9'>{{adNames}}</td>
         <td>
-            <Select v-model="useStyle" @on-change='selectData'>
+            <Select v-model="useStyle" @on-change='selectData' style="line-height:38px; height:38px;">
                 <Option v-for="(key, value) in useList" :value="key" :key="value">{{value}}</Option>
             </Select>
         </td>
@@ -346,8 +346,10 @@ export default {
 
 <style lang="scss" scoped>
 td {
-    padding: 0;
+    padding: 0 !important;
+    height: 30px !important;
 }
+
 
 .dateLayer {
     position: absolute;

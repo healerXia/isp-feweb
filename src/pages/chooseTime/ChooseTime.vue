@@ -55,9 +55,9 @@
                         <div class="fl">
                             <a href="javascript:;" @click='insert(index)'>新增本月广告位</a>
                         </div>
-                        <div class="fr">
-                            <span>购买净总价：{{priceList[index].total}}</span>
-                            <span>配送总价：{{priceList[index].delivery}}</span>
+                        <div class="fr priceTotalList clear">
+                            <span>购买净总价：{{priceList[index].total}}元</span>
+                            <span>配送总价：{{priceList[index].delivery}}元</span>
                             <span>配送比率：{{priceList[index].proportion}}</span>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="paging clear">
                 <Button type="primary" class="pagBtn nextPage fr">保存并继续下一页</Button>
-                <Button type="primary" class="pagBtn bg4373F3 fr">返回并继续下一页</Button>
+                <Button type="primary" class="pagBtn bg4373F3 fr">返回并返回上一页</Button>
             </div>
             <div class="save">
                 <Button type="primary" @click='save' class="btn bg4373F3" :disabled='saveStatus'>保存方案</Button>
@@ -534,6 +534,9 @@ export default {
                     });
                     this.adOrderCode = res.data.result;
                     window.localStorage.setItem('adOrderCode', res.data.result);
+                    this.saveStatus = false;
+                    this.proMess.contractCode = res.data.result;
+                    window.localStorage.setItem('proMess', JSON.stringify(this.proMess));
                 }
                 else {
                     this.$Modal.info({
@@ -615,15 +618,20 @@ export default {
                                 self.$router.push('buildPrice');
                             }
                        });
+                       this.saveStatus = false;
+                       this.proMess.contractCode = res.data.result;
+                       window.localStorage.setItem('proMess', JSON.stringify(this.proMess));
                    }
                    else {
                        this.$Modal.info({
                            title: '提示',
                            content: res.data.errorMsg
                        });
+                       this.saveStatus = false;
                    }
                }).catch((err) => {
                    console.log(err)
+                   this.saveStatus = false;
                })
            }
         },
