@@ -174,9 +174,4 @@ export default {
 <style lang="css" scoped>
 .white{color: white}
 a{width: 100%;height: 100%;display: inline-block;}
-.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item{border-left: 5px solid transparent;}
-.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active, .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active:hover{background:transparent !important;}
-
-.ivu-menu-dark.ivu-menu-vertical .ivu-menu-opened .ivu-menu-submenu-title{border-left: 5px solid #3D70FB !important}
-.ivu-menu-dark.ivu-menu-vertical .ivu-menu-item-active .ivu-menu-submenu-title{border-left: 5px solid #3D70FB!important}
 </style>
