@@ -15,13 +15,13 @@
             <Menu-item name="2-1">
                 <router-link class="white"
                 :to="{path:'createPro'}">
-                     创建项目             
+                     创建项目
                 </router-link>
             </Menu-item>
             <Menu-item name="2-2">
              <router-link class="white"
                 :to="{path:'projectList'}">
-                     项目管理             
+                     项目管理
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -33,7 +33,7 @@
             <Menu-item name="3-1">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                     订单管理              
+                     订单管理
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -45,7 +45,25 @@ export default {
 }
 </script>
 
-<style lang="css">
-.white{color: white}
-a{width: 100%;height: 100%;display: inline-block;}
+<style lang="css" scoped>
+ .white {
+     color: white;
+ }
+
+.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item {
+    padding-left: 0;
+}
+
+ .ivu-menu-item {
+     height: 48px;
+     padding: 0;
+ }
+
+ a {
+     display: block;
+     width: 100%;
+     height: 100%;
+     padding-left: 43px;
+     line-height: 48px;
+ }
 </style>

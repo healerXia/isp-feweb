@@ -369,12 +369,12 @@ span {
 }
 
 .priceTd {
-    border: 1px solid #DEE1E5;
+    border: 1px solid #DEE1E5;;
 }
 
 .dateTd {
     position: relative;
-    border: 1px solid #E9E9E9;
+    border: 1px solid #DEE1E5;;
     width: 20px;
 
     &.default {
