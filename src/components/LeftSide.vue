@@ -45,7 +45,7 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .white{color: white}
 a{width: 100%;height: 100%;display: inline-block;}
 </style>
