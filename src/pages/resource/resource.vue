@@ -22,6 +22,7 @@
                     <Row>
                         <Col span="5">
                             <Form-item prop="beginTime">
+                                <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date" placeholder="选择日期"></Date-picker>
                                 <Date-picker :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date" placeholder="选择日期"></Date-picker>
                             </Form-item>
                         </Col>
@@ -198,7 +199,7 @@
 
                 <div class="table-list">
                     <div  class="item">
-                        <table border="1" cellspacing="0" class="dateTable hasCheck">
+                        <table border="1" cellspacing="1" cellpadding="0" class="dateTable hasCheck">
                             <tr>
                                 <td></td>
                                 <td></td>

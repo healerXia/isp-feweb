@@ -15,13 +15,13 @@
             <Menu-item name="2-1">
                 <router-link class="white"
                 :to="{path:'createPro'}">
-                     创建项目             
+                     创建项目
                 </router-link>
             </Menu-item>
             <Menu-item name="2-2">
              <router-link class="white"
                 :to="{path:'projectList'}">
-                     项目管理             
+                     项目管理
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -33,7 +33,7 @@
             <Menu-item name="3-1">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                     订单管理              
+                     订单管理
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -45,31 +45,31 @@
             <Menu-item name="4-1">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                     客户管理             
+                     客户管理
                 </router-link>
             </Menu-item>
             <Menu-item name="4-2">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                     客户管理             
+                     客户管理
                 </router-link>
             </Menu-item>
             <Menu-item name="4-3">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                     代理商管理             
+                     代理商管理
                 </router-link>
             </Menu-item>
             <Menu-item name="4-4">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                     联系人管理           
+                     联系人管理
                 </router-link>
             </Menu-item>
             <Menu-item name="4-5">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                     访问记录           
+                     访问记录
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -81,19 +81,19 @@
             <Menu-item name="5-1">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                    合同管理             
+                    合同管理
                 </router-link>
             </Menu-item>
             <Menu-item name="5-2">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                     回款管理             
+                     回款管理
                 </router-link>
             </Menu-item>
             <Menu-item name="5-3">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                     发票管理             
+                     发票管理
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -105,7 +105,7 @@
             <Menu-item name="6-1">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                    业务审批             
+                    业务审批
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -117,25 +117,25 @@
             <Menu-item name="7-1">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                    广告售卖          
+                    广告售卖
                 </router-link>
             </Menu-item>
             <Menu-item name="7-2">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                    会员业务    
+                    会员业务
                 </router-link>
             </Menu-item>
             <Menu-item name="7-3">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                    客户合作         
+                    客户合作
                 </router-link>
             </Menu-item>
             <Menu-item name="7-4">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                    业绩分析         
+                    业绩分析
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -147,13 +147,13 @@
             <Menu-item name="1-1">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                    审批链管理       
+                    审批链管理
                 </router-link>
             </Menu-item>
             <Menu-item name="8-2">
                 <router-link class="white"
                 :to="{path:'orderList'}">
-                    审批链替换    
+                    审批链替换
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -172,6 +172,30 @@ export default {
 </script>
 
 <style lang="css" scoped>
+ .white {
+     color: white;
+ }
+
+.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item {
+    padding-left: 0;
+}
+
+ .ivu-menu-item {
+     height: 48px;
+     padding: 0;
+ }
+
+ a {
+     display: block;
+     width: 100%;
+     height: 100%;
+     padding-left: 43px;
+     line-height: 48px;
+ }
 .white{color: white}
-a{width: 100%;height: 100%;display: inline-block;}
+
+.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item{border-left: 5px solid transparent;}
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active, .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active:hover{background:#1C1F27;}
+.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active{background :#1C1F27 !important;}
+
 </style>

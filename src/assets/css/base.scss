@@ -104,6 +104,34 @@ body {
   .ivu-form-item-error-tip{height: 38px;line-height: 38px;padding-left: 19px}
 }
 
+.ivu-menu-item-active {
+    .ivu-menu-submenu-title {
+        position: relative;
+        
+        &:before {
+            content: '';
+            width: 5px;
+            height: 49px;
+            position: absolute;
+            background: #3D70FB;
+            left: 0;
+            top: 0;
+        }
+    }
+}
+
+
+.ivu-input-icon {
+    line-height: 36px;
+    height: 36px;
+}
+
+.ivu-tag {
+    magin: 2px 4px 2px 0;
+    height: 30px;
+    line-height: 30px;
+}
+
 .ivu-select-input {
     height: 36px;
 }
@@ -123,4 +151,18 @@ body {
 .ivu-select-multiple .ivu-select-input {
     line-height: 38px;
     height: 36px;
+}
+
+
+
+.ivu-form-item-content {
+    line-height: 36px;
+}
+
+.ivu-form-item-label {
+    height: 38px;
+}
+
+.ivu-form .ivu-form-item-label  {
+    line-height: 18px;
 }
