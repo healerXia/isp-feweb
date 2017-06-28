@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="details">
       <div class="conBox bgF9FAFC">
-        <ProjectInfo v-bind:proMess="projectData" :edit="editPro" :id="proid" v-on:edit="edit"></ProjectInfo>
+        <ProjectInfo v-bind:proMess="projectData" :edit="true" :id="proid" v-on:edit="edit"></ProjectInfo>
       </div>
       <div class="conBox" v-show="noOrder">
         <div class='hasNoOrder pL30'>
@@ -27,11 +27,11 @@
       <div class="conBox MT20 pL30 pR30" v-show="!noOrder">
         <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
-         <!--  <router-link 
+         <!--  <router-link v-show="editOrder" 
           :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
            编辑排期                
           </router-link>
-          <router-link 
+          <router-link v-show="editOrder"
           :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}"> 
            编辑价格                
           </router-link> -->
@@ -80,7 +80,7 @@
               <div class="totalPrice" slot="content">
                   <span>A类购买净总价：{{priceArr.totalBuy}}元</span>
                   <span>B类购买净总价：{{priceArr.totalDelivery}}元</span>
-                  <span>配送比率：{{priceArr.rate}}元</span>
+                  <span>配送比率：{{priceArr.rate}}</span>
                 </div>   
             </Panel>
           </Collapse>
@@ -200,7 +200,8 @@ export default {
     },
     data() {
       return {
-        editPro:true,
+        myChart:null,
+        editOrder:true,
         noOrder:false,
         showMes:{//收缩板
           collapse1:false,
@@ -305,6 +306,10 @@ export default {
     created() {
       let customerTime = Date.parse(new Date());
       let id = this.$router.currentRoute.query.id
+      this.createCharts([],[],[])
+      setTimeout(()=>{
+        this.showMes.value2=""
+      },0)
       //获取项目信息
       this.$http.get(config.urlList.getInfo+"?id="+id).then((res) => {
         if(res.data.errorCode === 0) {
@@ -325,27 +330,26 @@ export default {
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
-            var arr=['1002','1003','1004','1014']//可编辑的订单状态
+            var arr=['1002','1011','1004','1014']//可编辑的订单状态
             this.adverMes=res.data.result.resultList[0]
             if( Array.indexOf(arr, this.adverMes.status)!=-1){//如果是这这几种状态，就可以编辑
-                this.editPro=true
+                this.editOrder=true
             } else{
-               this.editPro=false
+               this.editOrder=false
             }
             //获取排期信息
             this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
               if(res.data.errorCode === 0) {
                 this.tableDatas=res.data.result
-                for(let i=0;i<this.tableDatas.length;i++){
+                for(let i=0;i<this.tableDatas.length;i++){//处理总数据
                   this.priceArr.totalBuy=this.tableDatas[i].monthPrice+this.priceArr.totalBuy
-                  this.priceArr.totalDelivery=this.tableDatas[i].monthPrice+this.priceArr.monthFree
+                  this.priceArr.totalDelivery=this.tableDatas[i].monthFree+this.priceArr.totalDelivery
                 }
                 if(this.priceArr.totalBuy!=0){
                   this.rate=(this.priceArr.totalDelivery/this.priceArr.totalBuy).toFixed(2)
                 }else{
                   this.rate=0
                 }
-                
               }
               else {
                 this.$Modal.info({
@@ -360,8 +364,8 @@ export default {
             this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
               if(res.data.errorCode === 0) {
                 this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);//创建echars
-                this.showMes.value2=""//收缩板关闭
-                this.noOrder=false//不显示 无订单
+                // this.showMes.value2=""//收缩板关闭
+                // this.noOrder=false//不显示 无订单
               }
               else {
                 this.$Modal.info({
@@ -370,13 +374,13 @@ export default {
                 });
               }
               }).catch((err) => {
-                this.showMes.value2=""//收缩板关闭
-                this.noOrder=false//不显示 无订单
+                // this.showMes.value2=""//收缩板关闭
+                // this.noOrder=false//不显示 无订单
             })  
           }
       }).catch((err) => {
           console.log(err);
-      })     
+      })       
     },
     methods: {
       createCharts(xAxisArr,pvArr,uvArr){
@@ -493,12 +497,15 @@ export default {
           ]
         }    
         setTimeout(()=>{
-          var myChart = echarts.init(document.getElementById('lineChart'));
-          myChart.setOption(polar);
+          if(!this.myChart){
+            let dom = echarts.init(document.getElementById('lineChart'));
+            this.myChart=dom
+          }
+          this.myChart.setOption(polar);
         },0)  
-        setTimeout(()=>{
-          this.showMes.value2=""
-        },10) 
+        // setTimeout(()=>{
+        //   this.showMes.value2=""
+        // },10) 
       },
       edit(){
         let id=this.$router.currentRoute.query.id

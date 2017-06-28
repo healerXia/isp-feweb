@@ -589,13 +589,14 @@
               this.dateErr="开始日期不能大于结束日期"
               return false
             }
-            else if(bdateStamp<new Date()-86400000){
-              // if(this.$router.currentRoute.query.id){
-              //   return true
-              // }
-              this.dateErr="开始日期不能小于今天"
-              return false
-            }else{
+            // else if(bdateStamp<new Date()-86400000){
+            //   // if(this.$router.currentRoute.query.id){
+            //   //   return true
+            //   // }
+            //   this.dateErr="开始日期不能小于今天"
+            //   return false
+            // }
+            else{
               return true
             }
           }

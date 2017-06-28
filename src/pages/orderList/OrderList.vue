@@ -53,9 +53,9 @@
               </li>
               <li class="MT15">
                 <div class="inputBox">
-                  <span class="formLabel">待处理</span>
-                  <Select v-model="searchData.toDo" placeholder="请选择待处理" :clearable="true">
-                    <Option v-for="option in selectData.toDoArr" :value="option.Value" :key="new Date()">{{option.Name}}</Option>
+                  <span class="formLabel">待处理</span>        
+                  <Select v-model="searchData.playStatus" multiple placeholder="请选择待处理" >
+                      <Option v-for="item in selectData.toDoArr" :value="item.Value" :key="item">{{ item.Name}}</Option>
                   </Select>
                 </div>
                 <div class="inputBox ML30">
@@ -148,8 +148,8 @@ import config from './config.js';
            {Name:"广告",Value:1}
           ],
           toDoArr:[
-           {Name:"未终审订单",Value:'1000,1001,1002,1004,1006,1013,1014,1011'},
-           {Name:"未上素材订单",Value:'2'},
+           {Name:"未终审订单",Value:'statusArray=1000,1001,1002,1004,1006,1013,1014,1011&'},
+           {Name:"未上素材订单",Value:'playStatus=0&'},
           ]
         },
         searchData:{
@@ -165,7 +165,7 @@ import config from './config.js';
           createTime1:"",      //开始时间
           createTime2:"",      //结束时间
           dutyUserName:"",//责任销售
-          toDo:"",//待处理  id
+          playStatus:[],//待处理  id
           proType:""//产品类型  id (多选 会转成字符串)
         },
         totalPages:0,
@@ -232,10 +232,14 @@ import config from './config.js';
       toParam(objs){
         var str=""
         for(let item in objs){
-          if(objs[item]){
+          if(objs[item]&&item!='playStatus'){
             let a=objs[item]
             a=(a+"").replace(/(^\s*)|(\s*$)/,"")
             str=str+item+"="+a+'&';
+          }else if(objs[item]&&item=='playStatus'){
+            for(let i=0;i<objs[item].length;i++){
+               str=str+objs[item][i];
+            }
           }
         }
         str=str.substring(0,str.length-1) ;
@@ -250,7 +254,7 @@ import config from './config.js';
         let str=this.toParam(this.searchData);
         this.searchStr=str;
         this.$http.post(config.urlList.getPageList+"?"+str,
-          this.searchData,
+          {},
           {
             emulateJSON:true
           }).then((res)=>{
