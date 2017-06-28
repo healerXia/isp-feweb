@@ -78,9 +78,9 @@
                 <Schedule :tableData="tableData"></Schedule>  
               </div>
               <div class="totalPrice" slot="content">
-                  <span>A类购买净总价：3000元</span>
-                  <span>B类购买净总价：3000元</span>
-                  <span>配送比率：3000元</span>
+                  <span>A类购买净总价：{{priceArr.totalBuy}}元</span>
+                  <span>B类购买净总价：{{priceArr.totalDelivery}}元</span>
+                  <span>配送比率：{{priceArr.rate}}元</span>
                 </div>   
             </Panel>
           </Collapse>
@@ -212,7 +212,7 @@ export default {
           value3:"",
           value4:"",
         },
-        projectData:{
+        projectData:{//项目信息
           id:0,
           custName:"大众",//客户名称
           agentCustName: "易车",//代理公司
@@ -294,6 +294,11 @@ export default {
               notes:"-"
             }
           ]
+        },
+        priceArr:{//总价格
+          totalBuy:0,
+          totalDelivery:0,
+          rate:0
         }
       }
     },
@@ -320,7 +325,7 @@ export default {
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
-            var arr=['1002','1003','1004','1014']
+            var arr=['1002','1003','1004','1014']//可编辑的订单状态
             this.adverMes=res.data.result.resultList[0]
             if( Array.indexOf(arr, this.adverMes.status)!=-1){//如果是这这几种状态，就可以编辑
                 this.editPro=true
@@ -331,6 +336,16 @@ export default {
             this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
               if(res.data.errorCode === 0) {
                 this.tableDatas=res.data.result
+                for(let i=0;i<this.tableDatas.length;i++){
+                  this.priceArr.totalBuy=this.tableDatas[i].monthPrice+this.priceArr.totalBuy
+                  this.priceArr.totalDelivery=this.tableDatas[i].monthPrice+this.priceArr.monthFree
+                }
+                if(this.priceArr.totalBuy!=0){
+                  this.rate=(this.priceArr.totalDelivery/this.priceArr.totalBuy).toFixed(2)
+                }else{
+                  this.rate=0
+                }
+                
               }
               else {
                 this.$Modal.info({
@@ -355,10 +370,8 @@ export default {
                 });
               }
               }).catch((err) => {
-                console.log(1)
                 this.showMes.value2=""//收缩板关闭
                 this.noOrder=false//不显示 无订单
-                console.log(err);
             })  
           }
       }).catch((err) => {

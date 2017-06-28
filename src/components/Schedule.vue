@@ -38,9 +38,14 @@
             </tbody>
         </table>
          <div class="price">
-          <span>购买净总价：{{tableData.data[0].price}}元</span>
-          <span>配送总价：3000元</span>
-          <span>配送比率：1:6</span>
+          <span>购买净总价：{{tableData.monthPrice}}元</span>
+          <span>配送总价：{{tableData.monthFree}}元</span>
+          <span v-if="tableData.monthPrice!=0">
+            配送比率：{{(tableData.monthFree/tableData.monthPrice).toFixed(1)}}
+          </span>
+          <span v-else-if="tableData.monthPrice==0">
+            配送比率：0
+          </span>
         </div> 
         </div>
 </template>

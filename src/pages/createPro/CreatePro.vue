@@ -590,9 +590,9 @@
               return false
             }
             else if(bdateStamp<new Date()-86400000){
-              if(this.$router.currentRoute.query.id){
-                return true
-              }
+              // if(this.$router.currentRoute.query.id){
+              //   return true
+              // }
               this.dateErr="开始日期不能小于今天"
               return false
             }else{
@@ -671,13 +671,13 @@
                 this.cityArr=res.data.result
                 if(this.cityId!=""){
                   this.areaArr=[]
+                  this.cityArr=[]
                   this.formValidate.areaId=""
                   this.cityId=""
                 }
                 if(this.addressId.cityId!=""){
                   this.cityId=this.addressId.cityId;
                   this.addressId.cityId=""
-
                 }
               }
 
@@ -1003,8 +1003,6 @@
           else if([1,2,4].indexOf(this.formValidate.promotionWay)!=-1) {//投放车型
             this.judge.showBrand=false;
             this.judge.showSerial=true;
-            if(!this.$router.currentRoute.query.id){
-            }
           }
           else if(!this.formValidate.promotionWay){
             this.judge.showBrand=false;

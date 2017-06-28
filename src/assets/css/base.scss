@@ -135,17 +135,22 @@ body {
 .ivu-select-input {
     height: 36px;
 }
-
+.ivu-select{
+border-radius: 2px;
+}
 .ivu-input {
+    border-radius: 2px;
      height: 38px;
  }
 
 .ivu-select-single .ivu-select-selection {
     height: 38px;
+    border-radius: 2px;
 }
 
 .ivu-select-multiple .ivu-select-selection {
     min-height: 38px;
+    border-radius: 2px;
 }
 
 .ivu-select-multiple .ivu-select-input {
