@@ -104,6 +104,22 @@ body {
   .ivu-form-item-error-tip{height: 38px;line-height: 38px;padding-left: 19px}
 }
 
+.ivu-menu-item-active {
+    .ivu-menu-submenu-title {
+        position: relative;
+        
+        &:before {
+            content: '';
+            width: 5px;
+            height: 49px;
+            position: absolute;
+            background: #3D70FB;
+            left: 0;
+            top: 0;
+        }
+    }
+}
+
 
 .ivu-input-icon {
     line-height: 36px;
@@ -136,6 +152,7 @@ body {
     line-height: 38px;
     height: 36px;
 }
+
 
 
 .ivu-form-item-content {
