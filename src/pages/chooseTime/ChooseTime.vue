@@ -10,7 +10,23 @@
                     </div>
                 </div>
                 <div v-if='num[index]'  v-for='(i, index) in currentList'  v-bind:key="index" class="item">
-                    <p>{{num[index]}}</p>
+                    <div class='clear'>
+                        <span class='fl'>{{num[index]}}</span>
+                        <div class="fr">
+                            <div class="fl dateTableStatus unavailable">
+                               <span class='fl'></span>
+                               <span class='fl'>不可用</span>
+                            </div>
+                            <div class="fl dateTableStatus occupied">
+                                <span class='fl'></span>
+                                <span class='fl'>已占用</span>
+                            </div>
+                            <div class="fl dateTableStatus reserved">
+                                <span class='fl'></span>
+                                <span class='fl'>已预订</span>
+                            </div>
+                        </div>
+                    </div>
                     <table  border="0" cellspacing="1" cellpadding="0" class="dateTable hasCheck">
                         <tr class='dateTable-title'>
                             <td></td>
@@ -47,14 +63,13 @@
                     </div>
                 </div>
             </div>
+            <div class="paging clear">
+                <Button type="primary" class="pagBtn nextPage fr">保存并继续下一页</Button>
+                <Button type="primary" class="pagBtn bg4373F3 fr">返回并继续下一页</Button>
+            </div>
             <div class="save">
-<<<<<<< HEAD
-                <Button type="primary" @click='save' class="btn bg4373F3">保存方案</Button>
+                <Button type="primary" @click='save' class="btn bg4373F3" :disabled='saveStatus'>保存方案</Button>
                 <Button type="primary" @click='generate' class="btn bg4373F3 ML20">生成价格</Button>
-=======
-                <Button type="primary" @click='save' :disabled='saveStatus'>保存方案</Button>
-                <Button type="primary" @click='generate'>生成价格</Button>
->>>>>>> feature/charts
             </div>
         </div>
     </div>
@@ -568,7 +583,7 @@ export default {
                            title: '提示',
                            content: '方案保存成功',
                            onOk () {
-                                window.localStorage.setItem('adOrderCode', res.data.result);
+                                //window.localStorage.setItem('adOrderCode', res.data.result);
                                 self.$router.push('buildPrice');
                             }
                        });

@@ -104,4 +104,23 @@ body {
   .ivu-form-item-error-tip{height: 38px;line-height: 38px;padding-left: 19px}
 }
 
-  
+.ivu-select-input {
+    height: 36px;
+}
+
+.ivu-input {
+     height: 38px;
+ }
+
+.ivu-select-single .ivu-select-selection {
+    height: 38px;
+}
+
+.ivu-select-multiple .ivu-select-selection {
+    min-height: 38px;
+}
+
+.ivu-select-multiple .ivu-select-input {
+    line-height: 38px;
+    height: 36px;
+}
