@@ -22,9 +22,7 @@
                     <Row>
                         <Col span="5">
                             <Form-item prop="beginTime">
-                                <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date" placeholder="选择日期"></Date-picker>
-                                <Date-picker :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date" placeholder="选择日期"></Date-picker>
-                            </Form-item>
+                                <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date" placeholder="选择日期"></Date-picker>                            </Form-item>
                         </Col>
                         <Col span="1" style="text-align: center">-</Col>
                         <Col span="5">
