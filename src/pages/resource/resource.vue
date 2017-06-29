@@ -426,8 +426,9 @@ export default {
                 this.searchInfo.labelTypeId = this.pageTypeList[0].tagId;
                 this.initPageName();
                 setTimeout(() => {
-                    let list = document.querySelectorAll('.pageType');
-                    list[0].className += ' active';
+                    this.choosePage(this.pageTypeList[0].tagName, this.pageTypeList[0].tagId, 0);
+                    // let list = document.querySelectorAll('.pageType');
+                    // list[0].className += ' active';
                 })
             }
             else {

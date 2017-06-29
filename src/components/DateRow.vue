@@ -9,7 +9,16 @@
             @mouseup.stop.prevent='fn'
             @mouseover.stop.prevent='fn'
             @mouseleave='moveout'
-            style='user-select:none; width:200px;border: 1px solid #E9E9E9'>{{adNames}}</td>
+            style='user-select:none; width:200px;border: 1px solid #E9E9E9'
+            class='infoNameTd'
+        >
+            <Tooltip  placement="top">
+                <div slot="content">
+                    <p>{{info.name}}</p>
+                </div>
+                <span class='infoName'>{{info.name}}</span>
+            </Tooltip>
+        </td>
         <td>
             <Select class='useSelect' v-model="useStyle" @on-change='selectData' style="line-height:38px; height:38px;">
                 <Option v-for="(key, value) in useList" :value="key" :key="value">{{value}}</Option>
@@ -101,6 +110,7 @@ export default {
         }
     },
     mounted() {
+        console.log(this.info);
         for(let i = 0;i < 31; i++) {
             this.$set(this.visibleList, i, false);
         }
@@ -346,8 +356,26 @@ export default {
 
 <style lang="scss" scoped>
 td {
-    padding: 0 !important;
-    height: 30px !important;
+    padding: 0;
+
+    .infoName {
+        margin: 0 auto;
+        display: block;
+        width: 180px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 23px;
+        height: 23px;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.infoNameTd {
+    position: relative;
 }
 
 
@@ -398,7 +426,7 @@ td.unselect {
 }
 
 .dateSpan {
-    height: 26px;
+    height: 36px;
     width: 20px;
 }
 

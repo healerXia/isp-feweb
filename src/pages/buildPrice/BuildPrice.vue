@@ -19,7 +19,7 @@
                         <Input-number class="w200 fl" v-model="formValidate.discount" @on-change='totalPrice' :max="10" :min="5" :step="0.1"></Input-number>
                         <span class="char fl">折</span>
                     </Form-item>
-                    <p class="MB20 fontSize12">实际成交价：<span class="colorRed fontSize14">{{reallyPrice.toFixed(2)}}元</span></p>
+                    <p class="MB20 fontSize12">实际成交价：<span class="colorRed fontSize14">{{formatNum(reallyPrice, 2)}}元</span></p>
                     <Form-item>
                         <Button type="primary" class="btn bg4373F3" @click="handleSubmit('formValidate', 1)" :disabled='saveStatus'>保存方案</Button>
                         <Button type="primary" class="btn bg4373F3 ML20" @click="handleSubmit('formValidate', 2)" :disabled='submitStatus'>提交</Button>
@@ -31,7 +31,6 @@
           </div>
         </div>
       </div>
-      <div v-show="false"><span>{{discoutTofix}}</span></div>
     </div>
 </template>
 
@@ -47,7 +46,8 @@ import urlList from './config.js';
         errorTxt: '',
         saveStatus: false,
         submitStatus: false,
-        reallyPrice:0,
+        reallyPrice: 0,
+        pointPrice: 0,
         total: 0,
         price: {},
         formValidate:{
@@ -135,10 +135,10 @@ import urlList from './config.js';
             }
             this.tableData.mess.push({
                 time: priceList[i].time,
-                aTotal: priceList[i].total.toFixed(2) == 0 ? '-' : priceList[i].total.toFixed(2),
-                bTotal: priceList[i].delivery.toFixed(2) == 0 ? '-' : priceList[i].delivery.toFixed(2),
-                cTotal: priceList[i].exchange.toFixed(2) == 0 ? '-' : priceList[i].exchange.toFixed(2),
-                dTotal: priceList[i].per.toFixed(2) == 0 ? '-' : priceList[i].per.toFixed(2),
+                aTotal: priceList[i].total == 0 ? '-' : this.formatNum(priceList[i].total, 2),
+                bTotal: priceList[i].delivery == 0 ? '-' : this.formatNum(priceList[i].delivery, 2),
+                cTotal: priceList[i].exchange == 0 ? '-' : this.formatNum(priceList[i].exchange, 2),
+                dTotal: priceList[i].per == 0 ? '-' : this.formatNum(priceList[i].per, 2),
                 distribution: priceList[i].proportion
             })
 
@@ -151,10 +151,10 @@ import urlList from './config.js';
         let str = this.ratio(aTotal, bTotal);
         this.tableData.mess.push({
             time: '合计',
-            aTotal: aTotal.toFixed(2) == 0 ? '-' : aTotal.toFixed(2),
-            bTotal: bTotal.toFixed(2) == 0 ? '-' : bTotal.toFixed(2),
-            cTotal: cTotal.toFixed(2) == 0 ? '-' : cTotal.toFixed(2),
-            dTotal: dTotal.toFixed(2) == 0 ? '-' : dTotal.toFixed(2),
+            aTotal: aTotal == 0 ? '-' : this.formatNum(aTotal, 2),
+            bTotal: bTotal == 0 ? '-' : this.formatNum(bTotal, 2),
+            cTotal: cTotal == 0 ? '-' : this.formatNum(cTotal, 2),
+            dTotal: dTotal == 0 ? '-' : this.formatNum(dTotal, 2),
             distribution: str
         })
         this.total =  aTotal;
@@ -216,6 +216,29 @@ import urlList from './config.js';
                         "detailList": datas
                     }).then((res) => {
                         if (res.data.errorCode === 0) {
+                            // 清空本地存储
+                            let nameList = [
+                                'adName',
+                                'adOrderCode',
+                                'checkBoxList',
+                                'insertData',
+                                'monthList',
+                                'price',
+                                'priceList',
+                                'proMess',
+                                'projectData',
+                                'searchInfo',
+                                'size',
+                                'tableData',
+                                'timePageList',
+                                'timePriceList',
+                                'viewAd'
+                            ];
+
+                            for (let i = 0; i < nameList.length; i++) {
+                                window.localStorage.removeItem(nameList[i]);
+                            }
+
                             if (id == 1) {
                                 this.$Modal.success({
                                     title: '提示',
@@ -286,7 +309,20 @@ import urlList from './config.js';
                     document.querySelector('.ivu-form-item').className = 'ivu-form-item ivu-form-item-required';
                 }
             }
-            this.reallyPrice = this.total * this.formValidate.discount / 10;
+            this.pointPrice = (this.total * this.formValidate.discount / 10).toFixed(2).toString().split('.')[1];
+            this.reallyPrice = parseInt(this.total * this.formValidate.discount / 10);
+
+        },
+        //转千分位
+        formatNum(num, n) {
+           //参数说明：num 要格式化的数字 n 保留小数位
+
+            num = String(num.toFixed(n));
+            var re = /(-?\d+)(\d{3})/;
+            while(re.test(num)) {
+                num = num.replace(re,"$1,$2");
+            }
+            return num;
         },
         // 计算比率 购买 配送
         ratio(total, delivery) {

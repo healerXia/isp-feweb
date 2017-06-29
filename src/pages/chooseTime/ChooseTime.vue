@@ -63,7 +63,7 @@
                     </div>
                 </div>
             </div>
-            <div class="paging clear">
+            <div class="paging clear" v-show='pageStatus'>
                 <Button type="primary" class="pagBtn nextPage fr">保存并继续下一页</Button>
                 <Button type="primary" class="pagBtn bg4373F3 fr">返回并返回上一页</Button>
             </div>
@@ -84,6 +84,7 @@ import DateRow from 'component/DateRow'
 export default {
     data() {
         return {
+            pageStatus: false,
             adOrderCode: '',
             saveStatus: false,
             proMess: {},
@@ -182,6 +183,7 @@ export default {
             this.pageList = Object.assign({}, JSON.parse(window.localStorage.getItem('tableData')));
             this.num = Object.assign([], JSON.parse(window.localStorage.getItem('monthList')));
 
+
             for (let i = 0;i < this.num.length; i++) {
                 len += this.pageList[this.num[i]].length;
 
@@ -195,31 +197,38 @@ export default {
                 });
             }
 
-
         }
 
         // 可放置最大月份个数
         let maxMonthNum = Math.ceil(40/len);
+        for (let i = 0;i < this.num.length; i++) {
+            this.currentList.push(this.pageList[this.num[i]]);
+        }
         // 初始化当前页月份数
-        if(this.num.length <= maxMonthNum) {
-            //一页可以显示完
-            for (let i = 0;i<this.num.length; i++) {
-                this.currentList.push(this.pageList[this.num[i]]);
-            }
-        }
-        else {
-            //每页可显示月份为maxMonthNum
-        }
+        // if(this.num.length <= maxMonthNum) {
+        //     //一页可以显示完
+        //     this.pageStatus = false;
+        //     for (let i = 0;i < this.num.length; i++) {
+        //         this.currentList.push(this.pageList[this.num[i]]);
+        //     }
+        // }
+        // else {
+        //     //this.pageStatus = true;
+        //     //每页可显示月份为maxMonthNum
+        //     for (let i = 0;i < this.num.length; i++) {
+        //         this.currentList.push(this.pageList[this.num[i]]);
+        //     }
+        // }
         this.num = this.num.sort();
 
         for (let i = 0; i < this.num.length; i++) {
             let data = this.pageList[this.num[i]];
             for (let j = 0; j < data.length; j++) {
-                 console.log(data[j]);
+
                  data[j].useStyle = 4001;
             }
         }
-        console.log(this.pageList);
+
     },
     methods: {
         // 数据拆分
@@ -371,8 +380,7 @@ export default {
             window.localStorage.setItem('timePriceList', JSON.stringify(this.priceList));
             window.localStorage.setItem('timePageList', JSON.stringify(this.pageList));
 
-            console.log(this.priceList);
-            console.log(this.pageList);
+
         },
         // 切换用途
         selectStyle(oldType, newType, list, index, price, date) {
@@ -660,10 +668,10 @@ export default {
                 this.priceList.splice(index, 1);
             }
             else {
-                let a = list.total;
-                let b = list.delivery;
-                let c = list.exchange;
-                let d = list.per;
+                let a = list.total ? list.total : 0;
+                let b = list.delivery ? list.delivery : 0;
+                let c = list.exchange ? list.exchange : 0;
+                let d = list.per ? list.per : 0;
                 let tableIndex = this.num.indexOf(date);
                 // let aTotal = this.priceList[date][index].total;
                 // let bTotal = this.priceList[date][index].delivery;
@@ -693,6 +701,9 @@ export default {
             }
             else {
                 //每页可显示月份为maxMonthNum
+                for (let i = 0;i<this.num.length; i++) {
+                    this.currentList.push(this.pageList[this.num[i]]);
+                }
             }
 
             this.num = this.num.sort();
