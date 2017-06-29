@@ -402,15 +402,10 @@ export default {
             containLabel: true
           },
           legend: {
+            itemHeight:10,
             right:"0%",
             top:"top",
-            data:[
-            {
-              name:'曝光量',
-            
-            }
-            ,'点击量'
-            ],
+            data:['曝光量','点击量'],
           },
           xAxis: {
               boundaryGap: false,
@@ -466,11 +461,9 @@ export default {
                   normal:{
                     color: '#E36776'
                   }
-                },
-               
-                  symbol:'circle',
-                
-                symbolSize: 10,
+                },              
+                symbol:'circle',               
+                symbolSize:6,
                 data: pvArr,
                 showAllSymbol:true
             },
@@ -481,16 +474,14 @@ export default {
                     normal: {
                         color: '#3D70FB'
                     }
-                },
-                 
-                  symbol:'circle',
-                
-                 itemStyle:{
+                },                 
+                symbol:'circle',
+                itemStyle:{
                   normal:{
                     color: '#3D70FB'
                   }
                 },
-                symbolSize: 10,
+                symbolSize: 7,
                 data: uvArr
                 // [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
             }
