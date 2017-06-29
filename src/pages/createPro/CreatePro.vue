@@ -670,15 +670,18 @@
           .then((res)=>{
               if(res.data.errorCode===0){
                 this.cityArr=res.data.result
-                if(this.cityId!=""){
-                  this.areaArr=[]
-                  this.cityArr=[]
-                  this.formValidate.areaId=""
-                  this.cityId=""
-                }
-                if(this.addressId.cityId!=""){
+                if(this.addressId.cityId!=""){//验证回填，回填以后将this.addressId.cityId制空，以后也不会走这一步了
                   this.cityId=this.addressId.cityId;
                   this.addressId.cityId=""
+                }else if(this.provinceId==""){
+                  this.cityArr=[]
+                  this.areaArr=[]
+                  this.cityId=""
+                  this.formValidate.areaId=""
+                }else if(this.provinceId!=""){
+                  this.areaArr=[]
+                  this.cityId=""
+                  this.formValidate.areaId=""
                 }
               }
 
@@ -692,28 +695,27 @@
         },
         cityChange(){//市列表change事件
           this.judge.areaErrShow=false
-          if(this.cityId!=""){
-            this.$http.post(config.urlList.getArea+"?pId="+this.cityId+"&pageSize=100").
-            then((res)=>{
-              if(res.data.errorCode===0){
-                  this.areaArr=res.data.result
-                  if(this.formValidate.areaId!=""){
-                    this.formValidate.areaId=""
-                  }
-                  if(this.addressId.areaId!=""){
-                    this.formValidate.areaId=this.addressId.areaId;
-                    this.addressId.areaId=""
-
-                  }
-              }
-              else {
-                this.$Modal.info({
-                    title: '提示',
-                    content: res.data.errorMsg
-                });
-              }
-            }).catch((res)=>{})
-          }
+          this.$http.post(config.urlList.getArea+"?pId="+this.cityId+"&pageSize=100").
+          then((res)=>{
+            if(res.data.errorCode===0){
+                this.areaArr=res.data.result
+                if(this.addressId.areaId!=""){
+                  this.formValidate.areaId=this.addressId.areaId;
+                  this.addressId.areaId=""
+                }else if(this.cityId==""){
+                  this.formValidate.areaId=""
+                  this.areaArr=[]
+                }else if(this.cityId!=""){
+                  this.formValidate.areaId=""
+                }
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+          }).catch((res)=>{})
         },
         areaChange(){//区县列表change事件
            this.judge.areaErrShow=false
