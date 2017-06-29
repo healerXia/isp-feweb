@@ -262,7 +262,6 @@ import urlList from './config.js';
                         if (id == 2) {
                             this.submitStatus = false;
                         }
-                        console.log(err)
                     })
                 } else {
                     if (id == 1) {

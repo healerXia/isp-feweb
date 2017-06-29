@@ -1513,7 +1513,7 @@ export default {
             if (this.Type.length > 0) {
                 this.Type = [];
                 this.searchInfo.typeId = '';
-                console.log(this.Type);
+                this.searchData.typeList = [];
             }
             // 城市
             if (this.cityId.length > 0) {
