@@ -1,18 +1,15 @@
 <template>
     <Row>
         <Col span="12">
-            <Date-picker  :editable = 'false'   @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>
+            <Date-picker  :editable = 'false' v-model='startTime'  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>
         </Col>
         <Col span="12">
             <Date-picker  :editable = 'false'   @on-change="chooseEndTime"  type="month" :options="date2" placeholder="选择日期"></Date-picker>
         </Col>
+
     </Row>
 </template>
 <script>
-    import 'select2';
-
-
-    console.log(select2);
     export default {
         data() {
             return  {
@@ -28,30 +25,27 @@
         },
         methods: {
             disStart(date) {
-                this.startTime = date;
                 let year = new Date().getFullYear();
                 let month = new Date().getMonth();
-                return date &&  date.valueOf() < new Date()
+                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
             },
             disEnd(date) {
-                this.startTime = date;
-
-                this.date2.disabledDate = (date) => {
-                    console.log(this);
-                    let start = this.startTime;
-                    let end = this.endTime;
-
+                if (this.startTime) {
+                    let year = this.startTime.split('-')[0];
+                    let month = this.startTime.split('-')[1];
+                    return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year, 11, 30).getTime();
+                }
+                else {
                     let year = new Date().getFullYear();
                     let month = new Date().getMonth();
-
-                    if (end) {
-                        let endYear = end.split('-')[0];
-                        if (endYear == year) {
-                            return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year,11,30).getTime();
-                        }
-
-                    }
+                    return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
                 }
+            },
+            chooseStartTime(date) {
+                this.startTime = date;
+            },
+            chooseEndTime(date) {
+                this.endTime = date;
             }
 
         }

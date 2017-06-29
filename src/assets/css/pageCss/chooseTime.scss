@@ -112,5 +112,12 @@
             line-height: 40px;
             background: #F9FAFC;
         }
+
+        .priceTotalList {
+            span {
+                float: left;
+                margin-left: 10px;
+            }
+        }
     }
 }

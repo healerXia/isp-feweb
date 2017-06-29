@@ -160,6 +160,7 @@ body {
   }
 }
 
+// 表单样式重置
 
 
 .ivu-input-icon {
@@ -171,14 +172,33 @@ body {
     magin: 2px 4px 2px 0;
     height: 30px;
     line-height: 30px;
+
+    .ivu-icon-ios-close-empty {
+        width: 8px;
+    }
 }
 
 .ivu-select-input {
     height: 36px;
 }
+
 .ivu-select{
 border-radius: 2px;
 }
+
+
+
+.useSelect {
+    .ivu-select-selection {
+        .ivu-select-selected-value {
+            height: 38px;
+            line-height: 38px !important;
+        }
+    }
+}
+
+
+
 .ivu-input {
     border-radius: 2px;
      height: 38px;
@@ -198,8 +218,6 @@ border-radius: 2px;
     line-height: 38px;
     height: 36px;
 }
-
-
 
 .ivu-form-item-content {
     line-height: 36px;

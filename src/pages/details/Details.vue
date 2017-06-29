@@ -7,9 +7,9 @@
         <div class='hasNoOrder pL30'>
             <div class="title MB20 MT15">
               <h1 class="MR15">订单信息</h1>
-              <router-link 
+              <router-link
               :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
-                新增订单         
+                新增订单
               </router-link>
             </div>
             <div class="contentBox">
@@ -27,22 +27,27 @@
       <div class="conBox MT20 pL30 pR30" v-show="!noOrder">
         <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
-         <!--  <router-link v-show="editOrder" 
-          :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
-           编辑排期                
+     <!--      <router-link v-show="editOrder" 
+            :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
+             编辑排期                
           </router-link>
           <router-link v-show="editOrder"
-          :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}"> 
-           编辑价格                
+            :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}"> 
+             编辑价格                
           </router-link> -->
+          <router-link
+            :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
+              新增订单
+          </router-link>
+
         </div>
         <div class="modul">
           <div class="nextTitle MB5">广告信息</div>
           <ul class="messShow fontColor">
             <li>
-              <span>订单编号：</span>         
+              <span>订单编号：</span>
               <span>{{adverMes.adOrderCode}}</span>
-              <a href="">导出PDF</a>     
+              <a href="">导出PDF</a>
             </li>
             <li>
               <span>投放周期：</span>
@@ -56,32 +61,32 @@
             </li>
              <li>
                 <span>成交价格：</span>
-                <span class="colorRed">{{adverMes.realitySellAllPrice}}元</span>         
+                <span class="colorRed">{{adverMes.realitySellAllPrice}}元</span>
             </li>
              <li >
               <span>订单状态：</span>
-              <span> {{adverMes.statusName}}</span>            
+              <span> {{adverMes.statusName}}</span>
             </li>
             <li>
               <span>创建时间：</span>
-              <span>{{adverMes.createTime}}</span>      
+              <span>{{adverMes.createTime}}</span>
             </li>
           </ul>
         </div>
         <div class="MT15">
-          <Collapse v-model="showMes.value1"  @on-change="showCollapse1">           
+          <Collapse v-model="showMes.value1"  @on-change="showCollapse1">
             <Panel name="1">
               <span>广告位信息</span>
                <span class="fRight MR20" v-if="showMes.collapse1">收起&nbsp;<Icon type="chevron-up"></Icon></span>
                 <span class="fRight MR20" v-else="showMes.collapse1">展开&nbsp;<Icon type="chevron-down"></Icon></span>
               <div class="tableBox" slot="content" v-for="tableData in tableDatas">
-                <Schedule :tableData="tableData"></Schedule>  
+                <Schedule :tableData="tableData"></Schedule>
               </div>
               <div class="totalPrice" slot="content">
-                  <span>A类购买净总价：{{priceArr.totalBuy}}元</span>
-                  <span>B类购买净总价：{{priceArr.totalDelivery}}元</span>
-                  <span>配送比率：{{priceArr.rate}}</span>
-                </div>   
+                <span>A类购买净总价：{{priceArr.totalBuy}}元</span>
+                <span>B类购买净总价：{{priceArr.totalDelivery}}元</span>
+                <span>配送比率：{{priceArr.rate}}</span>
+              </div>   
             </Panel>
           </Collapse>
         </div>
@@ -108,7 +113,7 @@
               </div>
               <div class="tableBox" slot="content">
                 <div class="nextTitle MB15 MT15">统计图</div>
-                <div id="lineChart" class="chars">             
+                <div id="lineChart" class="chars">
                 </div>
               </div>
             </Panel>
@@ -153,7 +158,7 @@
                   </table>
                 </div>
              </Panel>
-          </Collapse>          
+          </Collapse>
         </div>
         <div>
           <Collapse v-model="showMes.value4" @on-change="showCollapse4">
@@ -179,7 +184,7 @@
                   </table>
                 </div>
              </Panel>
-          </Collapse>          
+          </Collapse>
         </div>
       </div>
   </div>
@@ -235,7 +240,7 @@ export default {
           contractCode:"NO.00000"//关联合同号
         },
         thead:["广告位名称","用途","刊例价"],
-        theadkey:['adName','useStyle','price','listNumber'],  
+        theadkey:['adName','useStyle','price','listNumber'],
         tableDatas:[
         ],
         adverMes:{//广告信息
@@ -255,7 +260,7 @@ export default {
                 clickCount:"-",
                 clickRate:"-"
              }
-             
+
            ]
         },
         callSpecialMes:{//申请特批信息
@@ -326,7 +331,7 @@ export default {
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
-            this.createCharts([],[],[])
+            // this.createCharts([],[],[])
             setTimeout(()=>{
               this.showMes.value2=""
             },0)
@@ -378,21 +383,23 @@ export default {
                 // this.noOrder=false//不显示 无订单
             })  
           }
-      }).catch((err) => {
+        }).catch((err) => {
           console.log(err);
-      })       
-    },
+      })   
+    },    
     methods: {
-      createCharts(xAxisArr,pvArr,uvArr){
+
+      createCharts(xAxisArr,pvArr,uvArr)
+      {
         if(xAxisArr.length==0){
-           xAxisArr=['00.00','02.00','04.00','06.00','08.00','10.00','12.00','14.00','16.00','18.00','20.00','22.00','24.00']
-        }      
+           xAxisArr=['00.00','02.00','04.00','06.00','08.00','10.00','12.00','14.00','16.00','18.00','20.00','22.00','24.00'];
+        }
         var polar={
           title: {
               text: '111'
           },
           tooltip: {
-            trigger: 'axis'
+             trigger: 'axis'
           },
           grid: {
             top: '10%',
@@ -433,23 +440,22 @@ export default {
               }
           },
           yAxis: {
-                  type: 'value',
-                  axisLine:{
-                    show:false
-                  },
-                  axisTick:{
-                    show:false
-                  },
-                  axisLabel:{
-                    margin:20,
-                    textStyle:{
-                      color:'#7B8497',
-                    }
-                  }
-           },
-          
+            type: 'value',
+            axisLine:{
+              show:false
+            },
+            axisTick:{
+              show:false
+            },
+            axisLabel:{
+              margin:20,
+              textStyle:{
+                color:'#7B8497',
+              }
+            }
+          },
           series: [
-             {
+            {
                 name: '曝光量',
                 type: 'line',
                 lineStyle: {
@@ -486,7 +492,7 @@ export default {
                 // [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
             }
           ]
-        }    
+        }
         setTimeout(()=>{
           if(!this.myChart){
             let dom = echarts.init(document.getElementById('lineChart'));
@@ -494,9 +500,6 @@ export default {
           }
           this.myChart.setOption(polar);
         },0)  
-        // setTimeout(()=>{
-        //   this.showMes.value2=""
-        // },10) 
       },
       edit(){
         let id=this.$router.currentRoute.query.id

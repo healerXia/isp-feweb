@@ -4,7 +4,7 @@
             <div class="conBox pT30 bgF9FAFC">
             <div class="title MB20">
               <h1 class="MR15">项目信息</h1>
-              <span @click="editPro" v-show="edit">编辑</span>
+              <span @click="editPro" v-show="edit" class='MR15'>编辑</span>
             </div>
             <div class="modul">
               <div class="nextTitle MB5">客户信息</div>
@@ -56,10 +56,10 @@
                   <span>{{proMess.businessTypeName}}</span>
                   <span v-if="proMess.businessType!=3">
                     ({{proMess.promotionWayName}})
-                  </span> 
+                  </span>
                 </li>
                 <li>
-                  <span>投放方式：</span>                 
+                  <span>投放方式：</span>
                   <span>{{proMess.putWayNames}}</span>
                 </li>
                 <li v-if="proMess.serialIds==''&&proMess.brandIds==''" class="hide">
@@ -68,24 +68,24 @@
                   <span>投放车型：</span>
                   <span class='liWid'>
                     {{serialBrand}}
-                  </span>                     
+                  </span>
                 </li>
                 <li v-else-if="proMess.serialIds==''">
                   <span>投放品牌：</span>
-                  <span class='liWid'>{{proMess.brandNames}}</span>        
+                  <span class='liWid'>{{proMess.brandNames}}</span>
                 </li>
                 <li>
                   <span>签署地区：</span>
-                  <span>{{proMess.provinceName}}-{{proMess.cityName}}-{{proMess.areaName}}</span>     
+                  <span>{{proMess.provinceName}}-{{proMess.cityName}}-{{proMess.areaName}}</span>
                 </li>
                 <li>
                   <span>责任销售：</span>
                   <span v-if='proMess.dutyUserName==null||proMess.dutyUserName==""'>无</span>
-                  <span v-else>{{proMess.dutyUserName}}</span>         
+                  <span v-else>{{proMess.dutyUserName}}</span>
                 </li>
                 <li>
                   <span>关联合同号：</span>
-                  <span> {{proMess.contractCode}}</span>         
+                  <span> {{proMess.contractCode}}</span>
                 </li>
               </ul>
             </div>
@@ -115,9 +115,9 @@ export default {
             }
             this.serialBrand=this.serialBrand.replace(/(,)$/,"")
           }
-          
+
         }
-      }     
+      }
     },
     methods:{
         editPro(){
@@ -163,7 +163,7 @@ export default {
                 }
                 li.hide{display: none;}
             }
-            
+
         }
 
     }

@@ -3,6 +3,25 @@
     padding-left: 30px;
     min-height: 750px;
 
+    .ivu-tag {
+        .ivu-icon-ios-close-empty {
+            width: 8px;
+        }
+    }
+
+    .demo-spin-icon-load{
+        animation: ani-demo-spin 1s linear infinite;
+     }
+       @keyframes ani-demo-spin {
+           from { transform: rotate(0deg);}
+           50%  { transform: rotate(180deg);}
+           to   { transform: rotate(360deg);}
+       }
+       .demo-spin-col{
+           height: 100px;
+           position: relative;
+       }
+
     .labelList {
         margin-right: 26px;
         color: #333333;
@@ -72,21 +91,24 @@
     }
 
     .searchInput {
-        width: 268px;
+         width: 400px;
+    }
+
+    .noRes {
+        p {
+            text-align: center;
+        }
     }
 
     .result {
         padding-bottom: 20px;
 
-        .noResult {
-            p {
-                text-align: center;
-            }
-        }
-
-
         &.bottom {
             margin-top: 60px;
+        }
+
+        .viewAdButton {
+            font-size: 12px;
         }
 
         .title {
