@@ -306,10 +306,6 @@ export default {
     created() {
       let customerTime = Date.parse(new Date());
       let id = this.$router.currentRoute.query.id
-      this.createCharts([],[],[])
-      setTimeout(()=>{
-        this.showMes.value2=""
-      },0)
       //获取项目信息
       this.$http.get(config.urlList.getInfo+"?id="+id).then((res) => {
         if(res.data.errorCode === 0) {
@@ -330,6 +326,10 @@ export default {
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
+            this.createCharts([],[],[])
+            setTimeout(()=>{
+              this.showMes.value2=""
+            },0)
             var arr=['1002','1011','1004','1014']//可编辑的订单状态
             this.adverMes=res.data.result.resultList[0]
             if( Array.indexOf(arr, this.adverMes.status)!=-1){//如果是这这几种状态，就可以编辑

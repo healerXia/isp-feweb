@@ -107,7 +107,7 @@ export default {
     watch:{
       proMess:{
         handler:function(){
-          if(this.proMess.brandNames!=[]){
+          if(this.proMess.brandNames&&this.proMess.serialNames){
             this.brandNameArr=this.proMess.brandNames.split(",")
             this.serialNameArr=this.proMess.serialNames.split(",")
             for(let i=0;i<this.serialNameArr.length;i++){
