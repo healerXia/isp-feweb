@@ -276,7 +276,7 @@ export default {
         // obj 选中数据 index 操作数据的索引 操作数据的时间 type 用途 action 添加还是删除
         edit(obj, index, date, type, action, dayIndex) {
             let arr = [];
-            for (let i = 0;i < obj.length;i++) {
+            for (let i = 0;i < obj.length; i++) {
                 if (obj[i]) {
                     arr.push({
                         'beginTime': `${date}-${i+1}`,
