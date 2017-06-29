@@ -730,8 +730,7 @@ export default {
                 // 结束时间
                 endTime: `${this.searchInfo.endTime}-31`,
                 pageIndex: this.searchInfo.pageIndex,
-                // pageSize: this.searchInfo.pageSize
-                pageSize: 5,
+                pageSize: this.searchInfo.pageSize,
                 // 媒体名称id
                 mediaId: this.searchInfo.mediaId,
                 // 页面名称
@@ -1059,6 +1058,7 @@ export default {
             this.redrawed();
         },
         search(name) {
+
             if(this.timeTxt) {
                 return false;
             }
@@ -1169,21 +1169,19 @@ export default {
                             "adPosId": this.tableList[index].adPlaceId,
                             // 广告位名称
                             "name": this.tableList[index].name,
+                            "adName": this.tableList[index].name,
                             // 刊例价格
-                            "price": parseFloat(currentList[i].kprice).toFixed(2),
+                            "price": parseFloat(currentList[i].kprice),
                             // 用途
                             "useStyle":0,
                             // 刊例价单位
                             "priceUnit": 0,
-                            //品牌编号
-                            "brandId": 0,
-                            // 区域编号
-                            "areaId":0,
-                            // 城市编号
-                            "adCityId": 0,
+                            "brandId": this.tableList[index].brandId,
                             "dataList": [],
                             "kid": this.tableList[index].kid,
                             "cityId": this.tableList[index].cityId,
+                            "adCityId": this.tableList[index].cityId,
+                            "areaId": this.tableList[index].cityId,
                             "adType": this.tableList[index].adType,
                             "labelTypeId": this.tableList[index].labelTypeId,
                             "brandId": this.tableList[index].brandId,
@@ -1444,8 +1442,26 @@ export default {
             this.searchInfo.endTime = date;
             this.resetTime();
 
-            if (this.searchInfo.beginTime && this.searchInfo.endTime) {
-                //this.initSearchInfo();
+            if (this.searchInfo.endTime && this.searchInfo.beginTime) {
+                let endYear = this.searchInfo.endTime.split('-')[0];
+                let endMonth = this.searchInfo.endTime.split('-')[1];
+                let startYear = this.searchInfo.beginTime.split('-')[0];
+                let startMonth = this.searchInfo.beginTime.split('-')[1];
+                if (endYear != startYear && startYear > endYear) {
+                    this.timeTxt = '开始时间不能大于结束时间';
+                }
+                else if (endYear != startYear && startYear < endYear) {
+                    this.timeTxt = '选择时间不能跨年';
+                }
+                else if (endYear == startYear && startMonth > endMonth){
+                     this.endTime = this.beginTime;
+                     this.timeTxt = '';
+                     document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
+                }
+                else {
+                    this.timeTxt = '';
+                    document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
+                }
             }
 
         },
