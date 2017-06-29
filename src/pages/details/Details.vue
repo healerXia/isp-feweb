@@ -104,10 +104,8 @@
                       <td v-for="th in dataTable.thead">{{th}}</td>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr v-for="tbody in dataTable.tbody">
-                      <td v-for="item in tbody">{{item}}</td>
-                    </tr>
+                  <tbody>                  
+                      <td v-for="item in dataTable.theadKey">{{dataTable.tbodyData[item]}}</td>
                   </tbody>
                 </table>
               </div>
@@ -253,15 +251,13 @@ export default {
           valid:"0.5"//折扣信息
         },
         dataTable:{//数据表
+           theadKey:['uvSum','pvSum','clickRate'],
            thead:["总曝光量","总点击量","点击率"],
-           tbody:[
-             {
-                expectUvCount:"-",
-                clickCount:"-",
-                clickRate:"-"
-             }
-
-           ]
+           tbodyData:{
+              pvSum:"",
+              uvSum:"",
+              clickRate:""
+           }
         },
         callSpecialMes:{//申请特批信息
           theadKey:['project','remark','attachment','applicant','appliyTime','status'],
@@ -368,7 +364,17 @@ export default {
             //获取投放信息统计图数据
             this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
               if(res.data.errorCode === 0) {
-                this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);//创建echars
+                //创建echars
+                this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);
+                //处理数据表里面的值
+                this.dataTable.tbodyData.uvSum=(parseInt(res.data.result.uvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
+                this.dataTable.tbodyData.pvSum=(parseInt(res.data.result.pvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
+                if(this.dataTable.tbodyData.uvSum==0){
+                  this.dataTable.tbodyData.clickRate=0
+                }else{
+                  this.dataTable.tbodyData.clickRate=(res.data.result.pvSum/res.data.result.uvSum).toFixed(2)
+                }
+                
               }
               else {
                 this.$Modal.info({

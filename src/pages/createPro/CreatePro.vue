@@ -514,6 +514,10 @@
             this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
             if(!this.formValidate.serialIds){//如果投放车型没有值的话，投放品牌才赋值（解决小明的接口bug）
               this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
+            }else{
+              //如果投放车型不为空，那投放品牌也是有值的,需要清空
+              this.formValidate.brandIds=""
+              this.formValidate.brandNames=""
             }
             // this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
             this.mulCheck.putWay=this.toArr(this.formValidate.putWays)//投放公司
