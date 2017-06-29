@@ -104,21 +104,62 @@ body {
   .ivu-form-item-error-tip{height: 38px;line-height: 38px;padding-left: 19px}
 }
 
-.ivu-menu-item-active {
-    .ivu-menu-submenu-title {
-        position: relative;
-        
-        &:before {
-            content: '';
-            width: 5px;
-            height: 49px;
-            position: absolute;
-            background: #3D70FB;
-            left: 0;
-            top: 0;
+//侧边栏样式
+.layout-menu-left{
+  background-color: #252834 !important;
+  .ivu-menu-dark{
+    background:#252834 !important
+  }
+  .ivu-menu-dark.ivu-menu-vertical .ivu-menu-item:hover, 
+  .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title:hover{background:transparent;}
+  .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title:hover{background-color: #252834 !important}
+  .ivu-menu-dark.ivu-menu-vertical {
+    .ivu-menu-opened{
+      background:#20242e !important;
+      .ivu-menu-submenu-title{
+        background:#20242e !important;
+      }
+      .ivu-menu{
+        .ivu-menu-item{
+          &:hover{background:#1c1f27 !important;}
+        }
+      }
+    }
+    .ivu-menu-submenu{
+      .ivu-menu-item-active{
+        background:#20242e !important;
+        .menuCircle{background-color: #4373F3;border-color:#4373F3}
+      }
+    } 
+  }
+  .ivu-menu-vertical {
+    .ivu-menu-item-active{
+      .ivu-menu-submenu-title {
+          &:before {
+              content: '';
+              width: 5px;
+              height: 56px;
+              position: absolute;
+              background: #3D70FB!important;
+              left: 0;
+              top: 0;
+          }
         }
     }
+    .ivu-menu-submenu-title-icon{
+      top:35%
+    }
+    .ivu-menu-submenu-title,.ivu-menu-item{
+      height: 56px;
+      line-height: 56px;
+      position: relative;
+      height: 56px;
+      line-height: 56px;
+      padding: 0 24px;
+    }
+  }
 }
+
 
 
 .ivu-input-icon {
