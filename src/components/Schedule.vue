@@ -2,12 +2,12 @@
 <template lang="html">
     <div class="tabCom">
         <div class="nextTitle MB15">
-              {{tableData.yearMonth}}
-              <ul class="indentify">
+              {{(tableData.yearMonth+"").substring(0,4)}}-{{(tableData.yearMonth+"").substring(4,tableData.yearMonth.length)}}
+          <!--     <ul class="indentify">
                 <li><span class="square notUse"></span><span>不可用</span></li>
                 <li><span class="square hadUse"></span><span>已使用</span></li>
                 <li><span class="square hadOrder"></span><span>已预订</span></li>
-              </ul>
+              </ul> -->
         </div>
         <table class="comTale">
             <thead>
@@ -27,7 +27,7 @@
                         <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4005'">试用</span>
                         <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4006'">免费</span>
                         <span v-else-if="item=='adName'" :title='tbodys[item]'>{{tbodys[item]}}</span>
-                        <span v-else>{{tbodys[item]}}</span>
+                        <span v-else>{{(tbodys[item]+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}</span>
                      </td> 
                      <td v-for="n in tbodys.listNumber" class="cell">
                         <span v-if="n=='0'" class="status status1"></span>
@@ -39,8 +39,8 @@
             </tbody>
         </table>
          <div class="price">
-          <span>购买净总价：{{tableData.monthPrice}}元</span>
-          <span>配送总价：{{tableData.monthFree}}元</span>
+          <span>购买净总价：{{(tableData.monthPrice.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+          <span>配送总价：{{tableData.monthFree.toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
           <span v-if="tableData.monthPrice!=0">
             配送比率：{{(tableData.monthFree/tableData.monthPrice).toFixed(1)}}
           </span>

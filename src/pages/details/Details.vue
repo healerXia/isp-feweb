@@ -83,8 +83,8 @@
                 <Schedule :tableData="tableData"></Schedule>
               </div>
               <div class="totalPrice" slot="content">
-                <span>A类购买净总价：{{priceArr.totalBuy}}元</span>
-                <span>B类购买净总价：{{priceArr.totalDelivery}}元</span>
+                <span>A类购买净总价：{{(priceArr.totalBuy.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+                <span>B类购买净总价：{{(priceArr.totalDelivery.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
                 <span>配送比率：{{priceArr.rate}}</span>
               </div>   
             </Panel>
@@ -331,7 +331,7 @@ export default {
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
-            // this.createCharts([],[],[])
+            this.createCharts([],[],[])
             setTimeout(()=>{
               this.showMes.value2=""
             },0)
@@ -369,8 +369,6 @@ export default {
             this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
               if(res.data.errorCode === 0) {
                 this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);//创建echars
-                // this.showMes.value2=""//收缩板关闭
-                // this.noOrder=false//不显示 无订单
               }
               else {
                 this.$Modal.info({
@@ -379,8 +377,6 @@ export default {
                 });
               }
               }).catch((err) => {
-                // this.showMes.value2=""//收缩板关闭
-                // this.noOrder=false//不显示 无订单
             })  
           }
         }).catch((err) => {
