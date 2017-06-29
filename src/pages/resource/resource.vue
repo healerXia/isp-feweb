@@ -26,7 +26,7 @@
                         </Col>
                         <Col span="1" style="text-align: center">-</Col>
                         <Col span="5">
-                            <Form-item prop="endTime" :error='timeTxt'>
+                            <Form-item prop="endTime" :error='timeTxt' id='endTime'>
                                 <Date-picker   :editable = 'false' :value="this.searchInfo.endTime"  @on-change="chooseEndTime"   type="month" :options="date2" placeholder="选择日期"></Date-picker>
                             </Form-item>
                         </Col>
@@ -477,7 +477,7 @@ export default {
             if (this.searchInfo.beginTime) {
                 let year = this.searchInfo.beginTime.split('-')[0];
                 let month = this.searchInfo.beginTime.split('-')[1];
-                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year, 11, 30).getTime();
+                return date && date.valueOf() < new Date(year, month-1).getTime() || date && date.valueOf() > new Date(year, 11, 30).getTime();
             }
             else {
                 let year = new Date().getFullYear();
@@ -1420,15 +1420,20 @@ export default {
                let endMonth = this.searchInfo.endTime.split('-')[1];
                let startYear = this.searchInfo.beginTime.split('-')[0];
                let startMonth = this.searchInfo.beginTime.split('-')[1];
-               if (endYear != startYear && startYear < endYear) {
+               if (endYear != startYear && startYear > endYear) {
+                   this.timeTxt = '开始时间不能大于结束时间';
+               }
+               else if (endYear != startYear && startYear < endYear) {
                    this.timeTxt = '选择时间不能跨年';
                }
                else if (endYear == startYear && startMonth > endMonth){
                     this.endTime = this.beginTime;
                     this.timeTxt = '';
+                    document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
                }
                else {
                    this.timeTxt = '';
+                   document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
                }
            }
 

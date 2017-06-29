@@ -183,6 +183,7 @@ import urlList from './config.js';
             this.$router.push({path: 'details', query: {id: id}});
         },
         handleSubmit (name, id) {
+            console.log(this.errorTxt);
             if (this.errorTxt != '') {
                 return false;
             }
@@ -276,11 +277,14 @@ import urlList from './config.js';
             })
         },
         totalPrice(num) {
-            console.log(1);
             if (num) {
-                if (num.toString().split('.')[1].length > 1) {
+                if (num.toString().split('.')[1] && num.toString().split('.')[1].length > 1) {
                     this.errorTxt = '请输入5-10之间的数字，最多保留一位小数';
                     return false;
+                }
+                else {
+                    this.errorTxt = '';
+                    document.querySelector('.ivu-form-item').className = 'ivu-form-item ivu-form-item-required';
                 }
             }
             this.reallyPrice = this.total * this.formValidate.discount / 10;

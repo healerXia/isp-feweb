@@ -143,13 +143,15 @@ body {
 }
 
 
-
-.ivu-select-selection {
-    .ivu-select-selected-value {
-        height: 38px;
-        line-height: 38px !important;
+.useSelect {
+    .ivu-select-selection {
+        .ivu-select-selected-value {
+            height: 38px;
+            line-height: 38px !important;
+        }
     }
 }
+
 
 .ivu-input {
      height: 38px;
