@@ -529,8 +529,8 @@ export default {
 
             this.$http.post('/isp-kongming/adorder/insert', {
                 "action": 0,
-                 "ProjectId": this.proMess.id,
-                 "ProjectName": this.proMess.projectName,
+                 "projectId": this.proMess.id,
+                 "projectName": this.proMess.projectName,
                  "detailList": datas
              }).then((res) => {
                 if (res.data.errorCode == 0) {
@@ -585,9 +585,9 @@ export default {
                url = '/isp-kongming/adorder/orderUpdate';
                this.$http.post(url, {
                     "action": 0,
-                    "ProjectId": this.proMess.id,
+                    "projectId": this.proMess.id,
                     "adOrderCode": this.adOrderCode,
-                    "ProjectName": this.proMess.projectName,
+                    "projectName": this.proMess.projectName,
                     "detailList": datas
                 }).then((res) => {
                    if (res.data.errorCode == 0) {

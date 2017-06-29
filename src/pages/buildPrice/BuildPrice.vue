@@ -243,8 +243,6 @@ import urlList from './config.js';
                                          self.$router.push({path: 'details', query: {id: self.proMess.id}});
                                     }
                                 });
-
-                                this.saveStatus = false;
                             }
 
                             if (id == 2) {
@@ -273,7 +271,9 @@ import urlList from './config.js';
                                 content: res.data.errorMsg
                             });
                         }
+                        this.saveStatus = false;
                     }).catch((err) => {
+                        this.saveStatus = false;
                         if (id == 1) {
                             this.saveStatus = false;
                         }
@@ -290,6 +290,7 @@ import urlList from './config.js';
                     if (id == 2) {
                         this.submitStatus = false;
                     }
+                    this.saveStatus = false;
                     this.$Message.error('表单验证失败!');
                 }
             })

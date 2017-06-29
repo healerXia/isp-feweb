@@ -192,7 +192,7 @@
                 </div>
                 <Page  v-if ='paging.totalCounts'  class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
             </div>
-
+            <Page  class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
             <!-- 已选广告位 -->
             <div class="result bottom" v-if = 'monthList.length != 0'>
                 <div class="title">
@@ -383,7 +383,7 @@ export default {
                 // 当前页索引
                 currentIndex: 0,
                 // 总条数
-                totalCounts: -1
+                totalCounts: 100
             },
             // 已选择元数据
             resultList: [],
