@@ -190,7 +190,7 @@
                         </table>
                     </div>
                 </div>
-                <Page v-if ='paging.totalCounts' class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
+                <Page  v-if ='paging.totalCounts'  class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
             </div>
 
             <!-- 已选广告位 -->
@@ -705,7 +705,7 @@ export default {
             this.searchInfo.cityId = this.cityId.join(',');
             this.searchInfo.brandId = this.brandId.join(',');
             // 初始化页数 隐藏无结果选项
-            this.paging.totalCounts = -1;
+            //this.paging.totalCounts = -1;
             // /isp-kongming/ad/select
             let search = {
                 // 媒体名称id
@@ -761,12 +761,13 @@ export default {
                     for (let i = 0; i< this.tableList.length;i++) {
                         this.$set(this.checkBoxStatus, i, false);
                     }
-
+                    console.log(datas[0].totalCounts);
                     if (datas[0].totalCounts > 0) {
                         this.paging.totalCounts = datas[0].totalCounts;
                         this.searching = false;
                     }
                     else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
+                        alert(1);
                         this.paging.totalCounts = 0;
                         this.searching = false;
                     }
@@ -800,7 +801,9 @@ export default {
                 }
                 else {
                     this.searching = false;
-                    this.paging.totalCounts = -1;
+                    this.searchInfo.pageIndex = 1;
+                    this.searchInfo.pageSize = 10;
+                    this.paging.totalCounts = 0;
                     this.$Modal.info({
                         title: '提示',
                         content: res.data.rspMsg.errorMsg
@@ -809,6 +812,8 @@ export default {
             }).catch((err) => {
                 console.log(err);
                 this.searching = false;
+                this.searchInfo.pageIndex = 1;
+                this.searchInfo.pageSize = 10;
                 this.paging.totalCounts = 0;
             })
         },

@@ -225,7 +225,6 @@ import urlList from './config.js';
                                 'monthList',
                                 'price',
                                 'priceList',
-                                'proMess',
                                 'projectData',
                                 'searchInfo',
                                 'size',

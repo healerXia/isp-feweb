@@ -55,7 +55,7 @@ Vue.prototype.$http = Axios.create({
 
 Vue.prototype.CONFIG = CONFIG
 
-window.history.forward(1); 
+window.history.forward(1);
 
 // Vue.prototype.$http.get('/isp-kongming/basic/getBusinessType',{}).then((res) => {
 //     console.log(res);

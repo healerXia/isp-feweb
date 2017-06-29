@@ -281,7 +281,7 @@ export default {
                     arr.push({
                         'beginTime': `${date}-${i+1}`,
                         'endTime': `${date}-${i+1}`,
-                        'skuId': this.pageList[date][index].skuIdList[dayIndex]
+                        'skuId': this.pageList[date][index].skuIdList[i]
                     })
                     this.$set(this.pageList[date][index].adStateList, i, "4");
                 }
@@ -295,6 +295,7 @@ export default {
             let tableIndex = this.num.indexOf(date);
             // console.log(tableIndex); // 表索引
             // console.log(index); // 表格所在行数索引
+            console.log(arr);
             this.pageList[date][index].dataList = Object.assign([], arr);
             this.pageList[date][index].useStyle = 4001;
             if (!this.pageList[date][index].total) {
