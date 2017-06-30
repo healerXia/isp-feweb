@@ -292,12 +292,11 @@ export default {
             console.log(type);
             console.log(action);
             console.log(dayIndex);
-
-
-
             let arr = [];
             for (let i = 0;i < obj.length; i++) {
                 if (obj[i]) {
+                    console.log(obj[i]);
+                    console.log(this.pageList[date][index]);
                     arr.push({
                         'beginTime': `${date}-${i+1}`,
                         'endTime': `${date}-${i+1}`,
@@ -406,7 +405,6 @@ export default {
                     this.dataListCount += data[i].dataList.length;
                 }
             }
-            console.log(this.pageList);
         },
         // 切换用途
         selectStyle(oldType, newType, list, index, price, date) {

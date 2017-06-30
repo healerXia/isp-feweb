@@ -21,7 +21,7 @@
                     <span class='query-ad-title'>查询广告位</span>
                     <span class="fRight MR20" v-if="shrinkMes.collapse">收起&nbsp;<Icon type="chevron-up"></Icon></span>
                     <span class="fRight MR20" v-else="shrinkMes.collapse">展开&nbsp;<Icon type="chevron-down"></Icon></span>
-                    <div class="query-ad" slot="content">                                   
+                    <div class="query-ad" slot="content">
                         <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
                         <Form-item label="选择日期：">
                             <Row>
@@ -130,8 +130,11 @@
                        <Form-item>
                            <Button class='searchBtn' type="primary"  @click="search('formValidate')">查询</Button>
                        </Form-item>
-                        </Form>                 
-                    </div>  
+                        </Form>
+                        <div style='height:110px'>
+
+                        </div>
+                    </div>
                 </Panel>
             </Collapse>
             <!-- 查询条件结束 -->
@@ -318,10 +321,10 @@ export default {
             proMess: {},
             ruleValidate: {
                 serialId: [
-                    { required: true, type: 'string', message: '请选投放车型', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
                 ],
                 Type: [
-                    { required: true, type: 'string', message: '请选择广告类型', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择广告类型', trigger: 'blur' }
                 ],
                 beginTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
@@ -330,13 +333,13 @@ export default {
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
                 pageName: [
-                    { required: true, type: 'number', message: '请选择页面名称', trigger: 'change' }
+                    { required: true, type: 'number', message: '请选择页面名称', trigger: 'blur' }
                 ],
                 brandId: [
-                    { required: true, type: 'string', message: '请选择投放品牌', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
                 ],
                 cityId: [
-                    { required: true, type: 'string', message: '请选择投放地区', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
                 ]
             },
             action: 2,
