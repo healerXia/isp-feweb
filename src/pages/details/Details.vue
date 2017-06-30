@@ -27,7 +27,7 @@
       <div class="conBox MT20 pL30 pR30" v-show="!noOrder">
         <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
-     <!--      <router-link v-show="editOrder" 
+        <!-- <router-link v-show="editOrder" 
             :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
              编辑排期                
           </router-link>

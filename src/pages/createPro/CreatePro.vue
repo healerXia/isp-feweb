@@ -790,67 +790,40 @@
               }
               this.serialBrandValue()
 
-              if(this.$router.currentRoute.query.id){//修改项目
-                this.formValidate.id=this.$router.currentRoute.query.id
-                this.$http.post(config.urlList.editPro,
-                  this.formValidate,
-                  {
-                    emulateJSON:true
-                  }).then((res)=>{
-                      if(res.data.errorCode===0){
-                         this.$Modal.success({
-                            title: "提示",
-                            content: "修改成功",
-                            onOk: () => {
-                              this.$router.push({path:"resource",query:{id: this.$router.currentRoute.query.id}})
-                            }
-                          });
-                          setTimeout(()=>{
-                            this.$router.push({path:"resource",query:{id: this.$router.currentRoute.query.id}})
-                            this.$Modal.remove()
-                          },2000)
-                      }
-                      else {
-                        this.$Modal.info({
-                            title: '提示',
-                            content: res.data.errorMsg
-                        });
-                      }
-                      setTimeout(()=>{
-                        this.judge.submitDiasbled=false
-                      },0)
-                  }).catch((res)=>{this.judge.submitDiasbled=false})
-              }else{//添加项目
-                this.$http.post(config.urlList.addPro,
-                  this.formValidate,
-                  {
-                    emulateJSON:true
-                  }).then((res)=>{
-                    if(res.data.errorCode===0){
-                       this.$Modal.success({
-                          title: "提示",
-                          content: "添加成功",
-                          onOk: () => {
-                            this.$router.push({path:"resource", query: {id: res.data.result}})
-                          }
-                        });
-
-                        setTimeout(()=>{
+              //调取接口添加项目信息
+              this.$http.post(config.urlList.addPro,
+                this.formValidate,
+                {
+                  emulateJSON:true
+                }).then((res)=>{
+                  if(res.data.errorCode===0){
+                     this.$Modal.success({
+                        title: "提示",
+                        content: "添加成功",
+                        onOk: () => {
+                          this.setTimeRoute=function(){return}
                           this.$router.push({path:"resource", query: {id: res.data.result}})
-                          this.$Modal.remove()
-                        },2000)
-                    }
-                    else {
-                      this.$Modal.info({
-                          title: '提示',
-                          content: res.data.errorMsg
+                        }
                       });
-                    }
-                    setTimeout(()=>{
-                      this.judge.submitDiasbled=false
-                    },0)
-                  }).catch((res)=>{this.judge.submitDiasbled=false})
-                }
+
+                      setTimeout(()=>{
+                        if(document.getElementsByClassName('v-transfer-dom')[0]){
+                          document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;  
+                          this.setTimeRoute('resource',res.data.result)
+                        }   
+                      },2000)
+                  }
+                  else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.errorMsg
+                    });
+                  }
+                  setTimeout(()=>{
+                    this.judge.submitDiasbled=false
+                  },0)
+              }).catch((res)=>{this.judge.submitDiasbled=false})
+                
             }else {
               this.mustNeedCheck()//必填项验证
               this.$Modal.error({
@@ -894,16 +867,19 @@
                     emulateJSON:true
                   }).then((res)=>{
                       if(res.data.errorCode===0){
-                        this.$Modal.success({
+                        var a=this.$Modal.success({
                             title: "提示",
                             content: "修改成功",
                             onOk: () => {
+                              this.setTimeRoute=function(){return}
                               this.$router.push({path:"details",query:{id: this.$router.currentRoute.query.id}})
-                             }
-                          });
+                            }
+                        });
                         setTimeout(()=>{
-                          this.$router.push({path:"details",query:{id: this.$router.currentRoute.query.id}})
-                          this.$Modal.remove()
+                          if(document.getElementsByClassName('v-transfer-dom')[0]){
+                            document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;  
+                            this.setTimeRoute('details',this.$router.currentRoute.query.id)
+                          }   
                         },2000)
                       }
                       else {
@@ -927,12 +903,15 @@
                         title: "提示",
                         content: "添加成功",
                         onOk: () => {
+                          this.setTimeRoute=function(){return}
                           this.$router.push({path:"details", query: {id: res.data.result}})
                         }
                       });
                       setTimeout(()=>{
-                        this.$router.push({path:"details", query: {id: res.data.result}})
-                        this.$Modal.remove()
+                        if(document.getElementsByClassName('v-transfer-dom')[0]){
+                          document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;  
+                          this.setTimeRoute('details',res.data.result)
+                        }                          
                       },2000)
                     }
                     else {
@@ -965,6 +944,12 @@
             this.$router.push({path:"details",query:{id: this.$router.currentRoute.query.id}})
           }
         },
+        setTimeRoute(path,id){
+          if(document.getElementsByClassName('v-transfer-dom').length==1){
+           this.$Modal.remove()
+          }
+          this.$router.push({path:path,query:{id: id}})
+        },
         mustNeedCheck(){//必填项验证，主要是显示样式
           if(this.formValidate.budgetAmount==""){
             this.mesBudget.errorShow=true
@@ -984,7 +969,6 @@
               content: "表单验证失败！"
             });
             this.judge.submitDiasbled=false
-            // setTimeout(()=>{this.$Modal.remove()},2000)
             return false
           }else{
             return true
