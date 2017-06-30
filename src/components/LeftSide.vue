@@ -3,156 +3,174 @@
         <div class="layout-logo-left"></div>
         <Submenu name="1">
             <template slot="title">
-                <Icon type="ios-navigate"></Icon>
+                <i class="icon iconfont icon-index"></i>
                 首页
             </template>
         </Submenu>
         <Submenu name="2">
             <template slot="title">
-                <Icon type="ios-navigate"></Icon>
+                <i class="icon iconfont icon-project"></i>
                 项目
             </template>
             <Menu-item name="2-1">
                 <router-link class="white"
                 :to="{path:'createPro'}">
+                    <span class="menuCircle"></span>
                      创建项目
                 </router-link>
             </Menu-item>
             <Menu-item name="2-2">
              <router-link class="white"
                 :to="{path:'projectList'}">
+                    <span class="menuCircle"></span>
                      项目管理
                 </router-link>
             </Menu-item>
         </Submenu>
         <Submenu name="3">
             <template slot="title">
-                <Icon type="ios-keypad"></Icon>
+                <i class="icon iconfont icon-orders"></i>
                 订单
             </template>
             <Menu-item name="3-1">
                 <router-link class="white"
                 :to="{path:'orderList'}">
+                    <span class="menuCircle"></span>
                      订单管理
                 </router-link>
             </Menu-item>
         </Submenu>
         <Submenu name="4">
             <template slot="title">
-                <Icon type="ios-keypad"></Icon>
+                <i class="icon iconfont icon-customer"></i>
                 客户
             </template>
             <Menu-item name="4-1">
                 <router-link class="white"
-                :to="{path:'orderList'}">
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
                      客户管理
                 </router-link>
             </Menu-item>
             <Menu-item name="4-2">
                 <router-link class="white"
-                :to="{path:'orderList'}">
-                     客户管理
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
+                    客户管理
                 </router-link>
             </Menu-item>
             <Menu-item name="4-3">
                 <router-link class="white"
-                :to="{path:'orderList'}">
-                     代理商管理
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
+                    代理商管理
                 </router-link>
             </Menu-item>
             <Menu-item name="4-4">
                 <router-link class="white"
-                :to="{path:'orderList'}">
-                     联系人管理
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
+                    联系人管理
                 </router-link>
             </Menu-item>
             <Menu-item name="4-5">
                 <router-link class="white"
-                :to="{path:'orderList'}">
-                     访问记录
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
+                    访问记录
                 </router-link>
             </Menu-item>
         </Submenu>
         <Submenu name="5">
             <template slot="title">
-                <Icon type="ios-keypad"></Icon>
+                <i class="icon iconfont icon-contract"></i>
                 合同
             </template>
             <Menu-item name="5-1">
                 <router-link class="white"
-                :to="{path:'orderList'}">
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
                     合同管理
                 </router-link>
             </Menu-item>
             <Menu-item name="5-2">
                 <router-link class="white"
-                :to="{path:'orderList'}">
-                     回款管理
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
+                    回款管理
                 </router-link>
             </Menu-item>
             <Menu-item name="5-3">
                 <router-link class="white"
-                :to="{path:'orderList'}">
-                     发票管理
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
+                    发票管理
                 </router-link>
             </Menu-item>
         </Submenu>
         <Submenu name="6">
             <template slot="title">
-                <Icon type="ios-keypad"></Icon>
+                <i class="icon iconfont icon-approval"></i>
                 审批
             </template>
             <Menu-item name="6-1">
                 <router-link class="white"
-                :to="{path:'orderList'}">
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
                     业务审批
                 </router-link>
             </Menu-item>
         </Submenu>
         <Submenu name="7">
             <template slot="title">
-                <Icon type="ios-keypad"></Icon>
+                <i class="icon iconfont icon-reportForm"></i>
                 报表
             </template>
             <Menu-item name="7-1">
                 <router-link class="white"
-                :to="{path:'orderList'}">
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
                     广告售卖
                 </router-link>
             </Menu-item>
             <Menu-item name="7-2">
                 <router-link class="white"
-                :to="{path:'orderList'}">
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
                     会员业务
                 </router-link>
             </Menu-item>
             <Menu-item name="7-3">
                 <router-link class="white"
-                :to="{path:'orderList'}">
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
                     客户合作
                 </router-link>
             </Menu-item>
             <Menu-item name="7-4">
                 <router-link class="white"
-                :to="{path:'orderList'}">
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
                     业绩分析
                 </router-link>
             </Menu-item>
         </Submenu>
         <Submenu name="8">
             <template slot="title">
-                <Icon type="ios-keypad"></Icon>
+                <i class="icon iconfont icon-workflow"></i>
                 工作流
             </template>
             <Menu-item name="1-1">
                 <router-link class="white"
-                :to="{path:'orderList'}">
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
                     审批链管理
                 </router-link>
             </Menu-item>
             <Menu-item name="8-2">
                 <router-link class="white"
-                :to="{path:'orderList'}">
+                :to="{path:'wait'}">
+                    <span class="menuCircle"></span>
                     审批链替换
                 </router-link>
             </Menu-item>
@@ -175,13 +193,15 @@ export default {
  .white {
      color: white;
  }
+.menuCircle{width: 6px;height: 6px;border-radius: 3px;border: 1px solid white;display: inline-block;
+    margin-bottom: 2px;margin:0 10px;}
 
 .ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item {
     padding-left: 0;
 }
 
  .ivu-menu-item {
-     height: 48px;
+     height: 56px;
      padding: 0;
  }
 
@@ -190,10 +210,9 @@ export default {
      width: 100%;
      height: 100%;
      padding-left: 43px;
-     line-height: 48px;
+     line-height: 56px;
  }
 .white{color: white}
-.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item{border-left: 5px solid transparent;}
-.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active, .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active:hover{background:#1C1F27;}
-.ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item-active{background :#1C1F27 !important;}
+
+
 </style>

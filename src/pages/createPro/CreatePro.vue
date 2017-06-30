@@ -514,6 +514,10 @@
             this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
             if(!this.formValidate.serialIds){//如果投放车型没有值的话，投放品牌才赋值（解决小明的接口bug）
               this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
+            }else{
+              //如果投放车型不为空，那投放品牌也是有值的,需要清空
+              this.formValidate.brandIds=""
+              this.formValidate.brandNames=""
             }
             // this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
             this.mulCheck.putWay=this.toArr(this.formValidate.putWays)//投放公司
@@ -589,13 +593,14 @@
               this.dateErr="开始日期不能大于结束日期"
               return false
             }
-            else if(bdateStamp<new Date()-86400000){
-              if(this.$router.currentRoute.query.id){
-                return true
-              }
-              this.dateErr="开始日期不能小于今天"
-              return false
-            }else{
+            // else if(bdateStamp<new Date()-86400000){
+            //   // if(this.$router.currentRoute.query.id){
+            //   //   return true
+            //   // }
+            //   this.dateErr="开始日期不能小于今天"
+            //   return false
+            // }
+            else{
               return true
             }
           }
@@ -669,15 +674,18 @@
           .then((res)=>{
               if(res.data.errorCode===0){
                 this.cityArr=res.data.result
-                if(this.cityId!=""){
-                  this.areaArr=[]
-                  this.formValidate.areaId=""
-                  this.cityId=""
-                }
-                if(this.addressId.cityId!=""){
+                if(this.addressId.cityId!=""){//验证回填，回填以后将this.addressId.cityId制空，以后也不会走这一步了
                   this.cityId=this.addressId.cityId;
                   this.addressId.cityId=""
-
+                }else if(this.provinceId==""){
+                  this.cityArr=[]
+                  this.areaArr=[]
+                  this.cityId=""
+                  this.formValidate.areaId=""
+                }else if(this.provinceId!=""){
+                  this.areaArr=[]
+                  this.cityId=""
+                  this.formValidate.areaId=""
                 }
               }
 
@@ -691,28 +699,27 @@
         },
         cityChange(){//市列表change事件
           this.judge.areaErrShow=false
-          if(this.cityId!=""){
-            this.$http.post(config.urlList.getArea+"?pId="+this.cityId+"&pageSize=100").
-            then((res)=>{
-              if(res.data.errorCode===0){
-                  this.areaArr=res.data.result
-                  if(this.formValidate.areaId!=""){
-                    this.formValidate.areaId=""
-                  }
-                  if(this.addressId.areaId!=""){
-                    this.formValidate.areaId=this.addressId.areaId;
-                    this.addressId.areaId=""
-
-                  }
-              }
-              else {
-                this.$Modal.info({
-                    title: '提示',
-                    content: res.data.errorMsg
-                });
-              }
-            }).catch((res)=>{})
-          }
+          this.$http.post(config.urlList.getArea+"?pId="+this.cityId+"&pageSize=100").
+          then((res)=>{
+            if(res.data.errorCode===0){
+                this.areaArr=res.data.result
+                if(this.addressId.areaId!=""){
+                  this.formValidate.areaId=this.addressId.areaId;
+                  this.addressId.areaId=""
+                }else if(this.cityId==""){
+                  this.formValidate.areaId=""
+                  this.areaArr=[]
+                }else if(this.cityId!=""){
+                  this.formValidate.areaId=""
+                }
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+          }).catch((res)=>{})
         },
         areaChange(){//区县列表change事件
            this.judge.areaErrShow=false
@@ -1003,8 +1010,6 @@
           else if([1,2,4].indexOf(this.formValidate.promotionWay)!=-1) {//投放车型
             this.judge.showBrand=false;
             this.judge.showSerial=true;
-            if(!this.$router.currentRoute.query.id){
-            }
           }
           else if(!this.formValidate.promotionWay){
             this.judge.showBrand=false;

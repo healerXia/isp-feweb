@@ -11,6 +11,7 @@ const BuildPrice=(resolve) => require(['../pages/buildPrice/BuildPrice'], resolv
 const OrderList = (resolve) => require(['../pages/orderList/OrderList.vue'], resolve);
 const ProjectList = (resolve) => require(['../pages/projectList/ProjectList.vue'], resolve);
 const Details = (resolve) => require(['../pages/details/Details.vue'], resolve);
+const Wait = (resolve) => require(['../pages/wait/Wait.vue'], resolve);
 
 const ViewAd = (resolve) => require(['../pages/viewAd/ViewAd'], resolve);
 const ChooseTime = (resolve) =>  require(['../pages/chooseTime/ChooseTime'],resolve);
@@ -81,6 +82,11 @@ const routes = [
                 path: 'details',
                 name: 'details',
                 component: Details
+            },
+            {
+                path: 'wait',
+                name: 'wait',
+                component: Wait
             }
         ]
     },

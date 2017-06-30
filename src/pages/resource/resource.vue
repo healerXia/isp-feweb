@@ -15,118 +15,125 @@
             <!-- 进度组件 -->
 
             <!-- 查询条件 -->
-            <div class="query-ad">
-                <p class='query-ad-title'>查询广告位</p>
-                <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
-                <Form-item label="选择日期：">
-                    <Row>
-                        <Col span="5">
-                            <Form-item prop="beginTime">
-                                <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>                            </Form-item>
-                        </Col>
-                        <Col span="1" style="text-align: center">-</Col>
-                        <Col span="5">
-                            <Form-item prop="endTime" :error='timeTxt' id='endTime'>
-                                <Date-picker   :editable = 'false' :value="this.searchInfo.endTime"  @on-change="chooseEndTime"   type="month" :options="date2" placeholder="选择日期"></Date-picker>
-                            </Form-item>
-                        </Col>
-                    </Row>
-                </Form-item>
-
-                <Form-item  label="媒体名称：">
-                    <a class='labelList mediaName' @click='chooseMedia(i.mediaName, i.mediaId, index)'  v-for='(i, index) in mediaNameList' href="javascript:;">{{i.mediaName}}</a>
-                </Form-item>
-
-                <Form-item  label="页面类型：">
-                    <a class='labelList pageType' @click='choosePage(i.tagName, i.tagId, index)' v-for='(i, index) in pageTypeList' href="javascript:;">{{i.tagName}}</a>
-                </Form-item>
-
-                <Row>
-                    <Col span="12" style="padding-right:10px">
-                        <Form-item label="页面名称：" prop='pageName'>
-                            <Select
-                                class="searchInput"
-                                v-model="searchInfo.pageName"
-                                filterable
-                                remote
-                                :clearable="true"
-                                :label-in-value="true"
-                                :remote-method="remoteMethod1"
-                                :loading="loading1"
-                                @on-change='selectPageName'>
-                                <Option v-for="option in searchList.pageNameList" :value="option.channelId" :key="new Date()">{{option.channelName}}</Option>
-                            </Select>
+            <!-- zhoufeng加上收缩 -->
+            <Collapse v-model="shrinkMes.shrinkValue" @on-change="showCollapse">
+                <Panel name="1">
+                    <span class='query-ad-title'>查询广告位</span>
+                    <span class="fRight MR20" v-if="shrinkMes.collapse">收起&nbsp;<Icon type="chevron-up"></Icon></span>
+                    <span class="fRight MR20" v-else="shrinkMes.collapse">展开&nbsp;<Icon type="chevron-down"></Icon></span>
+                    <div class="query-ad" slot="content">                                   
+                        <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
+                        <Form-item label="选择日期：">
+                            <Row>
+                                <Col span="5">
+                                    <Form-item prop="beginTime">
+                                        <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>                            </Form-item>
+                                </Col>
+                                <Col span="1" style="text-align: center">-</Col>
+                                <Col span="5">
+                                    <Form-item prop="endTime" :error='timeTxt' id='endTime'>
+                                        <Date-picker   :editable = 'false' :value="this.searchInfo.endTime"  @on-change="chooseEndTime"   type="month" :options="date2" placeholder="选择日期"></Date-picker>
+                                    </Form-item>
+                                </Col>
+                            </Row>
                         </Form-item>
-                    </Col>
-                    <Col span="12">
-                        <Form-item label="广告类型：" prop='Type'>
-                            <Select
-                                class="searchInput"
-                                v-model="Type"
-                                multiple
-                                filterable
-                                remote
-                                :remote-method="remoteMethod2"
-                                :loading="loading1"
-                                @on-change='checkType'>
-                                <Option v-for="option in searchList.typeList" :value="option.typeId" :key="new Date()">{{option.typeName}}</Option>
-                            </Select>
-                        </Form-item>
-                    </Col>
-                </Row>
 
-                <Row>
-                   <Col v-if='searchInfoTxt[0]' span="12" style="padding-right:10px">
-                       <Form-item label="投放车型：" class='resetSearchInfo' prop='serialId'>
-                           <Select
-                               class="searchInput"
-                               v-model="serialId"
-                               filterable
-                               remote
-                               multiple
-                               :remote-method="remoteMethod3"
-                               :loading="loading1"
-                               @on-change='checkCar'>
-                               <Option v-for="option in searchList.modelList" :value="option.value" :key="new Date()">{{option.name}}</Option>
-                           </Select>
+                        <Form-item  label="媒体名称：">
+                            <a class='labelList mediaName' @click='chooseMedia(i.mediaName, i.mediaId, index)'  v-for='(i, index) in mediaNameList' href="javascript:;">{{i.mediaName}}</a>
+                        </Form-item>
+
+                        <Form-item  label="页面类型：">
+                            <a class='labelList pageType' @click='choosePage(i.tagName, i.tagId, index)' v-for='(i, index) in pageTypeList' href="javascript:;">{{i.tagName}}</a>
+                        </Form-item>
+
+                        <Row>
+                            <Col span="12" style="padding-right:10px">
+                                <Form-item label="页面名称：" prop='pageName'>
+                                    <Select
+                                        class="searchInput"
+                                        v-model="searchInfo.pageName"
+                                        filterable
+                                        remote
+                                        :clearable="true"
+                                        :label-in-value="true"
+                                        :remote-method="remoteMethod1"
+                                        :loading="loading1"
+                                        @on-change='selectPageName'>
+                                        <Option v-for="option in searchList.pageNameList" :value="option.channelId" :key="new Date()">{{option.channelName}}</Option>
+                                    </Select>
+                                </Form-item>
+                            </Col>
+                            <Col span="12">
+                                <Form-item label="广告类型：" prop='Type'>
+                                    <Select
+                                        class="searchInput"
+                                        v-model="Type"
+                                        multiple
+                                        filterable
+                                        remote
+                                        :remote-method="remoteMethod2"
+                                        :loading="loading1"
+                                        @on-change='checkType'>
+                                        <Option v-for="option in searchList.typeList" :value="option.typeId" :key="new Date()">{{option.typeName}}</Option>
+                                    </Select>
+                                </Form-item>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                           <Col v-if='searchInfoTxt[0]' span="12" style="padding-right:10px">
+                               <Form-item label="投放车型：" class='resetSearchInfo' prop='serialId'>
+                                   <Select
+                                       class="searchInput"
+                                       v-model="serialId"
+                                       filterable
+                                       remote
+                                       multiple
+                                       :remote-method="remoteMethod3"
+                                       :loading="loading1"
+                                       @on-change='checkCar'>
+                                       <Option v-for="option in searchList.modelList" :value="option.value" :key="new Date()">{{option.name}}</Option>
+                                   </Select>
+                               </Form-item>
+                           </Col>
+                           <Col v-if='searchInfoTxt[1]' span="12" style="padding-right:10px">
+                               <Form-item label="投放地区：" class='resetSearchInfo' prop='cityId'>
+                                   <Select
+                                       class="searchInput"
+                                       v-model="cityId"
+                                       filterable
+                                       remote
+                                       multiple
+                                       :remote-method="remoteMethod4"
+                                       :loading="loading1"
+                                       @on-change='checkCity'>
+                                       <Option v-for="option in searchList.areaList" :value="option.value" :key="new Date()">{{option.name}}</Option>
+                                   </Select>
+                               </Form-item>
+                           </Col>
+                           <Col v-if='searchInfoTxt[2]' span="12" style="padding-right:10px">
+                               <Form-item label="投放品牌：" class='resetSearchInfo' prop='brandId'>
+                                   <Select
+                                       class="searchInput"
+                                       v-model="brandId"
+                                       filterable
+                                       remote
+                                       multiple
+                                       :remote-method="remoteMethod5"
+                                       :loading="loading1"
+                                       @on-change='checkBrand'>
+                                       <Option v-for="option in searchList.brandList" :value="option.value" :key="new Date()">{{option.name}}</Option>
+                                   </Select>
+                               </Form-item>
+                           </Col>
+                        </Row>
+                       <Form-item>
+                           <Button class='searchBtn' type="primary"  @click="search('formValidate')">查询</Button>
                        </Form-item>
-                   </Col>
-                   <Col v-if='searchInfoTxt[1]' span="12" style="padding-right:10px">
-                       <Form-item label="投放地区：" class='resetSearchInfo' prop='cityId'>
-                           <Select
-                               class="searchInput"
-                               v-model="cityId"
-                               filterable
-                               remote
-                               multiple
-                               :remote-method="remoteMethod4"
-                               :loading="loading1"
-                               @on-change='checkCity'>
-                               <Option v-for="option in searchList.areaList" :value="option.value" :key="new Date()">{{option.name}}</Option>
-                           </Select>
-                       </Form-item>
-                   </Col>
-                   <Col v-if='searchInfoTxt[2]' span="12" style="padding-right:10px">
-                       <Form-item label="投放品牌：" class='resetSearchInfo' prop='brandId'>
-                           <Select
-                               class="searchInput"
-                               v-model="brandId"
-                               filterable
-                               remote
-                               multiple
-                               :remote-method="remoteMethod5"
-                               :loading="loading1"
-                               @on-change='checkBrand'>
-                               <Option v-for="option in searchList.brandList" :value="option.value" :key="new Date()">{{option.name}}</Option>
-                           </Select>
-                       </Form-item>
-                   </Col>
-               </Row>
-                   <Form-item>
-                       <Button class='searchBtn' type="primary"  @click="search('formValidate')">查询</Button>
-                   </Form-item>
-                </Form>
-            </div>
+                        </Form>                 
+                    </div>  
+                </Panel>
+            </Collapse>
             <!-- 查询条件结束 -->
 
             <!-- 查询结果 -->
@@ -258,6 +265,10 @@ export default {
     },
     data() {
         return {
+            shrinkMes:{//zhoufeng
+                shrinkValue:"",
+                collapse:false
+            },
             searching: false,
             timeTxt: '',
             // 日期判断
@@ -467,6 +478,9 @@ export default {
         this.searchInfoTxt = [false, false, false];
     },
     methods: {
+        showCollapse(){
+            this.shrinkMes.collapse=!this.shrinkMes.collapse
+        },
         // 日期判断
         disStart(date) {
             let year = new Date().getFullYear();

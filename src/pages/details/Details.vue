@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="details">
       <div class="conBox bgF9FAFC">
-        <ProjectInfo v-bind:proMess="projectData" :edit="editPro" :id="proid" v-on:edit="edit"></ProjectInfo>
+        <ProjectInfo v-bind:proMess="projectData" :edit="true" :id="proid" v-on:edit="edit"></ProjectInfo>
       </div>
       <div class="conBox" v-show="noOrder">
         <div class='hasNoOrder pL30'>
@@ -27,18 +27,19 @@
       <div class="conBox MT20 pL30 pR30" v-show="!noOrder">
         <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
-          <router-link
-          :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
-            新增订单
+     <!--      <router-link v-show="editOrder" 
+            :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
+             编辑排期                
           </router-link>
-         <!--  <router-link
-          :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}">
-           编辑排期
-          </router-link>
-          <router-link
-          :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}">
-           编辑价格
+          <router-link v-show="editOrder"
+            :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}"> 
+             编辑价格                
           </router-link> -->
+          <router-link
+            :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
+              新增订单
+          </router-link>
+
         </div>
         <div class="modul">
           <div class="nextTitle MB5">广告信息</div>
@@ -82,10 +83,10 @@
                 <Schedule :tableData="tableData"></Schedule>
               </div>
               <div class="totalPrice" slot="content">
-                  <span>A类购买净总价：3000元</span>
-                  <span>B类购买净总价：3000元</span>
-                  <span>配送比率：3000元</span>
-                </div>
+                <span>A类购买净总价：{{(priceArr.totalBuy.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+                <span>B类购买净总价：{{(priceArr.totalDelivery.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+                <span>配送比率：{{priceArr.rate}}</span>
+              </div>   
             </Panel>
           </Collapse>
         </div>
@@ -103,10 +104,8 @@
                       <td v-for="th in dataTable.thead">{{th}}</td>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr v-for="tbody in dataTable.tbody">
-                      <td v-for="item in tbody">{{item}}</td>
-                    </tr>
+                  <tbody>                  
+                      <td v-for="item in dataTable.theadKey">{{dataTable.tbodyData[item]}}</td>
                   </tbody>
                 </table>
               </div>
@@ -204,7 +203,8 @@ export default {
     },
     data() {
       return {
-        editPro:true,
+        myChart:null,
+        editOrder:true,
         noOrder:false,
         showMes:{//收缩板
           collapse1:false,
@@ -216,7 +216,7 @@ export default {
           value3:"",
           value4:"",
         },
-        projectData:{
+        projectData:{//项目信息
           id:0,
           custName:"大众",//客户名称
           agentCustName: "易车",//代理公司
@@ -251,15 +251,13 @@ export default {
           valid:"0.5"//折扣信息
         },
         dataTable:{//数据表
+           theadKey:['uvSum','pvSum','clickRate'],
            thead:["总曝光量","总点击量","点击率"],
-           tbody:[
-             {
-                expectUvCount:"-",
-                clickCount:"-",
-                clickRate:"-"
-             }
-
-           ]
+           tbodyData:{
+              pvSum:"",
+              uvSum:"",
+              clickRate:""
+           }
         },
         callSpecialMes:{//申请特批信息
           theadKey:['project','remark','attachment','applicant','appliyTime','status'],
@@ -298,6 +296,11 @@ export default {
               notes:"-"
             }
           ]
+        },
+        priceArr:{//总价格
+          totalBuy:0,
+          totalDelivery:0,
+          rate:0
         }
       }
     },
@@ -324,17 +327,30 @@ export default {
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
-            var arr=['1002','1003','1004','1014']
+            this.createCharts([],[],[])
+            setTimeout(()=>{
+              this.showMes.value2=""
+            },0)
+            var arr=['1002','1011','1004','1014']//可编辑的订单状态
             this.adverMes=res.data.result.resultList[0]
             if( Array.indexOf(arr, this.adverMes.status)!=-1){//如果是这这几种状态，就可以编辑
-                this.editPro=true
+                this.editOrder=true
             } else{
-               this.editPro=false
+               this.editOrder=false
             }
             //获取排期信息
             this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
               if(res.data.errorCode === 0) {
                 this.tableDatas=res.data.result
+                for(let i=0;i<this.tableDatas.length;i++){//处理总数据
+                  this.priceArr.totalBuy=this.tableDatas[i].monthPrice+this.priceArr.totalBuy
+                  this.priceArr.totalDelivery=this.tableDatas[i].monthFree+this.priceArr.totalDelivery
+                }
+                if(this.priceArr.totalBuy!=0){
+                  this.rate=(this.priceArr.totalDelivery/this.priceArr.totalBuy).toFixed(2)
+                }else{
+                  this.rate=0
+                }
               }
               else {
                 this.$Modal.info({
@@ -348,9 +364,17 @@ export default {
             //获取投放信息统计图数据
             this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
               if(res.data.errorCode === 0) {
-                this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);//创建echars
-                this.showMes.value2=""//收缩板关闭
-                this.noOrder=false//不显示 无订单
+                //创建echars
+                this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);
+                //处理数据表里面的值
+                this.dataTable.tbodyData.uvSum=(parseInt(res.data.result.uvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
+                this.dataTable.tbodyData.pvSum=(parseInt(res.data.result.pvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
+                if(this.dataTable.tbodyData.uvSum==0){
+                  this.dataTable.tbodyData.clickRate=0
+                }else{
+                  this.dataTable.tbodyData.clickRate=(res.data.result.pvSum/res.data.result.uvSum).toFixed(2)
+                }
+                
               }
               else {
                 this.$Modal.info({
@@ -359,27 +383,25 @@ export default {
                 });
               }
               }).catch((err) => {
-                console.log(1)
-                this.showMes.value2=""//收缩板关闭
-                this.noOrder=false//不显示 无订单
-                console.log(err);
-            })
+            })  
           }
-      }).catch((err) => {
+        }).catch((err) => {
           console.log(err);
-      })
-    },
+      })   
+    },    
     methods: {
-      createCharts(xAxisArr,pvArr,uvArr){
+
+      createCharts(xAxisArr,pvArr,uvArr)
+      {
         if(xAxisArr.length==0){
-           xAxisArr=['00.00','02.00','04.00','06.00','08.00','10.00','12.00','14.00','16.00','18.00','20.00','22.00','24.00']
+           xAxisArr=['00.00','02.00','04.00','06.00','08.00','10.00','12.00','14.00','16.00','18.00','20.00','22.00','24.00'];
         }
         var polar={
           title: {
               text: '111'
           },
           tooltip: {
-            trigger: 'axis'
+             trigger: 'axis'
           },
           grid: {
             top: '10%',
@@ -389,15 +411,10 @@ export default {
             containLabel: true
           },
           legend: {
+            itemHeight:10,
             right:"0%",
             top:"top",
-            data:[
-            {
-              name:'曝光量',
-
-            }
-            ,'点击量'
-            ],
+            data:['曝光量','点击量'],
           },
           xAxis: {
               boundaryGap: false,
@@ -425,23 +442,22 @@ export default {
               }
           },
           yAxis: {
-                  type: 'value',
-                  axisLine:{
-                    show:false
-                  },
-                  axisTick:{
-                    show:false
-                  },
-                  axisLabel:{
-                    margin:20,
-                    textStyle:{
-                      color:'#7B8497',
-                    }
-                  }
-           },
-
+            type: 'value',
+            axisLine:{
+              show:false
+            },
+            axisTick:{
+              show:false
+            },
+            axisLabel:{
+              margin:20,
+              textStyle:{
+                color:'#7B8497',
+              }
+            }
+          },
           series: [
-             {
+            {
                 name: '曝光量',
                 type: 'line',
                 lineStyle: {
@@ -453,11 +469,9 @@ export default {
                   normal:{
                     color: '#E36776'
                   }
-                },
-
-                  symbol:'circle',
-
-                symbolSize: 10,
+                },              
+                symbol:'circle',               
+                symbolSize:6,
                 data: pvArr,
                 showAllSymbol:true
             },
@@ -468,28 +482,26 @@ export default {
                     normal: {
                         color: '#3D70FB'
                     }
-                },
-
-                  symbol:'circle',
-
-                 itemStyle:{
+                },                 
+                symbol:'circle',
+                itemStyle:{
                   normal:{
                     color: '#3D70FB'
                   }
                 },
-                symbolSize: 10,
+                symbolSize: 7,
                 data: uvArr
                 // [400, 400, 600, 200, 300, 400,80, 300, 460, 200, 300, 400,200]
             }
           ]
         }
         setTimeout(()=>{
-          var myChart = echarts.init(document.getElementById('lineChart'));
-          myChart.setOption(polar);
-        },0)
-        setTimeout(()=>{
-          this.showMes.value2=""
-        },10)
+          if(!this.myChart){
+            let dom = echarts.init(document.getElementById('lineChart'));
+            this.myChart=dom
+          }
+          this.myChart.setOption(polar);
+        },0)  
       },
       edit(){
         let id=this.$router.currentRoute.query.id
