@@ -311,18 +311,17 @@
             putWayArr:[],//投放方式
             agentOptionT:[],//代理公司总
             agentOption:[],//代理公司十条数据
-            serialOptionT:[],//投放车型总
             serialOption:[],//投放车型十条数据
             dutyUserArrT:[],//责任销售总
             dutyUserArr:[],//责任销售十条数据
-            brandOptionT:[],//投放品牌总
             brandOption:[],//投放品牌十条数据
-            // custOptionT:[],//客户信息总
             custOption:[],//客户信息十条数据
             budgetAmountArr:[],
             provinceArr:[],//省
             cityArr:[],//市
-            areaArr:[]//区
+            areaArr:[],//区
+            selectedSerial:[],
+            selectedBrand:[]
         }
       },
       created() {//页面数据初始化
@@ -350,10 +349,9 @@
           }).catch((err) => {
         })
 
-        this.$http.get(config.urlList.getBrand+`?${customerTime}`).then((res) => {//投放品牌
+        this.$http.get(config.urlList.getBrand+'?pageSize=10').then((res) => {//投放品牌
           if(res.data.errorCode===0){
-            this.brandOptionT=res.data.result;
-            this.brandOption=this.brandOptionT.slice(0,10)
+            this.brandOption=res.data.result
             this.judge.loading2=false
           }
           else {
@@ -365,10 +363,9 @@
           }).catch((err) => {
         })
 
-        this.$http.get(config.urlList.getSerial+`?${customerTime}`).then((res) => {//投放车型
+        this.$http.get(config.urlList.getSerial+"?pageSize=10").then((res) => {//投放车型
           if(res.data.errorCode===0){
-            this.serialOptionT=res.data.result;
-            this.serialOption=this.serialOptionT.slice(0,10)
+            this.serialOption=res.data.result;
             this.judge.loading3=false
           }
           else {
@@ -537,22 +534,23 @@
           this.formValidate.agentCustName=value.label
         },
         checkSerial(value){//选择投放车型
+          this.selectedSerial=value;
+          console.log(value)
           let arr=[]
           for(let i=0;i<value.length;i++){
             arr.push(value[i].label);
           }
           this.formValidate.serialNames=this.toStr(arr);
           this.formValidate.serialIds=this.toStr(this.mulCheck.serial)
-          this.serialOption=this.serialOptionT.slice(0,10)
         },
         checkBrand(value){//选择投放品牌
+          this.selectedBrand=value;
           let arr=[]
           for(let i=0;i<value.length;i++){
             arr.push(value[i].label);
           }
           this.formValidate.brandNames=this.toStr(arr);
           this.formValidate.brandIds=this.toStr(this.mulCheck.brand)
-          this.brandOption=this.brandOptionT.slice(0,10)
         },
         checkPutway(value){//选择投放方式
           this.formValidate.putWays=this.toStr(this.mulCheck.putWay)
@@ -656,10 +654,56 @@
           }).catch((res)=>{})
         },
         brandChoose (query) {//投放品牌过滤
-          this.arrFilter(query,'brandOption','brandOptionT','loading2')
+           this.$http.get(config.urlList.getBrand+'?pageSize=10&name='+query).then((res) => {//投放品牌
+            if(res.data.errorCode===0){
+              for(let i=0;i<res.data.result.length;i++){
+                for(let j=0;j<this.selectedBrand.length;j++){
+                  if(this.selectedBrand[j].value==res.data.result[i].value){
+                    res.data.result.splice(i,1)
+                  }
+                }
+              }
+              this.brandOption=res.data.result
+              for(let i=0;i<this.selectedBrand.length;i++){
+                this.selectedBrand[i].name=this.selectedBrand[i].label;
+                this.brandOption.push(this.selectedBrand[i])
+              }
+              this.judge.loading2=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
         },
         serialChoose (query) {//投放车型过滤
-          this.arrFilter(query,'serialOption','serialOptionT','loading3')
+          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//投放车型
+            if(res.data.errorCode===0){
+              for(let i=0;i<res.data.result.length;i++){
+                for(let j=0;j<this.selectedSerial.length;j++){
+                  if(this.selectedSerial[j].value==res.data.result[i].value){
+                    res.data.result.splice(i,1)
+                  }
+                }
+              }
+              this.serialOption=res.data.result
+              for(let i=0;i<this.selectedSerial.length;i++){
+                this.selectedSerial[i].name=this.selectedSerial[i].label;
+                this.serialOption.push(this.selectedSerial[i])
+              }
+              this.judge.loading3=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {}
+          )
         },
         dutyUserIdChoose(query){//责任销售过滤
           if(query==""){

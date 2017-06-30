@@ -116,6 +116,8 @@ body {
   .ivu-menu-dark.ivu-menu-vertical {
     .ivu-menu-opened{
       background:#20242e !important;
+      .icon-navi-down{display: none}//箭头
+      .icon-navi-up{display: inline-block;}
       .ivu-menu-submenu-title{
         background:#20242e !important;
       }
@@ -130,7 +132,7 @@ body {
         background:#20242e !important;
         .menuCircle{background-color: #4373F3;border-color:#4373F3}
       }
-    } 
+    }
   }
   .ivu-menu-vertical {
     .ivu-menu-item-active{

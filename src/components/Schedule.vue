@@ -115,6 +115,7 @@
         }
         tbody{
            td{  
+                cursor: pointer;
                 padding: 0 5px;  
                 padding-right: 0;   
                 white-space: nowrap;
