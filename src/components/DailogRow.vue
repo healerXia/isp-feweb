@@ -145,10 +145,12 @@ export default {
                 // this.$set(this.visibleList, index, true);
                 this.timer = setTimeout(() => {
                     this.$nextTick(() => {
+                        let dateIndexs = parseInt(event.target.getAttribute('data-index'));
                         let dateIndex = parseInt(event.target.getAttribute('data-index')) + 1;
                         if (dateIndex < 10) {
                             dateIndex = '0' + dateIndex
                         }
+
 
                         // "adPlaceId": `${this.info.adPlaceId}`,
                         // "beginTime": `${this.time}-${dateIndex}`,
@@ -161,6 +163,14 @@ export default {
                         }).then((res) => {
                             if (res.data.errorCode == 0) {
                                 this.layer = Object.assign({}, res.data.result);
+                                this.layer.pSize = `${this.info.width} * ${this.info.height}`;
+                                let skuDatas = JSON.parse(this.info.adStateLists)[0];
+                                for (let attr in skuDatas) {
+                                    if(attr == this.time) {
+                                        let n = skuDatas[attr];
+                                        this.layer.skuPrice = n[dateIndexs].skuPrice;
+                                    }
+                                }
                             }
                             else if (res.data.errorCode == 50000){
                                 this.$Modal.info({

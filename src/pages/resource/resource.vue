@@ -192,7 +192,6 @@
                 </div>
                 <Page  v-if ='paging.totalCounts'  class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
             </div>
-            <Page  class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
             <!-- 已选广告位 -->
             <div class="result bottom" v-if = 'monthList.length != 0'>
                 <div class="title">
@@ -383,7 +382,7 @@ export default {
                 // 当前页索引
                 currentIndex: 0,
                 // 总条数
-                totalCounts: 100
+                totalCounts: -1
             },
             // 已选择元数据
             resultList: [],
@@ -472,18 +471,18 @@ export default {
         disStart(date) {
             let year = new Date().getFullYear();
             let month = new Date().getMonth();
-            return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
+            return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 12, 1).getTime();
         },
         disEnd(date) {
             if (this.searchInfo.beginTime) {
                 let year = this.searchInfo.beginTime.split('-')[0];
                 let month = this.searchInfo.beginTime.split('-')[1];
-                return date && date.valueOf() < new Date(year, month-1).getTime() || date && date.valueOf() > new Date(year, 11, 30).getTime();
+                return date && date.valueOf() < new Date(year, month-1).getTime() || date && date.valueOf() > new Date(year, 12, 1).getTime();
             }
             else {
                 let year = new Date().getFullYear();
                 let month = new Date().getMonth();
-                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
+                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 12, 1).getTime();
             }
         },
         // 格式化数据
@@ -1535,7 +1534,7 @@ export default {
             if (this.Type.length > 0) {
                 this.Type = [];
                 this.searchInfo.typeId = '';
-                this.searchData.typeList = [];
+                //this.searchData.typeList = [];
             }
             // 城市
             if (this.cityId.length > 0) {

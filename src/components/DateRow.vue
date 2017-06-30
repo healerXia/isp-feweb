@@ -24,7 +24,7 @@
                 <Option v-for="(key, value) in useList" :value="key" :key="value">{{value}}</Option>
             </Select>
         </td>
-        <td class='priceTd'>{{formatNum(info.price, 2)}}元/天</td>
+        <td class='priceTd'>{{info.price}}元/天</td>
         <td v-for='(i,index) in info.adStateList'
             :class='["dateTd", {"active": indexList[index]},{"default": i == 3}, {"hasSel": i == 2}]'>
             <span :data-index='index' :data-status='i' class='dateSpan'></span>

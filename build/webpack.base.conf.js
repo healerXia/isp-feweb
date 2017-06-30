@@ -51,11 +51,12 @@ module.exports = {
       moduleExtensions: ['-loader']
   },
   // // webpack不处理echarts
-  // externals: [
-  //     {
-  //         '/static/echarts/echarts.js':'echarts'
-  //     }
-  // ],
+  externals: [
+      {
+          'jquery': 'window.$',
+          'jquery':'window.jQuery'
+      }
+  ],
   module: {
     rules: [
       {
