@@ -343,8 +343,8 @@ export default {
               if(res.data.errorCode === 0) {
                 this.tableDatas=res.data.result
                 for(let i=0;i<this.tableDatas.length;i++){//处理总数据
-                  this.priceArr.totalBuy=this.tableDatas[i].monthPrice+this.priceArr.totalBuy
-                  this.priceArr.totalDelivery=this.tableDatas[i].monthFree+this.priceArr.totalDelivery
+                  this.priceArr.totalBuy=this.tableDatas[i].monthPrice4001+this.priceArr.totalBuy
+                  this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
                 }
                 if(this.priceArr.totalBuy!=0){
                   this.rate=(this.priceArr.totalDelivery/this.priceArr.totalBuy).toFixed(2)
