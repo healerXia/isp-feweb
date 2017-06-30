@@ -1,7 +1,11 @@
 <template lang="html">
     <div class="chooseTime">
         <ProjectInfo :proMess="proMess"></ProjectInfo>
-        <div class="chooseTime-box">
+        <div v-if='this.num.length == 0' class="noAd">
+            <p>请先选择要投放的广告位</p>
+            <Button type="primary" @click='jump' class="btn bg4373F3">选择广告位</Button>
+        </div>
+        <div v-if='this.num.length != 0' class="chooseTime-box">
             <ProjectStep></ProjectStep>
             <div class="tableList">
                 <div class="title">
@@ -85,6 +89,8 @@ export default {
     data() {
         return {
             pageStatus: false,
+            // 已选择月份总和
+            dataListCount: 0,
             adOrderCode: '',
             saveStatus: false,
             proMess: {},
@@ -126,6 +132,9 @@ export default {
             this.pageList = Object.assign({}, JSON.parse(window.localStorage.getItem('timePageList')));
             this.priceList = Object.assign([], JSON.parse(window.localStorage.getItem('timePriceList')));
             this.num = Object.assign([], JSON.parse(window.localStorage.getItem('monthList')));
+            if (this.num.length == 0) {
+                return false;
+            }
 
             // 新插入数据容器
             let insertList = [];
@@ -182,7 +191,9 @@ export default {
             // }
             this.pageList = Object.assign({}, JSON.parse(window.localStorage.getItem('tableData')));
             this.num = Object.assign([], JSON.parse(window.localStorage.getItem('monthList')));
-
+            if (this.num.length == 0) {
+                return false;
+            }
 
             for (let i = 0;i < this.num.length; i++) {
                 len += this.pageList[this.num[i]].length;
@@ -275,13 +286,21 @@ export default {
         // 操作的是行单位
         // obj 选中数据 index 操作数据的索引 操作数据的时间 type 用途 action 添加还是删除
         edit(obj, index, date, type, action, dayIndex) {
+            console.log(obj);
+            console.log(index);
+            console.log(date);
+            console.log(type);
+            console.log(action);
+            console.log(dayIndex);
             let arr = [];
-            for (let i = 0;i < obj.length;i++) {
+            for (let i = 0;i < obj.length; i++) {
                 if (obj[i]) {
+                    console.log(obj[i]);
+                    console.log(this.pageList[date][index]);
                     arr.push({
                         'beginTime': `${date}-${i+1}`,
                         'endTime': `${date}-${i+1}`,
-                        'skuId': this.pageList[date][index].skuIdList[dayIndex]
+                        'skuId': this.pageList[date][index].skuIdList[i]
                     })
                     this.$set(this.pageList[date][index].adStateList, i, "4");
                 }
@@ -296,7 +315,7 @@ export default {
             // console.log(tableIndex); // 表索引
             // console.log(index); // 表格所在行数索引
             this.pageList[date][index].dataList = Object.assign([], arr);
-            this.pageList[date][index].useStyle = 4001;
+            //this.pageList[date][index].useStyle = 4001;
             if (!this.pageList[date][index].total) {
                 this.pageList[date][index].total = 0;
             }
@@ -379,8 +398,13 @@ export default {
             })
             window.localStorage.setItem('timePriceList', JSON.stringify(this.priceList));
             window.localStorage.setItem('timePageList', JSON.stringify(this.pageList));
-
-
+            this.dataListCount = 0;
+            for (let attr in this.pageList) {
+                let data = this.pageList[attr];
+                for (let i = 0; i < data.length; i++) {
+                    this.dataListCount += data[i].dataList.length;
+                }
+            }
         },
         // 切换用途
         selectStyle(oldType, newType, list, index, price, date) {
@@ -432,8 +456,10 @@ export default {
                     this.pageList[date][index].useStyle = 4001;
                     break;
                 case 4003:
+                    console.log('配送');
                     this.pageList[date][index].delivery += money;
                     this.pageList[date][index].useStyle = 4003;
+                    console.log(this.pageList[date][index]);
                     break;
                 case 4002:
                     this.pageList[date][index].exchange -= money;
@@ -514,6 +540,9 @@ export default {
                 }
             }
         },
+        jump() {
+            this.$router.push('resource');
+        },
         // 保存方案
         save() {
             this.saveStatus = true;
@@ -528,17 +557,14 @@ export default {
 
             this.$http.post('/isp-kongming/adorder/insert', {
                 "action": 0,
-                 "ProjectId": this.proMess.id,
-                 "ProjectName": this.proMess.projectName,
+                 "projectId": this.proMess.id,
+                 "projectName": this.proMess.projectName,
                  "detailList": datas
              }).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.$Modal.success({
                         title: '提示',
                         content: '方案保存成功'
-                        // onOk () {
-                        //      self.$router.push({path: 'orderList', query: {id: self.proMess.id}});
-                        // }
                     });
                     this.adOrderCode = res.data.result;
                     window.localStorage.setItem('adOrderCode', res.data.result);
@@ -557,6 +583,17 @@ export default {
                 console.log(err);
                 this.saveStatus = false;
             })
+        },
+        //转千分位
+        formatNum(num, n) {
+           //参数说明：num 要格式化的数字 n 保留小数位
+
+            num = String(num.toFixed(n));
+            var re = /(-?\d+)(\d{3})/;
+            while(re.test(num)) {
+                num = num.replace(re,"$1,$2");
+            }
+            return num;
         },
         // 生成价格
         generate() {
@@ -584,9 +621,9 @@ export default {
                url = '/isp-kongming/adorder/orderUpdate';
                this.$http.post(url, {
                     "action": 0,
-                    "ProjectId": this.proMess.id,
+                    "projectId": this.proMess.id,
                     "adOrderCode": this.adOrderCode,
-                    "ProjectName": this.proMess.projectName,
+                    "projectName": this.proMess.projectName,
                     "detailList": datas
                 }).then((res) => {
                    if (res.data.errorCode == 0) {

@@ -14,7 +14,7 @@
         >
             <Tooltip  placement="top">
                 <div slot="content">
-                    <p>{{info.name}}</p>
+                    <div style='white-space: normal;text-align:center'>{{info.name}}</div>
                 </div>
                 <span class='infoName'>{{info.name}}</span>
             </Tooltip>
@@ -110,7 +110,6 @@ export default {
         }
     },
     mounted() {
-        console.log(this.info);
         for(let i = 0;i < 31; i++) {
             this.$set(this.visibleList, i, false);
         }
@@ -175,6 +174,17 @@ export default {
     methods: {
         initRow() {
 
+        },
+        //转千分位
+        formatNum(num, n) {
+           //参数说明：num 要格式化的数字 n 保留小数位
+
+            num = String(num.toFixed(n));
+            var re = /(-?\d+)(\d{3})/;
+            while(re.test(num)) {
+                num = num.replace(re,"$1,$2");
+            }
+            return num;
         },
         // 删除数据
         delAd() {
@@ -334,18 +344,7 @@ export default {
             this.visibleList = [];
             clearTimeout(this.timer);
         },
-        // totalRmb(status) {
-        //     if (status === 1) {
-        //         this.n++;
-        //     } else {
-        //         this.n--;
-        //         if (this.n < 0) {
-        //             this.n = 0;
-        //         }
-        //     }
-        //     let total = this.n * this.info.money;
-        //     this.$emit('totalRmb', total)
-        // },
+
         selectData() {
             this.$emit('selectData', this.useState, this.useStyle, this.indexList, this.index, this.info.price, this.info.yearMonth);
             this.useState = this.useStyle;

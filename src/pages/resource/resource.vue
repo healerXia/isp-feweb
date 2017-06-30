@@ -21,7 +21,7 @@
                     <span class='query-ad-title'>查询广告位</span>
                     <span class="fRight MR20" v-if="shrinkMes.collapse">收起&nbsp;<Icon type="chevron-up"></Icon></span>
                     <span class="fRight MR20" v-else="shrinkMes.collapse">展开&nbsp;<Icon type="chevron-down"></Icon></span>
-                    <div class="query-ad" slot="content">                                   
+                    <div class="query-ad" slot="content">
                         <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
                         <Form-item label="选择日期：">
                             <Row>
@@ -130,8 +130,11 @@
                        <Form-item>
                            <Button class='searchBtn' type="primary"  @click="search('formValidate')">查询</Button>
                        </Form-item>
-                        </Form>                 
-                    </div>  
+                        </Form>
+                        <div style='height:110px'>
+
+                        </div>
+                    </div>
                 </Panel>
             </Collapse>
             <!-- 查询条件结束 -->
@@ -197,9 +200,8 @@
                         </table>
                     </div>
                 </div>
-                <Page v-if ='paging.totalCounts' class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
+                <Page  v-if ='paging.totalCounts'  class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
             </div>
-
             <!-- 已选广告位 -->
             <div class="result bottom" v-if = 'monthList.length != 0'>
                 <div class="title">
@@ -319,10 +321,10 @@ export default {
             proMess: {},
             ruleValidate: {
                 serialId: [
-                    { required: true, type: 'string', message: '请选投放车型', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
                 ],
                 Type: [
-                    { required: true, type: 'string', message: '请选择广告类型', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择广告类型', trigger: 'blur' }
                 ],
                 beginTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
@@ -331,13 +333,13 @@ export default {
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
                 pageName: [
-                    { required: true, type: 'number', message: '请选择页面名称', trigger: 'change' }
+                    { required: true, type: 'number', message: '请选择页面名称', trigger: 'blur' }
                 ],
                 brandId: [
-                    { required: true, type: 'string', message: '请选择投放品牌', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
                 ],
                 cityId: [
-                    { required: true, type: 'string', message: '请选择投放地区', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
                 ]
             },
             action: 2,
@@ -486,18 +488,18 @@ export default {
         disStart(date) {
             let year = new Date().getFullYear();
             let month = new Date().getMonth();
-            return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
+            return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 12, 1).getTime();
         },
         disEnd(date) {
             if (this.searchInfo.beginTime) {
                 let year = this.searchInfo.beginTime.split('-')[0];
                 let month = this.searchInfo.beginTime.split('-')[1];
-                return date && date.valueOf() < new Date(year, month-1).getTime() || date && date.valueOf() > new Date(year, 11, 30).getTime();
+                return date && date.valueOf() < new Date(year, month-1).getTime() || date && date.valueOf() > new Date(year, 12, 1).getTime();
             }
             else {
                 let year = new Date().getFullYear();
                 let month = new Date().getMonth();
-                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
+                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 12, 1).getTime();
             }
         },
         // 格式化数据
@@ -719,7 +721,7 @@ export default {
             this.searchInfo.cityId = this.cityId.join(',');
             this.searchInfo.brandId = this.brandId.join(',');
             // 初始化页数 隐藏无结果选项
-            this.paging.totalCounts = -1;
+            //this.paging.totalCounts = -1;
             // /isp-kongming/ad/select
             let search = {
                 // 媒体名称id
@@ -744,8 +746,7 @@ export default {
                 // 结束时间
                 endTime: `${this.searchInfo.endTime}-31`,
                 pageIndex: this.searchInfo.pageIndex,
-                // pageSize: this.searchInfo.pageSize
-                pageSize: 5,
+                pageSize: this.searchInfo.pageSize,
                 // 媒体名称id
                 mediaId: this.searchInfo.mediaId,
                 // 页面名称
@@ -776,12 +777,13 @@ export default {
                     for (let i = 0; i< this.tableList.length;i++) {
                         this.$set(this.checkBoxStatus, i, false);
                     }
-
+                    console.log(datas[0].totalCounts);
                     if (datas[0].totalCounts > 0) {
                         this.paging.totalCounts = datas[0].totalCounts;
                         this.searching = false;
                     }
                     else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
+                        alert(1);
                         this.paging.totalCounts = 0;
                         this.searching = false;
                     }
@@ -815,7 +817,9 @@ export default {
                 }
                 else {
                     this.searching = false;
-                    this.paging.totalCounts = -1;
+                    this.searchInfo.pageIndex = 1;
+                    this.searchInfo.pageSize = 10;
+                    this.paging.totalCounts = 0;
                     this.$Modal.info({
                         title: '提示',
                         content: res.data.rspMsg.errorMsg
@@ -824,6 +828,8 @@ export default {
             }).catch((err) => {
                 console.log(err);
                 this.searching = false;
+                this.searchInfo.pageIndex = 1;
+                this.searchInfo.pageSize = 10;
                 this.paging.totalCounts = 0;
             })
         },
@@ -1073,6 +1079,7 @@ export default {
             this.redrawed();
         },
         search(name) {
+
             if(this.timeTxt) {
                 return false;
             }
@@ -1183,21 +1190,19 @@ export default {
                             "adPosId": this.tableList[index].adPlaceId,
                             // 广告位名称
                             "name": this.tableList[index].name,
+                            "adName": this.tableList[index].name,
                             // 刊例价格
-                            "price": parseFloat(currentList[i].kprice).toFixed(2),
+                            "price": parseFloat(currentList[i].kprice),
                             // 用途
                             "useStyle":0,
                             // 刊例价单位
                             "priceUnit": 0,
-                            //品牌编号
-                            "brandId": 0,
-                            // 区域编号
-                            "areaId":0,
-                            // 城市编号
-                            "adCityId": 0,
+                            "brandId": this.tableList[index].brandId,
                             "dataList": [],
                             "kid": this.tableList[index].kid,
                             "cityId": this.tableList[index].cityId,
+                            "adCityId": this.tableList[index].cityId,
+                            "areaId": this.tableList[index].cityId,
                             "adType": this.tableList[index].adType,
                             "labelTypeId": this.tableList[index].labelTypeId,
                             "brandId": this.tableList[index].brandId,
@@ -1458,8 +1463,26 @@ export default {
             this.searchInfo.endTime = date;
             this.resetTime();
 
-            if (this.searchInfo.beginTime && this.searchInfo.endTime) {
-                //this.initSearchInfo();
+            if (this.searchInfo.endTime && this.searchInfo.beginTime) {
+                let endYear = this.searchInfo.endTime.split('-')[0];
+                let endMonth = this.searchInfo.endTime.split('-')[1];
+                let startYear = this.searchInfo.beginTime.split('-')[0];
+                let startMonth = this.searchInfo.beginTime.split('-')[1];
+                if (endYear != startYear && startYear > endYear) {
+                    this.timeTxt = '开始时间不能大于结束时间';
+                }
+                else if (endYear != startYear && startYear < endYear) {
+                    this.timeTxt = '选择时间不能跨年';
+                }
+                else if (endYear == startYear && startMonth > endMonth){
+                     this.endTime = this.beginTime;
+                     this.timeTxt = '';
+                     document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
+                }
+                else {
+                    this.timeTxt = '';
+                    document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
+                }
             }
 
         },
@@ -1528,7 +1551,7 @@ export default {
             if (this.Type.length > 0) {
                 this.Type = [];
                 this.searchInfo.typeId = '';
-                this.searchData.typeList = [];
+                //this.searchData.typeList = [];
             }
             // 城市
             if (this.cityId.length > 0) {

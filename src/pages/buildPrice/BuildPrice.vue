@@ -21,8 +21,8 @@
                     </Form-item>
                     <p class="MB20 fontSize12">实际成交价：<span class="colorRed fontSize14">{{formatNum(reallyPrice, 2)}}元</span></p>
                     <Form-item>
-                        <Button type="primary" class="btn bg4373F3" @click="handleSubmit('formValidate', 1)" :disabled='saveStatus'>保存方案</Button>
-                        <Button type="primary" class="btn bg4373F3 ML20" @click="handleSubmit('formValidate', 2)" :disabled='submitStatus'>提交</Button>
+                        <Button type="primary" class="btn bg4373F3" @click="handleSubmit('formValidate', 0)" :disabled='saveStatus'>保存方案</Button>
+                        <Button type="primary" class="btn bg4373F3 ML20" @click="handleSubmit('formValidate', 1)" :disabled='submitStatus'>提交</Button>
                         <Button type="primary" class="btn bgccc ML20" @click="handleReset('formValidate')" >取消</Button>
                     </Form-item>
                 </Form>
@@ -183,15 +183,14 @@ import urlList from './config.js';
             this.$router.push({path: 'details', query: {id: id}});
         },
         handleSubmit (name, id) {
-            console.log(this.errorTxt);
             if (this.errorTxt != '') {
                 return false;
             }
-            if (id == 1) {
+            if (id == 0) {
                 this.saveStatus = true;
             }
 
-            if (id == 2) {
+            if (id == 1) {
                 this.submitStatus = true;
             }
             let self = this;
@@ -219,13 +218,10 @@ import urlList from './config.js';
                             // 清空本地存储
                             let nameList = [
                                 'adName',
-                                'adOrderCode',
                                 'checkBoxList',
                                 'insertData',
                                 'monthList',
-                                'price',
                                 'priceList',
-                                'proMess',
                                 'projectData',
                                 'searchInfo',
                                 'size',
@@ -247,8 +243,6 @@ import urlList from './config.js';
                                          self.$router.push({path: 'details', query: {id: self.proMess.id}});
                                     }
                                 });
-
-                                this.saveStatus = true;
                             }
 
                             if (id == 2) {
@@ -277,7 +271,9 @@ import urlList from './config.js';
                                 content: res.data.errorMsg
                             });
                         }
+                        this.saveStatus = false;
                     }).catch((err) => {
+                        this.saveStatus = false;
                         if (id == 1) {
                             this.saveStatus = false;
                         }
@@ -294,6 +290,7 @@ import urlList from './config.js';
                     if (id == 2) {
                         this.submitStatus = false;
                     }
+                    this.saveStatus = false;
                     this.$Message.error('表单验证失败!');
                 }
             })
