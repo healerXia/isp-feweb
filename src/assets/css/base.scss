@@ -230,3 +230,35 @@ border-radius: 2px;
 .ivu-form .ivu-form-item-label  {
     line-height: 18px;
 }
+//单选按钮样式调增
+.ivu-radio-checked .ivu-radio-inner{border-color:#B9B9B9 }
+.ivu-radio-inner{
+    width: 12px;
+    height: 12px;
+    border: 1px solid #B9B9B9;
+    &:after{
+      width: 6px;
+      height: 6px;
+      background-color: #3D70FB;
+    }
+}
+//多选按钮样式调增
+.ivu-checkbox-inner{
+  width: 18px;
+  height: 18px;
+  border: 1px solid #B9B9B9;
+}
+.ivu-checkbox-checked .ivu-checkbox-inner{
+  background-color: #fff;
+  border-color: #3D70FB;
+}
+.ivu-checkbox-checked .ivu-checkbox-inner:after{
+    border: 2px solid #3D70FB;
+    border-top: 0;
+    border-left: 0;
+    left: 5px;
+    top: 2px;
+    width: 6px;
+    height: 10px;
+    // left: 3px;
+}

@@ -37,6 +37,11 @@
         </div>
         <div class="listTable MT30">
           <span class="exportBtn" @click="exportFile"><Icon type="document"></Icon><span>|</span>导出Excel</span>
+          <span class="addProBtn ML15">
+            <router-link :to="{path:'createPro'}">
+              添加项目
+            </router-link>
+          </span>
           <table>
             <thead>
               <tr>

@@ -27,7 +27,7 @@
                         <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4005'">试用</span>
                         <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4006'">免费</span>
                         <span v-else-if="item=='adName'" :title='tbodys[item]'>{{tbodys[item]}}</span>
-                        <span v-else>{{(tbodys[item]+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}</span>
+                        <span v-else>{{(parseInt(tbodys[item])+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}</span>
                      </td> 
                      <td v-for="n in tbodys.listNumber" class="cell">
                         <span v-if="n=='0'" class="status status1"></span>
@@ -67,7 +67,7 @@
         data(){
             return {
                 str:"广告位名称广告位名称广告位名称广告位名称广告位名称广告位名称广告位名称广告位名称广告位名称广告位名称",
-                thead:["广告位名称","用途","刊例价"],
+                thead:["广告位名称","用途","刊例价(元/天)"],
                 theadkey:['adName','useStyle','price','listNumber']               
             }           
         },
