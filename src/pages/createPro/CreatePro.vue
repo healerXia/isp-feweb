@@ -331,6 +331,8 @@
         if(!this.$router.currentRoute.query.id){
           this.judge.showOrder=true
           this.selectForMess("","")
+          this.getSerialOption();
+          this.getBrandOption();
         }else{//编辑页面不显示继续下单按钮
           this.judge.showOrder=false
         }
@@ -339,34 +341,6 @@
             this.dutyUserArrT=res.data.result;
             this.dutyUserArr=this.dutyUserArrT.slice(0,10)
             this.judge.loading4=false
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((err) => {
-        })
-
-        this.$http.get(config.urlList.getBrand+'?pageSize=10').then((res) => {//投放品牌
-          if(res.data.errorCode===0){
-            this.brandOption=res.data.result
-            this.judge.loading2=false
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((err) => {
-        })
-
-        this.$http.get(config.urlList.getSerial+"?pageSize=10").then((res) => {//投放车型
-          if(res.data.errorCode===0){
-            this.serialOption=res.data.result;
-            this.judge.loading3=false
           }
           else {
             this.$Modal.info({
@@ -451,6 +425,36 @@
         },0)
       },
       methods: {
+        getSerialOption(){
+          this.$http.get(config.urlList.getSerial+"?pageSize=10").then((res) => {//投放车型
+            if(res.data.errorCode===0){
+              this.serialOption=res.data.result;
+              this.judge.loading3=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+        },
+        getBrandOption(){
+          this.$http.get(config.urlList.getBrand+'?pageSize=10').then((res) => {//投放品牌
+            if(res.data.errorCode===0){
+              this.brandOption=res.data.result
+              this.judge.loading2=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+        },
         selectForMess(custName,agentname){//由于客户信息与代理公司下拉数据较多，回填时的特别处理   
           //客户信息
           this.$http.get(config.urlList.getCustomer+'?custName='+custName).then((res) => {
@@ -498,6 +502,16 @@
         disEnd (date) {//结束时间
            return date && date.valueOf() < new Date(this.searchData.createTime2)
         },
+        getSerialBrandArr(nameArr,idArr){//回填车型和品牌是讲id和名称变成
+          var resultArr=[]
+          for(let i=0;i<nameArr.length;i++){
+            let item={};
+            item['name']=nameArr[i];
+            item['value']=idArr[i];
+            resultArr.push(item);
+          }
+          return resultArr
+        },
         copyFormValidate(data){//当页面为编辑状态时，将formValidate里的值替换一下
             for(let item in this.formValidate){
               if(this.formValidate.hasOwnProperty(item)){          
@@ -506,19 +520,33 @@
                 }
               }
             }
-
             this.selectForMess(data.custName,data.agentCustName)
-            this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
-            if(!this.formValidate.serialIds){//如果投放车型没有值的话，投放品牌才赋值（解决小明的接口bug）
-              this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
-            }else{
-              //如果投放车型不为空，那投放品牌也是有值的,需要清空
-              this.formValidate.brandIds=""
-              this.formValidate.brandNames=""
+
+            if(this.formValidate.serialIds==""&&this.formValidate.brandIds!=""){//车型为空,品牌不为空,品牌赋值
+              this.brandOption=this.getSerialBrandArr(this.toArr(data.brandNames),this.toArr(this.formValidate.brandIds))
+              this.judge.loading2=false
+              setTimeout(()=>{
+                this.mulCheck.brand=this.toArr(this.formValidate.brandIds)//投放品牌
+              },0)
+              this.getSerialOption();
+
+            }else if(this.formValidate.serialIds){ //车型不为空,那品牌也是有值的,需要清空（小明传的）             
+              this.formValidate.brandIds="";
+              this.formValidate.brandNames="";
+              this.serialOption=this.getSerialBrandArr(this.toArr(data.serialNames),this.toArr(this.formValidate.serialIds))
+              this.judge.loading3=false
+              setTimeout(()=>{
+                this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
+              },0)
+              this.getBrandOption();
+            }else if(this.formValidate.serialIds==""&&this.formValidate.brandIds==""){//两个都没有值
+              this.getBrandOption();
+              this.getSerialOption();
             }
-            // this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
-            this.mulCheck.putWay=this.toArr(this.formValidate.putWays)//投放公司
-            this.singleCheck.dutyId=this.formValidate.dutyUserId?parseInt(this.formValidate.dutyUserId):""//责任销售
+            //投放公司
+            this.mulCheck.putWay=this.toArr(this.formValidate.putWays);
+            //责任销售
+            this.singleCheck.dutyId=this.formValidate.dutyUserId?parseInt(this.formValidate.dutyUserId):"";
             this.formValidate.endDate=new Date(this.formValidate.endDate)
             this.formValidate.beginDate=new Date(this.formValidate.beginDate)
             let arr =this.toArr(this.formValidate.promotionRate);
@@ -535,7 +563,6 @@
         },
         checkSerial(value){//选择投放车型
           this.selectedSerial=value;
-          console.log(value)
           let arr=[]
           for(let i=0;i<value.length;i++){
             arr.push(value[i].label);
@@ -567,8 +594,10 @@
             return []
           }else if(str.length==1){
             return [parseInt(str)]
-          }else{
+          }else if(str.replace(/\,/g,"").match(/^(\d+)$/)){
             return  Array.from(str.split(","), (x) => parseInt(x))
+          }else {
+            return str.split(",")
           }
         },
         toStr(arr){//把字符串变成数组
