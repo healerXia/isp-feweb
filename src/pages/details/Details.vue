@@ -61,7 +61,9 @@
             </li>
              <li>
                 <span>成交价格：</span>
-                <span class="colorRed">{{adverMes.realitySellAllPrice}}元</span>
+                <span class="colorRed">
+                  {{adverMes.realitySellAllPrice.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,'$&,')}}元
+                </span>
             </li>
              <li >
               <span>订单状态：</span>
@@ -83,8 +85,16 @@
                 <Schedule :tableData="tableData"></Schedule>
               </div>
               <div class="totalPrice" slot="content">
-                <span>A类购买净总价：{{(priceArr.totalBuy.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
-                <span>B类购买净总价：{{(priceArr.totalDelivery.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+                <span>
+                  A类购买净总价：
+                  {{(priceArr.totalBuy.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                  元
+                </span>
+                <span>
+                  B类购买净总价：
+                  {{(priceArr.totalDelivery.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                  元
+                </span>
                 <span>配送比率：{{priceArr.rate}}</span>
               </div>   
             </Panel>
