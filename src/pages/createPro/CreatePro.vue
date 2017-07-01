@@ -330,27 +330,12 @@
     
         if(!this.$router.currentRoute.query.id){
           this.judge.showOrder=true
-          this.selectForMess("","")
+          this.selectForMess("","","")
           this.getSerialOption();
           this.getBrandOption();
         }else{//编辑页面不显示继续下单按钮
           this.judge.showOrder=false
         }
-        this.$http.get(config.urlList.getDutyUser+`?${customerTime}`).then((res) => {//责任销售
-          if(res.data.errorCode===0){
-            this.dutyUserArrT=res.data.result;
-            this.dutyUserArr=this.dutyUserArrT.slice(0,10)
-            this.judge.loading4=false
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((err) => {
-        })
-
         this.$http.get(config.urlList.getBusinessType+`?${customerTime}`).then((res) => {//业务类型
           if(res.data.errorCode===0){
             this.businessTypeArr=res.data.result;
@@ -363,7 +348,6 @@
           }
           }).catch((err) => {
         })
-
         this.$http.get(config.urlList.getPromotionWay+`?${customerTime}`).then((res) => {//推广方式
           if(res.data.errorCode===0){
             this.promotionWayArr=res.data.result;
@@ -455,13 +439,13 @@
             }).catch((err) => {
           })
         },
-        selectForMess(custName,agentname){//由于客户信息与代理公司下拉数据较多，回填时的特别处理   
+        selectForMess(custName,agentname,dutyname){//由于客户信息与代理公司下拉数据较多，回填时的特别处理   
           //客户信息
           this.$http.get(config.urlList.getCustomer+'?custName='+custName).then((res) => {
-            if(res.data.errorCode===0){            
+            if(res.data.errorCode===0){        
               this.custOption=res.data.result.resultList.slice(0,10)  
               setTimeout(()=>{
-                if(custName!=""){
+                if(custName!=""&&this.custOption.length==1){
                   this.formValidate.custId=this.custOption[0].custid   
                 }
               },0)    
@@ -493,8 +477,28 @@
                   content: res.data.errorMsg
               });
             }
-          }).catch((err) => {
-         })                 
+            }).catch((err) => {
+          })     
+
+          //责任销售
+          this.$http.get(config.urlList.getDutyUser+'?username='+dutyname).then((res) => {//责任销售
+            if(res.data.errorCode===0){
+              this.dutyUserArr=res.data.result.slice(0,10)
+              this.judge.loading4=false
+              setTimeout(()=>{
+                if(dutyname!=""&&this.dutyUserArr.length==1){
+                  this.singleCheck.dutyId=parseInt(this.dutyUserArr[0].value)//代理公司
+                }
+              },0)
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })            
         },
         disBegin (date) {//开始时间
           return date && date.valueOf() > new Date(this.searchData.createTime1)
@@ -520,8 +524,7 @@
                 }
               }
             }
-            this.selectForMess(data.custName,data.agentCustName)
-
+            this.selectForMess(data.custName,data.agentCustName,data.dutyUserName?data.dutyUserName:"")
             if(this.formValidate.serialIds==""&&this.formValidate.brandIds!=""){//车型为空,品牌不为空,品牌赋值
               this.brandOption=this.getSerialBrandArr(this.toArr(data.brandNames),this.toArr(this.formValidate.brandIds))
               this.judge.loading2=false
@@ -546,7 +549,7 @@
             //投放公司
             this.mulCheck.putWay=this.toArr(this.formValidate.putWays);
             //责任销售
-            this.singleCheck.dutyId=this.formValidate.dutyUserId?parseInt(this.formValidate.dutyUserId):"";
+            // this.singleCheck.dutyId=this.formValidate.dutyUserId?parseInt(this.formValidate.dutyUserId):"";
             this.formValidate.endDate=new Date(this.formValidate.endDate)
             this.formValidate.beginDate=new Date(this.formValidate.beginDate)
             let arr =this.toArr(this.formValidate.promotionRate);
@@ -632,20 +635,6 @@
             }
           }
         },
-        arrFilter(query,list,listT,loading){//用于下拉框数组过滤的功用方法
-          if (query != '') {
-              this[loading] = true;
-                setTimeout(() => {
-                  this[loading] = false;                 
-                  this[list] = this[listT].filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
-                if(this[list].length>10){
-                  this[list]=this[list].slice(0,10);
-                }
-              }, 200);
-          }else {
-              this[list]=this[listT].slice(0,10);
-          }
-        },
         agentChoose (query) {//代理公司过滤
           if(query==""){
             this.formValidate.agentCustId=""
@@ -683,7 +672,7 @@
           }).catch((res)=>{})
         },
         brandChoose (query) {//投放品牌过滤
-           this.$http.get(config.urlList.getBrand+'?pageSize=10&name='+query).then((res) => {//投放品牌
+          this.$http.get(config.urlList.getBrand+'?pageSize=10&name='+query).then((res) => {//投放品牌
             if(res.data.errorCode===0){
               for(let i=0;i<res.data.result.length;i++){
                 for(let j=0;j<this.selectedBrand.length;j++){
@@ -739,7 +728,20 @@
             this.formValidate.dutyUserId=""
             this.singleCheck.dutyId=""
           }
-           this.arrFilter(query,'dutyUserArr','dutyUserArrT','loading4');
+          //责任销售
+          this.$http.get(config.urlList.getDutyUser+'?username='+query).then((res) => {//责任销售
+            if(res.data.errorCode===0){
+              this.dutyUserArr=res.data.result.slice(0,10)
+              this.judge.loading4=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })            
         },
         provinceChange(){//省列表change事件
           this.judge.areaErrShow=false
