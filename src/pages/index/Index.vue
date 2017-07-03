@@ -52,6 +52,7 @@
 
             span {
                 // position: relative;
+                font-weight: bold;
                 line-height: 60px;
                 font-size: 16px;
                 color: #333;
