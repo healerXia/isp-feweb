@@ -109,8 +109,8 @@ import urlList from './config.js';
     },
     mounted() {
         this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
-        let priceList = JSON.parse(window.localStorage.getItem('priceList'));
-        let data = JSON.parse(window.localStorage.getItem('price'));
+        let priceList = JSON.parse(window.sessionStorage.getItem('priceList'));
+        let data = JSON.parse(window.sessionStorage.getItem('price'));
         this.submitData = Object.assign([], data);
         let aTotal = 0;
         let bTotal = 0;
@@ -133,6 +133,7 @@ import urlList from './config.js';
             if (priceList[i].total == 0 && priceList[i].delivery == 0 && priceList[i].exchange == 0 && priceList[i].per == 0) {
                 continue;
             }
+
             this.tableData.mess.push({
                 time: priceList[i].time,
                 aTotal: priceList[i].total == 0 ? '-' : this.formatNum(priceList[i].total, 2),
@@ -157,6 +158,7 @@ import urlList from './config.js';
             dTotal: dTotal == 0 ? '-' : this.formatNum(dTotal, 2),
             distribution: str
         })
+        console.log(this.tableData.mess);
         this.total =  aTotal;
         this.totalPrice();
         this.price.sellAllPrice = aTotal;
@@ -194,7 +196,7 @@ import urlList from './config.js';
                 this.submitStatus = true;
             }
             let self = this;
-            let datas = JSON.parse(window.localStorage.getItem('price'));
+            let datas = JSON.parse(window.sessionStorage.getItem('price'));
             // 浅拷贝
             // let datas = Object.assign([], this.submitData);
             for (let i = 0;i < datas.length; i++) {
@@ -202,7 +204,7 @@ import urlList from './config.js';
             }
 
             this.$refs[name].validate((valid) => {
-                let adOrderCode = window.localStorage.getItem('adOrderCode');
+                let adOrderCode = window.sessionStorage.getItem('adOrderCode');
                 if (valid) {
                     this.$http.post('/isp-kongming/adorder/orderUpdate', {
                         "action": id,
@@ -232,10 +234,10 @@ import urlList from './config.js';
                             ];
 
                             for (let i = 0; i < nameList.length; i++) {
-                                window.localStorage.removeItem(nameList[i]);
+                                window.sessionStorage.removeItem(nameList[i]);
                             }
 
-                            if (id == 1) {
+                            if (id == 0) {
                                 this.$Modal.success({
                                     title: '提示',
                                     content: '保存成功',
@@ -245,7 +247,7 @@ import urlList from './config.js';
                                 });
                             }
 
-                            if (id == 2) {
+                            if (id == 1) {
                                 this.$Modal.success({
                                     title: '提示',
                                     content: '提交成功',

@@ -136,21 +136,25 @@ export default {
     mounted() {
     // /api/isp-kongming/ad/select_
         this.result = JSON.parse(window.localStorage.getItem('viewAd'));
-        let time = this.result.beginTime.split(' ')[0];
+        console.log(this.$router.currentRoute.query.viewTime);
+        let time  = this.$router.currentRoute.query.viewTime.split(' ')[0];
         let month = time.split('-');
-        this.adName = window.localStorage.getItem('adName');
-        this.size = window.localStorage.getItem('size');
+        this.adName = this.result.name;
+        this.size = `${this.result.width}*${this.result.height}`;
         // this.pageData = Object.assign({}, this.mockData.result[0]);
         // let year = Object.assign([], this.pageData.adStateList).reverse();
         // this.first = year.slice(0,6);
         // this.second = year.slice(6);
-        let search = JSON.parse(window.localStorage.getItem('searchInfo'));
-        search.beginTime = `${time}`;
-        search.endTime = `${parseInt(month[0])+ 1}-${month[1]}-${month[2]}`;
+        let search = JSON.parse(window.sessionStorage.getItem('searchInfo'));
+        let currentYear = parseInt(month[0]);
+        let currenMonth = month[1];
+        // 曝光量
+        search.beginTime = `${currentYear}-${currenMonth}-01`
+        search.endTime = `${currentYear + 1}-${currenMonth}-01`;
         search.adPlaceId = this.result.adPlaceId;
-       this.$http.post('/isp-kongming/ad/kuAdPlaceBo', search).then((res) => {
+        this.$http.post('/isp-kongming/ad/kuAdPlaceBo', search).then((res) => {
            if (res.data.errorCode === 0) {
-               let datas = Object.assign({}, res.data.result[0]);
+               let datas = res.data.result[0];
                datas.adStateList = this.initResult(datas);
                this.pageData = Object.assign({}, datas);
                let year = Object.assign([], this.pageData.adStateList).reverse();
@@ -167,16 +171,11 @@ export default {
            console.log(err);
        });
 
-       let currentYear = parseInt(month[0]);
-       let currenMonth = month[1];
-       // 曝光量
-       search.beginTime = `${currentYear}-${currenMonth}-01`
-       search.endTime = `${currentYear + 1}-${currenMonth}-01`;
+
        this.$http.post('/isp-kongming/ad/amountSelectSum', search).then((res) => {
            if (res.data.errorCode === 0) {
                let data = res.data.result;
                this.$set(this.exposureList, 0, data);
-               console.log(this.exposureList);
            }
            else {
                this.$Modal.info({
@@ -306,31 +305,45 @@ export default {
             let arr = [];
             let monthList = [];
             let adList = data.adStateList;
-            for (let i = 0; i < adList.length; i++) {
-                let obj = adList[i];
-                for (let attr in obj) {
-                   monthList.push(attr);
-                   let ad = obj[attr];
-                   let monthData = {};
-                   let dayStates = [];
-                   let total = 0;
-                   monthData.time = attr;
-                   monthData.dayStatus = obj[attr];
-                   for (let j = 0; j < ad.length; j++) {
-                       dayStates.push(ad[i].skuStatus);
-                       total += ad[i].skuPrice;
-                   }
 
-                   for (let k = 0; k < 31; k++ ) {
-                       if (!dayStates[k]) {
-                           dayStates.push('3');
-                       }
+            let obj = Object.assign({}, adList);
+            for (let attr in obj) {
+               monthList.push(attr);
+               let ad = obj[attr];
+               let monthData = {};
+               let dayStates = [];
+               let skuIdList = [];
+               let total = 0;
+               monthData.time = attr;
+               monthData.dayStatus = obj[attr];
+               //ad.sort(this.compare('day'));
+               // 按照日期
+               for (let j = 0; j < ad.length; j++) {
+                //    dayStates.push(ad[j].skuStatus);
+                   dayStates[ad[j].day - 1] = ad[j].skuStatus;
+                   skuIdList[ad[j].day -1 ] = ad[j].skuId;
+                   total += parseFloat(ad[j].skuPrice);
+               }
+
+               for (let k = 0; k < 31; k++ ) {
+                   if (dayStates[k] == 'SKU_STATUS_LOCKED' || dayStates[k] == 'SKU_STATUS_SALED' || dayStates[k] == 'SKU_STATUS_RUNNING') {
+                       dayStates[k] = '2'
                    }
-                   monthData.kprice = (total/30).toFixed(1);
-                   monthData.state = dayStates.join(',');
-                   arr.push(monthData);
-                }
+                   if (dayStates[k] == 'SKU_STATUS_NONE' || dayStates[k] =='SKU_STATUS_DELETE' || dayStates[k] == 'SKU_STATUS_IDLE') {
+                       dayStates[k]  = '1';
+                   }
+                   if (!dayStates[k]) {
+                       dayStates[k]  = '3';
+                   }
+               }
+
+               monthData.kprice = (total/30).toFixed(2);
+               monthData.state = dayStates.join(',');
+               monthData.skuIdList = skuIdList;
+               arr.push(monthData);
             }
+
+            // 存储日期
             monthList.sort();
             for (let i = 0; i < monthList.length; i++) {
                 for (let j = 0; j < arr.length; j++) {
@@ -391,14 +404,30 @@ export default {
             width: 100%;
             text-align: center;
             font-size: 12px;
-
-            .dateTd {
-                height: 28px;
-                width: 30px;
-            }
+            border: 1px solid #DEE1E5;
 
             .allMoth {
                 width: 34px;
+            }
+
+            .dateTd {
+                position: relative;
+                border: 1px solid #DEE1E5;;
+                height: 28px;
+                width: 30px;
+
+                &.default {
+                    background: #EDEFF2;
+                }
+
+                &.active {
+                    background: #A8C8EE;
+                }
+
+                &.hasSel {
+                    background: #6A7088;
+                }
+
             }
         }
     }

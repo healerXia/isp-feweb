@@ -3,6 +3,10 @@
     padding-left: 30px;
     min-height: 750px;
 
+    .size {
+        font-size: 12px;
+    }
+    
      // zhoufeng 收缩条的样式
     .ivu-collapse{
         margin-top: 40px;
@@ -16,14 +20,14 @@
                 font-size: 14px;
                 color: #333;
                 padding-left: 20px;
-                
+
             }
             .ivu-icon-arrow-right-b{
                 display: none;
             }
         }
     }
-    
+
     .ivu-tag {
         .ivu-icon-ios-close-empty {
             width: 8px;

@@ -1,5 +1,10 @@
 <template lang="html">
-    <select id="select2_sample" name="sample" style="width:75%" ></select>
+    <div class="">
+        <select id="select2_sample" name="sample" style="width:75%" class="js-example-basic-multiple" >
+        </select>
+        <button type="button" name="button" @click='fn'>获取</button>
+        <button type="button" name="button" @click='clear'>清空</button>
+    </div>
 </template>
 
 <script>
@@ -10,37 +15,78 @@ import axios from 'axios';
 export default {
     mounted() {
         setTimeout(() => {
-            var data = [{id: 0, text: 'apple'}, {id: 1, text: 'banana'}, {id: 2, text: 'pear'}];//下拉列表中的数据项
-
+            var data = //下拉列表中的数据项
             $("#select2_sample").select2({
-                tags: true,
                 multiple: true,
-                // ajax: {
-                //     type    : "get",
-                //     url     : "/api/isp-kongming/ad/modelInfo",//请求的API地址
-                //     dataType: 'json',//数据类型
-                //     params: { // extra parameters that will be passed to ajax
-                //         contentType: "application/json; charset=utf-8",
-                //     },
-                //     data    : function(params){
-                //         var query = {
-                //             name: params.term, modelId: 0
-                //         }
-                //         return query
-                //     },
-                //
-                // }
+                allowClear:true,
                 ajax: {
-                    transport: function(params) {
-                        console.log(params.data.term,);
-                        axios.post('/api/isp-kongming/ad/modelInfo',{
+                    transport: function(params, success, failure) {
+                        if (!params.data.term) {
+                            let data = [
+                                {
+                                    id: 1,
+                                    name: '默认选项',
+                                    text: 'text'
+                                }
+                            ]
+                            success(data);
+                            return false;
+                        }
+                        axios.get('mock/resource',{
                             name: '',
                             modelId: 0
+                        }).then((res)=> {
+                            console.log(1);
+                            success();
+                        }).catch((err) => {
+                            failure();
                         })
+
+
+                    },
+                    processResults: function (data, params) {
+                      // parse the results into the format expected by Select2
+                      // since we are using custom formatting functions we do not need to
+                      // alter the remote JSON data, except to indicate that infinite
+                      // scrolling can be used
+                      return {
+                          results: data
+                      };
+                    },
+                },
+                escapeMarkup: function (markup) { return markup; },
+                //minimumInputLength: 1,
+                templateSelection(repo) {
+                    if (repo.loading){
+
                     }
+                    var markup = "<span>"+repo.name+"</span>";
+                    return markup;
+                },
+                templateResult(repo) {
+                    if (repo.loading) {
+                        // $("#select2_sample").select2({
+                        //     data: [{id:0, text:'text',name: '无结果'}]
+                        // })
+                    };
+                    var markup = "<span>"+repo.name+"</span>";
+                    return markup;
+                },
+                formatSelection: function(object, container) {
+                    console.log(object);
+                    return object.name;
                 }
-            });//启动select2
+            });
         })
+    },
+    methods: {
+        fn() {
+            console.log($("#select2_sample").select2("data"));
+        },
+        clear() {
+            console.log('清空');
+            $("#select2_sample").val(null).trigger("change");
+        }
     }
 }
 </script>
