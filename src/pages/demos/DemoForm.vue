@@ -1,5 +1,14 @@
 <template lang="html">
+<<<<<<< HEAD
     <select id="select2_sample" name="sample" style="width:75%" ></select>
+=======
+    <div class="">
+        <select id="select2_sample" name="sample" style="width:75%" class="js-example-basic-multiple" >
+        </select>
+        <button type="button" name="button" @click='fn'>获取</button>
+        <button type="button" name="button" @click='clear'>清空</button>
+    </div>
+>>>>>>> master
 </template>
 
 <script>
@@ -10,6 +19,7 @@ import axios from 'axios';
 export default {
     mounted() {
         setTimeout(() => {
+<<<<<<< HEAD
             var data = [{id: 0, text: 'apple'}, {id: 1, text: 'banana'}, {id: 2, text: 'pear'}];//下拉列表中的数据项
 
             $("#select2_sample").select2({
@@ -41,6 +51,80 @@ export default {
                 }
             });//启动select2
         })
+=======
+            var data = //下拉列表中的数据项
+            $("#select2_sample").select2({
+                multiple: true,
+                allowClear:true,
+                ajax: {
+                    transport: function(params, success, failure) {
+                        if (!params.data.term) {
+                            let data = [
+                                {
+                                    id: 1,
+                                    name: '默认选项',
+                                    text: 'text'
+                                }
+                            ]
+                            success(data);
+                            return false;
+                        }
+                        axios.get('mock/resource',{
+                            name: '',
+                            modelId: 0
+                        }).then((res)=> {
+                            console.log(1);
+                            success();
+                        }).catch((err) => {
+                            failure();
+                        })
+
+
+                    },
+                    processResults: function (data, params) {
+                      // parse the results into the format expected by Select2
+                      // since we are using custom formatting functions we do not need to
+                      // alter the remote JSON data, except to indicate that infinite
+                      // scrolling can be used
+                      return {
+                          results: data
+                      };
+                    },
+                },
+                escapeMarkup: function (markup) { return markup; },
+                //minimumInputLength: 1,
+                templateSelection(repo) {
+                    if (repo.loading){
+
+                    }
+                    var markup = "<span>"+repo.name+"</span>";
+                    return markup;
+                },
+                templateResult(repo) {
+                    if (repo.loading) {
+                        // $("#select2_sample").select2({
+                        //     data: [{id:0, text:'text',name: '无结果'}]
+                        // })
+                    };
+                    var markup = "<span>"+repo.name+"</span>";
+                    return markup;
+                },
+                formatSelection: function(object, container) {
+                    console.log(object);
+                    return object.name;
+                }
+            });
+        })
+    },
+    methods: {
+        fn() {
+            console.log($("#select2_sample").select2("data"));
+        },
+        clear() {
+            console.log('清空');
+            $("#select2_sample").val(null).trigger("change");
+        }
+>>>>>>> master
     }
 }
 </script>

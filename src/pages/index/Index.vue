@@ -150,6 +150,7 @@ export default {
             this.$http.get('/common-portal/common/portal/logout').then((res) => {
                 if (res.data.errorCode == 0) {
                     this.$router.push('/');
+                    window.location.reload();
                 }
             }).catch((err) => {
                 console.log(err);

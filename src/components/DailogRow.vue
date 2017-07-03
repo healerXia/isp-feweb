@@ -164,7 +164,11 @@ export default {
                             if (res.data.errorCode == 0) {
                                 this.layer = Object.assign({}, res.data.result);
                                 this.layer.pSize = `${this.info.width} * ${this.info.height}`;
+<<<<<<< HEAD
                                 let skuDatas = JSON.parse(this.info.adStateLists)[0];
+=======
+                                let skuDatas = JSON.parse(this.info.adStateLists);
+>>>>>>> master
                                 for (let attr in skuDatas) {
                                     if(attr == this.time) {
                                         let n = skuDatas[attr];

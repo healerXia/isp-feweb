@@ -139,7 +139,7 @@ export default {
             }
         }
 
-        this.adNames = window.localStorage.getItem('adName');
+        this.adNames = window.sessionStorage.getItem('adName');
 
         // for (let i = 0; i < this.timeData.length; i++) {
         //      let timeName = this.timeData[i];
@@ -263,20 +263,19 @@ export default {
 
                         let dayData = {};
                         let datas = JSON.parse(this.info.adStateLists);
-                        for (let i = 0; i < datas.length; i++) {
-                            let n = datas[i];
-                            for (let attr in n) {
-                                if (attr == dataTimes) {
-                                    let arr = n[attr];
 
-                                    for (let j = 0; j < arr.length; j++) {
-                                        if (arr[j].day == dateIndex) {
-                                            this.layer.skuPrice = arr[j].skuPrice;
-                                        }
+                        for (let attr in datas) {
+                            if (attr == dataTimes) {
+                                let arr = datas[attr];
+
+                                for (let j = 0; j < arr.length; j++) {
+                                    if (arr[j].day == dateIndex) {
+                                        this.layer.skuPrice = arr[j].skuPrice;
                                     }
                                 }
                             }
                         }
+
                         // 宽高
                         this.layer.pSize = `${this.info.width}*${this.info.height}`;
                         if (dateIndex < 10) {
