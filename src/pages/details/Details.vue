@@ -356,10 +356,12 @@ export default {
                   this.priceArr.totalBuy=this.tableDatas[i].monthPrice4001+this.priceArr.totalBuy
                   this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
                 }
-                if(this.priceArr.totalBuy!=0){
+                if(this.priceArr.totalBuy!=0&&this.priceArr.totalDelivery!=0){
                   this.priceArr.rate=(this.priceArr.totalDelivery/this.priceArr.totalBuy).toFixed(2)
-                }else{
-                  this.rate=0
+                }else if(this.priceArr.totalDelivery==0){
+                  this.priceArr.rate=0
+                }else if(this.priceArr.totalDelivery!=0&&this.priceArr.totalBuy==0){
+                  this.priceArr.rate=1
                 }
               }
               else {

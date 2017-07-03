@@ -41,11 +41,14 @@
          <div class="price">
           <span>购买净总价：{{(tableData.monthPrice4001.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
           <span>配送总价：{{tableData.monthPrice4003.toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
-          <span v-if="tableData.monthPrice4001!=0">
+          <span v-if="tableData.monthPrice4001!=0&&tableData.monthPrice4003!=0">
             配送比率：{{(tableData.monthPrice4003/tableData.monthPrice4001).toFixed(1)}}
           </span>
-          <span v-else-if="tableData.monthPrice4001==0">
+          <span v-else-if="tableData.monthPrice4003==0">
             配送比率：0
+          </span>
+           <span v-else-if="tableData.monthPrice4003!=0&&tableData.monthPrice4001==0">
+            配送比率：1
           </span>
         </div> 
         </div>
@@ -74,7 +77,6 @@
         created(){
         },
         methods: {
-           
         }
     }
 </script>
