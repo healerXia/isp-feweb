@@ -116,8 +116,6 @@ body {
   .ivu-menu-dark.ivu-menu-vertical {
     .ivu-menu-opened{
       background:#20242e !important;
-      .icon-navi-down{display: none}//箭头
-      .icon-navi-up{display: inline-block;}
       .ivu-menu-submenu-title{
         background:#20242e !important;
       }
@@ -308,11 +306,5 @@ border-radius: 2px;
     top: 2px;
     width: 6px;
     height: 10px;
-<<<<<<< HEAD
-}
-// 时间框样式统一
-.ivu-date-picker-cells span em,.ivu-date-picker-cells-header span,.ivu-date-picker-header{font-size: 12px}
-=======
     // left: 3px;
 }
->>>>>>> master

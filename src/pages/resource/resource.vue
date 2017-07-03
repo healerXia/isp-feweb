@@ -11,101 +11,126 @@
         <!-- 订单信息 -->
         <div class="resource-box">
             <!-- 进度组件 -->
-            <ProjectStep :status = '1' class="MT20"></ProjectStep>
+            <ProjectStep :status = '1'></ProjectStep>
             <!-- 进度组件 -->
 
             <!-- 查询条件 -->
-            <!-- zhoufeng加上收缩 -->
-            <Collapse v-model="shrinkMes.shrinkValue" @on-change="showCollapse">
-                <Panel name="1">
-                    <span class='query-ad-title'>查询广告位</span>
-                    <span class="fRight MR20" v-if="shrinkMes.collapse">收起&nbsp;<Icon type="chevron-up"></Icon></span>
-                    <span class="fRight MR20" v-else="shrinkMes.collapse">展开&nbsp;<Icon type="chevron-down"></Icon></span>
-                    <div class="query-ad" slot="content">
-                        <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
-                        <Form-item label="选择日期：">
-                            <Row>
-                                <Col span="5">
-                                    <Form-item prop="beginTime">
-                                        <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>                            </Form-item>
-                                </Col>
-                                <Col span="1" style="text-align: center">-</Col>
-                                <Col span="5">
-                                    <Form-item prop="endTime" :error='timeTxt' id='endTime'>
-                                        <Date-picker   :editable = 'false' :value="this.searchInfo.endTime"  @on-change="chooseEndTime"   type="month" :options="date2" placeholder="选择日期"></Date-picker>
-                                    </Form-item>
-                                </Col>
-                            </Row>
+            <div class="query-ad">
+                <p class='query-ad-title'>查询广告位</p>
+                <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
+                <Form-item label="选择日期：">
+                    <Row>
+                        <Col span="5">
+                            <Form-item prop="beginTime">
+                                <Date-picker  :editable = 'false' :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date" placeholder="选择日期"></Date-picker>
+                            </Form-item>
+                        </Col>
+                        <Col span="1" style="text-align: center">-</Col>
+                        <Col span="5">
+                            <Form-item prop="endTime">
+                                <Date-picker   :editable = 'false' :value="this.searchInfo.endTime"  @on-change="chooseEndTime"   type="month" :options="date" placeholder="选择日期"></Date-picker>
+                            </Form-item>
+                        </Col>
+                    </Row>
+                </Form-item>
+
+                <Form-item  label="媒体名称：">
+                    <a class='labelList mediaName' @click='chooseMedia(i.mediaName, i.mediaId, index)'  v-for='(i, index) in mediaNameList' href="javascript:;">{{i.mediaName}}</a>
+                </Form-item>
+
+                <Form-item  label="页面类型：">
+                    <a class='labelList pageType' @click='choosePage(i.tagName, i.tagId, index)' v-for='(i, index) in pageTypeList' href="javascript:;">{{i.tagName}}</a>
+                </Form-item>
+
+                <Row>
+                    <Col span="12" style="padding-right:10px">
+                        <Form-item label="页面名称：" prop='pageName'>
+                            <Select
+                                class="searchInput"
+                                v-model="searchInfo.pageName"
+                                filterable
+                                remote
+                                :clearable="true"
+                                :label-in-value="true"
+                                :remote-method="remoteMethod1"
+                                :loading="loading1"
+                                @on-change='selectPageName'>
+                                <Option v-for="option in searchList.pageNameList" :value="option.channelId" :key="new Date()">{{option.channelName}}</Option>
+                            </Select>
                         </Form-item>
-
-                        <Form-item  label="媒体名称：">
-                            <a class='labelList mediaName' @click='chooseMedia(i.mediaName, i.mediaId, index)'  v-for='(i, index) in mediaNameList' href="javascript:;">{{i.mediaName}}</a>
+                    </Col>
+                    <Col span="12">
+                        <Form-item label="广告类型：" prop='Type'>
+                            <Select
+                                class="searchInput"
+                                v-model="Type"
+                                multiple
+                                filterable
+                                remote
+                                :remote-method="remoteMethod2"
+                                :loading="loading1"
+                                @on-change='checkType'>
+                                <Option v-for="option in searchList.typeList" :value="option.typeId" :key="new Date()">{{option.typeName}}</Option>
+                            </Select>
                         </Form-item>
-
-                        <Form-item  label="页面类型：">
-                            <a class='labelList pageType' @click='choosePage(i.tagName, i.tagId, index)' v-for='(i, index) in pageTypeList' href="javascript:;">{{i.tagName}}</a>
+                    </Col>
+                </Row>
+                 <Row>
+                    <Col v-if='searchInfoTxt[0]' span="12" style="padding-right:10px">
+                        <Form-item label="投放车型：" class='resetSearchInfo' prop='serialId'>
+                            <Select
+                                class="searchInput"
+                                v-model="serialId"
+                                filterable
+                                remote
+                                multiple
+                                :remote-method="remoteMethod3"
+                                :loading="loading1"
+                                @on-change='checkCar'>
+                                <Option v-for="option in searchList.modelList" :value="option.Name" :key="new Date()">{{option.Name}}</Option>
+                            </Select>
                         </Form-item>
-
-                        <Row>
-                            <Col span="12" style="padding-right:10px">
-                                <Form-item label="页面名称：" prop='pageName'>
-
-                                    <select id="pageName"  name="sample" style="width:400px;height:36px;" class="js-example-basic-multiple"></select>
-                                </Form-item>
-                            </Col>
-                            <Col span="12">
-                                <Form-item label="广告类型：" prop='Type'>
-
-                                    <select id="adType" name="sample" style="width:75%" class="js-example-basic-multiple"></select>
-                                </Form-item>
-                            </Col>
-                        </Row>
-                        <Row>
-                           <Col v-if='searchInfoTxt[0]' span="12" style="padding-right:10px">
-                               <Form-item label="投放车型：" class='resetSearchInfo' prop='serialId'>
-                                   <select id="serialId" name="sample" style="width:75%" class="js-example-basic-multiple"></select>
-                               </Form-item>
-                           </Col>
-                           <Col v-if='searchInfoTxt[1]' span="12" style="padding-right:10px">
-                               <Form-item label="投放地区：" class='resetSearchInfo' prop='cityId'>
-                                   <select id="cityId" name="sample" style="width:75%" class="js-example-basic-multiple"></select>
-                               </Form-item>
-                           </Col>
-                           <Col v-if='searchInfoTxt[2]' span="12" style="padding-right:10px">
-                               <Form-item label="投放品牌：" class='resetSearchInfo' prop='brandId'>
-                                   <select id="brandId" name="sample" style="width:75%" class="js-example-basic-multiple"></select>
-                               </Form-item>
-                           </Col>
-                        </Row>
-                       <Form-item>
-                           <Button class='searchBtn' type="primary"  @click="search('formValidate')">查询</Button>
-                       </Form-item>
-                        </Form>
-<<<<<<< HEAD
-                        <div style='height:110px'>
-
-                        </div>
-=======
->>>>>>> master
-                    </div>
-                </Panel>
-            </Collapse>
+                    </Col>
+                    <Col v-if='searchInfoTxt[1]' span="12" style="padding-right:10px">
+                        <Form-item label="投放地区：" class='resetSearchInfo' prop='cityId'>
+                            <Select
+                                class="searchInput"
+                                v-model="cityId"
+                                filterable
+                                remote
+                                multiple
+                                :remote-method="remoteMethod4"
+                                :loading="loading1"
+                                @on-change='checkCity'>
+                                <Option v-for="option in searchList.areaList" :value="option.Name" :key="new Date()">{{option.Name}}</Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                    <Col v-if='searchInfoTxt[2]' span="12" style="padding-right:10px">
+                        <Form-item label="投放品牌：" class='resetSearchInfo' prop='brandId'>
+                            <Select
+                                class="searchInput"
+                                v-model="brandId"
+                                filterable
+                                remote
+                                multiple
+                                :remote-method="remoteMethod5"
+                                :loading="loading1"
+                                @on-change='checkBrand'>
+                                <Option v-for="option in searchList.brandList" :value="option.Name" :key="new Date()">{{option.Name}}</Option>
+                            </Select>
+                        </Form-item>
+                    </Col>
+                </Row>
+                    <Form-item>
+                        <Button class='searchBtn' type="primary"  @click="search('formValidate')">查询</Button>
+                    </Form-item>
+                 </Form>
+            </div>
             <!-- 查询条件结束 -->
 
             <!-- 查询结果 -->
-            <div class="noRes searching">
-                <Row>
-                    <Col v-show='searching' class="demo-spin-col" span="24">
-                        <Spin fix>
-                            <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                            <div>搜索中</div>
-                        </Spin>
-                    </Col>
-                </Row>
-                <p v-if='paging.totalCounts == 0'>无查询结果！</p>
-            </div>
-
-            <div class="result clear" v-if ='paging.totalCounts > 0'>
+            <div class="result clear" v-if ='paging.totalCounts'>
                 <!-- v-if ='paging.totalCounts' -->
                 <!-- 查询结果头信息 -->
                 <div class="title clear">
@@ -118,22 +143,24 @@
                         <a href="#">列表视图</a>
                     </div> -->
                 </div>
+                <!-- <div class="noResult">
+                    <p>查询无结果</p>
+                </div> -->
                 <!-- 查询结果列表 -->
                 <div class="table-list">
                     <div v-if='i.adStateList.length > 0'  v-for = "(i, index) in tableList" class="item">
                         <div class="item-title clear">
                             <div class="fl">
-                                 <Checkbox class='fl' v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="font-size:12px; margin-right:10px">
+                                 <Checkbox class='fl' v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="font-size:14px; margin-right:10px">
                                      <span class="ad-name">名称:</span>
                                  </Checkbox>
-                                 <span class='ad-listName fl'>{{i.name}}</span>
-                                 <a href="javascript:;" @click='viewAd(i.width, i.height, i, index)'>查看</a>
+                                 <span class='ad-listName fl'>{{adNames}}/{{i.name}}</span>
+                                 <a href="javascript:;" @click='viewAd(i.width, i.height, i)'>查看</a>
                             </div>
                             <div class="fr">
-                                <span class='size'>
+                                <span>
                                     尺寸：{{adType[i.adType]}}：{{i.width}}*{{i.height}}px
-                                    ≤100k
-                                </span>
+                                    ≤100k</span>
                             </div>
                         </div>
 
@@ -151,8 +178,9 @@
                         </table>
                     </div>
                 </div>
-                <Page  v-if ='paging.totalCounts'  class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
+                <Page v-if ='paging.totalCounts' class='fl' :total="paging.totalCounts" size="small" @on-change = 'changePageIndex' @on-page-size-change='changePageSize' show-elevator show-sizer></Page>
             </div>
+
             <!-- 已选广告位 -->
             <div class="result bottom" v-if = 'monthList.length != 0'>
                 <div class="title">
@@ -164,7 +192,7 @@
 
                 <div class="table-list">
                     <div  class="item">
-                        <table border="1" cellspacing="1" cellpadding="0" class="dateTable hasCheck">
+                        <table border="1" cellspacing="0" class="dateTable hasCheck">
                             <tr>
                                 <td></td>
                                 <td></td>
@@ -186,7 +214,7 @@
                                     </a>
                                 </td>
                                 <td class='ad-lis'>
-                                    <span class="">{{i.name}}</span>
+                                    <span class="">{{adNames}}/{{i.name}}</span>
                                 </td>
                                 <!-- 当前月份 -->
                                 <td>{{i.kprice}}元/天</td>
@@ -206,11 +234,7 @@
 
 <script>
 import qs from 'qs';
-import $ from 'jquery';
-import 'select2';
-import 'select2/dist/css/select2.css';
-import axios from 'axios';
-import {urlList, initSelect} from './config';
+import {urlList} from './config';
 // 组件
 import ProjectInfo from 'component/ProjectInfo';
 import ProjectStep from 'component/ProjectStep';
@@ -223,19 +247,6 @@ export default {
     },
     data() {
         return {
-            shrinkMes:{//zhoufeng
-                shrinkValue:"1",
-                collapse:false
-            },
-            searching: false,
-            timeTxt: '',
-            // 日期判断
-            date1: {
-                disabledDate: this.disStart
-            },
-            date2: {
-                disabledDate: this.disEnd
-            },
             // 搜索条件初始化数据集合
             searchList: {
                 // 页面名称集合
@@ -274,50 +285,36 @@ export default {
             searchInfoTxt: [true, true, false],
             // 项目基本信息
             proMess: {},
-            ruleValidate: {
-<<<<<<< HEAD
-                serialId: [
-                    { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
-                ],
-                Type: [
-                    { required: true, type: 'string', message: '请选择广告类型', trigger: 'blur' }
-                ],
-=======
-                // serialId: [
-                //     { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
-                // ],
-                // Type: [
-                //     { required: true, type: 'string', message: '请选择广告类型', trigger: 'blur' }
-                // ],
->>>>>>> master
-                beginTime: [
-                    { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
-                ],
-                endTime: [
-                    { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
-                ],
-<<<<<<< HEAD
-                pageName: [
-                    { required: true, type: 'number', message: '请选择页面名称', trigger: 'blur' }
-                ],
-                brandId: [
-                    { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
-                ],
-                cityId: [
-                    { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
-                ]
-=======
-                // pageName: [
-                //     { required: true, type: 'number', message: '请选择页面名称', trigger: 'blur' }
-                // ],
-                // brandId: [
-                //     { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
-                // ],
-                // cityId: [
-                //     { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
-                // ]
->>>>>>> master
+            date: {
+                disabledDate (date) {
+                    let year = new Date().getFullYear();
+                    let month = new Date().getMonth();
+                    return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year,11,30).getTime();
+                }
             },
+            ruleValidate: {
+                    serialId: [
+                        { required: true, type: 'string', message: '请选投放车型', trigger: 'change' }
+                    ],
+                    Type: [
+                        { required: true, type: 'string', message: '请选择广告类型', trigger: 'change' }
+                    ],
+                    beginTime: [
+                        { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
+                    ],
+                    endTime: [
+                        { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
+                    ],
+                    pageName: [
+                        { required: true, type: 'number', message: '请选择页面名称', trigger: 'change' }
+                    ],
+                    brandId: [
+                        { required: true, type: 'string', message: '请选择投放品牌', trigger: 'change' }
+                    ],
+                    cityId: [
+                        { required: true, type: 'string', message: '请选择投放地区', trigger: 'change' }
+                    ]
+                },
             action: 2,
             // 查询开关
             searchOnoff: false,
@@ -372,7 +369,7 @@ export default {
                 // 当前页索引
                 currentIndex: 0,
                 // 总条数
-                totalCounts: -1
+                totalCounts: 0
             },
             // 已选择元数据
             resultList: [],
@@ -382,100 +379,14 @@ export default {
             showSelect: [],
             // 已选广告位月份按钮索引
             monthIndex: 0,
+            // 广告位名称组合
+            adNames: '',
             // 选择时间页面日期集合存储
-            timePageMonth: [],
-            areaId: 1,
+            timePageMonth: []
         }
     },
     mounted() {
         let timeStap = Date.parse(new Date());
-        // 初始化下拉
-        setTimeout(() => {
-            let postData = this.searchInfo;
-            $("#pageName").select2({
-                allowClear:true,
-                ajax: {
-                    transport: function(params, success, failure) {
-                        if (!params.data.term) {
-                            axios.post('/isp-kongming/ad/channelSelect',{
-                                // 媒体名称id
-                                mediaId: postData.mediaId,
-                                // 页面类型
-                                tagId: postData.labelTypeId,
-                                name: params.iterm
-                            }).then((res)=> {
-                                success(res.data.result);
-                            }).catch((err) => {
-                                failure();
-                            })
-                            return false;
-                        }
-                        axios.post('/isp-kongming/ad/channelSelect',{
-                            // 媒体名称id
-                            mediaId: postData.mediaId,
-                            // 页面类型
-                            tagId: postData.labelTypeId,
-                            name: params.data.term
-                        }).then((res)=> {
-                            success(res.data.result);
-                        }).catch((err) => {
-                            failure();
-                        })
-
-
-                    },
-                    processResults: function (data, params) {
-                      let datas = [];
-                      for (let i = 0; i < data.length; i++) {
-                          datas.push({
-                              id: data[i].channelId,
-                              text: 'text',
-                              name: data[i].channelName
-                          })
-                      }
-                      let searchData = datas.slice(0, 10);
-
-                      return {
-                          results: searchData
-                      };
-                    },
-                },
-                escapeMarkup: function (markup) { return markup; },
-                //minimumInputLength: 1,
-                templateSelection(repo) {
-                    if (repo.loading){
-
-                    }
-                    var markup = `<span id='${repo.id}'>${repo.name}</span>`;
-                    return markup;
-                },
-                templateResult(repo) {
-                    if (repo.loading) {
-
-                    };
-                    var markup = `<span id='${repo.id}'>${repo.name}</span>`;
-                    return markup;
-                }
-            });
-
-            $("#pageName").on('change', ()=> {
-                let data = $('#pageName').select2("data")[0];
-                if (data) {
-                    this.searchInfo.channelId = data.id;
-                    this.searchInfo.pageName = data.id;
-                    this.pageName = parseInt(data.id);
-                    this.initAdType();
-                }
-            })
-
-
-            // 初始化广告类型
-            $("#adType").select2({
-                multiple: true,
-                allowClear:true
-            });
-
-        })
         this.$http.get(`/isp-kongming/ad/mediaSelect`).then((res) => {
             if (res.data.errorCode == 0) {
                 this.mediaNameList = res.data.result;
@@ -502,9 +413,8 @@ export default {
                 this.searchInfo.labelTypeId = this.pageTypeList[0].tagId;
                 this.initPageName();
                 setTimeout(() => {
-                    this.choosePage(this.pageTypeList[0].tagName, this.pageTypeList[0].tagId, 0);
-                    // let list = document.querySelectorAll('.pageType');
-                    // list[0].className += ' active';
+                    let list = document.querySelectorAll('.pageType');
+                    list[0].className += ' active';
                 })
             }
             else {
@@ -531,7 +441,7 @@ export default {
             this.$http.get(urlList.getInfo+"?id="+id).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.proMess = res.data.result;
-                    window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));//小阳哥写的
+                    window.localStorage.setItem('proMess', JSON.stringify(this.proMess));//小阳哥写的
                 }
               }).catch((err) => {
             })
@@ -544,90 +454,65 @@ export default {
         this.searchInfoTxt = [false, false, false];
     },
     methods: {
-        showCollapse(){
-            this.shrinkMes.collapse=!this.shrinkMes.collapse
-        },
-        // 日期判断
-        disStart(date) {
-            let year = new Date().getFullYear();
-            let month = new Date().getMonth();
-            return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 12, 1).getTime();
-        },
-        disEnd(date) {
-            if (this.searchInfo.beginTime) {
-                let year = this.searchInfo.beginTime.split('-')[0];
-                let month = this.searchInfo.beginTime.split('-')[1];
-                return date && date.valueOf() < new Date(year, month-1).getTime() || date && date.valueOf() > new Date(year, 12, 1).getTime();
-            }
-            else {
-                let year = new Date().getFullYear();
-                let month = new Date().getMonth();
-                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 12, 1).getTime();
-            }
-        },
         // 格式化数据
         initResult(data) {
-            let time = new Date();
-            let year = time.getFullYear();
-            let month = time.getMonth() + 1;
-            let crrentTime = new Date(`${year}-${month}`);
             let adStateList = [];
             let arr = [];
             let monthList = [];
             let adList = data.adStateList;
+            if (adList.length > 0) {
+                for (let i = 0; i < adList.length; i++) {
+                    let obj = adList[i];
+                    for (let attr in obj) {
+                       monthList.push(attr);
+                       let ad = obj[attr];
+                       let monthData = {};
+                       let dayStates = [];
+                       let skuIdList = [];
+                       let total = 0;
+                       monthData.time = attr;
+                       monthData.dayStatus = obj[attr];
+                       //ad.sort(this.compare('day'));
+                       // 按照日期
+                       for (let j = 0; j < ad.length; j++) {
+                        //    dayStates.push(ad[j].skuStatus);
+                           dayStates[ad[j].day - 1] = ad[j].skuStatus;
+                           skuIdList[ad[j].day -1 ] = ad[j].skuId;
+                           total += ad[j].skuPrice;
+                       }
 
-            let obj = Object.assign({}, adList);
-            for (let attr in obj) {
-               monthList.push(attr);
-               let ad = obj[attr];
-               let monthData = {};
-               let dayStates = [];
-               let skuIdList = [];
-               let total = 0;
-               monthData.time = attr;
-               monthData.dayStatus = obj[attr];
-               //ad.sort(this.compare('day'));
-               // 按照日期
+                       for (let k = 0; k < 31; k++ ) {
+                           if (dayStates[k] == 'SKU_STATUS_LOCKED' || dayStates[k] == 'SKU_STATUS_SALED' || dayStates[k] == 'SKU_STATUS_RUNNING') {
+                               dayStates[k] = '2'
+                           }
+                           if (dayStates[k] == 'SKU_STATUS_NONE' || dayStates[k] =='SKU_STATUS_DELETE' || dayStates[k] == 'SKU_STATUS_IDLE') {
+                               dayStates[k]  = '1';
+                           }
+                           if (!dayStates[k]) {
+                               dayStates[k]  = '3';
+                           }
+                       }
 
-               for (let j = 0; j < ad.length; j++) {
-                //    dayStates.push(ad[j].skuStatus);
-                   dayStates[ad[j].day - 1] = ad[j].skuStatus;
-                   skuIdList[ad[j].day -1 ] = ad[j].skuId;
-                   total += parseFloat(ad[j].skuPrice);
-               }
-
-               for (let k = 0; k < 31; k++ ) {
-
-                   if (dayStates[k] == 'SKU_STATUS_LOCKED' || dayStates[k] == 'SKU_STATUS_SALED' || dayStates[k] == 'SKU_STATUS_RUNNING') {
-                       dayStates[k] = '2'
-                   }
-                   if (dayStates[k] == 'SKU_STATUS_NONE' || dayStates[k] =='SKU_STATUS_DELETE' || dayStates[k] == 'SKU_STATUS_IDLE') {
-                       dayStates[k]  = '1';
-                   }
-                   if (!dayStates[k]) {
-                       dayStates[k]  = '3';
-                   }
-                   if (crrentTime > new Date(`${attr}-${k+1}`)) {
-                       dayStates[k]  = '3';
-                   }
-
-
-               }
-
-               monthData.kprice = (total/30).toFixed(2);
-               monthData.state = dayStates.join(',');
-               monthData.skuIdList = skuIdList;
-               arr.push(monthData);
-            }
-
-            // 存储日期
-            monthList.sort();
-            for (let i = 0; i < monthList.length; i++) {
-                for (let j = 0; j < arr.length; j++) {
-                    if (arr[j].time == monthList[i]) {
-                        adStateList.push(arr[j]);
+                       monthData.kprice = (total/30).toFixed(2);
+                       monthData.state = dayStates.join(',');
+                       monthData.skuIdList = skuIdList;
+                       arr.push(monthData);
                     }
                 }
+                // 存储日期
+                monthList.sort();
+                for (let i = 0; i < monthList.length; i++) {
+                    for (let j = 0; j < arr.length; j++) {
+                        if (arr[j].time == monthList[i]) {
+                            adStateList.push(arr[j]);
+                        }
+                    }
+                }
+            }
+            else {
+                // for (let i = 0; i < 31; i++) {
+                //     adStateList
+                // }
             }
             return adStateList;
         },
@@ -671,160 +556,113 @@ export default {
             let postData = this.searchInfo;
             this.searchInfo.pageName = '';
             if (postData.labelTypeId && postData.mediaId) {
-                $("#pageName").select2({
-                    allowClear:true,
-                    ajax: {
-                        transport: function(params, success, failure) {
-                            if (!params.data.term) {
-                                axios.post('/isp-kongming/ad/channelSelect',{
-                                    // 媒体名称id
-                                    mediaId: postData.mediaId,
-                                    // 页面类型
-                                    tagId: postData.labelTypeId,
-                                    name: params.iterm
-                                }).then((res)=> {
-                                    success(res.data.result);
-                                }).catch((err) => {
-                                    failure();
-                                })
-                                return false;
-                            }
-                            axios.post('/isp-kongming/ad/channelSelect',{
-                                // 媒体名称id
-                                mediaId: postData.mediaId,
-                                // 页面类型
-                                tagId: postData.labelTypeId,
-                                name: params.data.term
-                            }).then((res)=> {
-                                success(res.data.result);
-                            }).catch((err) => {
-                                failure();
-                            })
-
-
-                        },
-                        processResults: function (data, params) {
-                          let datas = [];
-                          for (let i = 0; i < data.length; i++) {
-                              datas.push({
-                                  id: data[i].channelId,
-                                  text: 'text',
-                                  name: data[i].channelName
-                              })
-                          }
-                          let searchData = datas.slice(0, 10);
-
-                          return {
-                              results: searchData
-                          };
-                        },
-                    },
-                    escapeMarkup: function (markup) { return markup; },
-                    //minimumInputLength: 1,
-                    templateSelection(repo) {
-                        if (repo.loading){
-
-                        }
-                        var markup = `<span id='${repo.id}'>${repo.name}</span>`;
-                        return markup;
-                    },
-                    templateResult(repo) {
-                        if (repo.loading) {
-
-                        };
-                        var markup = `<span id='${repo.id}'>${repo.name}</span>`;
-                        return markup;
+                this.$http.post('/isp-kongming/ad/channelSelect', {
+                    // 媒体名称id
+                    mediaId: postData.mediaId,
+                    // 页面类型
+                    tagId: postData.labelTypeId,
+                    name: ''
+                }).then((res) => {
+                    if (res.data.errorCode == 0) {
+                        this.searchData.pageNameList = Object.assign([], res.data.result);
+                        this.searchList.pageNameList = Object.assign([], res.data.result).slice(0, 10);
                     }
-                });
+                    else {
+                        this.$Modal.info({
+                            title: '提示',
+                            content: res.data.rspMsg.errorMsg
+                        });
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
             }
         },
         initAdType() {
             let postData = this.searchInfo;
             this.searchInfo.Type = '';
-            let _this = this;
             // 初始化广告类型
-            setTimeout(() => {
-                initSelect('#adType', '/isp-kongming/ad/placeTypeSelect', {
-                    channelId: this.searchInfo.pageName,
-                    mediaId: this.searchInfo.mediaId,
-                    name: ''
-                }, 'typeId', 'typeName');
-
-                $('#adType').on('change', () => {
-                    let data = $('#adType').select2('data');
-                    let str = [];
-                    if (data.length > 0) {
-                        for (let i = 0; i < data.length; i++) {
-                            str.push(data[i].id);
-                        }
-                        this.searchInfo.placeTypeSelect = str.join(',');
-                    }
-                })
+            this.$http.post(`/isp-kongming/ad/placeTypeSelect`, {
+                // 广告类型
+                channelId: this.searchInfo.pageName,
+                mediaId: this.searchInfo.mediaId,
+                name: '',
+            }).then((res) => {
+                if (res.data.errorCode == 0) {
+                    this.searchData.typeList = Object.assign([], res.data.result);
+                    this.searchList.typeList = Object.assign([], res.data.result).slice(0, 20);;
+                }
+                else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.rspMsg.errorMsg
+                    });
+                }
+            }).catch((err) => {
+                console.log(err);
             })
         },
         initModels() {
-            // 初始化车型
             this.searchInfo.serialId = '';
-            setTimeout(()=> {
-                initSelect('#serialId', '/isp-kongming/ad/modelInfo', {
-                    modelId: 0,
-                    name: ''
-                }, 'value', 'name');
-
-
-                $('#serialId').on('change', () => {
-                    let data = $('#serialId').select2('data');
-                    let str = [];
-                    if (data.length > 0) {
-                        for (let i = 0; i < data.length; i++) {
-                            str.push(data[i].id);
-                        }
-                        this.searchInfo.serialId = str.join(',');
-                    }
-                })
+            // 初始化车型
+            this.$http.post('/isp-kongming/ad/modelInfo', {
+                modelId: 0,
+                name: ''
+            }).then((res) => {
+                if (res.data.errorCode == 0) {
+                  this.searchData.modelList = Object.assign([], res.data.result);
+                  this.searchList.modelList = Object.assign([], res.data.result).slice(0, 10);
+                }
+                else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.rspMsg.errorMsg
+                    });
+                }
+            }).catch((err) => {
+                console.log(err);
             })
         },
         initArea(id) {
             // 初始化地区
-            this.areaId = id;
             this.searchInfo.cityId = '';
-            setTimeout( () => {
-                initSelect('#cityId', '/isp-kongming/ad/areaInfo', {
-                    cityId: id,
-                    name: ''
-                }, 'value', 'name');
-
-                $('#cityId').on('change', () => {
-                    let data = $('#cityId').select2('data');
-                    let str = [];
-                    if (data.length > 0) {
-                        for (let i = 0; i < data.length; i++) {
-                            str.push(data[i].id);
-                        }
-                        this.searchInfo.cityId = str.join(',');
-                    }
-                })
+            this.$http.post('/isp-kongming/ad/areaInfo',{
+                cityId: id,
+                name: ''
+            }).then((res) => {
+                if (res.data.errorCode == 0) {
+                    this.searchData.areaList = Object.assign([], res.data.result);
+                    this.searchList.areaList = Object.assign([], res.data.result).slice(0, 10);
+                }
+                else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.rspMsg.errorMsg
+                    });
+                }
+            }).catch((err) => {
+                console.log(err);
             })
         },
         initBrand() {
             // 初始化品牌
             this.searchInfo.brandId = '';
-            setTimeout(() => {
-                initSelect('#brandId', '/isp-kongming/ad/brandInfo', {
-                    brandId: 0,
-                    name: ''
-                }, 'value', 'name');
-
-                $('#brandId').on('change', () => {
-                    let data = $('#brandId').select2('data');
-                    let str = [];
-                    if (data.length > 0) {
-                        for (let i = 0; i < data.length; i++) {
-                            str.push(data[i].id);
-                        }
-                        this.searchInfo.brandId = str.join(',');
-                    }
-                })
+            this.$http.post('/isp-kongming/ad/brandInfo', {
+                brandId: -1,
+                name: ''
+            }).then((res) => {
+                if (res.data.errorCode == 0) {
+                    this.searchData.brandList = Object.assign([], res.data.result);
+                    this.searchList.brandList = Object.assign([], res.data.result).slice(0, 10);
+                }
+                else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.rspMsg.errorMsg
+                    });
+                }
+            }).catch((err) => {
+                console.log(err);
             })
         },
         render() {
@@ -833,27 +671,8 @@ export default {
             this.searchInfo.serialId = this.serialId.join(',');
             this.searchInfo.cityId = this.cityId.join(',');
             this.searchInfo.brandId = this.brandId.join(',');
-            // 初始化页数 隐藏无结果选项
-            //this.paging.totalCounts = -1;
+
             // /isp-kongming/ad/select
-            let search = {
-                // 媒体名称id
-                mediaId: this.searchInfo.mediaId,
-                // 页面名称
-                channelId: this.searchInfo.pageName,
-                // 页面类型
-                adTagId:  this.searchInfo.labelTypeId,
-                // 广告类型
-                placeTypeList: this.searchInfo.Type,
-                // 投放车型
-                modelIdList: this.searchInfo.serialId,
-                // // 投放地区
-                cityIdList: this.searchInfo.cityId,
-                // // 投放品牌
-                brandIdList: this.searchInfo.brandId
-            };
-            window.sessionStorage.setItem('searchInfo', JSON.stringify(search));
-            // /isp-kongming/ad/selec
             this.$http.post('/isp-kongming/ad/select',{
                 // 开始时间
                 beginTime: `${this.searchInfo.beginTime}-01`,
@@ -866,7 +685,7 @@ export default {
                 // 页面名称
                 channelId: this.searchInfo.pageName,
                 // 页面类型
-                adTagId:  this.searchInfo.labelTypeId,
+                adAdTagId:  this.searchInfo.labelTypeId,
                 // 广告类型
                 placeTypeList: this.searchInfo.Type,
                 // 投放车型
@@ -882,26 +701,16 @@ export default {
                     // this.paging.count = this.tableList.length;
                     let datas = Object.assign([], res.data.result);
                     for (let i = 0; i < datas.length; i++) {
-                        let str = JSON.stringify(datas[i].adStateList);
-                         datas[i].adStateLists = str;
                          datas[i].adStateList = this.initResult(datas[i]);
                     }
-
                     this.tableList = Object.assign([], datas);
                     for (let i = 0; i< this.tableList.length;i++) {
                         this.$set(this.checkBoxStatus, i, false);
                     }
-                    console.log(datas[0].totalCounts);
+
                     if (datas[0].totalCounts > 0) {
                         this.paging.totalCounts = datas[0].totalCounts;
-                        this.searching = false;
                     }
-                    else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
-                        alert(1);
-                        this.paging.totalCounts = 0;
-                        this.searching = false;
-                    }
-
                     // action 1  进行新增操作
                     if (this.$router.currentRoute.query.action) {
                         //this.selectTableData = JSON.parse(window.localStorage.getItem('timePageList'));
@@ -922,6 +731,9 @@ export default {
                         this.searchInfo.Type = this.Type.join(',');
                     }
 
+
+                    this.adNames = `${this.searchInfo.mediaName}/${this.searchData.pageName}`;
+
                     for (let i = 0; i < datas.length; i++) {
                         if (this.checkBoxList.indexOf(datas[i].adPlaceId) > -1) {
                             this.$set(this.checkBoxStatus, i, true);
@@ -930,10 +742,6 @@ export default {
                     this.redrawed();
                 }
                 else {
-                    this.searching = false;
-                    this.searchInfo.pageIndex = 1;
-                    this.searchInfo.pageSize = 10;
-                    this.paging.totalCounts = 0;
                     this.$Modal.info({
                         title: '提示',
                         content: res.data.rspMsg.errorMsg
@@ -941,11 +749,169 @@ export default {
                 }
             }).catch((err) => {
                 console.log(err);
-                this.searching = false;
-                this.searchInfo.pageIndex = 1;
-                this.searchInfo.pageSize = 10;
-                this.paging.totalCounts = 0;
             })
+        },
+        remoteMethod1 (query, id) {
+            if (query == '') {
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.loading1 = false;
+                    this.searchList.pageNameList = Object.assign([], this.searchData.pageNameList).slice(0, 10);
+                },200)
+
+            } else {
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.$http.post('/isp-kongming/ad/channelSelect', {
+                        mediaId: this.searchInfo.mediaId,
+                        tagId: this.searchInfo.labelTypeId,
+                        name: query
+                    }).then((res) => {
+                        if (res.data.errorCode == 0) {
+                            this.loading1 = false;
+                            this.searchList.pageNameList = res.data.result;
+                        }
+                    }).catch((res) => {
+                        this.loading1 = false;
+                    })
+                }, 200)
+            }
+        },
+        remoteMethod2 (query) {
+            if (query == '') {
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.loading1 = false;
+                    this.searchList.modelList = Object.assign([], this.searchData.modelList).slice(0, 10);;
+                },200)
+
+            } else {
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.searchInfo.Type = '';
+                    // 初始化广告类型
+                    this.$http.post(`/isp-kongming/ad/placeTypeSelect`, {
+                        // 广告类型
+                        channelId: this.searchInfo.pageName,
+                        mediaId: this.searchInfo.mediaId,
+                        name: query,
+                    }).then((res) => {
+                        this.loading1 = false;
+                        if (res.data.errorCode == 0) {
+                            this.searchList.typeList = res.data.result.slice(0, 20);
+                        }
+                        else {
+                            this.$Modal.info({
+                                title: '提示',
+                                content: res.data.rspMsg.errorMsg
+                            });
+                        }
+                    }).catch((err) => {
+                        this.loading1 = false;
+                        console.log(err);
+                    })
+                }, 200)
+            }
+        },
+        remoteMethod3 (query) {
+            if (query == '') {
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.loading1 = false;
+                    this.searchList.modelList = Object.assign([], this.searchData.modelList).slice(0, 10);;
+                },200)
+
+            } else {
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.searchInfo.serialId = '';
+                    // 初始化车型
+                    this.$http.post('/isp-kongming/ad/modelInfo', {
+                        modelId: 0,
+                        name: query
+                    }).then((res) => {
+                        this.loading1 = false;
+                        if (res.data.errorCode == 0) {
+                          this.searchList.modelList = res.data.result;
+                        }
+                        else {
+                            this.$Modal.info({
+                                title: '提示',
+                                content: res.data.rspMsg.errorMsg
+                            });
+                        }
+                    }).catch((err) => {
+                        this.loading1 = false;
+                        console.log(err);
+                    })
+                }, 200)
+            }
+        },
+        remoteMethod4 (query) {
+            if (query == '') {
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.loading1 = false;
+                    this.searchList.areaList = Object.assign([], this.searchData.areaList).slice(0, 10);
+                },200)
+
+            } else {
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.searchInfo.cityId = '';
+                    this.$http.post('/isp-kongming/ad/areaInfo',{
+                        id: id,
+                        name: query
+                    }).then((res) => {
+                        this.loading1 = false;
+                        if (res.data.errorCode == 0) {
+                            this.searchList.areaList = res.data.result;
+                        }
+                        else {
+                            this.$Modal.info({
+                                title: '提示',
+                                content: res.data.rspMsg.errorMsg
+                            });
+                        }
+
+                    }).catch((err) => {
+                        this.loading1 = false;
+                        console.log(err);
+                    })
+                }, 200)
+            }
+        },
+        remoteMethod5 (query) {
+            if (query == '') {
+                this.loading1 = true;
+                setTimeout(() => {
+                    this.loading1 = false;
+                    this.searchList.brandList = Object.assign([], this.searchData.brandList).slice(0, 10);;
+                },200)
+
+            } else {
+                this.loading1 = true;
+
+                this.searchInfo.brandId = '';
+                this.$http.post('/isp-kongming/ad/brandInfo', {
+                    brandId: -1,
+                    name: query
+                }).then((res) => {
+                    this.loading1 = false;
+                    if (res.data.errorCode == 0) {
+                        this.searchList.brandList = res.data.result;
+                    }
+                    else {
+                        this.$Modal.info({
+                            title: '提示',
+                            content: res.data.rspMsg.errorMsg
+                        });
+                    }
+                }).catch((err) => {
+                    this.loading1 = false;
+                    console.log(err);
+                })
+            }
         },
         chooseMedia(name, id, index) {
             this.searchInfo.mediaName = name;
@@ -994,7 +960,7 @@ export default {
                     this.searchInfoTxt = [true, false, false];
                     this.initModels();
                     break;
-                case '按省区发布':
+                case '省区页':
                     this.searchInfoTxt = [false, true, false];
                     this.initArea(2);
                     break;
@@ -1019,27 +985,15 @@ export default {
                     break;
                 case '论坛资源页':
                     this.searchInfoTxt = [false, false, false];
-                    break;
-                case '省区品牌页':
-                    this.searchInfoTxt = [false, true, true];
-                    this.initArea(2);
-                    this.initBrand();
-
             }
             this.initPageName();
             this.redrawed();
         },
         search(name) {
-
-            if(this.timeTxt) {
-                return false;
-            }
-
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.searching = true;
-                    this.paging.totalCounts = -1;
                     this.render();
+                    this.adName = `${this.searchInfo.mediaName}`;
                 } else {
                     //this.$Message.error('查询失败!');
                 }
@@ -1141,19 +1095,21 @@ export default {
                             "adPosId": this.tableList[index].adPlaceId,
                             // 广告位名称
                             "name": this.tableList[index].name,
-                            "adName": this.tableList[index].name,
                             // 刊例价格
-                            "price": parseFloat(currentList[i].kprice),
+                            "price": parseFloat(currentList[i].kprice).toFixed(2),
                             // 用途
                             "useStyle":0,
                             // 刊例价单位
                             "priceUnit": 0,
-                            "brandId": this.tableList[index].brandId,
+                            //品牌编号
+                            "brandId": 0,
+                            // 区域编号
+                            "areaId":0,
+                            // 城市编号
+                            "adCityId": 0,
                             "dataList": [],
                             "kid": this.tableList[index].kid,
                             "cityId": this.tableList[index].cityId,
-                            "adCityId": this.tableList[index].cityId,
-                            "areaId": this.tableList[index].cityId,
                             "adType": this.tableList[index].adType,
                             "labelTypeId": this.tableList[index].labelTypeId,
                             "brandId": this.tableList[index].brandId,
@@ -1165,14 +1121,13 @@ export default {
                             "width": this.tableList[index].width,
                             // 日期
                             "adStateList": currentList[i].state.split(','),
-                            "adStateLists": this.tableList[index].adStateLists,
                             // "id": obj.id,
                             "channelName": this.tableList[index].channelName,
                             "kprice": parseFloat(currentList[i].kprice).toFixed(2)
                         })
                     }
                     else {
-                        // 当前日期广告位列表不为空 判断列表中是否有重复ID广告位
+                    // 当前日期广告位列表不为空 判断列表中是否有重复ID广告位
                         let dataStatus = false;
                         for (let i = 0; i < this.selectTableData[time].length; i++) {
                             if (obj.adPlaceId == this.selectTableData[time][i].adPlaceId) {
@@ -1219,7 +1174,6 @@ export default {
                                 "skuIdList": currentList[i].skuIdList,
                                 // 日期
                                 "adStateList": currentList[i].state.split(','),
-                                "adStateLists": this.tableList[index].adStateLists,
                                 // "id": obj.id,
                                 "channelName": this.tableList[index].channelName,
                                 "kprice": parseFloat(currentList[i].kprice).toFixed(2)
@@ -1386,26 +1340,8 @@ export default {
            this.searchInfo.beginTime = date;
            this.resetTime();
 
-           if (this.searchInfo.endTime && this.searchInfo.beginTime) {
-               let endYear = this.searchInfo.endTime.split('-')[0];
-               let endMonth = this.searchInfo.endTime.split('-')[1];
-               let startYear = this.searchInfo.beginTime.split('-')[0];
-               let startMonth = this.searchInfo.beginTime.split('-')[1];
-               if (endYear != startYear && startYear > endYear) {
-                   this.timeTxt = '开始时间不能大于结束时间';
-               }
-               else if (endYear != startYear && startYear < endYear) {
-                   this.timeTxt = '选择时间不能跨年';
-               }
-               else if (endYear == startYear && startMonth > endMonth){
-                    this.endTime = this.beginTime;
-                    this.timeTxt = '';
-                    document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
-               }
-               else {
-                   this.timeTxt = '';
-                   document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
-               }
+           if (this.searchInfo.beginTime && this.searchInfo.endTime) {
+            //    this.initSearchInfo();
            }
 
        },
@@ -1414,26 +1350,8 @@ export default {
             this.searchInfo.endTime = date;
             this.resetTime();
 
-            if (this.searchInfo.endTime && this.searchInfo.beginTime) {
-                let endYear = this.searchInfo.endTime.split('-')[0];
-                let endMonth = this.searchInfo.endTime.split('-')[1];
-                let startYear = this.searchInfo.beginTime.split('-')[0];
-                let startMonth = this.searchInfo.beginTime.split('-')[1];
-                if (endYear != startYear && startYear > endYear) {
-                    this.timeTxt = '开始时间不能大于结束时间';
-                }
-                else if (endYear != startYear && startYear < endYear) {
-                    this.timeTxt = '选择时间不能跨年';
-                }
-                else if (endYear == startYear && startMonth > endMonth){
-                     this.endTime = this.beginTime;
-                     this.timeTxt = '';
-                     document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
-                }
-                else {
-                    this.timeTxt = '';
-                    document.querySelector('#endTime').className = 'ivu-form-item ivu-form-item-required';
-                }
+            if (this.searchInfo.beginTime && this.searchInfo.endTime) {
+                //this.initSearchInfo();
             }
 
         },
@@ -1455,7 +1373,7 @@ export default {
         selectTime() {
             // 进行新增操作
             if (this.action == 1) {
-                window.sessionStorage.setItem('insertData', JSON.stringify(this.selectTableData));
+                window.localStorage.setItem('insertData', JSON.stringify(this.selectTableData));
             }
 
             for(let i = 0; i < this.timePageMonth.length; i++) {
@@ -1465,20 +1383,20 @@ export default {
             }
 
             this.monthList.sort();
-            window.sessionStorage.setItem('monthList', JSON.stringify(this.monthList));
-            window.sessionStorage.setItem('tableData', JSON.stringify(this.selectTableData));
-            window.sessionStorage.setItem('checkBoxList', JSON.stringify(this.checkBoxList));
-
+            window.localStorage.setItem('monthList', JSON.stringify(this.monthList));
+            window.localStorage.setItem('tableData', JSON.stringify(this.selectTableData));
+            window.localStorage.setItem('checkBoxList', JSON.stringify(this.checkBoxList));
+            window.localStorage.setItem('adName', this.adNames);
 
             this.$router.push({name:'chooseTime',query: {action: this.action}});
         },
         // 查看广告位
         viewAd(width, height, obj) {
             let size = `${width} * ${height}`;
-            // window.sessionStorage.setItem('viewTime', this.searchInfo.beginTime);
-            window.localStorage.setItem('viewAd', JSON.stringify(obj));
             this.$router.push('viewAd');
-            this.$router.push({path: 'viewAd', query: {'viewTime': this.searchInfo.beginTime}})
+            window.localStorage.setItem('adName', this.adNames);
+            window.localStorage.setItem('size', size);
+            window.localStorage.setItem('viewAd', JSON.stringify(obj));
         },
         // 选择投放品牌
         checkBrand() {
@@ -1498,16 +1416,11 @@ export default {
         },
         // 重置搜索条件 清空车型 地区 品牌
         resetSearchInfo() {
-            $("#pageName").val(null).trigger("change");
-            $("#adType").val(null).trigger("change")
-            $("#serialId").val(null).trigger("change")
-            $("#cityId").val(null).trigger("change")
-            $("#brandId").val(null).trigger("change")
+
             // 广告类型
             if (this.Type.length > 0) {
                 this.Type = [];
                 this.searchInfo.typeId = '';
-                //this.searchData.typeList = [];
             }
             // 城市
             if (this.cityId.length > 0) {
