@@ -357,7 +357,7 @@ export default {
                   this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
                 }
                 if(this.priceArr.totalBuy!=0){
-                  this.rate=(this.priceArr.totalDelivery/this.priceArr.totalBuy).toFixed(2)
+                  this.priceArr.rate=(this.priceArr.totalDelivery/this.priceArr.totalBuy).toFixed(2)
                 }else{
                   this.rate=0
                 }
