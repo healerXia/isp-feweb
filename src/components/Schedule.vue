@@ -120,6 +120,7 @@
                 padding-right: 0;   
                 white-space: nowrap;
                 text-overflow:ellipsis; 
+                height: 24px;
                 overflow: hidden;
                 .status{ 
                     padding: 0;
@@ -141,7 +142,7 @@
            td.cell{
                 padding: 0;
                 margin: 0;
-                height: 30px;
+                height: 25px;
                 width:25px;
            }
         }
