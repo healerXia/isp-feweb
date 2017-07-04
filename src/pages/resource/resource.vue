@@ -799,7 +799,7 @@ export default {
             };
             window.sessionStorage.setItem('searchInfo', JSON.stringify(search));
             // /isp-kongming/ad/selec
-            this.$http.post('mock/resource', {
+            this.$http.post('/isp-kongming/ad/select', {
                 // 开始时间
                 beginTime: `${this.searchInfo.beginTime}-01`,
                 // 结束时间
