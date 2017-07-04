@@ -595,8 +595,12 @@ export default {
                     console.log(err)
                 })
             } else {
+                console.log(JSON.stringify({
+                    "projectId": this.proMess.id,
+                    "projectName": this.proMess.projectName,
+                    "detailList": datas
+                }));
                 this.$http.post('/isp-kongming/adorder/insert', {
-                    "action": 0,
                      "projectId": this.proMess.id,
                      "projectName": this.proMess.projectName,
                      "detailList": datas
@@ -697,7 +701,6 @@ export default {
            else {
                url = '/isp-kongming/adorder/insert';
                this.$http.post(url, {
-                    "action": 0,
                     "projectId": this.proMess.id,
                     "projectName": this.proMess.projectName,
                     "detailList": datas
