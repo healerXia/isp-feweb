@@ -213,7 +213,7 @@ export default {
          color: white;
      }
     .menuCircle{width: 6px;height: 6px;border-radius: 3px;border: 1px solid white;display: inline-block;
-        margin-bottom: 2px;margin:0 10px;}
+        margin-bottom: 2px;margin:0 6px;}
 
     .ivu-menu-vertical .ivu-menu-submenu .ivu-menu-item {
         padding-left: 0;
@@ -228,7 +228,6 @@ export default {
          display: block;
          width: 100%;
          height: 100%;
-         padding-left: 20px;
          line-height: 56px;
      }
     .white{color: white}

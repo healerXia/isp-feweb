@@ -1,0 +1,3393 @@
+{
+    "errorCode": 0,
+    "errorMsg": "OK",
+    "result": [
+        {
+            "adPlaceId": 17150,
+            "adPlaceSkuList": null,
+            "pageIndex": 0,
+            "pageSize": 0,
+            "totalCounts": 4,
+            "mediaId": 180,
+            "adTagId": 0,
+            "channelId": 671,
+            "placeTypeList": null,
+            "cityId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "name": "易车网/易车网首页（全国通发）/顶部通栏2",
+            "height": 80,
+            "width": 860,
+            "adStateList": {
+                "2017-07": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_NONE",
+                        "skuId": "126628"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_NONE",
+                        "skuId": "126629"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_NONE",
+                        "skuId": "126630"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_NONE",
+                        "skuId": "126631"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_NONE",
+                        "skuId": "126632"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_NONE",
+                        "skuId": "126633"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_NONE",
+                        "skuId": "126634"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_NONE",
+                        "skuId": "126635"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126636"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126637"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126638"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126639"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126640"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126641"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126642"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126643"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126644"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126645"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126646"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126647"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126648"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126649"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126650"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126651"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126652"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126653"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126654"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126655"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126656"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126657"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126658"
+                    }
+                ],
+                "2017-11": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126659"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126660"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126661"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126662"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126663"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126664"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126665"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126666"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126667"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126668"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126669"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126670"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126671"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126672"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126673"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126674"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126675"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126676"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126677"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126678"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126679"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126680"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126681"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126682"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126683"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126684"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126685"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126686"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126687"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126688"
+                    }
+                ],
+                "2017-12": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126689"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126690"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126691"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126692"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126693"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126694"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126695"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126696"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126697"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126698"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126699"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126700"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126701"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126702"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126703"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126704"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126705"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126706"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126707"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126708"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126709"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126710"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126711"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126712"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126713"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126714"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126715"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126716"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126717"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126718"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126719"
+                    }
+                ],
+                "2017-07": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126536"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126537"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126538"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126539"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126540"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126541"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126542"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126543"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126544"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126545"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126546"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126547"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126548"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126549"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126550"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126551"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126552"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126553"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126554"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126555"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126556"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126557"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126558"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126559"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126560"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126561"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126562"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126563"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126564"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126565"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126566"
+                    }
+                ],
+                "2017-08": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126567"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126568"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126569"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126570"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126571"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126572"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126573"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126574"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126575"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126576"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126577"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126578"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126579"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126580"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126581"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126582"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126583"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126584"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126585"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126586"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126587"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126588"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126589"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126590"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126591"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126592"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126593"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126594"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126595"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126596"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126597"
+                    }
+                ],
+                "2017-09": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126598"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126599"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126600"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126601"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126602"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126603"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126604"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126605"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126606"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126607"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126608"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126609"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126610"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "126611"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126612"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126613"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "126614"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126615"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126616"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126617"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126618"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126619"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126620"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126621"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126622"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126623"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126624"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126625"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126626"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "126627"
+                    }
+                ]
+            }
+        },
+        {
+            "adPlaceId": 17749,
+            "adPlaceSkuList": null,
+            "pageIndex": 0,
+            "pageSize": 0,
+            "totalCounts": 4,
+            "mediaId": 180,
+            "adTagId": 0,
+            "channelId": 671,
+            "placeTypeList": null,
+            "cityId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "name": "易车网/易车网首页（全国通发）/顶部通栏3",
+            "height": 80,
+            "width": 230,
+            "adStateList": {
+                "2017-10": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129388"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129389"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129390"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129391"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129392"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129393"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129394"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129395"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129396"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129397"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129398"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129399"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129400"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129401"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129402"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129403"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129404"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129405"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129406"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129407"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129408"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129409"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129410"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129411"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129412"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129413"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129414"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129415"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129416"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129417"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129418"
+                    }
+                ],
+                "2017-11": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129419"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129420"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129421"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129422"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129423"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129424"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129425"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129426"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129427"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129428"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129429"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129430"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129431"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129432"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129433"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129434"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129435"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129436"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129437"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129438"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129439"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129440"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129441"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129442"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129443"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129444"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129445"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129446"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129447"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129448"
+                    }
+                ],
+                "2017-12": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129449"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129450"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129451"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129452"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129453"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129454"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129455"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129456"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129457"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129458"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129459"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129460"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129461"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129462"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129463"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129464"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129465"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129466"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129467"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129468"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129469"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129470"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129471"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129472"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129473"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129474"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129475"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129476"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129477"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129478"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129479"
+                    }
+                ],
+                "2017-07": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129296"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129297"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129299"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129300"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129301"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129302"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129303"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129304"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129305"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129306"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129307"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129308"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129309"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129310"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129311"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129312"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129313"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129314"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129315"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129316"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129317"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129318"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129319"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129320"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129321"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129322"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129323"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129324"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129325"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129326"
+                    }
+                ],
+                "2017-08": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129327"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129328"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129329"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129330"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129331"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129332"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129333"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129334"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129335"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129336"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129337"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129338"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129339"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129340"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129341"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129342"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129343"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129344"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129345"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129346"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129347"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129348"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129349"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129350"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129351"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129352"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129353"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129354"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129355"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129356"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129357"
+                    }
+                ],
+                "2017-09": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129358"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129359"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129360"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129361"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129362"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129363"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129364"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129365"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129366"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129367"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129368"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129369"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129370"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129371"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129372"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129373"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129374"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129375"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129376"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129377"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129378"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129379"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129380"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129381"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129382"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129383"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129384"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129385"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129386"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129387"
+                    }
+                ]
+            }
+        },
+        {
+            "adPlaceId": 17752,
+            "adPlaceSkuList": null,
+            "pageIndex": 0,
+            "pageSize": 0,
+            "totalCounts": 4,
+            "mediaId": 180,
+            "adTagId": 0,
+            "channelId": 671,
+            "placeTypeList": null,
+            "cityId": 0,
+            "brandId": 0,
+            "modelId": 0,
+            "name": "易车网/易车网首页（全国通发）/顶部通栏4",
+            "height": 80,
+            "width": 230,
+            "adStateList": {
+                "2017-10": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129756"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129757"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129758"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129759"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129760"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129761"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129762"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129763"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129764"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129765"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129766"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129767"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129768"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129769"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129770"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129771"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129772"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129773"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129774"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129775"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129776"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129777"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129778"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129779"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129780"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129781"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129782"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129783"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129784"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129785"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129786"
+                    }
+                ],
+                "2017-11": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129787"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129788"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129789"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129790"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129791"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129792"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129793"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129794"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129795"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129796"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129797"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129798"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129799"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129800"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129801"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129802"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129803"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129804"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129805"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129806"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129807"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129808"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129809"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129810"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129811"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129812"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129813"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129814"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129815"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129816"
+                    }
+                ],
+                "2017-12": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129817"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129818"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129819"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129820"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129821"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129822"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129823"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129824"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129825"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129826"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129827"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129828"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129829"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129830"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129831"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129832"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129833"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129834"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129835"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129836"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129837"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129838"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129839"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129840"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129841"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129842"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129843"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129844"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129845"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129846"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129847"
+                    }
+                ],
+                "2017-07": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129664"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129665"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129666"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129667"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129668"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129669"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129670"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129671"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129672"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129673"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129675"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129676"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129677"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129678"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129679"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129680"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129681"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129682"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129683"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129684"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129685"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129686"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129687"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129688"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129689"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129690"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129691"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129692"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129693"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129694"
+                    }
+                ],
+                "2017-08": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129695"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129696"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129697"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129698"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129699"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129700"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129701"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129702"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129703"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129704"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129705"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129706"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129707"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129708"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129709"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129710"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129711"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129712"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129713"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129714"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129715"
+                    },
+                    {
+                        "day": "22",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129716"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129717"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129718"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129719"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129720"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129721"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129722"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129723"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129724"
+                    },
+                    {
+                        "day": "31",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129725"
+                    }
+                ],
+                "2017-09": [
+                    {
+                        "day": "01",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129726"
+                    },
+                    {
+                        "day": "02",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129727"
+                    },
+                    {
+                        "day": "03",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_LOCKED",
+                        "skuId": "129728"
+                    },
+                    {
+                        "day": "04",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129729"
+                    },
+                    {
+                        "day": "05",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129730"
+                    },
+                    {
+                        "day": "06",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129731"
+                    },
+                    {
+                        "day": "07",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129732"
+                    },
+                    {
+                        "day": "08",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129733"
+                    },
+                    {
+                        "day": "09",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129734"
+                    },
+                    {
+                        "day": "10",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129735"
+                    },
+                    {
+                        "day": "11",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129736"
+                    },
+                    {
+                        "day": "12",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129737"
+                    },
+                    {
+                        "day": "13",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129738"
+                    },
+                    {
+                        "day": "14",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129739"
+                    },
+                    {
+                        "day": "15",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129740"
+                    },
+                    {
+                        "day": "16",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129741"
+                    },
+                    {
+                        "day": "17",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129742"
+                    },
+                    {
+                        "day": "18",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129743"
+                    },
+                    {
+                        "day": "19",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129744"
+                    },
+                    {
+                        "day": "20",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129745"
+                    },
+                    {
+                        "day": "21",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129746"
+                    },
+                    {
+                        "day": "23",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129748"
+                    },
+                    {
+                        "day": "24",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_SALED",
+                        "skuId": "129749"
+                    },
+                    {
+                        "day": "25",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129750"
+                    },
+                    {
+                        "day": "26",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129751"
+                    },
+                    {
+                        "day": "27",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129752"
+                    },
+                    {
+                        "day": "28",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129753"
+                    },
+                    {
+                        "day": "29",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129754"
+                    },
+                    {
+                        "day": "30",
+                        "skuPrice": "750000",
+                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuId": "129755"
+                    }
+                ]
+            }
+        }
+    ]
+}

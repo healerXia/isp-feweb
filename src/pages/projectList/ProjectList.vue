@@ -101,7 +101,7 @@ import config from './config.js';
           dutyUserName:""//责任销售
         },
         tableData:{
-          theadKey:['projectName','custName','agentCustName','createTime','dutyUserName','expectUvCount','expectPvCount'],
+          theadKey:['projectName','custName','agentCustName','createTime','dutyUserName','expectPvCount','expectUvCount'],
           thead:[
           "项目名称","客户名称","代理公司","创建时间","责任销售","曝光预期","点击预期"],
           tbody:[]
