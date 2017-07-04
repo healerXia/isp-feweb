@@ -40,7 +40,7 @@
               <Indexbox :mes="mesBudget" v-model="formValidate.budgetAmount"></Indexbox>
             </div>
             <div class="cycle">
-              <Form-item label="投放周期:" prop="beginDate">
+              <Form-item label="项目周期:" prop="beginDate">
                 <Form-item prop="beginDate">
                   <Date-picker type="date" placeholder="选择开始日期"  v-model="formValidate.beginDate"  :editable="false" @on-change="bDateChange" class='dateInput'></Date-picker>
                 </Form-item>
@@ -56,8 +56,8 @@
         <div class="contentBox">
           <div class="title MB20">投放KPI</div>
           <div class="formBox">
-            <Indexbox :mes="mesUv" v-model="formValidate.expectUvCount"></Indexbox>
             <Indexbox :mes="mesPv" v-model="formValidate.expectPvCount"></Indexbox>
+            <Indexbox :mes="mesUv" v-model="formValidate.expectUvCount"></Indexbox>
           </div>
         </div>
         <div class="contentBox">
@@ -207,27 +207,27 @@
         return {
             mesBudget:{
               need:true,
-              name:"投放预算",
+              name:"项目预算",
               showUnit:true,
-              ph:"请填写投放预算",
+              ph:"请填写项目预算",
               errorShow:false,
               errorShadow:false,
               noCon:false
             },
             mesPv:{
               need:false,
-              name:"点击预期",
+              name:"曝光预期",
               showUnit:false,
-              ph:"请填写点击预期",
+              ph:"请填写曝光预期",
               errorShow:false,
               errorShadow:false,
               noCon:false
             },
             mesUv:{
               need:false,
-              name:"曝光预期",
+              name:"点击预期",
               showUnit:false,
-              ph:"请填写曝光预期",
+              ph:"请填写点击预期",
               errorShow:false,
               errorShadow:false,
               noCon:false
@@ -275,8 +275,8 @@
               beginDate:"",//开始时间
               endDate:"",//结束时间
               //投放KPI
-              expectUvCount:"",//曝光预期
-              expectPvCount:"",//点击预期
+              expectUvCount:"",//点击预期
+              expectPvCount:"",//曝光预期
               //排期信息
               businessType:1,//业务类型
               promotionWay:"1",//推广方式

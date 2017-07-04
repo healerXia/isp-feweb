@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="details">
       <div class="conBox bgF9FAFC">
-        <ProjectInfo v-bind:proMess="projectData" :edit="true" :id="proid" v-on:edit="edit"></ProjectInfo>
+        <ProjectInfo v-bind:proMess="projectData" :edit="true" :id="proid" v-on:edits="edit"></ProjectInfo>
       </div>
       <div class="conBox" v-show="noOrder">
         <div class='hasNoOrder pL30'>
@@ -261,7 +261,7 @@ export default {
           valid:"0.5"//折扣信息
         },
         dataTable:{//数据表
-           theadKey:['uvSum','pvSum','clickRate'],
+           theadKey:['pvSum','uvSum','clickRate'],
            thead:["总曝光量","总点击量","点击率"],
            tbodyData:{
               pvSum:"",
@@ -357,11 +357,11 @@ export default {
                   this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
                 }
                 if(this.priceArr.totalBuy!=0&&this.priceArr.totalDelivery!=0){
-                  this.priceArr.rate=(this.priceArr.totalDelivery/this.priceArr.totalBuy).toFixed(2)
+                  this.priceArr.rate="1："+(this.priceArr.totalBuy/this.priceArr.totalDelivery).toFixed(2)
                 }else if(this.priceArr.totalDelivery==0){
-                  this.priceArr.rate=0
+                  this.priceArr.rate="0:0"
                 }else if(this.priceArr.totalDelivery!=0&&this.priceArr.totalBuy==0){
-                  this.priceArr.rate=1
+                  this.priceArr.rate="1:0"
                 }
               }
               else {
@@ -384,7 +384,7 @@ export default {
                 if(this.dataTable.tbodyData.uvSum==0){
                   this.dataTable.tbodyData.clickRate=0
                 }else{
-                  this.dataTable.tbodyData.clickRate=(res.data.result.pvSum/res.data.result.uvSum).toFixed(2)
+                  this.dataTable.tbodyData.clickRate=(res.data.result.uvSum/res.data.result.pvSum).toFixed(2)
                 }
                 
               }

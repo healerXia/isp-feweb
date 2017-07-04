@@ -37,13 +37,13 @@
               <div class="nextTitle MB5 MT18">投放KPI</div>
               <ul class="messShow">
                 <li><span>曝光预期：</span>
-                <span v-if="proMess.expectUvCount!=null">
-                  {{(proMess.expectUvCount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                <span v-if="proMess.expectPvCount!=null">
+                  {{(proMess.expectPvCount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
                 </span>
                 </li>
                 <li><span>点击预期：</span>
-                  <span v-if="proMess.expectPvCount!=null">
-                    {{(proMess.expectPvCount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                  <span v-if="proMess.expectUvCount!=null">
+                    {{(proMess.expectUvCount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
                   </span>
                 </li>
               </ul>
@@ -107,6 +107,7 @@ export default {
     watch:{
       proMess:{
         handler:function(){
+          this.serialBrand=""
           if(this.proMess.brandNames&&this.proMess.serialNames){
             this.brandNameArr=this.proMess.brandNames.split(",")
             this.serialNameArr=this.proMess.serialNames.split(",")
@@ -121,7 +122,7 @@ export default {
     },
     methods:{
         editPro(){
-            this.$emit('edit','edit')
+            this.$emit('edits','edit')
         }
     }
 }
