@@ -122,7 +122,7 @@ export default {
         ProjectStep
     },
     mounted() {
-        this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+        this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
         let adOrderCode = window.sessionStorage.getItem('adOrderCode');
         if (adOrderCode) {
             this.adOrderCode = adOrderCode;
@@ -136,6 +136,7 @@ export default {
             this.pageList = Object.assign({}, JSON.parse(window.sessionStorage.getItem('timePageList')));
             this.priceList = Object.assign([], JSON.parse(window.sessionStorage.getItem('timePriceList')));
             this.num = Object.assign([], JSON.parse(window.sessionStorage.getItem('monthList')));
+            this.dataListCount = this.$router.currentRoute.query.total;
             if (this.num.length == 0) {
                 return false;
             }
@@ -150,8 +151,6 @@ export default {
                 let time = this.num[i];
                 insertList = insertData[time];
                 dataList = this.pageList[time];
-                console.log(insertList);
-                console.log(dataList);
                 if (dataList && insertList) {
                     this.compared(dataList, insertList, time);
 
@@ -248,7 +247,7 @@ export default {
     methods: {
         // 数据拆分
         render() {
-            this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+            this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
         },
         // 新老数据对比
         compared(oldData, newData,time) {
@@ -283,7 +282,7 @@ export default {
                 return `0:0`
             }
             else {
-                let percent = delivery/total;
+                let percent = total/delivery;
                 return `1:${percent.toFixed(1)}`;
             }
         },
@@ -551,7 +550,7 @@ export default {
             if (this.dataListCount == 0) {
                 this.$Modal.success({
                     title: '提示',
-                    content: '请选择排期后提交'
+                    content: '请选择投放时间！'
                 });
 
                 return false;
@@ -575,13 +574,14 @@ export default {
                      "projectName": this.proMess.projectName,
                      "detailList": datas
                  }).then((res) => {
+                     this.saveStatus = false;
                     if (res.data.errorCode == 0) {
                         this.$Modal.success({
                             title: '提示',
-                            content: '方案保存成功',
+                            content: res.data.errorMsg,
                             onOk () {
                                  //window.localStorage.setItem('adOrderCode', res.data.result);
-                                 self.$router.push('buildPrice');
+                                //  self.$router.push('buildPrice');
                              }
                         });
                     }
@@ -604,13 +604,13 @@ export default {
                     if (res.data.errorCode == 0) {
                         this.$Modal.success({
                             title: '提示',
-                            content: '方案保存成功'
+                            content: res.data.errorMsg
                         });
                         this.adOrderCode = res.data.result;
                         window.sessionStorage.setItem('adOrderCode', res.data.result);
                         this.saveStatus = false;
                         this.proMess.contractCode = res.data.result;
-                        window.localStorage.setItem('proMess', JSON.stringify(this.proMess));
+                        window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));
                     }
                     else {
                         this.$Modal.info({
@@ -640,24 +640,24 @@ export default {
             if (this.dataListCount == 0) {
                 this.$Modal.success({
                     title: '提示',
-                    content: '请选择排期后提交'
+                    content: '请选择投放时间！'
                 });
 
                 return false;
             }
-           this.initSubmitData();
-           let numList = [];
-           for (let i = 0; i < this.num.length; i++) {
+            this.initSubmitData();
+            let numList = [];
+            for (let i = 0; i < this.num.length; i++) {
                numList[i] = this.num[i].split('-').join('');
-           }
-           for (let i = 0;i<this.submitList.length;i++) {
+            }
+            for (let i = 0;i<this.submitList.length;i++) {
                 let index = numList.indexOf(this.submitList[i].yearMonth);
                 this.submitList[i].SellAllPrice = this.priceList[index].total;
                 this.submitList[i].DispatchinglAllPrice = this.priceList[index].delivery;
-           }
+            }
 
-           window.sessionStorage.setItem('price', JSON.stringify(this.submitList));
-           window.sessionStorage.setItem('priceList', JSON.stringify(this.priceList));
+            window.sessionStorage.setItem('price', JSON.stringify(this.submitList));
+            window.sessionStorage.setItem('priceList', JSON.stringify(this.priceList));
 
 
 
@@ -677,7 +677,7 @@ export default {
                    if (res.data.errorCode == 0) {
                        this.$Modal.success({
                            title: '提示',
-                           content: '方案保存成功',
+                           content: res.data.errorMsg,
                            onOk () {
                                 //window.localStorage.setItem('adOrderCode', res.data.result);
                                 self.$router.push('buildPrice');
@@ -705,7 +705,7 @@ export default {
                    if (res.data.errorCode == 0) {
                        this.$Modal.success({
                            title: '提示',
-                           content: '方案保存成功',
+                           content: res.data.errorMsg,
                            onOk () {
                                 window.sessionStorage.setItem('adOrderCode', res.data.result);
                                 self.$router.push('buildPrice');
@@ -713,7 +713,7 @@ export default {
                        });
                        this.saveStatus = false;
                        this.proMess.contractCode = res.data.result;
-                       window.localStorage.setItem('proMess', JSON.stringify(this.proMess));
+                       window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));
                    }
                    else {
                        this.$Modal.info({
@@ -734,7 +734,7 @@ export default {
             window.sessionStorage.setItem('timePageList',JSON.stringify(this.pageList));
             window.sessionStorage.setItem('monthList', JSON.stringify(this.num));
             window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
-            this.$router.push({name:"resource", query: {action:1, time:this.num[index]}});
+            this.$router.push({name:"resource", query: {action:1, time:this.num[index], total: this.dataListCount}});
         },
         // 删除当前广告
         delAd(index,list) {
@@ -767,8 +767,6 @@ export default {
                 this.priceList[tableIndex].per -= d;
 
             }
-
-
 
             for (let i = 0;i < this.num.length; i++) {
                 len += this.pageList[this.num[i]].length;

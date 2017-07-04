@@ -164,7 +164,7 @@ import config from './config.js';
         for(let item in objs){
           if(objs[item]){
             let a=objs[item]
-            a=(a+"").replace(/(^\s*)|(\s*$)/,"")
+            a=(a+"").replace(/(^\s*)|(\s*$)/g,"")
             str=str+item+"="+a+'&';
           }
         }

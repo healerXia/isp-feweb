@@ -1,10 +1,10 @@
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1498629746931'); /* IE9*/
-  src: url('iconfont.eot?t=1498629746931#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('iconfont.woff?t=1498629746931') format('woff'), /* chrome, firefox */
-  url('iconfont.ttf?t=1498629746931') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1498629746931#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1498822214242'); /* IE9*/
+  src: url('iconfont.eot?t=1498822214242#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1498822214242') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1498822214242') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1498822214242#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -64,4 +64,8 @@
 .icon-index:before { content: "\e622"; }
 
 .icon-project:before { content: "\e623"; }
+
+.icon-navi-down1:before { content: "\e624"; }
+
+.icon-navi-up1:before { content: "\e625"; }
 

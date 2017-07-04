@@ -39,12 +39,12 @@
             </tbody>
         </table>
          <div class="price">
-          <span>购买净总价：{{(tableData.monthPrice.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
-          <span>配送总价：{{tableData.monthFree.toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
-          <span v-if="tableData.monthPrice!=0">
-            配送比率：{{(tableData.monthFree/tableData.monthPrice).toFixed(1)}}
+          <span>购买净总价：{{(tableData.monthPrice4001.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+          <span>配送总价：{{tableData.monthPrice4003.toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+          <span v-if="tableData.monthPrice4001!=0">
+            配送比率：{{(tableData.monthPrice4003/tableData.monthPrice4001).toFixed(1)}}
           </span>
-          <span v-else-if="tableData.monthPrice==0">
+          <span v-else-if="tableData.monthPrice4001==0">
             配送比率：0
           </span>
         </div> 
@@ -115,10 +115,12 @@
         }
         tbody{
            td{  
+                cursor: pointer;
                 padding: 0 5px;  
                 padding-right: 0;   
                 white-space: nowrap;
                 text-overflow:ellipsis; 
+                height: 24px;
                 overflow: hidden;
                 .status{ 
                     padding: 0;
@@ -140,7 +142,7 @@
            td.cell{
                 padding: 0;
                 margin: 0;
-                height: 30px;
+                height: 25px;
                 width:25px;
            }
         }

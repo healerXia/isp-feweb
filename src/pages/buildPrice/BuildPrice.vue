@@ -108,7 +108,7 @@ import urlList from './config.js';
 
     },
     mounted() {
-        this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+        this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
         let priceList = JSON.parse(window.sessionStorage.getItem('priceList'));
         let data = JSON.parse(window.sessionStorage.getItem('price'));
         this.submitData = Object.assign([], data);
@@ -169,13 +169,13 @@ import urlList from './config.js';
             this.$http.get(config.urlList.getInfo+"?id="+id).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.proMess = res.data.result;
-                    window.localStorage.setItem('proMess', JSON.stringify(this.proMess));//小阳哥写的
+                    window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));//小阳哥写的
                 }
               }).catch((err) => {
             })
         }
-        if (window.localStorage.getItem('proMess')) {
-            this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+        if (window.sessionStorage.getItem('proMess')) {
+            this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
         }
     },
     methods: {
@@ -219,6 +219,7 @@ import urlList from './config.js';
                         if (res.data.errorCode === 0) {
                             // 清空本地存储
                             let nameList = [
+                                'adOrderCode',
                                 'adName',
                                 'checkBoxList',
                                 'insertData',
@@ -240,7 +241,7 @@ import urlList from './config.js';
                             if (id == 0) {
                                 this.$Modal.success({
                                     title: '提示',
-                                    content: '保存成功',
+                                    content:  res.data.errorMsg,
                                     onOk () {
                                          self.$router.push({path: 'details', query: {id: self.proMess.id}});
                                     }
@@ -250,7 +251,7 @@ import urlList from './config.js';
                             if (id == 1) {
                                 this.$Modal.success({
                                     title: '提示',
-                                    content: '提交成功',
+                                    content: res.data.errorMsg,
                                     onOk () {
                                          self.$router.push({path: 'details', query: {id: self.proMess.id}});
                                      }

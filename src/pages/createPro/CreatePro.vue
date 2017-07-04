@@ -311,75 +311,31 @@
             putWayArr:[],//投放方式
             agentOptionT:[],//代理公司总
             agentOption:[],//代理公司十条数据
-            serialOptionT:[],//投放车型总
             serialOption:[],//投放车型十条数据
             dutyUserArrT:[],//责任销售总
             dutyUserArr:[],//责任销售十条数据
-            brandOptionT:[],//投放品牌总
             brandOption:[],//投放品牌十条数据
-            // custOptionT:[],//客户信息总
             custOption:[],//客户信息十条数据
             budgetAmountArr:[],
             provinceArr:[],//省
             cityArr:[],//市
-            areaArr:[]//区
+            areaArr:[],//区
+            selectedSerial:[],
+            selectedBrand:[]
         }
       },
       created() {//页面数据初始化
         //获取客户信息
         let customerTime = Date.parse(new Date());
-    
+
         if(!this.$router.currentRoute.query.id){
           this.judge.showOrder=true
-          this.selectForMess("","")
+          this.selectForMess("","","")
+          this.getSerialOption();
+          this.getBrandOption();
         }else{//编辑页面不显示继续下单按钮
           this.judge.showOrder=false
         }
-        this.$http.get(config.urlList.getDutyUser+`?${customerTime}`).then((res) => {//责任销售
-          if(res.data.errorCode===0){
-            this.dutyUserArrT=res.data.result;
-            this.dutyUserArr=this.dutyUserArrT.slice(0,10)
-            this.judge.loading4=false
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((err) => {
-        })
-
-        this.$http.get(config.urlList.getBrand+`?${customerTime}`).then((res) => {//投放品牌
-          if(res.data.errorCode===0){
-            this.brandOptionT=res.data.result;
-            this.brandOption=this.brandOptionT.slice(0,10)
-            this.judge.loading2=false
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((err) => {
-        })
-
-        this.$http.get(config.urlList.getSerial+`?${customerTime}`).then((res) => {//投放车型
-          if(res.data.errorCode===0){
-            this.serialOptionT=res.data.result;
-            this.serialOption=this.serialOptionT.slice(0,10)
-            this.judge.loading3=false
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((err) => {
-        })
-
         this.$http.get(config.urlList.getBusinessType+`?${customerTime}`).then((res) => {//业务类型
           if(res.data.errorCode===0){
             this.businessTypeArr=res.data.result;
@@ -392,7 +348,6 @@
           }
           }).catch((err) => {
         })
-
         this.$http.get(config.urlList.getPromotionWay+`?${customerTime}`).then((res) => {//推广方式
           if(res.data.errorCode===0){
             this.promotionWayArr=res.data.result;
@@ -454,16 +409,46 @@
         },0)
       },
       methods: {
-        selectForMess(custName,agentname){//由于客户信息与代理公司下拉数据较多，回填时的特别处理   
+        getSerialOption(){
+          this.$http.get(config.urlList.getSerial+"?pageSize=10").then((res) => {//投放车型
+            if(res.data.errorCode===0){
+              this.serialOption=res.data.result;
+              this.judge.loading3=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+        },
+        getBrandOption(){
+          this.$http.get(config.urlList.getBrand+'?pageSize=10').then((res) => {//投放品牌
+            if(res.data.errorCode===0){
+              this.brandOption=res.data.result
+              this.judge.loading2=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+        },
+        selectForMess(custName,agentname,dutyname){//由于客户信息与代理公司下拉数据较多，回填时的特别处理
           //客户信息
           this.$http.get(config.urlList.getCustomer+'?custName='+custName).then((res) => {
-            if(res.data.errorCode===0){            
-              this.custOption=res.data.result.resultList.slice(0,10)  
+            if(res.data.errorCode===0){
+              this.custOption=res.data.result.resultList.slice(0,10)
               setTimeout(()=>{
-                if(custName!=""){
-                  this.formValidate.custId=this.custOption[0].custid   
+                if(custName!=""&&this.custOption.length==1){
+                  this.formValidate.custId=this.custOption[0].custid
                 }
-              },0)    
+              },0)
               this.judge.loading5=false
             }
             else {
@@ -492,8 +477,28 @@
                   content: res.data.errorMsg
               });
             }
-          }).catch((err) => {
-         })                 
+            }).catch((err) => {
+          })
+
+          //责任销售
+          this.$http.get(config.urlList.getDutyUser+'?username='+dutyname).then((res) => {//责任销售
+            if(res.data.errorCode===0){
+              this.dutyUserArr=res.data.result.slice(0,10)
+              this.judge.loading4=false
+              setTimeout(()=>{
+                if(dutyname!=""&&this.dutyUserArr.length==1){
+                  this.singleCheck.dutyId=parseInt(this.dutyUserArr[0].value)//代理公司
+                }
+              },0)
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
         },
         disBegin (date) {//开始时间
           return date && date.valueOf() > new Date(this.searchData.createTime1)
@@ -501,27 +506,50 @@
         disEnd (date) {//结束时间
            return date && date.valueOf() < new Date(this.searchData.createTime2)
         },
+        getSerialBrandArr(nameArr,idArr){//回填车型和品牌是讲id和名称变成
+          var resultArr=[]
+          for(let i=0;i<nameArr.length;i++){
+            let item={};
+            item['name']=nameArr[i];
+            item['value']=idArr[i];
+            resultArr.push(item);
+          }
+          return resultArr
+        },
         copyFormValidate(data){//当页面为编辑状态时，将formValidate里的值替换一下
             for(let item in this.formValidate){
-              if(this.formValidate.hasOwnProperty(item)){          
+              if(this.formValidate.hasOwnProperty(item)){
                 if(item!="areaId"&&item!='custId'){
                   this.formValidate[item]=data[item]
                 }
               }
             }
+            this.selectForMess(data.custName,data.agentCustName,data.dutyUserName?data.dutyUserName:"")
+            if(this.formValidate.serialIds==""&&this.formValidate.brandIds!=""){//车型为空,品牌不为空,品牌赋值
+              this.brandOption=this.getSerialBrandArr(this.toArr(data.brandNames),this.toArr(this.formValidate.brandIds))
+              this.judge.loading2=false
+              setTimeout(()=>{
+                this.mulCheck.brand=this.toArr(this.formValidate.brandIds)//投放品牌
+              },0)
+              this.getSerialOption();
 
-            this.selectForMess(data.custName,data.agentCustName)
-            this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
-            if(!this.formValidate.serialIds){//如果投放车型没有值的话，投放品牌才赋值（解决小明的接口bug）
-              this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
-            }else{
-              //如果投放车型不为空，那投放品牌也是有值的,需要清空
-              this.formValidate.brandIds=""
-              this.formValidate.brandNames=""
+            }else if(this.formValidate.serialIds){ //车型不为空,那品牌也是有值的,需要清空（小明传的）
+              this.formValidate.brandIds="";
+              this.formValidate.brandNames="";
+              this.serialOption=this.getSerialBrandArr(this.toArr(data.serialNames),this.toArr(this.formValidate.serialIds))
+              this.judge.loading3=false
+              setTimeout(()=>{
+                this.mulCheck.serial=this.toArr(this.formValidate.serialIds)//投放车型
+              },0)
+              this.getBrandOption();
+            }else if(this.formValidate.serialIds==""&&this.formValidate.brandIds==""){//两个都没有值
+              this.getBrandOption();
+              this.getSerialOption();
             }
-            // this.mulCheck.brand=this.toArr(this.formValidate.brandIds) //投放品牌
-            this.mulCheck.putWay=this.toArr(this.formValidate.putWays)//投放公司
-            this.singleCheck.dutyId=this.formValidate.dutyUserId?parseInt(this.formValidate.dutyUserId):""//责任销售
+            //投放公司
+            this.mulCheck.putWay=this.toArr(this.formValidate.putWays);
+            //责任销售
+            // this.singleCheck.dutyId=this.formValidate.dutyUserId?parseInt(this.formValidate.dutyUserId):"";
             this.formValidate.endDate=new Date(this.formValidate.endDate)
             this.formValidate.beginDate=new Date(this.formValidate.beginDate)
             let arr =this.toArr(this.formValidate.promotionRate);
@@ -537,22 +565,22 @@
           this.formValidate.agentCustName=value.label
         },
         checkSerial(value){//选择投放车型
+          this.selectedSerial=value;
           let arr=[]
           for(let i=0;i<value.length;i++){
             arr.push(value[i].label);
           }
           this.formValidate.serialNames=this.toStr(arr);
           this.formValidate.serialIds=this.toStr(this.mulCheck.serial)
-          this.serialOption=this.serialOptionT.slice(0,10)
         },
         checkBrand(value){//选择投放品牌
+          this.selectedBrand=value;
           let arr=[]
           for(let i=0;i<value.length;i++){
             arr.push(value[i].label);
           }
           this.formValidate.brandNames=this.toStr(arr);
           this.formValidate.brandIds=this.toStr(this.mulCheck.brand)
-          this.brandOption=this.brandOptionT.slice(0,10)
         },
         checkPutway(value){//选择投放方式
           this.formValidate.putWays=this.toStr(this.mulCheck.putWay)
@@ -569,8 +597,10 @@
             return []
           }else if(str.length==1){
             return [parseInt(str)]
-          }else{
+          }else if(str.replace(/\,/g,"").match(/^(\d+)$/)){
             return  Array.from(str.split(","), (x) => parseInt(x))
+          }else {
+            return str.split(",")
           }
         },
         toStr(arr){//把字符串变成数组
@@ -603,20 +633,6 @@
             else{
               return true
             }
-          }
-        },
-        arrFilter(query,list,listT,loading){//用于下拉框数组过滤的功用方法
-          if (query != '') {
-              this[loading] = true;
-                setTimeout(() => {
-                  this[loading] = false;                 
-                  this[list] = this[listT].filter(item => item.name.toLowerCase().indexOf(query.toLowerCase()) > -1);
-                if(this[list].length>10){
-                  this[list]=this[list].slice(0,10);
-                }
-              }, 200);
-          }else {
-              this[list]=this[listT].slice(0,10);
           }
         },
         agentChoose (query) {//代理公司过滤
@@ -656,17 +672,76 @@
           }).catch((res)=>{})
         },
         brandChoose (query) {//投放品牌过滤
-          this.arrFilter(query,'brandOption','brandOptionT','loading2')
+          this.$http.get(config.urlList.getBrand+'?pageSize=10&name='+query).then((res) => {//投放品牌
+            if(res.data.errorCode===0){
+              for(let i=0;i<res.data.result.length;i++){
+                for(let j=0;j<this.selectedBrand.length;j++){
+                  if(this.selectedBrand[j].value==res.data.result[i].value){
+                    res.data.result.splice(i,1)
+                  }
+                }
+              }
+              this.brandOption=res.data.result
+              for(let i=0;i<this.selectedBrand.length;i++){
+                this.selectedBrand[i].name=this.selectedBrand[i].label;
+                this.brandOption.push(this.selectedBrand[i])
+              }
+              this.judge.loading2=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
         },
         serialChoose (query) {//投放车型过滤
-          this.arrFilter(query,'serialOption','serialOptionT','loading3')
+          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//投放车型
+            if(res.data.errorCode===0){
+              for(let i=0;i<res.data.result.length;i++){
+                for(let j=0;j<this.selectedSerial.length;j++){
+                  if(this.selectedSerial[j].value==res.data.result[i].value){
+                    res.data.result.splice(i,1)
+                  }
+                }
+              }
+              this.serialOption=res.data.result
+              for(let i=0;i<this.selectedSerial.length;i++){
+                this.selectedSerial[i].name=this.selectedSerial[i].label;
+                this.serialOption.push(this.selectedSerial[i])
+              }
+              this.judge.loading3=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {}
+          )
         },
         dutyUserIdChoose(query){//责任销售过滤
           if(query==""){
             this.formValidate.dutyUserId=""
             this.singleCheck.dutyId=""
           }
-           this.arrFilter(query,'dutyUserArr','dutyUserArrT','loading4');
+          //责任销售
+          this.$http.get(config.urlList.getDutyUser+'?username='+query).then((res) => {//责任销售
+            if(res.data.errorCode===0){
+              this.dutyUserArr=res.data.result.slice(0,10)
+              this.judge.loading4=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
         },
         provinceChange(){//省列表change事件
           this.judge.areaErrShow=false
@@ -790,67 +865,61 @@
               }
               this.serialBrandValue()
 
-              if(this.$router.currentRoute.query.id){//修改项目
-                this.formValidate.id=this.$router.currentRoute.query.id
-                this.$http.post(config.urlList.editPro,
-                  this.formValidate,
-                  {
-                    emulateJSON:true
-                  }).then((res)=>{
-                      if(res.data.errorCode===0){
-                         this.$Modal.success({
-                            title: "提示",
-                            content: "修改成功",
-                            onOk: () => {
-                              this.$router.push({path:"resource",query:{id: this.$router.currentRoute.query.id}})
-                            }
-                          });
-                          setTimeout(()=>{
-                            this.$router.push({path:"resource",query:{id: this.$router.currentRoute.query.id}})
-                            this.$Modal.remove()
-                          },2000)
-                      }
-                      else {
-                        this.$Modal.info({
-                            title: '提示',
-                            content: res.data.errorMsg
-                        });
-                      }
-                      setTimeout(()=>{
-                        this.judge.submitDiasbled=false
-                      },0)
-                  }).catch((res)=>{this.judge.submitDiasbled=false})
-              }else{//添加项目
-                this.$http.post(config.urlList.addPro,
-                  this.formValidate,
-                  {
-                    emulateJSON:true
-                  }).then((res)=>{
-                    if(res.data.errorCode===0){
-                       this.$Modal.success({
-                          title: "提示",
-                          content: "添加成功",
-                          onOk: () => {
-                            this.$router.push({path:"resource", query: {id: res.data.result}})
-                          }
-                        });
+              //调取接口添加项目信息
+              this.$http.post(config.urlList.addPro,
+                this.formValidate,
+                {
+                  emulateJSON:true
+                }).then((res)=>{
+                  if(res.data.errorCode===0){
+                     this.$Modal.success({
+                        title: "提示",
+                        content: "添加成功",
+                        onOk: () => {
+                          this.setTimeRoute=function(){return}
+                          // 清空本地存储
+                          let nameList = [
+                              'adOrderCode',
+                              'adName',
+                              'checkBoxList',
+                              'insertData',
+                              'monthList',
+                              'priceList',
+                              'projectData',
+                              'searchInfo',
+                              'size',
+                              'tableData',
+                              'timePageList',
+                              'timePriceList',
+                              'viewAd'
+                          ];
 
-                        setTimeout(()=>{
+                          for (let i = 0; i < nameList.length; i++) {
+                              window.sessionStorage.removeItem(nameList[i]);
+                          }
                           this.$router.push({path:"resource", query: {id: res.data.result}})
-                          this.$Modal.remove()
-                        },2000)
-                    }
-                    else {
-                      this.$Modal.info({
-                          title: '提示',
-                          content: res.data.errorMsg
+                        }
                       });
-                    }
-                    setTimeout(()=>{
-                      this.judge.submitDiasbled=false
-                    },0)
-                  }).catch((res)=>{this.judge.submitDiasbled=false})
-                }
+
+                     
+                      setTimeout(()=>{
+                        if(document.getElementsByClassName('v-transfer-dom')[0]){
+                          document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;
+                          this.setTimeRoute('resource',res.data.result)
+                        }
+                      },2000)
+                  }
+                  else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.errorMsg
+                    });
+                  }
+                  setTimeout(()=>{
+                    this.judge.submitDiasbled=false
+                  },0)
+              }).catch((res)=>{this.judge.submitDiasbled=false})
+
             }else {
               this.mustNeedCheck()//必填项验证
               this.$Modal.error({
@@ -858,7 +927,7 @@
                   content: "表单验证失败！"
               });
               this.judge.submitDiasbled=false
-            }            
+            }
           })
           setTimeout(()=>{
             this.judge.submitDiasbled=false
@@ -885,7 +954,7 @@
                 this.judge.dateErrShow=false
               }
               this.serialBrandValue()
-              
+
               if(this.$router.currentRoute.query.id){//修改项目
                 this.formValidate.id=this.$router.currentRoute.query.id
                 this.$http.post(config.urlList.editPro,
@@ -894,16 +963,40 @@
                     emulateJSON:true
                   }).then((res)=>{
                       if(res.data.errorCode===0){
-                        this.$Modal.success({
+                        var a=this.$Modal.success({
                             title: "提示",
                             content: "修改成功",
                             onOk: () => {
+                              this.setTimeRoute=function(){return}
+                              // 清空本地存储
+                              let nameList = [
+                                  'adOrderCode',
+                                  'adName',
+                                  'checkBoxList',
+                                  'insertData',
+                                  'monthList',
+                                  'priceList',
+                                  'projectData',
+                                  'searchInfo',
+                                  'size',
+                                  'tableData',
+                                  'timePageList',
+                                  'timePriceList',
+                                  'viewAd'
+                              ];
+
+                              for (let i = 0; i < nameList.length; i++) {
+                                  window.sessionStorage.removeItem(nameList[i]);
+                              }
                               this.$router.push({path:"details",query:{id: this.$router.currentRoute.query.id}})
-                             }
-                          });
+                            }
+                        });
+
                         setTimeout(()=>{
-                          this.$router.push({path:"details",query:{id: this.$router.currentRoute.query.id}})
-                          this.$Modal.remove()
+                          if(document.getElementsByClassName('v-transfer-dom')[0]){
+                            document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;
+                            this.setTimeRoute('details',this.$router.currentRoute.query.id)
+                          }
                         },2000)
                       }
                       else {
@@ -927,12 +1020,15 @@
                         title: "提示",
                         content: "添加成功",
                         onOk: () => {
+                          this.setTimeRoute=function(){return}
                           this.$router.push({path:"details", query: {id: res.data.result}})
                         }
                       });
                       setTimeout(()=>{
-                        this.$router.push({path:"details", query: {id: res.data.result}})
-                        this.$Modal.remove()
+                        if(document.getElementsByClassName('v-transfer-dom')[0]){
+                          document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;
+                          this.setTimeRoute('details',res.data.result)
+                        }
                       },2000)
                     }
                     else {
@@ -965,6 +1061,12 @@
             this.$router.push({path:"details",query:{id: this.$router.currentRoute.query.id}})
           }
         },
+        setTimeRoute(path,id){
+          if(document.getElementsByClassName('v-transfer-dom').length==1){
+           this.$Modal.remove()
+          }
+          this.$router.push({path:path,query:{id: id}})
+        },
         mustNeedCheck(){//必填项验证，主要是显示样式
           if(this.formValidate.budgetAmount==""){
             this.mesBudget.errorShow=true
@@ -984,7 +1086,6 @@
               content: "表单验证失败！"
             });
             this.judge.submitDiasbled=false
-            // setTimeout(()=>{this.$Modal.remove()},2000)
             return false
           }else{
             return true

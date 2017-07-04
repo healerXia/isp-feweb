@@ -12,7 +12,7 @@
                         <p>尺寸：{{layer.pSize}}</p>
                     </div>
                     <div class="dialogContent-bot">
-                        <p>占用人：{{layer.dutyUserName}}</p>
+                        <p>占用人：{{layer.dutyUserName}}元</p>
                         <p>订单号：{{layer.adOrderCode}}</p>
                         <p>订单状态：{{layer.state}}</p>
                         <p>最终客户：{{layer.adCustomerName}}</p>

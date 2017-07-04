@@ -23,49 +23,49 @@
                     {
                         "day": "01",
                         "skuPrice": "750000",
-                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuStatus": "SKU_STATUS_NONE",
                         "skuId": "126628"
                     },
                     {
                         "day": "02",
                         "skuPrice": "750000",
-                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuStatus": "SKU_STATUS_NONE",
                         "skuId": "126629"
                     },
                     {
                         "day": "03",
                         "skuPrice": "750000",
-                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuStatus": "SKU_STATUS_NONE",
                         "skuId": "126630"
                     },
                     {
                         "day": "04",
                         "skuPrice": "750000",
-                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuStatus": "SKU_STATUS_NONE",
                         "skuId": "126631"
                     },
                     {
                         "day": "05",
                         "skuPrice": "750000",
-                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuStatus": "SKU_STATUS_NONE",
                         "skuId": "126632"
                     },
                     {
                         "day": "06",
                         "skuPrice": "750000",
-                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuStatus": "SKU_STATUS_NONE",
                         "skuId": "126633"
                     },
                     {
                         "day": "07",
                         "skuPrice": "750000",
-                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuStatus": "SKU_STATUS_NONE",
                         "skuId": "126634"
                     },
                     {
                         "day": "08",
                         "skuPrice": "750000",
-                        "skuStatus": "SKU_STATUS_IDLE",
+                        "skuStatus": "SKU_STATUS_NONE",
                         "skuId": "126635"
                     },
                     {

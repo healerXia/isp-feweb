@@ -5,7 +5,7 @@
 <template lang="html">
     <div class="resource">
         <!-- 项目信息 -->
-        <ProjectInfo :proMess="proMess" :edit="false"></ProjectInfo>
+        <ProjectInfo :proMess="proMess" :edit="true"></ProjectInfo>
         <!-- 项目信息 -->
 
         <!-- 订单信息 -->
@@ -47,15 +47,14 @@
                         </Form-item>
 
                         <Row>
-                            <Col span="12" style="padding-right:10px">
+                            <Col span="12"  style="padding-right:10px">
                                 <Form-item label="页面名称：" prop='pageName'>
-
-                                    <select id="pageName"  name="sample" style="width:400px;height:36px;" class="js-example-basic-multiple"></select>
+                                    <select id="pageName"   name="sample" style="width:400px;height:36px;" class="js-example-basic-multiple">
+                                    </select>
                                 </Form-item>
                             </Col>
                             <Col span="12">
-                                <Form-item label="广告类型：" prop='Type'>
-
+                                <Form-item label="广告类型：" prop='typeAd'>
                                     <select id="adType" name="sample" style="width:75%" class="js-example-basic-multiple"></select>
                                 </Form-item>
                             </Col>
@@ -202,7 +201,9 @@
 import qs from 'qs';
 import $ from 'jquery';
 import 'select2';
+import 'select2/dist/js/i18n/zh-CN.js';
 import 'select2/dist/css/select2.css';
+import 'select2-bootstrap-theme/dist/select2-bootstrap.css';
 import axios from 'axios';
 import {urlList, initSelect} from './config';
 // 组件
@@ -269,39 +270,37 @@ export default {
             // 项目基本信息
             proMess: {},
             ruleValidate: {
-                // serialId: [
-                //     { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
-                // ],
-                // Type: [
-                //     { required: true, type: 'string', message: '请选择广告类型', trigger: 'blur' }
-                // ],
+                serialId: [
+                    { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
+                ],
                 beginTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
                 endTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
-                // pageName: [
-                //     { required: true, type: 'number', message: '请选择页面名称', trigger: 'blur' }
+                pageName: [
+                    { required: true, type: 'string', message: '请选择页面名称', trigger: 'change' }
+                ],
+                // typeAd: [
+                //     { required: true, type: 'string', message: '请选择广告类型', trigger: 'change' }
                 // ],
-                // brandId: [
-                //     { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
-                // ],
-                // cityId: [
-                //     { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
-                // ]
+                brandId: [
+                    { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
+                ],
+                cityId: [
+                    { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
+                ]
             },
             action: 2,
             // 查询开关
             searchOnoff: false,
             options1: [],
-            model11: '',
-            loading1: false,
-            cityId: [],
-            brandId: [],
-            serialId: [],
-            Type: [],
-            pageName: [],
+            cityId: '',
+            brandId: '',
+            serialId: '',
+            pageName: '',
+            typeAd: '',
             searchInfo:{
                 // 开始时间
                 beginTime: '',
@@ -361,91 +360,19 @@ export default {
         }
     },
     mounted() {
+        this.render();
         let timeStap = Date.parse(new Date());
         // 初始化下拉
         setTimeout(() => {
             let postData = this.searchInfo;
-            $("#pageName").select2({
-                allowClear:true,
-                ajax: {
-                    transport: function(params, success, failure) {
-                        if (!params.data.term) {
-                            axios.post('/isp-kongming/ad/channelSelect',{
-                                // 媒体名称id
-                                mediaId: postData.mediaId,
-                                // 页面类型
-                                tagId: postData.labelTypeId,
-                                name: params.iterm
-                            }).then((res)=> {
-                                success(res.data.result);
-                            }).catch((err) => {
-                                failure();
-                            })
-                            return false;
-                        }
-                        axios.post('/isp-kongming/ad/channelSelect',{
-                            // 媒体名称id
-                            mediaId: postData.mediaId,
-                            // 页面类型
-                            tagId: postData.labelTypeId,
-                            name: params.data.term
-                        }).then((res)=> {
-                            success(res.data.result);
-                        }).catch((err) => {
-                            failure();
-                        })
-
-
-                    },
-                    processResults: function (data, params) {
-                      let datas = [];
-                      for (let i = 0; i < data.length; i++) {
-                          datas.push({
-                              id: data[i].channelId,
-                              text: 'text',
-                              name: data[i].channelName
-                          })
-                      }
-                      let searchData = datas.slice(0, 10);
-
-                      return {
-                          results: searchData
-                      };
-                    },
-                },
-                escapeMarkup: function (markup) { return markup; },
-                //minimumInputLength: 1,
-                templateSelection(repo) {
-                    if (repo.loading){
-
-                    }
-                    var markup = `<span id='${repo.id}'>${repo.name}</span>`;
-                    return markup;
-                },
-                templateResult(repo) {
-                    if (repo.loading) {
-
-                    };
-                    var markup = `<span id='${repo.id}'>${repo.name}</span>`;
-                    return markup;
-                }
-            });
-
-            $("#pageName").on('change', ()=> {
-                let data = $('#pageName').select2("data")[0];
-                if (data) {
-                    this.searchInfo.channelId = data.id;
-                    this.searchInfo.pageName = data.id;
-                    this.pageName = parseInt(data.id);
-                    this.initAdType();
-                }
-            })
-
 
             // 初始化广告类型
             $("#adType").select2({
                 multiple: true,
-                allowClear:true
+                allowClear:true,
+                language: 'zh-CN',
+                placeholder: "请选择",
+                theme: "bootstrap"
             });
 
         })
@@ -495,7 +422,7 @@ export default {
             this.action = this.$router.currentRoute.query.action;
             this.searchInfo.beginTime = this.$router.currentRoute.query.time;
             this.searchInfo.endTime = this.$router.currentRoute.query.time;
-            this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+            this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
         }
 
         let id = this.$router.currentRoute.query.id;
@@ -510,8 +437,8 @@ export default {
             })
         }
 
-        if (window.localStorage.getItem('proMess')) {
-            this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+        if (window.sessionStorage.getItem('proMess')) {
+            this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
         }
 
         this.searchInfoTxt = [false, false, false];
@@ -644,96 +571,142 @@ export default {
             let postData = this.searchInfo;
             this.searchInfo.pageName = '';
             if (postData.labelTypeId && postData.mediaId) {
-                $("#pageName").select2({
-                    allowClear:true,
-                    ajax: {
-                        transport: function(params, success, failure) {
-                            if (!params.data.term) {
+                setTimeout(() => {
+                    let resData = [];
+                    $("#pageName").select2({
+                        allowClear:true,
+                        language: 'zh-CN',
+                        theme: "bootstrap",
+                        placeholder: {id:'',name:'请选择', text:'text'},
+                        ajax: {
+                            transport: function(params, success, failure) {
+                                if (!params.data.term) {
+                                    axios.post('/isp-kongming/ad/channelSelect',{
+                                        // 媒体名称id
+                                        mediaId: postData.mediaId,
+                                        // 页面类型
+                                        tagId: postData.labelTypeId,
+                                        name: params.iterm
+                                    }).then((res)=> {
+                                        success(res.data.result);
+                                    }).catch((err) => {
+                                        failure();
+                                    })
+                                    return false;
+                                }
                                 axios.post('/isp-kongming/ad/channelSelect',{
                                     // 媒体名称id
                                     mediaId: postData.mediaId,
                                     // 页面类型
                                     tagId: postData.labelTypeId,
-                                    name: params.iterm
+                                    name: params.data.term
                                 }).then((res)=> {
                                     success(res.data.result);
                                 }).catch((err) => {
                                     failure();
                                 })
-                                return false;
+
+
+                            },
+                            processResults: function (data, params) {
+                              let datas = [];
+                              for (let i = 0; i < data.length; i++) {
+                                  datas.push({
+                                      id: data[i].channelId,
+                                      text: 'text',
+                                      name: data[i].channelName
+                                  })
+                              }
+                              let searchData = datas.slice(0, 10);
+                              resData = searchData;
+                              return {
+                                  results: searchData
+                              };
+                            },
+                        },
+                        escapeMarkup: function (markup) { return markup; },
+                        //minimumInputLength: 1,
+                        templateSelection(repo) {
+                            if (repo.loading){
+                                return repo.text;
                             }
-                            axios.post('/isp-kongming/ad/channelSelect',{
-                                // 媒体名称id
-                                mediaId: postData.mediaId,
-                                // 页面类型
-                                tagId: postData.labelTypeId,
-                                name: params.data.term
-                            }).then((res)=> {
-                                success(res.data.result);
-                            }).catch((err) => {
-                                failure();
-                            })
 
-
+                            for (let i = 0; i < resData.length; i++) {
+                                if (resData[i].id == repo.id){
+                                    repo.name = resData[i].name;
+                                    break;
+                                }
+                            }
+                            var markup = `<span id='${repo.id}'>${repo.name}</span>`;
+                            return markup;
                         },
-                        processResults: function (data, params) {
-                          let datas = [];
-                          for (let i = 0; i < data.length; i++) {
-                              datas.push({
-                                  id: data[i].channelId,
-                                  text: 'text',
-                                  name: data[i].channelName
-                              })
-                          }
-                          let searchData = datas.slice(0, 10);
+                        templateResult(repo) {
+                            if (repo.loading) {
+                                return repo.text;
+                            };
+                            var markup = `<span id='${repo.id}'>${repo.name}</span>`;
+                            return markup;
+                        }
+                    });
+                    $("#pageName").on('change', ()=> {
+                        let data = $('#pageName').select2("data")[0];
+                        if (data) {
+                            this.searchInfo.channelId = data.id;
+                            this.searchInfo.pageName = data.id;
+                            this.pageName = data.id;
+                            this.initAdType();
+                        }
+                        else {
+                            this.searchInfo.channelId = '';
+                            this.searchInfo.pageName = '';
+                            this.pageName = '';
+                            $("#adType").val('请选择').trigger("change");
 
-                          return {
-                              results: searchData
-                          };
-                        },
-                    },
-                    escapeMarkup: function (markup) { return markup; },
-                    //minimumInputLength: 1,
-                    templateSelection(repo) {
-                        if (repo.loading){
+                            this.searchInfo.Type = '';
+                            this.searchInfo.channelId = '';
+
+                            this.adTypes = '';
+                            this.typeAd = '';
+                            this.pageName = '';
 
                         }
-                        var markup = `<span id='${repo.id}'>${repo.name}</span>`;
-                        return markup;
-                    },
-                    templateResult(repo) {
-                        if (repo.loading) {
-
-                        };
-                        var markup = `<span id='${repo.id}'>${repo.name}</span>`;
-                        return markup;
-                    }
-                });
+                    })
+                })
             }
         },
         initAdType() {
+
             let postData = this.searchInfo;
             this.searchInfo.Type = '';
             let _this = this;
             // 初始化广告类型
-            setTimeout(() => {
-                initSelect('#adType', '/isp-kongming/ad/placeTypeSelect', {
-                    channelId: this.searchInfo.pageName,
-                    mediaId: this.searchInfo.mediaId,
-                    name: ''
-                }, 'typeId', 'typeName');
+            if (!this.searchInfo.pageName) {
+                return false;
+            }
+            else {
+                setTimeout(() => {
+                    console.log(this.searchInfo.pageName);
+                    initSelect('#adType', '/isp-kongming/ad/placeTypeSelect', {
+                        channelId: this.searchInfo.pageName,
+                        mediaId: this.searchInfo.mediaId,
+                        name: ''
+                    }, 'typeId', 'typeName');
 
-                $('#adType').on('change', () => {
-                    let data = $('#adType').select2('data');
-                    let str = [];
-                    if (data.length > 0) {
-                        for (let i = 0; i < data.length; i++) {
-                            str.push(data[i].id);
+                    $('#adType').on('change', () => {
+
+                        let data = $('#adType').select2('data');
+                        let str = [];
+                        if (data.length > 0) {
+                            for (let i = 0; i < data.length; i++) {
+                                str.push(data[i].id);
+                            }
+                            this.searchInfo.placeTypeSelect = str.join(',');
+                            console.log(this.searchInfo.placeTypeSelect);
+                            this.typeAd = str.join(',');
                         }
-                        this.searchInfo.placeTypeSelect = str.join(',');
-                    }
+                    })
                 })
-            })
+            }
         },
         initModels() {
             // 初始化车型
@@ -744,7 +717,6 @@ export default {
                     name: ''
                 }, 'value', 'name');
 
-
                 $('#serialId').on('change', () => {
                     let data = $('#serialId').select2('data');
                     let str = [];
@@ -753,6 +725,7 @@ export default {
                             str.push(data[i].id);
                         }
                         this.searchInfo.serialId = str.join(',');
+                        this.serialId = str.join(',');
                     }
                 })
             })
@@ -775,6 +748,7 @@ export default {
                             str.push(data[i].id);
                         }
                         this.searchInfo.cityId = str.join(',');
+                        this.cityId = str.join(',');
                     }
                 })
             })
@@ -796,16 +770,14 @@ export default {
                             str.push(data[i].id);
                         }
                         this.searchInfo.brandId = str.join(',');
+                        this.brandId = str.join(',');
                     }
                 })
             })
         },
         render() {
-            // /api/isp-kongming/ad
-            this.searchInfo.Type = this.Type.join(',');
-            this.searchInfo.serialId = this.serialId.join(',');
-            this.searchInfo.cityId = this.cityId.join(',');
-            this.searchInfo.brandId = this.brandId.join(',');
+            // /isp-kongming/ad
+
             // 初始化页数 隐藏无结果选项
             //this.paging.totalCounts = -1;
             // /isp-kongming/ad/select
@@ -827,7 +799,7 @@ export default {
             };
             window.sessionStorage.setItem('searchInfo', JSON.stringify(search));
             // /isp-kongming/ad/selec
-            this.$http.post('/isp-kongming/ad/select',{
+            this.$http.post('mock/resource', {
                 // 开始时间
                 beginTime: `${this.searchInfo.beginTime}-01`,
                 // 结束时间
@@ -841,7 +813,7 @@ export default {
                 // 页面类型
                 adTagId:  this.searchInfo.labelTypeId,
                 // 广告类型
-                placeTypeList: this.searchInfo.Type,
+                placeTypeList: this.searchInfo.placeTypeSelect,
                 // 投放车型
                 modelIdList: this.searchInfo.serialId,
                 // // 投放地区
@@ -864,12 +836,13 @@ export default {
                     for (let i = 0; i< this.tableList.length;i++) {
                         this.$set(this.checkBoxStatus, i, false);
                     }
-                    console.log(datas[0].totalCounts);
+
                     if (datas[0].totalCounts > 0) {
                         this.paging.totalCounts = datas[0].totalCounts;
                         this.searching = false;
                     }
                     else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
+
                         this.paging.totalCounts = 0;
                         this.searching = false;
                     }
@@ -878,7 +851,7 @@ export default {
                     if (this.$router.currentRoute.query.action) {
                         //this.selectTableData = JSON.parse(window.localStorage.getItem('timePageList'));
                         //this.monthList = JSON.parse(window.localStorage.getItem('monthList'));
-                        this.timePageMonth = JSON.parse(window.localStorage.getItem('monthList'));
+                        this.timePageMonth = JSON.parse(window.sessionStorage.getItem('monthList'));
                         this.action = this.$router.currentRoute.query.action;
                         this.searchInfo.beginTime = this.$router.currentRoute.query.time;
                         this.searchInfo.endTime = this.$router.currentRoute.query.time;
@@ -890,9 +863,7 @@ export default {
                         // console.log(this.checkBoxList);
                         // this.initSelect();
                     }
-                    if (this.Type.length > 0) {
-                        this.searchInfo.Type = this.Type.join(',');
-                    }
+
 
                     for (let i = 0; i < datas.length; i++) {
                         if (this.checkBoxList.indexOf(datas[i].adPlaceId) > -1) {
@@ -998,7 +969,10 @@ export default {
                     this.initBrand();
 
             }
+            this.resetSearchInfo();
             this.initPageName();
+            this.searchInfo.pageName = '';
+            this.initAdType();
             this.redrawed();
         },
         search(name) {
@@ -1012,6 +986,7 @@ export default {
                     this.paging.totalCounts = -1;
                     this.render();
                 } else {
+                    this.redrawed();
                     //this.$Message.error('查询失败!');
                 }
             })
@@ -1425,9 +1400,12 @@ export default {
         // 跳转选择时间页面
         selectTime() {
             // 进行新增操作
+            let count = 0;
             if (this.action == 1) {
                 window.sessionStorage.setItem('insertData', JSON.stringify(this.selectTableData));
+                count = this.$router.currentRoute.query.total;
             }
+
 
             for(let i = 0; i < this.timePageMonth.length; i++) {
                 if (this.monthList.indexOf(this.timePageMonth[i]) < 0) {
@@ -1441,7 +1419,7 @@ export default {
             window.sessionStorage.setItem('checkBoxList', JSON.stringify(this.checkBoxList));
 
 
-            this.$router.push({name:'chooseTime',query: {action: this.action}});
+            this.$router.push({name:'chooseTime',query: {action: this.action, total: count}});
         },
         // 查看广告位
         viewAd(width, height, obj) {
@@ -1451,70 +1429,29 @@ export default {
             this.$router.push('viewAd');
             this.$router.push({path: 'viewAd', query: {'viewTime': this.searchInfo.beginTime}})
         },
-        // 选择投放品牌
-        checkBrand() {
-            this.searchInfo.brandId = this.brandId.join();
-        },
-        // 选择广告类型
-        checkType(name) {
-            this.searchInfo.Type = this.Type.join();
-        },
-        // 请选择投放城市
-        checkCity() {
-            this.searchInfo.cityId = this.cityId.join();
-        },
-        //选择投放车型
-        checkCar() {
-            this.searchInfo.serialId = this.serialId.join();
-        },
         // 重置搜索条件 清空车型 地区 品牌
         resetSearchInfo() {
-            $("#pageName").val(null).trigger("change");
-            $("#adType").val(null).trigger("change")
-            $("#serialId").val(null).trigger("change")
-            $("#cityId").val(null).trigger("change")
-            $("#brandId").val(null).trigger("change")
+            $("#pageName").val('请选择').trigger("change");
+            $("#adType").val('请选择').trigger("change");
+            $("#serialId").val('请选择').trigger("change")
+            $("#cityId").val('请选择').trigger("change")
+            $("#brandId").val('请选择').trigger("change")
             // 广告类型
-            if (this.Type.length > 0) {
-                this.Type = [];
-                this.searchInfo.typeId = '';
-                //this.searchData.typeList = [];
-            }
-            // 城市
-            if (this.cityId.length > 0) {
-                this.cityId = [];
-                this.searchInfo.cityId = '';
-            }
 
-            //  投放品牌
-            if (this.brandId.length > 0) {
-                this.brandId = [];
-                this.searchInfo.brandId = '';
-            }
-
-            // 车型
-            if (this.serialId.length > 0) {
-                this.serialId = [];
-                this.searchInfo.modelList = '';
-            }
-
-
-            this.searchList.typeList = [];
+            this.searchInfo.Type = '';
+            this.pName = '';
+            this.searchInfo.pageName = '';
             this.searchInfo.serialId = '';
+            this.searchInfo.cityId = '';
+            this.searchInfo.brandId = '';
+            this.searchInfo.channelId = '';
 
-
-            let n = document.querySelectorAll('.ivu-select-selection');
-
-            for (let i = 0;i<n.length;i++) {
-                let child = n[i].children;
-
-                for (let k=0;k< child.length;k++) {
-                    if (n[i].querySelectorAll('.ivu-tag').length > 0) {
-                        n[i].removeChild(n[i].querySelectorAll('.ivu-tag')[0]);
-                    }
-
-                }
-            }
+            this.adTypes = '';
+            this.serialId = '';
+            this.typeAd = '';
+            this.pageName = '';
+            this.brandId = '';
+            this.cityId = '';
         }
     }
 }

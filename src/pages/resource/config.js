@@ -1,4 +1,8 @@
 import axios from 'axios';
+import 'select2';
+import 'select2/dist/js/i18n/zh-CN.js';
+import 'select2/dist/css/select2.css';
+import 'select2-bootstrap-theme/dist/select2-bootstrap.css';
 
 const mediaNameList = [
     "易车网",
@@ -19,11 +23,20 @@ const pageTypeList = [
 ]
 
 const initSelect = function(id, url, rqData, typeId, typeName) {
+    let resData = [];
     $(id).select2({
         multiple: true,
         allowClear:true,
+        placeholder: "请选择",
+        theme: "bootstrap",
+        language: 'zh-CN',
         ajax: {
             transport: function(params, success, failure) {
+                if (typeId == 'typeId') {
+                    if (rqData.channelId == '') {
+                        return false;
+                    }
+                }
                 if (!params.data.term) {
                     rqData.name = '';
                     axios.post(url, rqData).then((res)=> {
@@ -52,6 +65,7 @@ const initSelect = function(id, url, rqData, typeId, typeName) {
                 })
             }
             let searchData = datas.slice(0, 10);
+            resData = searchData;
               return {
                   results: searchData
               };
@@ -61,16 +75,22 @@ const initSelect = function(id, url, rqData, typeId, typeName) {
         //minimumInputLength: 1,
         templateSelection(repo) {
             if (repo.loading){
-
+                return repo.text;
             }
+
+            for (let i = 0; i < resData.length; i++) {
+                if (resData[i].id == repo.id){
+                    repo.name = resData[i].name;
+                    break;
+                }
+            }
+        
             var markup = `<span id='${repo.id}'>${repo.name}</span>`;
             return markup;
         },
         templateResult(repo) {
             if (repo.loading) {
-                // $("#select2_sample").select2({
-                //     data: [{id:0, text:'text',name: '无结果'}]
-                // })
+                return repo.text;
             };
             var markup = `<span id='${repo.id}'>${repo.name}</span>`;
             return markup;

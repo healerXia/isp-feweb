@@ -27,7 +27,7 @@
       <div class="conBox MT20 pL30 pR30" v-show="!noOrder">
         <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
-     <!--      <router-link v-show="editOrder" 
+        <!-- <router-link v-show="editOrder" 
             :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
              编辑排期                
           </router-link>
@@ -61,7 +61,9 @@
             </li>
              <li>
                 <span>成交价格：</span>
-                <span class="colorRed">{{adverMes.realitySellAllPrice}}元</span>
+                <span class="colorRed">
+                  {{adverMes.realitySellAllPrice.replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,'$&,')}}元
+                </span>
             </li>
              <li >
               <span>订单状态：</span>
@@ -83,8 +85,16 @@
                 <Schedule :tableData="tableData"></Schedule>
               </div>
               <div class="totalPrice" slot="content">
-                <span>A类购买净总价：{{(priceArr.totalBuy.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
-                <span>B类购买净总价：{{(priceArr.totalDelivery.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,').replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
+                <span>
+                  A类购买净总价：
+                  {{(priceArr.totalBuy.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                  元
+                </span>
+                <span>
+                  B类购买净总价：
+                  {{(priceArr.totalDelivery.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}
+                  元
+                </span>
                 <span>配送比率：{{priceArr.rate}}</span>
               </div>   
             </Panel>
@@ -343,8 +353,8 @@ export default {
               if(res.data.errorCode === 0) {
                 this.tableDatas=res.data.result
                 for(let i=0;i<this.tableDatas.length;i++){//处理总数据
-                  this.priceArr.totalBuy=this.tableDatas[i].monthPrice+this.priceArr.totalBuy
-                  this.priceArr.totalDelivery=this.tableDatas[i].monthFree+this.priceArr.totalDelivery
+                  this.priceArr.totalBuy=this.tableDatas[i].monthPrice4001+this.priceArr.totalBuy
+                  this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
                 }
                 if(this.priceArr.totalBuy!=0){
                   this.rate=(this.priceArr.totalDelivery/this.priceArr.totalBuy).toFixed(2)

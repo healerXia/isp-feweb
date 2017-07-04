@@ -32,7 +32,7 @@
                 <div class='dialogContent' slot='content'>
                     <p class="dialogContent-title">日期</p>
                     <div class="dialogContent-top">
-                        <p>价格：{{layer.skuPrice}}</p>
+                        <p>价格：{{layer.skuPrice}}元</p>
                         <p>尺寸：{{layer.pSize}}</p>
                     </div>
                     <div class="dialogContent-bot">
@@ -292,8 +292,15 @@ export default {
                             "adPlaceId": `${this.info.adPlaceId}`
                         }).then((res) => {
                             if (res.data.errorCode == 0) {
-                                let data = Object.assign({}, res.data.result);
-                                this.layer.djbg = `${data.singleClick}/${data.singleDisplay}`;
+                                this.layer = Object.assign({}, res.data.result);
+                                this.layer.pSize = `${this.info.width} * ${this.info.height}`;
+                                let skuDatas = JSON.parse(this.info.adStateLists);
+                                for (let attr in skuDatas) {
+                                    if(attr == `${dataTimes}`) {
+                                        let n = skuDatas[attr];
+                                        this.layer.skuPrice = n[dateIndex-1].skuPrice;
+                                    }
+                                }
                             }
                             else if (res.data.errorCode == 50000){
                                 this.$Modal.info({

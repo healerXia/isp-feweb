@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="">
-        <select id="select2_sample" name="sample" style="width:75%" class="js-example-basic-multiple" >
+        <select id="select2_sample" name="sample" style="width:75%" class="js-example-basic-multiple">
         </select>
         <button type="button" name="button" @click='fn'>获取</button>
         <button type="button" name="button" @click='clear'>清空</button>
@@ -17,52 +17,59 @@ export default {
         setTimeout(() => {
             var data = //下拉列表中的数据项
             $("#select2_sample").select2({
-                multiple: true,
                 allowClear:true,
-                ajax: {
-                    transport: function(params, success, failure) {
-                        if (!params.data.term) {
-                            let data = [
-                                {
-                                    id: 1,
-                                    name: '默认选项',
-                                    text: 'text'
-                                }
-                            ]
-                            success(data);
-                            return false;
-                        }
-                        axios.get('mock/resource',{
-                            name: '',
-                            modelId: 0
-                        }).then((res)=> {
-                            console.log(1);
-                            success();
-                        }).catch((err) => {
-                            failure();
-                        })
-
-
-                    },
-                    processResults: function (data, params) {
-                      // parse the results into the format expected by Select2
-                      // since we are using custom formatting functions we do not need to
-                      // alter the remote JSON data, except to indicate that infinite
-                      // scrolling can be used
-                      return {
-                          results: data
-                      };
-                    },
-                },
+                placeholder: '请选择',
+                data: [
+                    {
+                        name:"zxy",
+                        id: 1,
+                        text: 'text'
+                    }
+                ],
+                // ajax: {
+                //     transport: function(params, success, failure) {
+                //         if (!params.data.term) {
+                //             let data = [
+                //                 {
+                //                     id: 1,
+                //                     name: '默认选项',
+                //                     text: 'text'
+                //                 }
+                //             ]
+                //             success(data);
+                //             return false;
+                //         }
+                //         axios.get('mock/resource',{
+                //             name: '',
+                //             modelId: 0
+                //         }).then((res)=> {
+                //             console.log(1);
+                //             success();
+                //         }).catch((err) => {
+                //             failure();
+                //         })
+                //
+                //
+                //     },
+                //     processResults: function (data, params) {
+                //       // parse the results into the format expected by Select2
+                //       // since we are using custom formatting functions we do not need to
+                //       // alter the remote JSON data, except to indicate that infinite
+                //       // scrolling can be used
+                //       return {
+                //           results: data
+                //       };
+                //     },
+                // },
                 escapeMarkup: function (markup) { return markup; },
                 //minimumInputLength: 1,
-                templateSelection(repo) {
-                    if (repo.loading){
-
-                    }
-                    var markup = "<span>"+repo.name+"</span>";
-                    return markup;
-                },
+                // templateSelection(repo) {
+                //     if (repo.loading){
+                //
+                //     }
+                //     var markup = "<span>"+repo.name+"</span>";
+                //     return markup;
+                // },
                 templateResult(repo) {
                     if (repo.loading) {
                         // $("#select2_sample").select2({
@@ -71,10 +78,6 @@ export default {
                     };
                     var markup = "<span>"+repo.name+"</span>";
                     return markup;
-                },
-                formatSelection: function(object, container) {
-                    console.log(object);
-                    return object.name;
                 }
             });
         })

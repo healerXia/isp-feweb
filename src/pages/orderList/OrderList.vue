@@ -138,16 +138,16 @@ import config from './config.js';
             }
           ],
           orderStatusArr:[
+            {Name:"编辑中",Value:1011},
             {Name:"待初审",Value:1000},
-            {Name:"待复审",Value:1001},
             {Name:"初审驳回",Value:1002},
+            {Name:"待复审",Value:1001},
+            {Name:"复审驳回",Value:1014},
+            {Name:"待确认",Value:1013},
             {Name:"确认通过",Value:1003},
             {Name:"确认驳回",Value:1004},
-            {Name:"过期撤销",Value:1006},
             {Name:"终止",Value:1007},
-            {Name:"待确认",Value:1013},
-            {Name:"复审驳回",Value:1014},
-            {Name:"编辑中",Value:1011}, 
+            {Name:"过期撤销",Value:1006},  
           ],
           projectTypeArr:[
            {Name:"广告",Value:1}
@@ -239,7 +239,7 @@ import config from './config.js';
         for(let item in objs){
           if(objs[item]&&item!='playStatus'){
             let a=objs[item]
-            a=(a+"").replace(/(^\s*)|(\s*$)/,"")
+            a=(a+"").replace(/(^\s*)|(\s*$)/g,"")
             str=str+item+"="+a+'&';
           }else if(objs[item]&&item=='playStatus'){
             for(let i=0;i<objs[item].length;i++){
