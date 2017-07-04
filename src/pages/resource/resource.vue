@@ -360,7 +360,6 @@ export default {
         }
     },
     mounted() {
-        this.render();
         let timeStap = Date.parse(new Date());
         // 初始化下拉
         setTimeout(() => {
@@ -798,7 +797,7 @@ export default {
                 brandIdList: this.searchInfo.brandId
             };
             window.sessionStorage.setItem('searchInfo', JSON.stringify(search));
-            // /isp-kongming/ad/selec
+            //
             this.$http.post('/isp-kongming/ad/select', {
                 // 开始时间
                 beginTime: `${this.searchInfo.beginTime}-01`,
