@@ -47,7 +47,7 @@
             <li>
               <span>订单编号：</span>
               <span>{{adverMes.adOrderCode}}</span>
-              <a href="">导出PDF</a>
+              <!-- <a href="">导出PDF</a> -->
             </li>
             <li>
               <span>投放周期：</span>
