@@ -115,6 +115,8 @@ body {
   .ivu-menu-dark.ivu-menu-vertical .ivu-menu-submenu-title:hover{background-color: #252834 !important}
   .ivu-menu-dark.ivu-menu-vertical {
     .ivu-menu-opened{
+      .icon-navi-down{display: none;}
+       .icon-navi-up{display:inline-block}
       background:#20242e !important;
       .ivu-menu-submenu-title{
         background:#20242e !important;

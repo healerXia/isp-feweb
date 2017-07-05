@@ -34,7 +34,8 @@
               </Select>
             </Form-item>
             <Form-item label="项目名称:" prop="projectName" >
-              <Input v-model="formValidate.projectName" placeholder="请填写项目名称" maxlength="50" class='createInput fl'></Input>
+              <Input v-model="formValidate.projectName" placeholder="请填写项目名称" maxlength="50" class='createInput fl' @on-focus="removeRepeatCheck"></Input>
+              <span class="colorRed ML15" v-show="judge.checkRepeat">项目名称重复,请重新填写</span>
             </Form-item>
             <div class="budget">
               <Indexbox :mes="mesBudget" v-model="formValidate.budgetAmount"></Indexbox>
@@ -233,6 +234,7 @@
               noCon:false
             },
             judge:{//页面的各种判断
+              checkRepeat:false,//项目名称重复判断
               showOrder:true,//显示提交按钮
               submitDiasbled:false,//提交按钮
               orderDiasbled:false,//继续下单按钮
@@ -910,10 +912,11 @@
                       },2000)
                   }
                   else {
-                    this.$Modal.info({
+                    this.$Modal.error({
                         title: '提示',
                         content: res.data.errorMsg
                     });
+                    this.judge.checkRepeat=true;
                   }
                   setTimeout(()=>{
                     this.judge.submitDiasbled=false
@@ -1000,10 +1003,11 @@
                         },2000)
                       }
                       else {
-                        this.$Modal.info({
+                        this.$Modal.error({
                             title: '提示',
                             content: res.data.errorMsg
                         });
+                        this.judge.checkRepeat=true
                       }
                       setTimeout(()=>{
                         this.judge.submitDiasbled=false
@@ -1032,10 +1036,11 @@
                       },2000)
                     }
                     else {
-                        this.$Modal.info({
+                        this.$Modal.error({
                             title: '提示',
                             content: res.data.errorMsg
                         });
+                        this.judge.checkRepeat=true
                     }
                     setTimeout(()=>{
                       this.judge.submitDiasbled=false
@@ -1091,7 +1096,7 @@
             return true
           }
         },
-        putWayRadio:function(){//推广方式来决定投放车型与投放品牌
+        putWayRadio(){//推广方式来决定投放车型与投放品牌
           this.formValidate.promotionWay=parseInt(this.formValidate.promotionWay)//变成int类型
           if ([3,5,6,7].indexOf(this.formValidate.promotionWay)!=-1) {//投放品牌
             this.judge.showBrand=true;
@@ -1122,6 +1127,9 @@
           else{
             this.judge.rateShow=false
           }
+        },
+        removeRepeatCheck(){
+          this.judge.checkRepeat=false
         }
       },
       computed: {//计算属性
