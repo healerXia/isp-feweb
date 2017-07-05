@@ -25,7 +25,7 @@
                   <span>项目预算：</span>
                   <span>
                     {{(proMess.budgetAmount+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元
-                    </span>
+                  </span>
                 </li>
                 <li>
                   <span>项目周期：</span>
@@ -107,16 +107,22 @@ export default {
     watch:{
       proMess:{
         handler:function(){
-          this.serialBrand=""
+          this.serialBrand="";
           if(this.proMess.brandNames&&this.proMess.serialNames){
             this.brandNameArr=this.proMess.brandNames.split(",")
             this.serialNameArr=this.proMess.serialNames.split(",")
             for(let i=0;i<this.serialNameArr.length;i++){
-              this.serialBrand=this.serialBrand+this.serialNameArr[i]+"("+this.brandNameArr[i]+"),"
+              if(this.brandNameArr[i]==""){
+                this.serialBrand=this.serialBrand+this.serialNameArr[i]+","
+              }else{
+                this.serialBrand=this.serialBrand+this.serialNameArr[i]+"("+this.brandNameArr[i]+"),"
+              }
+              
             }
             this.serialBrand=this.serialBrand.replace(/(,)$/,"")
+          }else if(this.proMess.brandNames==""&&this.proMess.serialNames!=""){
+            this.serialBrand=this.proMess.serialNames;
           }
-
         }
       }
     },
