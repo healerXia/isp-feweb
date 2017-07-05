@@ -28,7 +28,7 @@
                     </span>
                 </li>
                 <li>
-                  <span>投放周期：</span>
+                  <span>项目周期：</span>
                   <span>{{proMess.beginDateStr}}至{{proMess.endDateStr}}</span>
                 </li>
               </ul>
