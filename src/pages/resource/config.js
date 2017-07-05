@@ -67,7 +67,7 @@ const initSelect = function(id, url, rqData, typeId, typeName) {
             let searchData = datas.slice(0, 10);
             resData = searchData;
               return {
-                  results: searchData
+                  results: resData
               };
             },
         },
@@ -84,7 +84,7 @@ const initSelect = function(id, url, rqData, typeId, typeName) {
                     break;
                 }
             }
-        
+
             var markup = `<span id='${repo.id}'>${repo.name}</span>`;
             return markup;
         },
@@ -108,3 +108,81 @@ export {
     urlList,
     initSelect
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// initResult(data) {
+//     let time = new Date();
+//     let year = time.getFullYear();
+//     let month = time.getMonth() + 1;
+//     let day = time.getDate();
+//     let adStateList = [];
+//     let arr = [];
+//     let monthList = [];
+//     let adList = data.adStateList;
+//
+//     let obj = Object.assign({}, adList);
+//     for (let attr in obj) {
+//        monthList.push(attr);
+//        let ad = obj[attr];
+//        let monthData = {};
+//        let dayStates = [];
+//        let skuIdList = [];
+//        let total = 0;
+//        monthData.time = attr;
+//        monthData.dayStatus = obj[attr];
+//        //ad.sort(this.compare('day'));
+//        // 按照日期
+//
+//        for (let j = 0; j < ad.length; j++) {
+//         //    dayStates.push(ad[j].skuStatus);
+//            dayStates[ad[j].day - 1] = ad[j].skuStatus;
+//            skuIdList[ad[j].day -1 ] = ad[j].skuId;
+//            total += parseFloat(ad[j].skuPrice);
+//        }
+//
+//        for (let k = 0; k < 31; k++ ) {
+//
+//            if (dayStates[k] == 'SKU_STATUS_LOCKED' || dayStates[k] == 'SKU_STATUS_SALED' || dayStates[k] == 'SKU_STATUS_RUNNING') {
+//                dayStates[k] = '2'
+//            }
+//            if (dayStates[k] == 'SKU_STATUS_NONE' || dayStates[k] =='SKU_STATUS_DELETE' || dayStates[k] == 'SKU_STATUS_IDLE') {
+//                dayStates[k]  = '1';
+//            }
+//            if (!dayStates[k]) {
+//                dayStates[k]  = '3';
+//            }
+//
+//            if ((new Date(`${year}/${month}/${day}`)) >= new Date(`${attr}/${k+1}`.replace(/\-/g, "\/"))) {
+//                dayStates[k]  = '3';
+//            }
+//        }
+//
+//        monthData.kprice = (total/30).toFixed(2);
+//        monthData.state = dayStates.join(',');
+//        monthData.skuIdList = skuIdList;
+//        arr.push(monthData);
+//     }
+//
+//     // 存储日期
+//     monthList.sort();
+//     for (let i = 0; i < monthList.length; i++) {
+//         for (let j = 0; j < arr.length; j++) {
+//             if (arr[j].time == monthList[i]) {
+//                 adStateList.push(arr[j]);
+//             }
+//         }
+//     }
+//     return adStateList;
+// },

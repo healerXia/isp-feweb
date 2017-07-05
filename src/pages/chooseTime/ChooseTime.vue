@@ -658,11 +658,11 @@ export default {
                 let index = numList.indexOf(this.submitList[i].yearMonth);
                 this.submitList[i].SellAllPrice = this.priceList[index].total;
                 this.submitList[i].DispatchinglAllPrice = this.priceList[index].delivery;
+                this.submitList[i].discount = this.priceList[index].proportion;
             }
 
             window.sessionStorage.setItem('price', JSON.stringify(this.submitList));
             window.sessionStorage.setItem('priceList', JSON.stringify(this.priceList));
-
 
 
            let str = JSON.stringify(this.submitList);

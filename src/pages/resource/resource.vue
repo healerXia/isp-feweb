@@ -280,11 +280,11 @@ export default {
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
                 pageName: [
-                    { required: true, type: 'string', message: '请选择页面名称', trigger: 'change' }
+                    { required: true,  message: '请选择页面名称', trigger: 'change' }
                 ],
-                // typeAd: [
-                //     { required: true, type: 'string', message: '请选择广告类型', trigger: 'change' }
-                // ],
+                adType: [
+                    { required: true,  message: '请选择广告类型', trigger: 'change' }
+                ],
                 brandId: [
                     { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
                 ],
@@ -360,6 +360,7 @@ export default {
         }
     },
     mounted() {
+        let self = this;
         let timeStap = Date.parse(new Date());
         // 初始化下拉
         setTimeout(() => {
@@ -373,6 +374,7 @@ export default {
                 placeholder: "请选择",
                 theme: "bootstrap"
             });
+
 
         })
         this.$http.get(`/isp-kongming/ad/mediaSelect`).then((res) => {
@@ -469,7 +471,7 @@ export default {
             let time = new Date();
             let year = time.getFullYear();
             let month = time.getMonth() + 1;
-            let crrentTime = new Date(`${year}-${month}`);
+            let day = time.getDate();
             let adStateList = [];
             let arr = [];
             let monthList = [];
@@ -506,11 +508,10 @@ export default {
                    if (!dayStates[k]) {
                        dayStates[k]  = '3';
                    }
-                   if (crrentTime > new Date(`${attr}-${k+1}`)) {
+
+                   if ((new Date(`${year}/${month}/${day}`)) >= new Date(`${attr}/${k+1}`.replace(/\-/g, "\/"))) {
                        dayStates[k]  = '3';
                    }
-
-
                }
 
                monthData.kprice = (total/30).toFixed(2);
@@ -700,7 +701,6 @@ export default {
                                 str.push(data[i].id);
                             }
                             this.searchInfo.placeTypeSelect = str.join(',');
-                            console.log(this.searchInfo.placeTypeSelect);
                             this.typeAd = str.join(',');
                         }
                     })
@@ -975,6 +975,7 @@ export default {
             this.redrawed();
         },
         search(name) {
+            console.log(this.typeAd);
             if(this.timeTxt) {
                 return false;
             }

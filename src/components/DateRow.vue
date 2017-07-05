@@ -33,12 +33,12 @@
                     <p class="dialogContent-title">日期</p>
                     <div class="dialogContent-top">
                         <p>价格：{{layer.skuPrice}}元</p>
-                        <p>尺寸：{{layer.pSize}}</p>
+                        <p>尺寸：{{layer.width}}*{{layer.height}}</p>
                     </div>
                     <div class="dialogContent-bot">
-                        <p>占用人：{{layer.dutyUserName}}</p>
+                        <p>占用人：{{layer.adCustomerName}}</p>
                         <p>订单号：{{layer.adOrderCode}}</p>
-                        <p>订单状态：{{layer.state}}</p>
+                        <p>订单状态：{{layer.statusName}}</p>
                         <p>最终客户：{{layer.adCustomerName}}</p>
                         <p>点击/曝光：{{layer.singleClick}}/{{layer.singleDisplay}}</p>
                     </div>
@@ -275,7 +275,7 @@ export default {
                                 }
                             }
                         }
-
+                        console.log(dataTimes);
                         // 宽高
                         this.layer.pSize = `${this.info.width}*${this.info.height}`;
                         if (dateIndex < 10) {

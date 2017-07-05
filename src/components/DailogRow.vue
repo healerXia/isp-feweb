@@ -9,12 +9,12 @@
                     <p class="dialogContent-title">日期</p>
                     <div class="dialogContent-top">
                         <p>价格：{{layer.skuPrice}}</p>
-                        <p>尺寸：{{layer.pSize}}</p>
+                        <p>尺寸：{{layer.width}}*{{layer.height}}</p>
                     </div>
                     <div class="dialogContent-bot">
-                        <p>占用人：{{layer.dutyUserName}}元</p>
+                        <p>占用人：{{layer.adCustomerName ? layer.adCustomerName : '-'}}元</p>
                         <p>订单号：{{layer.adOrderCode}}</p>
-                        <p>订单状态：{{layer.state}}</p>
+                        <p>订单状态：{{layer.statusName}}</p>
                         <p>最终客户：{{layer.adCustomerName}}</p>
                         <p>点击/曝光：{{layer.singleClick}}/{{layer.singleDisplay}}</p>
                     </div>
@@ -112,6 +112,7 @@ export default {
     },
     methods: {
         initDate(time) {
+            console.log(time);
             // 获取数据传输的年月
             let arry = this.time.split('-');
             let dataYear = arry[0];
@@ -127,6 +128,11 @@ export default {
                 }
             }
 
+            let times = new Date();
+            let year = times.getFullYear();
+            let month = times.getMonth() + 1;
+            let day = times.getDate();
+
             for (let i = 0; i < this.timeData.length; i++) {
                  let timeName = this.timeData[i];
                  if (timeName == 'SKU_STATUS_LOCKED' || timeName == 'SKU_STATUS_SALED' || timeName == 'SKU_STATUS_RUNNING') {
@@ -135,7 +141,25 @@ export default {
                  if (timeName == 'SKU_STATUS_NONE' || timeName =='SKU_STATUS_DELETE' || timeName == 'SKU_STATUS_IDLE') {
                      this.$set(this.timeData, i, "1");
                  }
+
+                 if (!timeName) {
+                    this.$set(this.timeData, i, "3");
+                 }
+
+                 if ((new Date(`${year}/${month}/${day}`)) >= new Date(`${time}/${i+1}`.replace(/\-/g, "\/"))) {
+                     this.$set(this.timeData, i, "3");
+                 }
+
+
+
+
+
+
+
+
+
             }
+
         },
         over(event) {
             let target = event.target.nodeName;
@@ -199,8 +223,7 @@ export default {
                             event.target.nextElementSibling.style.top = 34 + 'px';
                         }
                         else {
-                            console.log(1);
-                            event.target.nextElementSibling.style.top = -270 + 'px';
+                            event.target.nextElementSibling.style.top = -280 + 'px';
                         }
                     })
                 }, 2000)
@@ -225,7 +248,7 @@ export default {
     }
 
     .dialog-right {
-        left: -288px;
+        left: -320px;
     }
 
 
