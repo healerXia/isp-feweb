@@ -210,9 +210,17 @@ export default {
                     proportion:'0:0'
                 });
             }
-
         }
 
+        for (let i = 0; i < this.num.length; i++) {
+            let data = this.pageList[this.num[i]];
+            for (let j = 0; j < data.length; j++) {
+                 if (data[j].useStyle == 0) {
+                      data[j].useStyle = 4001;
+                 }
+            }
+        }
+        console.log(this.pageList);
         // 可放置最大月份个数
         let maxMonthNum = Math.ceil(40/len);
         for (let i = 0;i < this.num.length; i++) {
@@ -234,16 +242,6 @@ export default {
         //     }
         // }
         this.num = this.num.sort();
-
-        // for (let i = 0; i < this.num.length; i++) {
-        //     let data = this.pageList[this.num[i]];
-        //     for (let j = 0; j < data.length; j++) {
-        //          if (!data[j].useStyle) {
-        //               data[j].useStyle = 4001;
-        //          }
-        //     }
-        // }
-
     },
     methods: {
         // 数据拆分
@@ -315,7 +313,7 @@ export default {
             // console.log(tableIndex); // 表索引
             // console.log(index); // 表格所在行数索引
             this.pageList[date][index].dataList = Object.assign([], arr);
-            //this.pageList[date][index].useStyle = 4001;
+            this.pageList[date][index].useStyle = 4001;
             if (!this.pageList[date][index].total) {
                 this.pageList[date][index].total = 0;
             }
