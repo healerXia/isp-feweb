@@ -38,7 +38,7 @@
                         <p>尺寸：{{layer.width =! '' ? layer.width : '-'}}*{{layer.height != '' ? layer.height : '-'}}px ≤ 100k</p>
                     </div>
                     <div class="dialogContent-bot">
-                        <p>占用人：{{layer.adCustomerName ? layer.adCustomerName : '-'}}</p>
+                        <p>占用人：{{layer.dutyUserName ? layer.dutyUserName : '-'}}</p>
                         <p>订单号：{{layer.adOrderCode ? layer.adOrderCode: '-'}}</p>
                         <p>订单状态：{{layer.statusName ? layer.statusName: '-'}}</p>
                         <p>最终客户：{{layer.adCustomerName ? layer.adCustomerName : '-'}}</p>
