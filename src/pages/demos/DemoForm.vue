@@ -1,5 +1,5 @@
 <template lang="html">
-    <div class="">
+    <div class="" style="height:2000px;">
         <select id="select2_sample" name="sample" style="width:75%" class="js-example-basic-multiple">
         </select>
         <button type="button" name="button" @click='fn'>获取</button>
@@ -11,6 +11,7 @@
 import $ from 'jquery';
 import 'select2';
 import 'select2/dist/css/select2.css';
+import 'select2-bootstrap-theme/dist/select2-bootstrap.css';
 import axios from 'axios';
 export default {
     mounted() {
@@ -19,6 +20,7 @@ export default {
             $("#select2_sample").select2({
                 allowClear:true,
                 placeholder: '请选择',
+                theme: "bootstrap",
                 data: [
                     {
                         name:"zxy",

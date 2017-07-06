@@ -337,7 +337,7 @@ import urlList from './config.js';
             }
             else {
                 let percent = total/delivery;
-                return `1:${percent.toFixed(1)}`;
+                return `1:${percent.toFixed(2)}`;
             }
         }
     }

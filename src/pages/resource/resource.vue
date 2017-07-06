@@ -19,8 +19,8 @@
             <Collapse v-model="shrinkMes.shrinkValue" @on-change="showCollapse">
                 <Panel name="1">
                     <span class='query-ad-title'>查询广告位</span>
-                    <span class="fRight MR20" v-if="shrinkMes.collapse">收起&nbsp;<Icon type="chevron-up"></Icon></span>
-                    <span class="fRight MR20" v-else="shrinkMes.collapse">展开&nbsp;<Icon type="chevron-down"></Icon></span>
+                    <span class="fRight MR20" v-if="shrinkMes.collapse">展开&nbsp;<Icon type="chevron-up"></Icon></span>
+                    <span class="fRight MR20" v-else="shrinkMes.collapse">收起&nbsp;<Icon type="chevron-down"></Icon></span>
                     <div class="query-ad" slot="content">
                         <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
                         <Form-item label="选择日期：">
@@ -54,25 +54,25 @@
                                 </Form-item>
                             </Col>
                             <Col span="12">
-                                <Form-item label="广告类型：" prop='typeAd'>
-                                    <select id="adType" name="sample" style="width:75%" class="js-example-basic-multiple"></select>
+                                <Form-item label="广告类型" prop='adType' :error='errorTxts.adType'>
+                                    <select id="adType" name="sample" style="width:400px;height:36px;" class="js-example-basic-multiple"></select>
                                 </Form-item>
                             </Col>
                         </Row>
                         <Row>
                            <Col v-if='searchInfoTxt[0]' span="12" style="padding-right:10px">
                                <Form-item label="投放车型：" class='resetSearchInfo' prop='serialId'>
-                                   <select id="serialId" name="sample" style="width:75%" class="js-example-basic-multiple"></select>
+                                   <select id="serialId" name="sample" style="width:400px;height:36px;" class="js-example-basic-multiple"></select>
                                </Form-item>
                            </Col>
                            <Col v-if='searchInfoTxt[1]' span="12" style="padding-right:10px">
                                <Form-item label="投放地区：" class='resetSearchInfo' prop='cityId'>
-                                   <select id="cityId" name="sample" style="width:75%" class="js-example-basic-multiple"></select>
+                                   <select id="cityId" name="sample" style="width:400px;height:36px;" class="js-example-basic-multiple"></select>
                                </Form-item>
                            </Col>
                            <Col v-if='searchInfoTxt[2]' span="12" style="padding-right:10px">
                                <Form-item label="投放品牌：" class='resetSearchInfo' prop='brandId'>
-                                   <select id="brandId" name="sample" style="width:75%" class="js-example-basic-multiple"></select>
+                                   <select id="brandId" name="sample" style="width:400px;height:36px;" class="js-example-basic-multiple"></select>
                                </Form-item>
                            </Col>
                         </Row>
@@ -113,18 +113,24 @@
                 </div>
                 <!-- 查询结果列表 -->
                 <div class="table-list">
-                    <div v-if='i.adStateList.length > 0'  v-for = "(i, index) in tableList" class="item">
+                    <div v-if='paging.totalCounts'  v-for = "(i, index) in tableList" class="item">
                         <div class="item-title clear">
-                            <div class="fl">
+                            <div class="fl" style="height:30px;">
                                  <Checkbox class='fl' v-model='checkBoxStatus[index]' @on-change='splitTable(i, index)' style="font-size:12px; margin-right:10px">
                                      <span class="ad-name">名称:</span>
                                  </Checkbox>
-                                 <span class='ad-listName fl'>{{i.name}}</span>
-                                 <a href="javascript:;" @click='viewAd(i.width, i.height, i, index)'>查看</a>
+
+                                 <Tooltip  placement="top">
+                                     <div slot="content">
+                                         <div style='white-space: normal;text-align:left'>{{i.name}}</div>
+                                     </div>
+                                     <span class='ad-listName fl'>{{i.name}}</span>
+                                 </Tooltip>
+                                 <a href="javascript:;" @click='viewAd(i.width, i.height, i, index)' style="display:inline-block;vertical-align:top;">查看</a>
                             </div>
                             <div class="fr">
                                 <span class='size'>
-                                    尺寸：{{adType[i.adType]}}：{{i.width}}*{{i.height}}px
+                                    尺寸：{{i.adTypeList}}：{{i.width}}*{{i.height}}px
                                     ≤100k
                                 </span>
                             </div>
@@ -139,7 +145,7 @@
                             </tr>
                             <tr v-for='k in i.adStateList' :info='i' :time = 'k.time' :timeData = 'k.state.split(",")' is='DailogRow'>
                                 <td>{{k.time}}</td>
-                                <td>{{k.kprice}}</td>
+                                <td>{{k.kprice}} 元/天</td>
                             </tr>
                         </table>
                     </div>
@@ -224,6 +230,9 @@ export default {
             },
             searching: false,
             timeTxt: '',
+            errorTxts: {
+                adType: '请选择广告类型'
+            },
             // 日期判断
             date1: {
                 disabledDate: this.disStart
@@ -281,9 +290,6 @@ export default {
                 ],
                 pageName: [
                     { required: true,  message: '请选择页面名称', trigger: 'change' }
-                ],
-                adType: [
-                    { required: true,  message: '请选择广告类型', trigger: 'change' }
                 ],
                 brandId: [
                     { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
@@ -374,6 +380,8 @@ export default {
                 placeholder: "请选择",
                 theme: "bootstrap"
             });
+
+            //this.errorTxts.adType = '1231231'
 
 
         })
@@ -821,10 +829,21 @@ export default {
                 brandIdList: this.searchInfo.brandId
 
             }).then((res) => {
+                console.log('请求成功');
                 if (res.data.errorCode == 0) {
                     // this.tableList = Object.assign([], res.data.result);
                     // this.paging.count = this.tableList.length;
+                    console.log(res.data.result);
                     let datas = Object.assign([], res.data.result);
+                    if (datas[0].totalCounts > 0) {
+                        this.paging.totalCounts = datas[0].totalCounts;
+                        this.searching = false;
+                    }
+                    else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
+
+                        this.paging.totalCounts = 0;
+                        this.searching = false;
+                    }
                     for (let i = 0; i < datas.length; i++) {
                         let str = JSON.stringify(datas[i].adStateList);
                          datas[i].adStateLists = str;
@@ -834,16 +853,6 @@ export default {
                     this.tableList = Object.assign([], datas);
                     for (let i = 0; i< this.tableList.length;i++) {
                         this.$set(this.checkBoxStatus, i, false);
-                    }
-
-                    if (datas[0].totalCounts > 0) {
-                        this.paging.totalCounts = datas[0].totalCounts;
-                        this.searching = false;
-                    }
-                    else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
-
-                        this.paging.totalCounts = 0;
-                        this.searching = false;
                     }
 
                     // action 1  进行新增操作
@@ -884,9 +893,9 @@ export default {
             }).catch((err) => {
                 console.log(err);
                 this.searching = false;
-                this.searchInfo.pageIndex = 1;
-                this.searchInfo.pageSize = 10;
-                this.paging.totalCounts = 0;
+                // this.searchInfo.pageIndex = 1;
+                // this.searchInfo.pageSize = 10;
+                // this.paging.totalCounts = 0;
             })
         },
         chooseMedia(name, id, index) {

@@ -14,7 +14,7 @@
         >
             <Tooltip  placement="top">
                 <div slot="content">
-                    <div style='white-space: normal;text-align:center'>{{info.name}}</div>
+                    <div style='white-space: normal;text-align:left'>{{info.name}}</div>
                 </div>
                 <span class='infoName'>{{info.name}}</span>
             </Tooltip>
@@ -24,7 +24,9 @@
                 <Option v-for="(key, value) in useList" :value="key" :key="value">{{value}}</Option>
             </Select>
         </td>
-        <td class='priceTd'>{{info.price}}元/天</td>
+        <td class='priceTd'>
+            <span>{{info.price}}元/天</span>
+        </td>
         <td v-for='(i,index) in info.adStateList'
             :class='["dateTd", {"active": indexList[index]},{"default": i == 3}, {"hasSel": i == 2}]'>
             <span :data-index='index' :data-status='i' class='dateSpan'></span>
@@ -32,15 +34,15 @@
                 <div class='dialogContent' slot='content'>
                     <p class="dialogContent-title">日期</p>
                     <div class="dialogContent-top">
-                        <p>价格：{{layer.skuPrice}}元</p>
-                        <p>尺寸：{{layer.width}}*{{layer.height}}</p>
+                        <p>价格：{{layer.skuPrice}}元/天</p>
+                        <p>尺寸：{{layer.width =! '' ? layer.width : '-'}}*{{layer.height != '' ? layer.height : '-'}}px ≤ 100k</p>
                     </div>
                     <div class="dialogContent-bot">
-                        <p>占用人：{{layer.adCustomerName}}</p>
-                        <p>订单号：{{layer.adOrderCode}}</p>
-                        <p>订单状态：{{layer.statusName}}</p>
-                        <p>最终客户：{{layer.adCustomerName}}</p>
-                        <p>点击/曝光：{{layer.singleClick}}/{{layer.singleDisplay}}</p>
+                        <p>占用人：{{layer.adCustomerName ? layer.adCustomerName : '-'}}</p>
+                        <p>订单号：{{layer.adOrderCode ? layer.adOrderCode: '-'}}</p>
+                        <p>订单状态：{{layer.statusName ? layer.statusName: '-'}}</p>
+                        <p>最终客户：{{layer.adCustomerName ? layer.adCustomerName : '-'}}</p>
+                        <p>点击/曝光：{{layer.singleClick ? layer.singleClick : '-'}}/{{layer.singleDisplay ? layer.singleDisplay : '-'}}</p>
                     </div>
                 </div>
             </div>
@@ -100,6 +102,7 @@ export default {
     watch:{
         info: {
             handler: function(){
+                console.log(this.info);
                 for (let i = 0;i < this.info.adStateList.length;i++) {
                     if (this.info.adStateList[i] == 4) {
                         this.$set(this.indexList, i, true);
@@ -110,6 +113,7 @@ export default {
         }
     },
     mounted() {
+        console.log(this.useStyle);
         for(let i = 0;i < 31; i++) {
             this.$set(this.visibleList, i, false);
         }
@@ -366,12 +370,13 @@ td {
     .infoName {
         margin: 0 auto;
         display: block;
-        width: 180px;
+        width: 200px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         line-height: 23px;
         height: 23px;
+        text-align: left;
 
         &:hover {
             cursor: pointer;
@@ -399,12 +404,19 @@ td {
 
 span {
     height: 100%;
-    width: 100%;
+    // width: 100%;
     display: block;
 }
 
 .priceTd {
-    border: 1px solid #DEE1E5;;
+    width: 126px;
+    border: 1px solid #DEE1E5;
+
+    span {
+        text-align: right;
+        // text-indent: 20px;
+        padding-right: 20px;
+    }
 }
 
 .dateTd {

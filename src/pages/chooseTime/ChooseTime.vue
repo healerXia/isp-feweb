@@ -235,13 +235,14 @@ export default {
         // }
         this.num = this.num.sort();
 
-        for (let i = 0; i < this.num.length; i++) {
-            let data = this.pageList[this.num[i]];
-            for (let j = 0; j < data.length; j++) {
-
-                 data[j].useStyle = 4001;
-            }
-        }
+        // for (let i = 0; i < this.num.length; i++) {
+        //     let data = this.pageList[this.num[i]];
+        //     for (let j = 0; j < data.length; j++) {
+        //          if (!data[j].useStyle) {
+        //               data[j].useStyle = 4001;
+        //          }
+        //     }
+        // }
 
     },
     methods: {
@@ -283,7 +284,7 @@ export default {
             }
             else {
                 let percent = total/delivery;
-                return `1:${percent.toFixed(1)}`;
+                return `1:${percent.toFixed(2)}`;
             }
         },
         // 操作的是行单位
@@ -429,7 +430,7 @@ export default {
 
             let money = this.computedPrice(list, price);
             let tableIndex = this.num.indexOf(date);
-            this.pageList[date][index].useStyle = 4001;
+            // this.pageList[date][index].useStyle = 4001;
             switch (oldType) {
                 // 销售
                 case 4001:
@@ -513,7 +514,6 @@ export default {
                 per: d,
                 proportion: str
             })
-            console.log(JSON.stringify(this.priceList[tableIndex]));
             window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
             window.sessionStorage.setItem('timePageList', JSON.stringify(this.pageList));
         },
@@ -576,13 +576,13 @@ export default {
                  }).then((res) => {
                      this.saveStatus = false;
                     if (res.data.errorCode == 0) {
+                        window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));
                         this.$Modal.success({
                             title: '提示',
                             content: res.data.errorMsg,
                             onOk () {
-                                 //window.localStorage.setItem('adOrderCode', res.data.result);
-                                //  self.$router.push('buildPrice');
-                             }
+                                 self.$router.push('buildPrice');
+                            }
                         });
                     }
                     else {
@@ -595,26 +595,26 @@ export default {
                     console.log(err)
                 })
             } else {
-                console.log(JSON.stringify({
-                    "projectId": this.proMess.id,
-                    "projectName": this.proMess.projectName,
-                    "detailList": datas
-                }));
                 this.$http.post('/isp-kongming/adorder/insert', {
                      "projectId": this.proMess.id,
                      "projectName": this.proMess.projectName,
                      "detailList": datas
                  }).then((res) => {
                     if (res.data.errorCode == 0) {
-                        this.$Modal.success({
-                            title: '提示',
-                            content: res.data.errorMsg
-                        });
                         this.adOrderCode = res.data.result;
                         window.sessionStorage.setItem('adOrderCode', res.data.result);
                         this.saveStatus = false;
-                        this.proMess.contractCode = res.data.result;
+                        //this.proMess.contractCode = res.data.result;
                         window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));
+
+                        this.$Modal.success({
+                            title: '提示',
+                            content: res.data.errorMsg,
+                            onOk () {
+                                 self.$router.push('buildPrice');
+                            }
+                        });
+
                     }
                     else {
                         this.$Modal.info({
@@ -658,7 +658,7 @@ export default {
                 let index = numList.indexOf(this.submitList[i].yearMonth);
                 this.submitList[i].SellAllPrice = this.priceList[index].total;
                 this.submitList[i].DispatchinglAllPrice = this.priceList[index].delivery;
-                this.submitList[i].discount = this.priceList[index].proportion;
+                this.submitList[i].discount  = this.priceList[index].proportion;
             }
 
             window.sessionStorage.setItem('price', JSON.stringify(this.submitList));

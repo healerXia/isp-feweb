@@ -8,15 +8,15 @@
                 <div class='dialogContent' slot='content'>
                     <p class="dialogContent-title">日期</p>
                     <div class="dialogContent-top">
-                        <p>价格：{{layer.skuPrice}}</p>
-                        <p>尺寸：{{layer.width}}*{{layer.height}}</p>
+                        <p>价格：{{layer.skuPrice}}元/天</p>
+                        <p>尺寸：{{layer.width =! '' ? layer.width : '-'}}*{{layer.height != '' ? layer.height : '-'}}px ≤ 100k</p>
                     </div>
                     <div class="dialogContent-bot">
-                        <p>占用人：{{layer.adCustomerName ? layer.adCustomerName : '-'}}元</p>
-                        <p>订单号：{{layer.adOrderCode}}</p>
-                        <p>订单状态：{{layer.statusName}}</p>
-                        <p>最终客户：{{layer.adCustomerName}}</p>
-                        <p>点击/曝光：{{layer.singleClick}}/{{layer.singleDisplay}}</p>
+                        <p>占用人：{{layer.adCustomerName ? layer.adCustomerName : '-'}}</p>
+                        <p>订单号：{{layer.adOrderCode ? layer.adOrderCode: '-'}}</p>
+                        <p>订单状态：{{layer.statusName ? layer.statusName: '-'}}</p>
+                        <p>最终客户：{{layer.adCustomerName ? layer.adCustomerName : '-'}}</p>
+                        <p>点击/曝光：{{layer.singleClick ? layer.singleClick : '-'}}/{{layer.singleDisplay ? layer.singleDisplay : '-'}}</p>
                     </div>
                 </div>
             </div>
@@ -150,14 +150,6 @@ export default {
                      this.$set(this.timeData, i, "3");
                  }
 
-
-
-
-
-
-
-
-
             }
 
         },
@@ -262,15 +254,15 @@ export default {
         border: 1px solid #E9E9E9;
 
         &.default {
-            background: #f4f4f4;
+            background: #EDEFF2;
         }
 
-        &.select {
-            background: rgba(67,115,243,.5);
+        &.active {
+            background: #A8C8EE;
         }
 
         &.hasSel {
-            background: rgba(67,115,243,.2);
+            background: #6A7088;
         }
 
         a {
