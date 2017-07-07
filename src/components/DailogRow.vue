@@ -15,7 +15,7 @@
                         <p>占用人：{{layer.dutyUserName ? layer.dutyUserName : '-'}}</p>
                         <p>订单号：{{layer.adOrderCode ? layer.adOrderCode: '-'}}</p>
                         <p>订单状态：{{layer.statusName ? layer.statusName: '-'}}</p>
-                        <p>  
+                        <p>
                             <Row>
                                 <Col span="6">最终客户：</Col>
                                 <Col span="17">{{layer.adCustomerName ? layer.adCustomerName : '-'}} </Col>
@@ -114,7 +114,6 @@ export default {
         if (this.time) {
             this.initDate(this.time);
         }
-        console.log(this.info);
     },
     methods: {
         initDate(time) {
@@ -191,7 +190,6 @@ export default {
 
                                 if (window.sessionStorage.getItem('viewState') == 2) {
                                     let sk = this.info.adStateList;
-                                    console.log(this.time);
                                     for (let i = 0; i < sk.length; i++) {
                                         if (sk[i].time == this.time) {
                                             this.layer.skuPrice = sk[i].dayStatus[dateIndexs].skuPrice;

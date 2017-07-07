@@ -713,11 +713,6 @@ export default {
                })
            }
            else {
-               console.log(JSON.stringify({
-                   "projectId": this.proMess.id,
-                   "projectName": this.proMess.projectName,
-                   "detailList": datas
-               }))
                url = '/isp-kongming/adorder/insert';
                this.$http.post(url, {
                     "projectId": this.proMess.id,
