@@ -57,7 +57,7 @@
 
                     <div class="price clear">
                         <div class="fl">
-                            <a href="javascript:;" @click='insert(index)'>新增本月广告位</a>
+                            <!-- <a href="javascript:;" @click='insert(index)'>新增本月广告位</a> -->
                         </div>
                         <div class="fr priceTotalList clear">
                             <span>购买净总价：{{formatNum(priceList[index].total, 2)}}元</span>
