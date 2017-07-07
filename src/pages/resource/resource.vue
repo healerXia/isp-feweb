@@ -23,7 +23,7 @@
                     <span class="fRight MR20" v-else="shrinkMes.collapse">收起&nbsp;<Icon type="chevron-down"></Icon></span>
                     <div class="query-ad" slot="content" style="position: relative">
                         <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
-                        <span style="position: absolute;color: red">*</span>
+                        <span style="position: absolute;color: red;left: 8px;">*</span>
                         <Form-item label="选择日期：">
                             <Row>
                                 <Col span="5">
