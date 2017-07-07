@@ -7,10 +7,6 @@
         <div class='hasNoOrder pL30'>
             <div class="title MB20 MT15">
               <h1 class="MR15">订单信息</h1>
-              <router-link
-              :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
-                新增订单
-              </router-link>
             </div>
             <div class="contentBox">
               <div class="orderMess">
@@ -357,7 +353,7 @@ export default {
                   this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
                 }
                 if(this.priceArr.totalBuy!=0&&this.priceArr.totalDelivery!=0){
-                  this.priceArr.rate="1："+(this.priceArr.totalBuy/this.priceArr.totalDelivery).toFixed(2)
+                  this.priceArr.rate="1："+(this.priceArr.totalBuy/this.priceArr.totalDelivery).toFixed(1)
                 }else if(this.priceArr.totalDelivery==0){
                   this.priceArr.rate="0：0"
                 }else if(this.priceArr.totalDelivery!=0&&this.priceArr.totalBuy==0){
