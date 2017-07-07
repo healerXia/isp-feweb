@@ -454,7 +454,7 @@ export default {
 
         this.searchInfoTxt = [false, false, false];
         if (window.sessionStorage.getItem('viewState') == '2') {
-            //window.sessionStorage.setItem('viewState', '1');
+            window.sessionStorage.setItem('viewState', '1');
             let datas = JSON.parse(window.sessionStorage.getItem('viewTable'));
             this.checkBoxList = JSON.parse(window.sessionStorage.getItem('checkBoxList'));
             this.monthList = JSON.parse(window.sessionStorage.getItem('monthList'));
@@ -491,7 +491,7 @@ export default {
 
             if (this.selectTableData[time]) {
                 this.showSelect = this.selectTableData[time];
-                console.log(this.showSelect);
+
                 for (let i = 0; i < this.showSelect.length; i++) {
                     let stateList = Object.assign([], this.showSelect[i].adStateList);
 
@@ -649,7 +649,7 @@ export default {
                         ajax: {
                             transport: function(params, success, failure) {
                                 if (!params.data.term) {
-                                    axios.post('/isp-kongming/ad/channelSelect',{
+                                    axios.post('/api/isp-kongming/ad/channelSelect',{
                                         // 媒体名称id
                                         mediaId: postData.mediaId,
                                         // 页面类型
@@ -662,7 +662,7 @@ export default {
                                     })
                                     return false;
                                 }
-                                axios.post('/isp-kongming/ad/channelSelect',{
+                                axios.post('/api/isp-kongming/ad/channelSelect',{
                                     // 媒体名称id
                                     mediaId: postData.mediaId,
                                     // 页面类型
@@ -760,7 +760,7 @@ export default {
             else {
                 setTimeout(() => {
                     console.log(this.searchInfo.pageName);
-                    initSelect('#adType', '/isp-kongming/ad/placeTypeSelect', {
+                    initSelect('#adType', '/api/isp-kongming/ad/placeTypeSelect', {
                         channelId: this.searchInfo.pageName,
                         mediaId: this.searchInfo.mediaId,
                         name: ''
@@ -788,7 +788,7 @@ export default {
             // 初始化车型
             this.searchInfo.serialId = '';
             setTimeout(()=> {
-                initSelect('#serialId', '/isp-kongming/ad/modelInfo', {
+                initSelect('#serialId', '/api/isp-kongming/ad/modelInfo', {
                     modelId: 0,
                     name: ''
                 }, 'value', 'name');
@@ -815,7 +815,7 @@ export default {
             this.areaId = id;
             this.searchInfo.cityId = '';
             setTimeout( () => {
-                initSelect('#cityId', '/isp-kongming/ad/areaInfo', {
+                initSelect('#cityId', '/api/isp-kongming/ad/areaInfo', {
                     cityId: id,
                     name: ''
                 }, 'value', 'name');
@@ -841,7 +841,7 @@ export default {
             // 初始化品牌
             this.searchInfo.brandId = '';
             setTimeout(() => {
-                initSelect('#brandId', '/isp-kongming/ad/brandInfo', {
+                initSelect('#brandId', '/api/isp-kongming/ad/brandInfo', {
                     brandId: 0,
                     name: ''
                 }, 'value', 'name');
@@ -886,7 +886,7 @@ export default {
                 brandIdList: this.searchInfo.brandId
             };
             window.sessionStorage.setItem('searchInfo', JSON.stringify(search));
-            //
+
             this.$http.post('/isp-kongming/ad/select', {
                 // 开始时间
                 beginTime: `${this.searchInfo.beginTime}-01`,
@@ -1065,7 +1065,6 @@ export default {
             this.redrawed();
         },
         search(name) {
-            this.typeAd = '2321312'
             if(this.timeTxt) {
                 return false;
             }
