@@ -27,7 +27,7 @@
                         <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4005'">试用</span>
                         <span v-else-if="item=='useStyle'&&tbodys.useStyle=='4006'">免费</span>
                         <span v-else-if="item=='adName'" :title='tbodys[item]'>{{tbodys[item]}}</span>
-                        <span v-else>{{(tbodys[item]+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}</span>
+                        <span v-else>{{(tbodys[item].toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}</span>
                      </td> 
                      <td v-for="n in tbodys.listNumber" class="cell">
                         <span v-if="n=='0'" class="status status1"></span>
@@ -42,7 +42,7 @@
           <span>购买净总价：{{(tableData.monthPrice4001.toFixed(2)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
           <span>配送总价：{{tableData.monthPrice4003.toFixed(2).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}元</span>
           <span v-if="tableData.monthPrice4001!=0&&tableData.monthPrice4003!=0">
-            配送比率：1：{{(tableData.monthPrice4001/tableData.monthPrice4003).toFixed(2)}}
+            配送比率：1：{{(tableData.monthPrice4001/tableData.monthPrice4003).toFixed(1)}}
           </span>
           <span v-else-if="tableData.monthPrice4003==0">
             配送比率：0：0
@@ -112,7 +112,7 @@
         height: auto;
         border-collapse:collapse;
         cellpadding:0;
-        td{ border:#DEE1E5 solid 1px;font-size: 12px;height: 30px;max-width: 100px; padding: 0;text-align: center;}
+        td{ border:#DEE1E5 solid 1px;font-size: 12px;height: 30px;max-width: 150px; padding: 0;text-align: center;}
         thead{ 
         }
         tbody{

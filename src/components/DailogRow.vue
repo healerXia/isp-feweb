@@ -15,7 +15,12 @@
                         <p>占用人：{{layer.dutyUserName ? layer.dutyUserName : '-'}}</p>
                         <p>订单号：{{layer.adOrderCode ? layer.adOrderCode: '-'}}</p>
                         <p>订单状态：{{layer.statusName ? layer.statusName: '-'}}</p>
-                        <p>最终客户：{{layer.adCustomerName ? layer.adCustomerName : '-'}}</p>
+                        <p>  
+                            <Row>
+                                <Col span="6">最终客户：</Col>
+                                <Col span="17">{{layer.adCustomerName ? layer.adCustomerName : '-'}} </Col>
+                            </Row>
+                        </p>
                         <p>点击/曝光：{{layer.singleClick ? layer.singleClick : '-'}}/{{layer.singleDisplay ? layer.singleDisplay : '-'}}</p>
                     </div>
                 </div>

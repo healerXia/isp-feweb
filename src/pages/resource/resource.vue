@@ -649,7 +649,7 @@ export default {
                         ajax: {
                             transport: function(params, success, failure) {
                                 if (!params.data.term) {
-                                    axios.post('/isp-kongming/ad/channelSelect',{
+                                    axios.post('/api/isp-kongming/ad/channelSelect',{
                                         // 媒体名称id
                                         mediaId: postData.mediaId,
                                         // 页面类型
@@ -662,7 +662,7 @@ export default {
                                     })
                                     return false;
                                 }
-                                axios.post('/isp-kongming/ad/channelSelect',{
+                                axios.post('/api/isp-kongming/ad/channelSelect',{
                                     // 媒体名称id
                                     mediaId: postData.mediaId,
                                     // 页面类型
@@ -760,7 +760,7 @@ export default {
             else {
                 setTimeout(() => {
                     console.log(this.searchInfo.pageName);
-                    initSelect('#adType', '/isp-kongming/ad/placeTypeSelect', {
+                    initSelect('#adType', '/api/isp-kongming/ad/placeTypeSelect', {
                         channelId: this.searchInfo.pageName,
                         mediaId: this.searchInfo.mediaId,
                         name: ''
