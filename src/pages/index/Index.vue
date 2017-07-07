@@ -121,7 +121,6 @@
                     <router-view></router-view>
                 </div>
                 <div class="layout-copy">
-                    2011-2017 &copy; TalkingData
                 </div>
             </i-col>
         </Row>

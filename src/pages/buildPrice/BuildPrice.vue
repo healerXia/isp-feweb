@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="buildPrice">
-      <ProjectInfo :proMess="proMess"></ProjectInfo>
+      <ProjectInfo :proMess="proMess" :edit="true" :jumpUrl='1'></ProjectInfo>
       <div class="content">
         <div class="contentBox">
           <div class="orderMess">
@@ -108,7 +108,7 @@ import urlList from './config.js';
 
     },
     mounted() {
-        this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+        this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
         let priceList = JSON.parse(window.sessionStorage.getItem('priceList'));
         let data = JSON.parse(window.sessionStorage.getItem('price'));
         this.submitData = Object.assign([], data);
@@ -144,10 +144,10 @@ import urlList from './config.js';
             })
 
 
-            aTotal += parseInt(priceList[i].total);
-            bTotal += parseInt(priceList[i].delivery);
-            cTotal += parseInt(priceList[i].exchange);
-            dTotal += parseInt(priceList[i].per);
+            aTotal += parseFloat(priceList[i].total);
+            bTotal += parseFloat(priceList[i].delivery);
+            cTotal += parseFloat(priceList[i].exchange);
+            dTotal += parseFloat(priceList[i].per);
         }
         let str = this.ratio(aTotal, bTotal);
         this.tableData.mess.push({
@@ -158,7 +158,7 @@ import urlList from './config.js';
             dTotal: dTotal == 0 ? '-' : this.formatNum(dTotal, 2),
             distribution: str
         })
-        console.log(this.tableData.mess);
+
         this.total =  aTotal;
         this.totalPrice();
         this.price.sellAllPrice = aTotal;
@@ -169,13 +169,13 @@ import urlList from './config.js';
             this.$http.get(config.urlList.getInfo+"?id="+id).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.proMess = res.data.result;
-                    window.localStorage.setItem('proMess', JSON.stringify(this.proMess));//小阳哥写的
+                    window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));//小阳哥写的
                 }
               }).catch((err) => {
             })
         }
-        if (window.localStorage.getItem('proMess')) {
-            this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+        if (window.sessionStorage.getItem('proMess')) {
+            this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
         }
     },
     methods: {
@@ -214,11 +214,13 @@ import urlList from './config.js';
                         "sellAllPrice": this.price.sellAllPrice,
                         "dispatchinglAllPrice": this.price.dispatchinglAllPrice,
                         "realitySellAllPrice": this.reallyPrice,
+                        "discount": this.formValidate.discount,
                         "detailList": datas
                     }).then((res) => {
                         if (res.data.errorCode === 0) {
                             // 清空本地存储
                             let nameList = [
+                                'adOrderCode',
                                 'adName',
                                 'checkBoxList',
                                 'insertData',
@@ -240,7 +242,7 @@ import urlList from './config.js';
                             if (id == 0) {
                                 this.$Modal.success({
                                     title: '提示',
-                                    content: '保存成功',
+                                    content:  res.data.errorMsg,
                                     onOk () {
                                          self.$router.push({path: 'details', query: {id: self.proMess.id}});
                                     }
@@ -250,7 +252,7 @@ import urlList from './config.js';
                             if (id == 1) {
                                 this.$Modal.success({
                                     title: '提示',
-                                    content: '提交成功',
+                                    content: res.data.errorMsg,
                                     onOk () {
                                          self.$router.push({path: 'details', query: {id: self.proMess.id}});
                                      }
@@ -259,6 +261,15 @@ import urlList from './config.js';
                                 this.submitStatus = true;
                             }
 
+                        }
+                        else if (res.data.errorCode == '40300101'){
+                            this.$Modal.info({
+                                title: '提示',
+                                content: res.data.errorMsg,
+                                onOk () {
+                                     self.$router.push({path: 'createPro', query: {id: window.sessionStorage.getItem('proMessId')}});
+                                }
+                            });
                         }
                         else {
                             if (id == 1) {
@@ -309,7 +320,7 @@ import urlList from './config.js';
                 }
             }
             this.pointPrice = (this.total * this.formValidate.discount / 10).toFixed(2).toString().split('.')[1];
-            this.reallyPrice = parseInt(this.total * this.formValidate.discount / 10);
+            this.reallyPrice = parseFloat(this.total * this.formValidate.discount / 10);
 
         },
         //转千分位
@@ -335,8 +346,8 @@ import urlList from './config.js';
                 return `0:0`
             }
             else {
-                let percent = delivery/total;
-                return `1:${percent.toFixed(1)}`;
+                let percent = total/delivery;
+                return `1:${percent.toFixed(2)}`;
             }
         }
     }

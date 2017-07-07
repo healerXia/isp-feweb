@@ -8,15 +8,15 @@
                 <div class='dialogContent' slot='content'>
                     <p class="dialogContent-title">日期</p>
                     <div class="dialogContent-top">
-                        <p>价格：{{layer.skuPrice}}</p>
-                        <p>尺寸：{{layer.pSize}}</p>
+                        <p>价格：{{layer.skuPrice}}元/天</p>
+                        <p>尺寸：{{layer.width == '' ? '-':layer.width}}*{{layer.height == '' ? '-' : layer.height}}px ≤ 100k</p>
                     </div>
                     <div class="dialogContent-bot">
-                        <p>占用人：{{layer.dutyUserName}}</p>
-                        <p>订单号：{{layer.adOrderCode}}</p>
-                        <p>订单状态：{{layer.state}}</p>
-                        <p>最终客户：{{layer.adCustomerName}}</p>
-                        <p>点击/曝光：{{layer.singleClick}}/{{layer.singleDisplay}}</p>
+                        <p>占用人：{{layer.dutyUserName ? layer.dutyUserName : '-'}}</p>
+                        <p>订单号：{{layer.adOrderCode ? layer.adOrderCode: '-'}}</p>
+                        <p>订单状态：{{layer.statusName ? layer.statusName: '-'}}</p>
+                        <p>最终客户：{{layer.adCustomerName ? layer.adCustomerName : '-'}}</p>
+                        <p>点击/曝光：{{layer.singleClick ? layer.singleClick : '-'}}/{{layer.singleDisplay ? layer.singleDisplay : '-'}}</p>
                     </div>
                 </div>
             </div>
@@ -112,6 +112,7 @@ export default {
     },
     methods: {
         initDate(time) {
+            
             // 获取数据传输的年月
             let arry = this.time.split('-');
             let dataYear = arry[0];
@@ -127,6 +128,11 @@ export default {
                 }
             }
 
+            let times = new Date();
+            let year = times.getFullYear();
+            let month = times.getMonth() + 1;
+            let day = times.getDate();
+
             for (let i = 0; i < this.timeData.length; i++) {
                  let timeName = this.timeData[i];
                  if (timeName == 'SKU_STATUS_LOCKED' || timeName == 'SKU_STATUS_SALED' || timeName == 'SKU_STATUS_RUNNING') {
@@ -135,7 +141,17 @@ export default {
                  if (timeName == 'SKU_STATUS_NONE' || timeName =='SKU_STATUS_DELETE' || timeName == 'SKU_STATUS_IDLE') {
                      this.$set(this.timeData, i, "1");
                  }
+
+                 if (!timeName) {
+                    this.$set(this.timeData, i, "3");
+                 }
+
+                 if ((new Date(`${year}/${month}/${day}`)) >= new Date(`${time}/${i+1}`.replace(/\-/g, "\/"))) {
+                     this.$set(this.timeData, i, "3");
+                 }
+
             }
+
         },
         over(event) {
             let target = event.target.nodeName;
@@ -145,6 +161,7 @@ export default {
                 // this.$set(this.visibleList, index, true);
                 this.timer = setTimeout(() => {
                     this.$nextTick(() => {
+                        let dateIndexs = parseInt(event.target.getAttribute('data-index'));
                         let dateIndex = parseInt(event.target.getAttribute('data-index')) + 1;
                         if (dateIndex < 10) {
                             dateIndex = '0' + dateIndex
@@ -161,6 +178,16 @@ export default {
                         }).then((res) => {
                             if (res.data.errorCode == 0) {
                                 this.layer = Object.assign({}, res.data.result);
+                                this.layer.width = `${this.layer.width}`;
+                                this.layer.height = `${this.layer.height}`;
+                                this.layer.pSize = `${this.info.width} * ${this.info.height}`;
+                                let skuDatas = JSON.parse(this.info.adStateLists);
+                                for (let attr in skuDatas) {
+                                    if(attr == this.time) {
+                                        let n = skuDatas[attr];
+                                        this.layer.skuPrice = n[dateIndexs].skuPrice;
+                                    }
+                                }
                             }
                             else if (res.data.errorCode == 50000){
                                 this.$Modal.info({
@@ -172,10 +199,17 @@ export default {
                                 });
                             }
                             else {
-                                this.$Modal.info({
-                                    title: '提示',
-                                    content: res.data.rspMsg.errorMsg
-                                });
+                                this.layer = {};
+                                this.layer.width = '';
+                                this.layer.height = '';
+                                this.layer.pSize = `${this.info.width} * ${this.info.height}`;
+                                let skuDatas = JSON.parse(this.info.adStateLists);
+                                for (let attr in skuDatas) {
+                                    if(attr == this.time) {
+                                        let n = skuDatas[attr];
+                                        this.layer.skuPrice = n[dateIndexs].skuPrice;
+                                    }
+                                }
                             }
                         }).catch((err) => {
                             console.log(err);
@@ -184,13 +218,12 @@ export default {
                         let index = parseInt(event.target.getAttribute('data-index'));
                         this.$set(this.visibleList, index, true);
                         let y = event.clientY;
-                        console.log(event.target.nextElementSibling);
+
                         if (y < 270) {
                             event.target.nextElementSibling.style.top = 34 + 'px';
                         }
                         else {
-                            console.log(1);
-                            event.target.nextElementSibling.style.top = -270 + 'px';
+                            event.target.nextElementSibling.style.top = -280 + 'px';
                         }
                     })
                 }, 2000)
@@ -215,7 +248,7 @@ export default {
     }
 
     .dialog-right {
-        left: -288px;
+        left: -320px;
     }
 
 
@@ -229,15 +262,15 @@ export default {
         border: 1px solid #E9E9E9;
 
         &.default {
-            background: #f4f4f4;
+            background: #EDEFF2;
         }
 
-        &.select {
-            background: rgba(67,115,243,.5);
+        &.active {
+            background: #A8C8EE;
         }
 
         &.hasSel {
-            background: rgba(67,115,243,.2);
+            background: #6A7088;
         }
 
         a {

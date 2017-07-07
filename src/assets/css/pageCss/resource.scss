@@ -6,7 +6,7 @@
     .size {
         font-size: 12px;
     }
-    
+
      // zhoufeng 收缩条的样式
     .ivu-collapse{
         margin-top: 40px;
@@ -172,7 +172,7 @@
 
             .ad-listName {
                 display: inline-block;
-                max-width: 280px;
+                max-width: 410px;
                 text-overflow: ellipsis;
                 white-space:nowrap;
                 overflow: hidden;
@@ -220,15 +220,15 @@
                     width: 20px;
 
                     &.default {
-                        background: #f4f4f4;
+                        background: #EDEFF2;
                     }
 
-                    &.select {
-                        background: rgba(67,115,243,.5);
+                    &.active {
+                        background: #A8C8EE;
                     }
 
                     &.hasSel {
-                        background: rgba(67,115,243,.2);
+                        background: #6A7088;
                     }
 
                 }

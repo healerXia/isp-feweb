@@ -1,7 +1,11 @@
 <template lang="html">
     <div class="chooseTime">
-        <ProjectInfo :proMess="proMess"></ProjectInfo>
-        <div class="chooseTime-box">
+        <ProjectInfo :proMess="proMess" :edit="true" :jumpUrl='1'></ProjectInfo>
+        <div v-if='this.num.length == 0' class="noAd">
+            <p>请先选择要投放的广告位</p>
+            <Button type="primary" @click='jump' class="btn bg4373F3">选择广告位</Button>
+        </div>
+        <div v-if='this.num.length != 0' class="chooseTime-box">
             <ProjectStep></ProjectStep>
             <div class="tableList">
                 <div class="title">
@@ -10,7 +14,23 @@
                     </div>
                 </div>
                 <div v-if='num[index]'  v-for='(i, index) in currentList'  v-bind:key="index" class="item">
-                    <p>{{num[index]}}</p>
+                    <div class='clear'>
+                        <span class='fl'>{{num[index]}}</span>
+                        <div class="fr">
+                            <div class="fl dateTableStatus unavailable">
+                               <span class='fl'></span>
+                               <span class='fl'>不可用</span>
+                            </div>
+                            <div class="fl dateTableStatus occupied">
+                                <span class='fl'></span>
+                                <span class='fl'>已占用</span>
+                            </div>
+                            <div class="fl dateTableStatus reserved">
+                                <span class='fl'></span>
+                                <span class='fl'>已预订</span>
+                            </div>
+                        </div>
+                    </div>
                     <table  border="0" cellspacing="1" cellpadding="0" class="dateTable hasCheck">
                         <tr class='dateTable-title'>
                             <td></td>
@@ -39,17 +59,21 @@
                         <div class="fl">
                             <a href="javascript:;" @click='insert(index)'>新增本月广告位</a>
                         </div>
-                        <div class="fr">
-                            <span>购买净总价：{{priceList[index].total}}</span>
-                            <span>配送总价：{{priceList[index].delivery}}</span>
+                        <div class="fr priceTotalList clear">
+                            <span>购买净总价：{{formatNum(priceList[index].total, 2)}}元</span>
+                            <span>配送总价：{{formatNum(priceList[index].delivery, 2)}}元</span>
                             <span>配送比率：{{priceList[index].proportion}}</span>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="paging clear" v-show='pageStatus'>
+                <Button type="primary" class="pagBtn nextPage fr">保存并继续下一页</Button>
+                <Button type="primary" class="pagBtn bg4373F3 fr">返回并返回上一页</Button>
+            </div>
             <div class="save">
-                <Button type="primary" @click='save' :disabled='saveStatus'>保存方案</Button>
-                <Button type="primary" @click='generate'>生成价格</Button>
+                <Button type="primary" @click='save' class="btn bg4373F3" :disabled='saveStatus'>保存方案</Button>
+                <Button type="primary" @click='generate' class="btn bg4373F3 ML20">生成价格</Button>
             </div>
         </div>
     </div>
@@ -64,6 +88,9 @@ import DateRow from 'component/DateRow'
 export default {
     data() {
         return {
+            pageStatus: false,
+            // 已选择月份总和
+            dataListCount: 0,
             adOrderCode: '',
             saveStatus: false,
             proMess: {},
@@ -95,16 +122,24 @@ export default {
         ProjectStep
     },
     mounted() {
-        this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+        this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
+        let adOrderCode = window.sessionStorage.getItem('adOrderCode');
+        if (adOrderCode) {
+            this.adOrderCode = adOrderCode;
+        }
         let action = this.$router.currentRoute.query.action;
         let len = 0;
         // 新增
         if (action == 1) {
 
-            let insertData = JSON.parse(window.localStorage.getItem('insertData'));
-            this.pageList = Object.assign({}, JSON.parse(window.localStorage.getItem('timePageList')));
-            this.priceList = Object.assign([], JSON.parse(window.localStorage.getItem('timePriceList')));
-            this.num = Object.assign([], JSON.parse(window.localStorage.getItem('monthList')));
+            let insertData = JSON.parse(window.sessionStorage.getItem('insertData'));
+            this.pageList = Object.assign({}, JSON.parse(window.sessionStorage.getItem('timePageList')));
+            this.priceList = Object.assign([], JSON.parse(window.sessionStorage.getItem('timePriceList')));
+            this.num = Object.assign([], JSON.parse(window.sessionStorage.getItem('monthList')));
+            this.dataListCount = this.$router.currentRoute.query.total;
+            if (this.num.length == 0) {
+                return false;
+            }
 
             // 新插入数据容器
             let insertList = [];
@@ -116,8 +151,6 @@ export default {
                 let time = this.num[i];
                 insertList = insertData[time];
                 dataList = this.pageList[time];
-                console.log(insertList);
-                console.log(dataList);
                 if (dataList && insertList) {
                     this.compared(dataList, insertList, time);
 
@@ -150,8 +183,8 @@ export default {
                    })
                }
            }
-            window.localStorage.setItem('timePriceList', JSON.stringify(this.priceList));
-            window.localStorage.setItem('timePageList', JSON.stringify(this.pageList));
+            window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
+            window.sessionStorage.setItem('timePageList', JSON.stringify(this.pageList));
         }
         // 正常添加
         else {
@@ -159,8 +192,11 @@ export default {
             // if (priceList) {
             //     this.priceList = JSON.parse(priceList);
             // }
-            this.pageList = Object.assign({}, JSON.parse(window.localStorage.getItem('tableData')));
-            this.num = Object.assign([], JSON.parse(window.localStorage.getItem('monthList')));
+            this.pageList = Object.assign({}, JSON.parse(window.sessionStorage.getItem('tableData')));
+            this.num = Object.assign([], JSON.parse(window.sessionStorage.getItem('monthList')));
+            if (this.num.length == 0) {
+                return false;
+            }
 
             for (let i = 0;i < this.num.length; i++) {
                 len += this.pageList[this.num[i]].length;
@@ -174,37 +210,44 @@ export default {
                     proportion:'0:0'
                 });
             }
-
-
         }
-
-        // 可放置最大月份个数
-        let maxMonthNum = Math.ceil(40/len);
-        // 初始化当前页月份数
-        if(this.num.length <= maxMonthNum) {
-            //一页可以显示完
-            for (let i = 0;i<this.num.length; i++) {
-                this.currentList.push(this.pageList[this.num[i]]);
-            }
-        }
-        else {
-            //每页可显示月份为maxMonthNum
-        }
-        this.num = this.num.sort();
 
         for (let i = 0; i < this.num.length; i++) {
             let data = this.pageList[this.num[i]];
             for (let j = 0; j < data.length; j++) {
-                 console.log(data[j]);
-                 data[j].useStyle = 4001;
+                 if (data[j].useStyle == 0) {
+                      data[j].useStyle = 4001;
+                 }
             }
         }
-        console.log(this.pageList);
+
+        // 可放置最大月份个数
+        let maxMonthNum = Math.ceil(40/len);
+        for (let i = 0;i < this.num.length; i++) {
+            this.currentList.push(this.pageList[this.num[i]]);
+        }
+
+        // 初始化当前页月份数
+        // if(this.num.length <= maxMonthNum) {
+        //     //一页可以显示完
+        //     this.pageStatus = false;
+        //     for (let i = 0;i < this.num.length; i++) {
+        //         this.currentList.push(this.pageList[this.num[i]]);
+        //     }
+        // }
+        // else {
+        //     //this.pageStatus = true;
+        //     //每页可显示月份为maxMonthNum
+        //     for (let i = 0;i < this.num.length; i++) {
+        //         this.currentList.push(this.pageList[this.num[i]]);
+        //     }
+        // }
+        this.num = this.num.sort();
     },
     methods: {
         // 数据拆分
         render() {
-            this.proMess = JSON.parse(window.localStorage.getItem('proMess'));
+            this.proMess = JSON.parse(window.sessionStorage.getItem('proMess'));
         },
         // 新老数据对比
         compared(oldData, newData,time) {
@@ -239,20 +282,24 @@ export default {
                 return `0:0`
             }
             else {
-                let percent = delivery/total;
-                return `1:${percent.toFixed(1)}`;
+                let percent = total/delivery;
+                return `1:${percent.toFixed(2)}`;
             }
         },
         // 操作的是行单位
         // obj 选中数据 index 操作数据的索引 操作数据的时间 type 用途 action 添加还是删除
         edit(obj, index, date, type, action, dayIndex) {
+            if (date.indexOf('-') < 0) {
+                let str = date.toString();
+                date = `${str.slice(0,4)}-${str.slice(4)}`;
+            }
             let arr = [];
-            for (let i = 0;i < obj.length;i++) {
+            for (let i = 0;i < obj.length; i++) {
                 if (obj[i]) {
                     arr.push({
                         'beginTime': `${date}-${i+1}`,
                         'endTime': `${date}-${i+1}`,
-                        'skuId': this.pageList[date][index].skuIdList[dayIndex]
+                        'skuId': this.pageList[date][index].skuIdList[i]
                     })
                     this.$set(this.pageList[date][index].adStateList, i, "4");
                 }
@@ -283,38 +330,38 @@ export default {
 
             if (type == 4001) {
                 if (action == 1) {
-                    this.pageList[date][index].total += parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].total += parseFloat(this.pageList[date][index].price);
                 }
                 else {
-                    this.pageList[date][index].total -= parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].total -= parseFloat(this.pageList[date][index].price);
                 }
             }
             if (type == 4003) {
                 if (action == 1) {
-                    this.pageList[date][index].delivery += parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].delivery += parseFloat(this.pageList[date][index].price);
                 }
                 else {
-                    this.pageList[date][index].delivery -= parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].delivery -= parseFloat(this.pageList[date][index].price);
                 }
             }
 
             // 互换
             if (type == 4002) {
                 if (action == 1) {
-                    this.pageList[date][index].exchange += parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].exchange += parseFloat(this.pageList[date][index].price);
                 }
                 else {
-                    this.pageList[date][index].exchange -= parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].exchange -= parseFloat(this.pageList[date][index].price);
                 }
             }
 
             // 自用
             if (type == 4004) {
                 if (action == 1) {
-                    this.pageList[date][index].per += parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].per += parseFloat(this.pageList[date][index].price);
                 }
                 else {
-                    this.pageList[date][index].per -= parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].per -= parseFloat(this.pageList[date][index].price);
                 }
             }
 
@@ -331,10 +378,11 @@ export default {
                 if (!datas[i].delivery) {
                     datas[i].delivery = 0;
                 }
-                a += parseInt(datas[i].total);
-                b += parseInt(datas[i].delivery);
-                c += parseInt(datas[i].exchange);
-                d += parseInt(datas[i].per);
+                console.log(datas[i].total);
+                a += parseFloat(datas[i].total);
+                b += parseFloat(datas[i].delivery);
+                c += parseFloat(datas[i].exchange);
+                d += parseFloat(datas[i].per);
             }
 
             let str = this.ratio(a, b);
@@ -348,14 +396,23 @@ export default {
                 per: d,
                 proportion: str
             })
-            window.localStorage.setItem('timePriceList', JSON.stringify(this.priceList));
-            window.localStorage.setItem('timePageList', JSON.stringify(this.pageList));
-
-            console.log(this.priceList);
-            console.log(this.pageList);
+            console.log(JSON.stringify(this.priceList[tableIndex]));
+            window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
+            window.sessionStorage.setItem('timePageList', JSON.stringify(this.pageList));
+            this.dataListCount = 0;
+            for (let attr in this.pageList) {
+                let data = this.pageList[attr];
+                for (let i = 0; i < data.length; i++) {
+                    this.dataListCount += data[i].dataList.length;
+                }
+            }
         },
         // 切换用途
         selectStyle(oldType, newType, list, index, price, date) {
+            if (date.indexOf('-') < 0) {
+                let str = date.toString();
+                date = `${str.slice(0,4)}-${str.slice(4)}`;
+            }
 
             if (!this.pageList[date][index].total) {
                 this.pageList[date][index].total = 0;
@@ -373,7 +430,7 @@ export default {
 
             let money = this.computedPrice(list, price);
             let tableIndex = this.num.indexOf(date);
-            this.pageList[date][index].useStyle = 4001;
+            // this.pageList[date][index].useStyle = 4001;
             switch (oldType) {
                 // 销售
                 case 4001:
@@ -408,11 +465,11 @@ export default {
                     this.pageList[date][index].useStyle = 4003;
                     break;
                 case 4002:
-                    this.pageList[date][index].exchange -= money;
+                    this.pageList[date][index].exchange += money;
                     this.pageList[date][index].useStyle = 4002;
                     break;
                 case 4004:
-                    this.pageList[date][index].per -= money;
+                    this.pageList[date][index].per += money;
                     this.pageList[date][index].useStyle = 4004;
                     break;
             }
@@ -440,10 +497,10 @@ export default {
                 }
 
 
-                a += parseInt(datas[i].total);
-                b += parseInt(datas[i].delivery);
-                c += parseInt(datas[i].exchange);
-                d += parseInt(datas[i].per);
+                a += parseFloat(datas[i].total);
+                b += parseFloat(datas[i].delivery);
+                c += parseFloat(datas[i].exchange);
+                d += parseFloat(datas[i].per);
             }
 
             let str = this.ratio(a, b);
@@ -457,9 +514,8 @@ export default {
                 per: d,
                 proportion: str
             })
-
-            window.localStorage.setItem('timePriceList', JSON.stringify(this.priceList));
-            window.localStorage.setItem('timePageList', JSON.stringify(this.pageList));
+            window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
+            window.sessionStorage.setItem('timePageList', JSON.stringify(this.pageList));
         },
         // 计算价格
         computedPrice(list, price) {
@@ -477,17 +533,29 @@ export default {
             this.submitList = [];
             for(let i = 0; i< this.num.length; i++) {
                 let time = this.num[i];
-                let data = this.pageList[time];
+                let data = Object.assign(this.pageList[time]);
 
                 for(let k = 0;k < data.length;k++) {
                     let yearMonth = data[k].yearMonth.split('-').join('');
                     data[k].yearMonth = yearMonth;
+                    data[k].adStateLists = null;
                     this.submitList.push(data[k]);
                 }
             }
         },
+        jump() {
+            this.$router.push('resource');
+        },
         // 保存方案
         save() {
+            if (this.dataListCount == 0) {
+                this.$Modal.success({
+                    title: '提示',
+                    content: '请选择投放时间！'
+                });
+
+                return false;
+            }
             this.saveStatus = true;
             let self = this;
             this.initSubmitData();
@@ -498,72 +566,126 @@ export default {
                 datas[i].yearMonth = parseInt(datas[i].yearMonth);
             }
 
-            this.$http.post('/isp-kongming/adorder/insert', {
-                "action": 0,
-                 "ProjectId": this.proMess.id,
-                 "ProjectName": this.proMess.projectName,
-                 "detailList": datas
-             }).then((res) => {
-                if (res.data.errorCode == 0) {
-                    this.$Modal.success({
-                        title: '提示',
-                        content: '方案保存成功'
-                        // onOk () {
-                        //      self.$router.push({path: 'orderList', query: {id: self.proMess.id}});
-                        // }
-                    });
-                    this.adOrderCode = res.data.result;
-                    window.localStorage.setItem('adOrderCode', res.data.result);
-                }
-                else {
-                    this.$Modal.info({
-                        title: '提示',
-                        content: res.data.errorMsg
-                    });
+            if (this.adOrderCode) {
+                let url = '/isp-kongming/adorder/orderUpdate';
+                this.$http.post(url, {
+                     "action": 0,
+                     "projectId": this.proMess.id,
+                     "adOrderCode": this.adOrderCode,
+                     "projectName": this.proMess.projectName,
+                     "detailList": datas
+                 }).then((res) => {
+                     this.saveStatus = false;
+                    if (res.data.errorCode == 0) {
+                        window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));
+                        this.$Modal.success({
+                            title: '提示',
+                            content: res.data.errorMsg,
+                            onOk () {
+                                 //self.$router.push('buildPrice');
+                            }
+                        });
+                    }
+                    else {
+                        this.$Modal.info({
+                            title: '提示',
+                            content: res.data.errorMsg
+                        });
+                    }
+                }).catch((err) => {
+                    console.log(err)
+                })
+            } else {
+                this.$http.post('/isp-kongming/adorder/insert', {
+                     "projectId": this.proMess.id,
+                     "projectName": this.proMess.projectName,
+                     "detailList": datas
+                 }).then((res) => {
+                    if (res.data.errorCode == 0) {
+                        this.adOrderCode = res.data.result;
+                        window.sessionStorage.setItem('adOrderCode', res.data.result);
+                        this.saveStatus = false;
+                        //this.proMess.contractCode = res.data.result;
+                        window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));
+
+                        this.$Modal.success({
+                            title: '提示',
+                            content: res.data.errorMsg,
+                            onOk () {
+                                 //self.$router.push('buildPrice');
+                            }
+                        });
+
+                    }
+                    else {
+                        this.$Modal.info({
+                            title: '提示',
+                            content: res.data.errorMsg
+                        });
+                        this.saveStatus = false;
+                    }
+                }).catch((err) => {
                     this.saveStatus = false;
-                }
-            }).catch((err) => {
-                console.log(err);
-                this.saveStatus = false;
-            })
+                })
+            }
+        },
+        //转千分位
+        formatNum(num, n) {
+           //参数说明：num 要格式化的数字 n 保留小数位
+
+            num = String(num.toFixed(n));
+            var re = /(-?\d+)(\d{3})/;
+            while(re.test(num)) {
+                num = num.replace(re,"$1,$2");
+            }
+            return num;
         },
         // 生成价格
         generate() {
-           this.initSubmitData();
-           let numList = [];
-           for (let i = 0; i < this.num.length; i++) {
+            if (this.dataListCount == 0) {
+                this.$Modal.success({
+                    title: '提示',
+                    content: '请选择投放时间！'
+                });
+
+                return false;
+            }
+            this.initSubmitData();
+            let numList = [];
+            for (let i = 0; i < this.num.length; i++) {
                numList[i] = this.num[i].split('-').join('');
-           }
-           for (let i = 0;i<this.submitList.length;i++) {
+            }
+            for (let i = 0;i<this.submitList.length;i++) {
                 let index = numList.indexOf(this.submitList[i].yearMonth);
                 this.submitList[i].SellAllPrice = this.priceList[index].total;
                 this.submitList[i].DispatchinglAllPrice = this.priceList[index].delivery;
-           }
+                this.submitList[i].discount  = this.priceList[index].proportion;
+            }
 
-           window.localStorage.setItem('price', JSON.stringify(this.submitList));
-           window.localStorage.setItem('priceList', JSON.stringify(this.priceList));
-
+            window.sessionStorage.setItem('price', JSON.stringify(this.submitList));
+            window.sessionStorage.setItem('priceList', JSON.stringify(this.priceList));
 
 
            let str = JSON.stringify(this.submitList);
            let datas = JSON.parse(str);
            let self = this;
            let url = '';
+
            if (this.adOrderCode) {
                url = '/isp-kongming/adorder/orderUpdate';
                this.$http.post(url, {
                     "action": 0,
-                    "ProjectId": this.proMess.id,
+                    "projectId": this.proMess.id,
                     "adOrderCode": this.adOrderCode,
-                    "ProjectName": this.proMess.projectName,
+                    "projectName": this.proMess.projectName,
                     "detailList": datas
                 }).then((res) => {
                    if (res.data.errorCode == 0) {
                        this.$Modal.success({
                            title: '提示',
-                           content: '方案保存成功',
+                           content: res.data.errorMsg,
                            onOk () {
-                                window.localStorage.setItem('adOrderCode', res.data.result);
+                                //window.localStorage.setItem('adOrderCode', res.data.result);
                                 self.$router.push('buildPrice');
                             }
                        });
@@ -581,44 +703,48 @@ export default {
            else {
                url = '/isp-kongming/adorder/insert';
                this.$http.post(url, {
-                    "action": 0,
-                    "ProjectId": this.proMess.id,
-                    "ProjectName": this.proMess.projectName,
+                    "projectId": this.proMess.id,
+                    "projectName": this.proMess.projectName,
                     "detailList": datas
                 }).then((res) => {
                    if (res.data.errorCode == 0) {
                        this.$Modal.success({
                            title: '提示',
-                           content: '方案保存成功',
+                           content: res.data.errorMsg,
                            onOk () {
-                                window.localStorage.setItem('adOrderCode', res.data.result);
+                                window.sessionStorage.setItem('adOrderCode', res.data.result);
                                 self.$router.push('buildPrice');
                             }
                        });
+                       this.saveStatus = false;
+                       this.proMess.contractCode = res.data.result;
+                       window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));
                    }
                    else {
                        this.$Modal.info({
                            title: '提示',
                            content: res.data.errorMsg
                        });
+                       this.saveStatus = false;
                    }
                }).catch((err) => {
                    console.log(err)
+                   this.saveStatus = false;
                })
            }
         },
         // 新增
         insert(index) {
             // 新增广告位 跳转至选择时间页面，并保存当前所选择数据 新增月份 action 1
-            window.localStorage.setItem('timePageList',JSON.stringify(this.pageList));
-            window.localStorage.setItem('monthList', JSON.stringify(this.num));
-            window.localStorage.setItem('timePriceList', JSON.stringify(this.priceList));
-            this.$router.push({name:"resource", query: {action:1, time:this.num[index]}});
+            window.sessionStorage.setItem('timePageList',JSON.stringify(this.pageList));
+            window.sessionStorage.setItem('monthList', JSON.stringify(this.num));
+            window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
+            this.$router.push({name:"resource", query: {action:1, time:this.num[index], total: this.dataListCount}});
         },
         // 删除当前广告
         delAd(index,list) {
             let date = list.yearMonth;
-            let checkBoxList = JSON.parse(window.localStorage.getItem('checkBoxList'));
+            let checkBoxList = JSON.parse(window.sessionStorage.getItem('checkBoxList'));
             let idIndex = checkBoxList.indexOf(list.id);
             checkBoxList.splice(idIndex, 1);
             this.pageList[date].splice(index, 1);
@@ -632,10 +758,10 @@ export default {
                 this.priceList.splice(index, 1);
             }
             else {
-                let a = list.total;
-                let b = list.delivery;
-                let c = list.exchange;
-                let d = list.per;
+                let a = list.total ? list.total : 0;
+                let b = list.delivery ? list.delivery : 0;
+                let c = list.exchange ? list.exchange : 0;
+                let d = list.per ? list.per : 0;
                 let tableIndex = this.num.indexOf(date);
                 // let aTotal = this.priceList[date][index].total;
                 // let bTotal = this.priceList[date][index].delivery;
@@ -646,8 +772,6 @@ export default {
                 this.priceList[tableIndex].per -= d;
 
             }
-
-
 
             for (let i = 0;i < this.num.length; i++) {
                 len += this.pageList[this.num[i]].length;
@@ -665,14 +789,17 @@ export default {
             }
             else {
                 //每页可显示月份为maxMonthNum
+                for (let i = 0;i<this.num.length; i++) {
+                    this.currentList.push(this.pageList[this.num[i]]);
+                }
             }
 
             this.num = this.num.sort();
             //重新计算价格
-            window.localStorage.setItem('monthList', JSON.stringify(this.num));
-            window.localStorage.setItem('timePageList', JSON.stringify(this.pageList));
-            window.localStorage.setItem('tableData', JSON.stringify(this.pageList));
-            window.localStorage.setItem('checkBoxList', JSON.stringify(checkBoxList));
+            window.sessionStorage.setItem('monthList', JSON.stringify(this.num));
+            window.sessionStorage.setItem('timePageList', JSON.stringify(this.pageList));
+            window.sessionStorage.setItem('tableData', JSON.stringify(this.pageList));
+            window.sessionStorage.setItem('checkBoxList', JSON.stringify(checkBoxList));
         }
     }
 }

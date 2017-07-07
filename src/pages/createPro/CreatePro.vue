@@ -329,7 +329,6 @@
       created() {//页面数据初始化
         //获取客户信息
         let customerTime = Date.parse(new Date());
-    
         if(!this.$router.currentRoute.query.id){
           this.judge.showOrder=true
           this.selectForMess("","","")
@@ -441,16 +440,16 @@
             }).catch((err) => {
           })
         },
-        selectForMess(custName,agentname,dutyname){//由于客户信息与代理公司下拉数据较多，回填时的特别处理   
+        selectForMess(custName,agentname,dutyname){//由于客户信息与代理公司下拉数据较多，回填时的特别处理
           //客户信息
           this.$http.get(config.urlList.getCustomer+'?custName='+custName).then((res) => {
-            if(res.data.errorCode===0){        
-              this.custOption=res.data.result.resultList.slice(0,10)  
+            if(res.data.errorCode===0){
+              this.custOption=res.data.result.resultList.slice(0,10)
               setTimeout(()=>{
                 if(custName!=""&&this.custOption.length==1){
-                  this.formValidate.custId=this.custOption[0].custid   
+                  this.formValidate.custId=this.custOption[0].custid
                 }
-              },0)    
+              },0)
               this.judge.loading5=false
             }
             else {
@@ -480,7 +479,7 @@
               });
             }
             }).catch((err) => {
-          })     
+          })
 
           //责任销售
           this.$http.get(config.urlList.getDutyUser+'?username='+dutyname).then((res) => {//责任销售
@@ -500,7 +499,7 @@
               });
             }
             }).catch((err) => {
-          })            
+          })
         },
         disBegin (date) {//开始时间
           return date && date.valueOf() > new Date(this.searchData.createTime1)
@@ -520,7 +519,7 @@
         },
         copyFormValidate(data){//当页面为编辑状态时，将formValidate里的值替换一下
             for(let item in this.formValidate){
-              if(this.formValidate.hasOwnProperty(item)){          
+              if(this.formValidate.hasOwnProperty(item)){
                 if(item!="areaId"&&item!='custId'){
                   this.formValidate[item]=data[item]
                 }
@@ -535,7 +534,7 @@
               },0)
               this.getSerialOption();
 
-            }else if(this.formValidate.serialIds){ //车型不为空,那品牌也是有值的,需要清空（小明传的）             
+            }else if(this.formValidate.serialIds){ //车型不为空,那品牌也是有值的,需要清空（小明传的）
               this.formValidate.brandIds="";
               this.formValidate.brandNames="";
               this.serialOption=this.getSerialBrandArr(this.toArr(data.serialNames),this.toArr(this.formValidate.serialIds))
@@ -743,7 +742,7 @@
               });
             }
             }).catch((err) => {
-          })            
+          })
         },
         provinceChange(){//省列表change事件
           this.judge.areaErrShow=false
@@ -879,15 +878,36 @@
                         content: "添加成功",
                         onOk: () => {
                           this.setTimeRoute=function(){return}
+                          // 清空本地存储
+                          let nameList = [
+                              'adOrderCode',
+                              'adName',
+                              'checkBoxList',
+                              'insertData',
+                              'monthList',
+                              'priceList',
+                              'projectData',
+                              'searchInfo',
+                              'size',
+                              'tableData',
+                              'timePageList',
+                              'timePriceList',
+                              'viewAd'
+                          ];
+
+                          for (let i = 0; i < nameList.length; i++) {
+                              window.sessionStorage.removeItem(nameList[i]);
+                          }
                           this.$router.push({path:"resource", query: {id: res.data.result}})
                         }
                       });
 
+
                       setTimeout(()=>{
                         if(document.getElementsByClassName('v-transfer-dom')[0]){
-                          document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;  
+                          document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;
                           this.setTimeRoute('resource',res.data.result)
-                        }   
+                        }
                       },2000)
                   }
                   else {
@@ -901,7 +921,7 @@
                     this.judge.submitDiasbled=false
                   },0)
               }).catch((res)=>{this.judge.submitDiasbled=false})
-                
+
             }else {
               this.mustNeedCheck()//必填项验证
               this.$Modal.error({
@@ -909,7 +929,7 @@
                   content: "表单验证失败！"
               });
               this.judge.submitDiasbled=false
-            }            
+            }
           })
           setTimeout(()=>{
             this.judge.submitDiasbled=false
@@ -936,7 +956,7 @@
                 this.judge.dateErrShow=false
               }
               this.serialBrandValue()
-              
+
               if(this.$router.currentRoute.query.id){//修改项目
                 this.formValidate.id=this.$router.currentRoute.query.id
                 this.$http.post(config.urlList.editPro,
@@ -950,14 +970,35 @@
                             content: "修改成功",
                             onOk: () => {
                               this.setTimeRoute=function(){return}
+                              // 清空本地存储
+                              let nameList = [
+                                  'adOrderCode',
+                                  'adName',
+                                  'checkBoxList',
+                                  'insertData',
+                                  'monthList',
+                                  'priceList',
+                                  'projectData',
+                                  'searchInfo',
+                                  'size',
+                                  'tableData',
+                                  'timePageList',
+                                  'timePriceList',
+                                  'viewAd'
+                              ];
+
+                              for (let i = 0; i < nameList.length; i++) {
+                                  window.sessionStorage.removeItem(nameList[i]);
+                              }
                               this.$router.push({path:"details",query:{id: this.$router.currentRoute.query.id}})
                             }
                         });
+
                         setTimeout(()=>{
                           if(document.getElementsByClassName('v-transfer-dom')[0]){
-                            document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;  
+                            document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;
                             this.setTimeRoute('details',this.$router.currentRoute.query.id)
-                          }   
+                          }
                         },2000)
                       }
                       else {
@@ -988,9 +1029,9 @@
                       });
                       setTimeout(()=>{
                         if(document.getElementsByClassName('v-transfer-dom')[0]){
-                          document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;  
+                          document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;
                           this.setTimeRoute('details',res.data.result)
-                        }                          
+                        }
                       },2000)
                     }
                     else {

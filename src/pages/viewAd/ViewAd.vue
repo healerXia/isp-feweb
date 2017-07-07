@@ -136,7 +136,7 @@ export default {
     mounted() {
     // /api/isp-kongming/ad/select_
         this.result = JSON.parse(window.localStorage.getItem('viewAd'));
-        console.log(this.$router.currentRoute.query.viewTime);
+        window.sessionStorage.setItem('viewState', '2');
         let time  = this.$router.currentRoute.query.viewTime.split(' ')[0];
         let month = time.split('-');
         this.adName = this.result.name;
