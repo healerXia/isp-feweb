@@ -106,7 +106,7 @@
                     <span class='fl'>欢迎您，{{username}}</span>
                     <div class="border fl"></div>
                     <a href="javascript:;" @click='signOut'>
-                        <img src="../../assets/images/exit.png" alt="">
+                        <img src="../../assets/images/exit.png" alt="退出" title="退出">
                     </a>
                 </div>
             </div>
