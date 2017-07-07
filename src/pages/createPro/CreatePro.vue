@@ -35,7 +35,7 @@
             </Form-item>
             <Form-item label="项目名称:" prop="projectName" >
               <Input v-model="formValidate.projectName" placeholder="请填写项目名称" maxlength="50" class='createInput fl' @on-focus="removeRepeatCheck"></Input>
-              <span class="colorRed ML15" v-show="judge.checkRepeat">项目名称重复,请重新填写</span>
+              <span class="colorRed ML15" v-show="judge.checkRepeat">此项目名称已存在，请重新输入!</span>
             </Form-item>
             <div class="budget">
               <Indexbox :mes="mesBudget" v-model="formValidate.budgetAmount"></Indexbox>
@@ -913,7 +913,7 @@
                   else {
                     this.$Modal.error({
                         title: '提示',
-                        content: res.data.errorMsg
+                        content: "表单验证失败！"
                     });
                     this.judge.checkRepeat=true;
                   }
@@ -1004,7 +1004,7 @@
                       else {
                         this.$Modal.error({
                             title: '提示',
-                            content: res.data.errorMsg
+                            content: "表单验证失败！"
                         });
                         this.judge.checkRepeat=true
                       }
@@ -1037,7 +1037,7 @@
                     else {
                         this.$Modal.error({
                             title: '提示',
-                            content: res.data.errorMsg
+                            content: "表单验证失败！"
                         });
                         this.judge.checkRepeat=true
                     }

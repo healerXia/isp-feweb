@@ -47,7 +47,7 @@
             <li>
               <span>订单编号：</span>
               <span>{{adverMes.adOrderCode}}</span>
-              <a href="">导出PDF</a>
+              <!-- <a href="">导出PDF</a> -->
             </li>
             <li>
               <span>投放周期：</span>
@@ -359,9 +359,9 @@ export default {
                 if(this.priceArr.totalBuy!=0&&this.priceArr.totalDelivery!=0){
                   this.priceArr.rate="1："+(this.priceArr.totalBuy/this.priceArr.totalDelivery).toFixed(2)
                 }else if(this.priceArr.totalDelivery==0){
-                  this.priceArr.rate="0:0"
+                  this.priceArr.rate="0：0"
                 }else if(this.priceArr.totalDelivery!=0&&this.priceArr.totalBuy==0){
-                  this.priceArr.rate="1:0"
+                  this.priceArr.rate="1：0"
                 }
               }
               else {
