@@ -738,6 +738,12 @@ export default {
                             this.pageName = '';
 
                         }
+                        $("#adType").val('请选择').trigger("change");
+
+                        this.searchInfo.Type = '';
+
+                        this.adTypes = '';
+                        this.typeAd = '';
                     })
                 })
             }
