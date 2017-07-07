@@ -182,7 +182,7 @@ import urlList from './config.js';
         handleReset (name) {
             let id = this.$router.currentRoute.query.id;
             this.$refs[name].resetFields();
-            this.$router.push({path: 'details', query: {id: id}});
+            this.$router.push({path: 'details', query: {id: window.sessionStorage.getItem('proMessId')}});
         },
         handleSubmit (name, id) {
             if (this.errorTxt != '') {
@@ -244,7 +244,7 @@ import urlList from './config.js';
                                     title: '提示',
                                     content:  res.data.errorMsg,
                                     onOk () {
-                                         self.$router.push({path: 'details', query: {id: self.proMess.id}});
+                                         self.$router.push({path: 'details', query: {id: window.sessionStorage.getItem('proMessId')}});
                                     }
                                 });
                             }
@@ -254,7 +254,7 @@ import urlList from './config.js';
                                     title: '提示',
                                     content: res.data.errorMsg,
                                     onOk () {
-                                         self.$router.push({path: 'details', query: {id: self.proMess.id}});
+                                         self.$router.push({path: 'details', query: {id: window.sessionStorage.getItem('proMessId')}});
                                      }
                                 });
 
@@ -347,7 +347,7 @@ import urlList from './config.js';
             }
             else {
                 let percent = total/delivery;
-                return `1:${percent.toFixed(2)}`;
+                return `1:${percent.toFixed(1)}`;
             }
         }
     }

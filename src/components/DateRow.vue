@@ -114,7 +114,6 @@ export default {
     },
     mounted() {
         this.useStyle = this.info.useStyle;
-        console.log(this.info);
         for(let i = 0;i < 31; i++) {
             this.$set(this.visibleList, i, false);
         }
@@ -264,6 +263,7 @@ export default {
                     this.$nextTick(() => {
                         let dataTimes = this.info.yearMonth;
                         let dateIndex = parseInt(event.target.getAttribute('data-index')) + 1;
+                        let dateIndexs = parseInt(event.target.getAttribute('data-index'));
 
                         let dayData = {};
                         let datas = JSON.parse(this.info.adStateLists);
@@ -279,7 +279,7 @@ export default {
                                 }
                             }
                         }
-                        console.log(dataTimes);
+
                         // 宽高
                         this.layer.pSize = `${this.info.width}*${this.info.height}`;
                         if (dateIndex < 10) {
@@ -324,7 +324,7 @@ export default {
                                 this.layer.pSize = `${this.info.width} * ${this.info.height}`;
                                 let skuDatas = JSON.parse(this.info.adStateLists);
                                 for (let attr in skuDatas) {
-                                    if(attr == this.time) {
+                                    if(attr == dataTimes) {
                                         let n = skuDatas[attr];
                                         this.layer.skuPrice = n[dateIndexs].skuPrice;
                                     }
@@ -343,7 +343,7 @@ export default {
                             event.target.nextElementSibling.style.top = 34 + 'px';
                         }
                         else {
-                            event.target.nextElementSibling.style.top = -270 + 'px';
+                            event.target.nextElementSibling.style.top = -280 + 'px';
                         }
                     })
                 }, 1500)

@@ -21,18 +21,19 @@
                     <span class='query-ad-title'>查询广告位</span>
                     <span class="fRight MR20" v-if="shrinkMes.collapse">展开&nbsp;<Icon type="chevron-up"></Icon></span>
                     <span class="fRight MR20" v-else="shrinkMes.collapse">收起&nbsp;<Icon type="chevron-down"></Icon></span>
-                    <div class="query-ad" slot="content">
+                    <div class="query-ad" slot="content" style="position: relative">
                         <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
+                        <span style="position: absolute;color: red">*</span>
                         <Form-item label="选择日期：">
                             <Row>
                                 <Col span="5">
                                     <Form-item prop="beginTime">
-                                        <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>                            </Form-item>
+                                        <Date-picker  :value="this.searchInfo.beginTime" @on-clear='clearBeginTime'  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>                            </Form-item>
                                 </Col>
                                 <Col span="1" style="text-align: center">-</Col>
                                 <Col span="5">
                                     <Form-item prop="endTime" :error='timeTxt' id='endTime'>
-                                        <Date-picker   :editable = 'false' :value="this.searchInfo.endTime"  @on-change="chooseEndTime"   type="month" :options="date2" placeholder="选择日期"></Date-picker>
+                                        <Date-picker   :editable = 'false' :value="this.searchInfo.endTime" @on-clear='clearEndTime'  @on-change="chooseEndTime"   type="month" :options="date2" placeholder="选择日期"></Date-picker>
                                     </Form-item>
                                 </Col>
                             </Row>
@@ -97,6 +98,7 @@
                 </Row>
                 <p v-if='paging.totalCounts == 0'>无查询结果！</p>
             </div>
+
 
             <div class="result clear" v-if ='paging.totalCounts > 0'>
                 <!-- v-if ='paging.totalCounts' -->
@@ -278,24 +280,24 @@ export default {
             // 项目基本信息
             proMess: {},
             ruleValidate: {
-                serialId: [
-                    { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
-                ],
+                // serialId: [
+                //     { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
+                // ],
                 beginTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
                 endTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
-                pageName: [
-                    { required: true,  message: '请选择页面名称', trigger: 'change' }
-                ],
-                brandId: [
-                    { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
-                ],
-                cityId: [
-                    { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
-                ],
+                // pageName: [
+                //     { required: true,  message: '请选择页面名称', trigger: 'change' }
+                // ],
+                // brandId: [
+                //     { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
+                // ],
+                // cityId: [
+                //     { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
+                // ],
                 // typeAd: [
                 //     { required: true, type: 'string', message: '请选择广告类型', trigger: 'blur' }
                 // ]
@@ -510,7 +512,11 @@ export default {
             }
 
             this.redrawed();
+
         }
+        setTimeout(() => {
+            this.redrawed();
+        });
     },
     methods: {
         showCollapse(){
@@ -649,7 +655,7 @@ export default {
                         ajax: {
                             transport: function(params, success, failure) {
                                 if (!params.data.term) {
-                                    axios.post('/api/isp-kongming/ad/channelSelect',{
+                                    axios.post('/isp-kongming/ad/channelSelect',{
                                         // 媒体名称id
                                         mediaId: postData.mediaId,
                                         // 页面类型
@@ -662,7 +668,7 @@ export default {
                                     })
                                     return false;
                                 }
-                                axios.post('/api/isp-kongming/ad/channelSelect',{
+                                axios.post('/isp-kongming/ad/channelSelect',{
                                     // 媒体名称id
                                     mediaId: postData.mediaId,
                                     // 页面类型
@@ -759,8 +765,7 @@ export default {
             }
             else {
                 setTimeout(() => {
-                    console.log(this.searchInfo.pageName);
-                    initSelect('#adType', '/api/isp-kongming/ad/placeTypeSelect', {
+                    initSelect('#adType', '/isp-kongming/ad/placeTypeSelect', {
                         channelId: this.searchInfo.pageName,
                         mediaId: this.searchInfo.mediaId,
                         name: ''
@@ -788,7 +793,7 @@ export default {
             // 初始化车型
             this.searchInfo.serialId = '';
             setTimeout(()=> {
-                initSelect('#serialId', '/api/isp-kongming/ad/modelInfo', {
+                initSelect('#serialId', '/isp-kongming/ad/modelInfo', {
                     modelId: 0,
                     name: ''
                 }, 'value', 'name');
@@ -815,7 +820,7 @@ export default {
             this.areaId = id;
             this.searchInfo.cityId = '';
             setTimeout( () => {
-                initSelect('#cityId', '/api/isp-kongming/ad/areaInfo', {
+                initSelect('#cityId', '/isp-kongming/ad/areaInfo', {
                     cityId: id,
                     name: ''
                 }, 'value', 'name');
@@ -841,7 +846,7 @@ export default {
             // 初始化品牌
             this.searchInfo.brandId = '';
             setTimeout(() => {
-                initSelect('#brandId', '/api/isp-kongming/ad/brandInfo', {
+                initSelect('#brandId', '/isp-kongming/ad/brandInfo', {
                     brandId: 0,
                     name: ''
                 }, 'value', 'name');
@@ -911,15 +916,16 @@ export default {
 
             }).then((res) => {
                 if (res.data.errorCode == 0) {
+                    window.sessionStorage.setItem('beginTime', this.searchInfo.beginTime)
                     // this.tableList = Object.assign([], res.data.result);
                     // this.paging.count = this.tableList.length;
                     let datas = Object.assign([], res.data.result);
                     window.sessionStorage.setItem('viewTable', JSON.stringify(datas));
-                    if (datas[0].totalCounts > 0) {
+                    if (datas.length > 0 && datas[0].totalCounts > 0) {
                         this.paging.totalCounts = datas[0].totalCounts;
                         this.searching = false;
                     }
-                    else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
+                    else if (datas.length == 0){
 
                         this.paging.totalCounts = 0;
                         this.searching = false;
@@ -1526,9 +1532,15 @@ export default {
             window.sessionStorage.setItem('tableData', JSON.stringify(this.selectTableData));
             window.sessionStorage.setItem('checkBoxList', JSON.stringify(this.checkBoxList));
             window.localStorage.setItem('viewAd', JSON.stringify(obj));
-            this.$router.push({path: 'viewAd', query: {'viewTime': this.searchInfo.beginTime}})
+            this.$router.push({path: 'viewAd', query: {'viewTime': window.sessionStorage.getItem('beginTime')}});
         },
         // 重置搜索条件 清空车型 地区 品牌
+        clearBeginTime() {
+            this.searchInfo.beginTime = '';
+        },
+        clearEndTime() {
+            this.searchInfo.endTime = '';
+        },
         resetSearchInfo() {
             $("#pageName").val('请选择').trigger("change");
             $("#adType").val('请选择').trigger("change");
