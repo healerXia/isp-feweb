@@ -7,6 +7,10 @@
         <div class='hasNoOrder pL30'>
             <div class="title MB20 MT15">
               <h1 class="MR15">订单信息</h1>
+              <router-link
+                :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
+                  新增订单
+              </router-link>
             </div>
             <div class="contentBox">
               <div class="orderMess">
@@ -31,10 +35,10 @@
             :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}"> 
              编辑价格                
           </router-link> -->
-          <router-link
+         <!--  <router-link
             :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
               新增订单
-          </router-link>
+          </router-link> -->
 
         </div>
         <div class="modul">
