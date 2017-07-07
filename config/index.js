@@ -10,7 +10,7 @@ module.exports = {
     //assetsPublicPath: '/isp_static/',
     //assetsPublicPath: '/isp_static/',
     //assetsPublicPath: '/isp_static/',
-    assetsPublicPath: '/isp-static/',
+    assetsPublicPath: '/ISP-FEstatic/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -33,7 +33,7 @@ module.exports = {
     proxyTable: {
         '/api': {
             //target: 'http://192.168.70.184',http://172.20.11.89:8080,//'http://192.168.56.46:8080',
-            target: 'http://192.168.70.184',
+            target: 'http://isp.yiche.com/',
             changeOrigin: true,
             pathRewrite: {
                 '^/api': ''

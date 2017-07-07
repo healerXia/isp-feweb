@@ -329,7 +329,6 @@
       created() {//页面数据初始化
         //获取客户信息
         let customerTime = Date.parse(new Date());
-
         if(!this.$router.currentRoute.query.id){
           this.judge.showOrder=true
           this.selectForMess("","","")
@@ -903,7 +902,7 @@
                         }
                       });
 
-                     
+
                       setTimeout(()=>{
                         if(document.getElementsByClassName('v-transfer-dom')[0]){
                           document.getElementsByClassName('v-transfer-dom')[0].getElementsByTagName("button")[0].disabled=true;

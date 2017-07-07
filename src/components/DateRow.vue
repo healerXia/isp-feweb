@@ -25,7 +25,7 @@
             </Select>
         </td>
         <td class='priceTd'>
-            <span>{{info.price}}元/天</span>
+            <span>{{formatNum(parseFloat(info.price), 2)}}元/天</span>
         </td>
         <td v-for='(i,index) in info.adStateList'
             :class='["dateTd", {"active": indexList[index]},{"default": i == 3}, {"hasSel": i == 2}]'>
@@ -102,18 +102,19 @@ export default {
     watch:{
         info: {
             handler: function(){
-                console.log(this.info);
                 for (let i = 0;i < this.info.adStateList.length;i++) {
                     if (this.info.adStateList[i] == 4) {
                         this.$set(this.indexList, i, true);
                     }
                 }
+                this.useStyle = this.info.useStyle;
             },
             deep: true
         }
     },
     mounted() {
-        console.log(this.useStyle);
+        this.useStyle = this.info.useStyle;
+        console.log(this.info);
         for(let i = 0;i < 31; i++) {
             this.$set(this.visibleList, i, false);
         }
@@ -179,20 +180,19 @@ export default {
         initRow() {
 
         },
+        // 删除数据
+        delAd() {
+
+        },
         //转千分位
         formatNum(num, n) {
            //参数说明：num 要格式化的数字 n 保留小数位
-
             num = String(num.toFixed(n));
             var re = /(-?\d+)(\d{3})/;
             while(re.test(num)) {
                 num = num.replace(re,"$1,$2");
             }
             return num;
-        },
-        // 删除数据
-        delAd() {
-
         },
         check(event) {
             this.initTd(event);
@@ -297,6 +297,8 @@ export default {
                         }).then((res) => {
                             if (res.data.errorCode == 0) {
                                 this.layer = Object.assign({}, res.data.result);
+                                this.layer.width = `${this.layer.width}`;
+                                this.layer.height = `${this.layer.height}`;
                                 this.layer.pSize = `${this.info.width} * ${this.info.height}`;
                                 let skuDatas = JSON.parse(this.info.adStateLists);
                                 for (let attr in skuDatas) {
@@ -316,10 +318,17 @@ export default {
                                 });
                             }
                             else {
-                                this.$Modal.info({
-                                    title: '提示',
-                                    content: res.data.rspMsg.errorMsg
-                                });
+                                this.layer = {};
+                                this.layer.width = '';
+                                this.layer.height = '';
+                                this.layer.pSize = `${this.info.width} * ${this.info.height}`;
+                                let skuDatas = JSON.parse(this.info.adStateLists);
+                                for (let attr in skuDatas) {
+                                    if(attr == this.time) {
+                                        let n = skuDatas[attr];
+                                        this.layer.skuPrice = n[dateIndexs].skuPrice;
+                                    }
+                                }
                             }
                         }).catch((err) => {
                             console.log(err);
@@ -415,7 +424,7 @@ span {
     span {
         text-align: right;
         // text-indent: 20px;
-        padding-right: 20px;
+        padding-right: 10px;
     }
 }
 

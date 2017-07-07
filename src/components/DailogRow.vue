@@ -9,7 +9,7 @@
                     <p class="dialogContent-title">日期</p>
                     <div class="dialogContent-top">
                         <p>价格：{{layer.skuPrice}}元/天</p>
-                        <p>尺寸：{{layer.width =! '' ? layer.width : '-'}}*{{layer.height != '' ? layer.height : '-'}}px ≤ 100k</p>
+                        <p>尺寸：{{layer.width == '' ? '-':layer.width}}*{{layer.height == '' ? '-' : layer.height}}px ≤ 100k</p>
                     </div>
                     <div class="dialogContent-bot">
                         <p>占用人：{{layer.dutyUserName ? layer.dutyUserName : '-'}}</p>
@@ -112,7 +112,7 @@ export default {
     },
     methods: {
         initDate(time) {
-            console.log(time);
+            
             // 获取数据传输的年月
             let arry = this.time.split('-');
             let dataYear = arry[0];
@@ -167,7 +167,6 @@ export default {
                             dateIndex = '0' + dateIndex
                         }
 
-
                         // "adPlaceId": `${this.info.adPlaceId}`,
                         // "beginTime": `${this.time}-${dateIndex}`,
                         // "endTime": `${this.time}-${dateIndex}`
@@ -179,6 +178,8 @@ export default {
                         }).then((res) => {
                             if (res.data.errorCode == 0) {
                                 this.layer = Object.assign({}, res.data.result);
+                                this.layer.width = `${this.layer.width}`;
+                                this.layer.height = `${this.layer.height}`;
                                 this.layer.pSize = `${this.info.width} * ${this.info.height}`;
                                 let skuDatas = JSON.parse(this.info.adStateLists);
                                 for (let attr in skuDatas) {
@@ -198,10 +199,17 @@ export default {
                                 });
                             }
                             else {
-                                this.$Modal.info({
-                                    title: '提示',
-                                    content: res.data.rspMsg.errorMsg
-                                });
+                                this.layer = {};
+                                this.layer.width = '';
+                                this.layer.height = '';
+                                this.layer.pSize = `${this.info.width} * ${this.info.height}`;
+                                let skuDatas = JSON.parse(this.info.adStateLists);
+                                for (let attr in skuDatas) {
+                                    if(attr == this.time) {
+                                        let n = skuDatas[attr];
+                                        this.layer.skuPrice = n[dateIndexs].skuPrice;
+                                    }
+                                }
                             }
                         }).catch((err) => {
                             console.log(err);
@@ -210,7 +218,7 @@ export default {
                         let index = parseInt(event.target.getAttribute('data-index'));
                         this.$set(this.visibleList, index, true);
                         let y = event.clientY;
-                        console.log(event.target.nextElementSibling);
+
                         if (y < 270) {
                             event.target.nextElementSibling.style.top = 34 + 'px';
                         }

@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="buildPrice">
-      <ProjectInfo :proMess="proMess"></ProjectInfo>
+      <ProjectInfo :proMess="proMess" :edit="true" :jumpUrl='1'></ProjectInfo>
       <div class="content">
         <div class="contentBox">
           <div class="orderMess">
@@ -144,10 +144,10 @@ import urlList from './config.js';
             })
 
 
-            aTotal += parseInt(priceList[i].total);
-            bTotal += parseInt(priceList[i].delivery);
-            cTotal += parseInt(priceList[i].exchange);
-            dTotal += parseInt(priceList[i].per);
+            aTotal += parseFloat(priceList[i].total);
+            bTotal += parseFloat(priceList[i].delivery);
+            cTotal += parseFloat(priceList[i].exchange);
+            dTotal += parseFloat(priceList[i].per);
         }
         let str = this.ratio(aTotal, bTotal);
         this.tableData.mess.push({
@@ -158,7 +158,7 @@ import urlList from './config.js';
             dTotal: dTotal == 0 ? '-' : this.formatNum(dTotal, 2),
             distribution: str
         })
-        console.log(this.tableData.mess);
+
         this.total =  aTotal;
         this.totalPrice();
         this.price.sellAllPrice = aTotal;
@@ -214,6 +214,7 @@ import urlList from './config.js';
                         "sellAllPrice": this.price.sellAllPrice,
                         "dispatchinglAllPrice": this.price.dispatchinglAllPrice,
                         "realitySellAllPrice": this.reallyPrice,
+                        "discount": this.formValidate.discount,
                         "detailList": datas
                     }).then((res) => {
                         if (res.data.errorCode === 0) {
@@ -260,6 +261,15 @@ import urlList from './config.js';
                                 this.submitStatus = true;
                             }
 
+                        }
+                        else if (res.data.errorCode == '40300101'){
+                            this.$Modal.info({
+                                title: '提示',
+                                content: res.data.errorMsg,
+                                onOk () {
+                                     self.$router.push({path: 'createPro', query: {id: window.sessionStorage.getItem('proMessId')}});
+                                }
+                            });
                         }
                         else {
                             if (id == 1) {
@@ -310,7 +320,7 @@ import urlList from './config.js';
                 }
             }
             this.pointPrice = (this.total * this.formValidate.discount / 10).toFixed(2).toString().split('.')[1];
-            this.reallyPrice = parseInt(this.total * this.formValidate.discount / 10);
+            this.reallyPrice = parseFloat(this.total * this.formValidate.discount / 10);
 
         },
         //转千分位

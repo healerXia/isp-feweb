@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="chooseTime">
-        <ProjectInfo :proMess="proMess"></ProjectInfo>
+        <ProjectInfo :proMess="proMess" :edit="true" :jumpUrl='1'></ProjectInfo>
         <div v-if='this.num.length == 0' class="noAd">
             <p>请先选择要投放的广告位</p>
             <Button type="primary" @click='jump' class="btn bg4373F3">选择广告位</Button>
@@ -220,12 +220,13 @@ export default {
                  }
             }
         }
-        console.log(this.pageList);
+
         // 可放置最大月份个数
         let maxMonthNum = Math.ceil(40/len);
         for (let i = 0;i < this.num.length; i++) {
             this.currentList.push(this.pageList[this.num[i]]);
         }
+
         // 初始化当前页月份数
         // if(this.num.length <= maxMonthNum) {
         //     //一页可以显示完
@@ -329,38 +330,38 @@ export default {
 
             if (type == 4001) {
                 if (action == 1) {
-                    this.pageList[date][index].total += parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].total += parseFloat(this.pageList[date][index].price);
                 }
                 else {
-                    this.pageList[date][index].total -= parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].total -= parseFloat(this.pageList[date][index].price);
                 }
             }
             if (type == 4003) {
                 if (action == 1) {
-                    this.pageList[date][index].delivery += parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].delivery += parseFloat(this.pageList[date][index].price);
                 }
                 else {
-                    this.pageList[date][index].delivery -= parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].delivery -= parseFloat(this.pageList[date][index].price);
                 }
             }
 
             // 互换
             if (type == 4002) {
                 if (action == 1) {
-                    this.pageList[date][index].exchange += parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].exchange += parseFloat(this.pageList[date][index].price);
                 }
                 else {
-                    this.pageList[date][index].exchange -= parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].exchange -= parseFloat(this.pageList[date][index].price);
                 }
             }
 
             // 自用
             if (type == 4004) {
                 if (action == 1) {
-                    this.pageList[date][index].per += parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].per += parseFloat(this.pageList[date][index].price);
                 }
                 else {
-                    this.pageList[date][index].per -= parseInt(this.pageList[date][index].price);
+                    this.pageList[date][index].per -= parseFloat(this.pageList[date][index].price);
                 }
             }
 
@@ -377,10 +378,11 @@ export default {
                 if (!datas[i].delivery) {
                     datas[i].delivery = 0;
                 }
-                a += parseInt(datas[i].total);
-                b += parseInt(datas[i].delivery);
-                c += parseInt(datas[i].exchange);
-                d += parseInt(datas[i].per);
+                console.log(datas[i].total);
+                a += parseFloat(datas[i].total);
+                b += parseFloat(datas[i].delivery);
+                c += parseFloat(datas[i].exchange);
+                d += parseFloat(datas[i].per);
             }
 
             let str = this.ratio(a, b);
@@ -495,10 +497,10 @@ export default {
                 }
 
 
-                a += parseInt(datas[i].total);
-                b += parseInt(datas[i].delivery);
-                c += parseInt(datas[i].exchange);
-                d += parseInt(datas[i].per);
+                a += parseFloat(datas[i].total);
+                b += parseFloat(datas[i].delivery);
+                c += parseFloat(datas[i].exchange);
+                d += parseFloat(datas[i].per);
             }
 
             let str = this.ratio(a, b);
@@ -531,11 +533,12 @@ export default {
             this.submitList = [];
             for(let i = 0; i< this.num.length; i++) {
                 let time = this.num[i];
-                let data = this.pageList[time];
+                let data = Object.assign(this.pageList[time]);
 
                 for(let k = 0;k < data.length;k++) {
                     let yearMonth = data[k].yearMonth.split('-').join('');
                     data[k].yearMonth = yearMonth;
+                    data[k].adStateLists = null;
                     this.submitList.push(data[k]);
                 }
             }
@@ -579,7 +582,7 @@ export default {
                             title: '提示',
                             content: res.data.errorMsg,
                             onOk () {
-                                 self.$router.push('buildPrice');
+                                 //self.$router.push('buildPrice');
                             }
                         });
                     }
@@ -609,7 +612,7 @@ export default {
                             title: '提示',
                             content: res.data.errorMsg,
                             onOk () {
-                                 self.$router.push('buildPrice');
+                                 //self.$router.push('buildPrice');
                             }
                         });
 
@@ -667,6 +670,7 @@ export default {
            let datas = JSON.parse(str);
            let self = this;
            let url = '';
+
            if (this.adOrderCode) {
                url = '/isp-kongming/adorder/orderUpdate';
                this.$http.post(url, {

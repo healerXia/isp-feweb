@@ -5,7 +5,7 @@
 <template lang="html">
     <div class="resource">
         <!-- 项目信息 -->
-        <ProjectInfo :proMess="proMess" :edit="true"></ProjectInfo>
+        <ProjectInfo :proMess="proMess" :edit="true" :jumpUrl='1'></ProjectInfo>
         <!-- 项目信息 -->
 
         <!-- 订单信息 -->
@@ -54,7 +54,7 @@
                                 </Form-item>
                             </Col>
                             <Col span="12">
-                                <Form-item label="广告类型" prop='adType' :error='errorTxts.adType'>
+                                <Form-item label="广告类型" prop='typeAd'>
                                     <select id="adType" name="sample" style="width:400px;height:36px;" class="js-example-basic-multiple"></select>
                                 </Form-item>
                             </Col>
@@ -253,7 +253,6 @@ export default {
                 // 广告类型集合
                 typeList: []
             },
-            adType: ['图片', '文章', 'flash', '视频', '图片\flash', '图文', '组图', '大图'],
             searchData: {
                 // 页面名称
                 pageName: '',
@@ -296,7 +295,10 @@ export default {
                 ],
                 cityId: [
                     { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
-                ]
+                ],
+                // typeAd: [
+                //     { required: true, type: 'string', message: '请选择广告类型', trigger: 'blur' }
+                // ]
             },
             action: 2,
             // 查询开关
@@ -436,7 +438,7 @@ export default {
 
         let id = this.$router.currentRoute.query.id;
         if (id) {
-
+            window.sessionStorage.setItem('proMessId', id);
             this.$http.get(urlList.getInfo+"?id="+id).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.proMess = res.data.result;
@@ -451,6 +453,64 @@ export default {
         }
 
         this.searchInfoTxt = [false, false, false];
+        if (window.sessionStorage.getItem('viewState') == '2') {
+            //window.sessionStorage.setItem('viewState', '1');
+            let datas = JSON.parse(window.sessionStorage.getItem('viewTable'));
+            this.checkBoxList = JSON.parse(window.sessionStorage.getItem('checkBoxList'));
+            this.monthList = JSON.parse(window.sessionStorage.getItem('monthList'));
+            this.selectTableData =  JSON.parse(window.sessionStorage.getItem('tableData'));
+            if (datas[0].totalCounts > 0) {
+                this.paging.totalCounts = datas[0].totalCounts;
+                this.searching = false;
+            }
+            else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
+
+                this.paging.totalCounts = 0;
+                this.searching = false;
+            }
+            for (let i = 0; i < datas.length; i++) {
+                let str = JSON.stringify(datas[i].adStateList);
+                 datas[i].adStateLists = str;
+                 datas[i].adStateList = this.initResult(datas[i], 2);
+            }
+
+            this.tableList = Object.assign([], datas);
+            for (let i = 0; i< this.tableList.length;i++) {
+                this.$set(this.checkBoxStatus, i, false);
+            }
+
+            for (let i = 0; i < datas.length; i++) {
+                if (this.checkBoxList.indexOf(datas[i].adPlaceId) > -1) {
+                    this.$set(this.checkBoxStatus, i, true);
+                }
+            }
+
+
+
+            let time = this.monthList[0];
+
+            if (this.selectTableData[time]) {
+                this.showSelect = this.selectTableData[time];
+                console.log(this.showSelect);
+                for (let i = 0; i < this.showSelect.length; i++) {
+                    let stateList = Object.assign([], this.showSelect[i].adStateList);
+
+                    for(let j = 0; j < stateList.length; j++) {
+                        if (stateList[j] == 'SKU_STATUS_LOCKED' || stateList[j] == 'SKU_STATUS_SALED' || stateList[j] == 'SKU_STATUS_RUNNING') {
+                            this.$set(this.showSelect[i].adStateList, j, "2");
+                        }
+                        if (stateList[j] == 'SKU_STATUS_NONE' || stateList[j] =='SKU_STATUS_DELETE' || stateList[j] == 'SKU_STATUS_IDLE') {
+                            this.$set(this.showSelect[i].adStateList, j, "1");
+                        }
+                    }
+                }
+            }
+            else {
+                this.showSelect = [];
+            }
+
+            this.redrawed();
+        }
     },
     methods: {
         showCollapse(){
@@ -475,7 +535,7 @@ export default {
             }
         },
         // 格式化数据
-        initResult(data) {
+        initResult(data, typeStatus) {
             let time = new Date();
             let year = time.getFullYear();
             let month = time.getMonth() + 1;
@@ -483,7 +543,8 @@ export default {
             let adStateList = [];
             let arr = [];
             let monthList = [];
-            let adList = data.adStateList;
+            let adList =  data.adStateList;
+            //console.log(data);
 
             let obj = Object.assign({}, adList);
             for (let attr in obj) {
@@ -497,7 +558,6 @@ export default {
                monthData.dayStatus = obj[attr];
                //ad.sort(this.compare('day'));
                // 按照日期
-
                for (let j = 0; j < ad.length; j++) {
                 //    dayStates.push(ad[j].skuStatus);
                    dayStates[ad[j].day - 1] = ad[j].skuStatus;
@@ -522,7 +582,7 @@ export default {
                    }
                }
 
-               monthData.kprice = (total/30).toFixed(2);
+               monthData.kprice = (total/ad.length).toFixed(2);
                monthData.state = dayStates.join(',');
                monthData.skuIdList = skuIdList;
                arr.push(monthData);
@@ -701,8 +761,8 @@ export default {
                     }, 'typeId', 'typeName');
 
                     $('#adType').on('change', () => {
-
                         let data = $('#adType').select2('data');
+
                         let str = [];
                         if (data.length > 0) {
                             for (let i = 0; i < data.length; i++) {
@@ -710,6 +770,9 @@ export default {
                             }
                             this.searchInfo.placeTypeSelect = str.join(',');
                             this.typeAd = str.join(',');
+                        } else {
+                            this.searchInfo.placeTypeSelect = '';
+                            this.typeAd = '';
                         }
                     })
                 })
@@ -734,6 +797,10 @@ export default {
                         this.searchInfo.serialId = str.join(',');
                         this.serialId = str.join(',');
                     }
+                    else {
+                        this.searchInfo.serialId = '';
+                        this.serialId = '';
+                    }
                 })
             })
         },
@@ -757,6 +824,10 @@ export default {
                         this.searchInfo.cityId = str.join(',');
                         this.cityId = str.join(',');
                     }
+                    else {
+                        this.searchInfo.cityId = '';
+                        this.cityId = '';
+                    }
                 })
             })
         },
@@ -778,6 +849,10 @@ export default {
                         }
                         this.searchInfo.brandId = str.join(',');
                         this.brandId = str.join(',');
+                    }
+                    else {
+                        this.searchInfo.brandId = '';
+                        this.brandId = '';
                     }
                 })
             })
@@ -829,12 +904,11 @@ export default {
                 brandIdList: this.searchInfo.brandId
 
             }).then((res) => {
-                console.log('请求成功');
                 if (res.data.errorCode == 0) {
                     // this.tableList = Object.assign([], res.data.result);
                     // this.paging.count = this.tableList.length;
-                    console.log(res.data.result);
                     let datas = Object.assign([], res.data.result);
+                    window.sessionStorage.setItem('viewTable', JSON.stringify(datas));
                     if (datas[0].totalCounts > 0) {
                         this.paging.totalCounts = datas[0].totalCounts;
                         this.searching = false;
@@ -854,6 +928,7 @@ export default {
                     for (let i = 0; i< this.tableList.length;i++) {
                         this.$set(this.checkBoxStatus, i, false);
                     }
+
 
                     // action 1  进行新增操作
                     if (this.$router.currentRoute.query.action) {
@@ -984,7 +1059,7 @@ export default {
             this.redrawed();
         },
         search(name) {
-            console.log(this.typeAd);
+            this.typeAd = '2321312'
             if(this.timeTxt) {
                 return false;
             }
@@ -1434,8 +1509,18 @@ export default {
         viewAd(width, height, obj) {
             let size = `${width} * ${height}`;
             // window.sessionStorage.setItem('viewTime', this.searchInfo.beginTime);
+
+            for(let i = 0; i < this.timePageMonth.length; i++) {
+                if (this.monthList.indexOf(this.timePageMonth[i]) < 0) {
+                    this.monthList.push(this.timePageMonth[i]);
+                }
+            }
+
+            this.monthList.sort();
+            window.sessionStorage.setItem('monthList', JSON.stringify(this.monthList));
+            window.sessionStorage.setItem('tableData', JSON.stringify(this.selectTableData));
+            window.sessionStorage.setItem('checkBoxList', JSON.stringify(this.checkBoxList));
             window.localStorage.setItem('viewAd', JSON.stringify(obj));
-            this.$router.push('viewAd');
             this.$router.push({path: 'viewAd', query: {'viewTime': this.searchInfo.beginTime}})
         },
         // 重置搜索条件 清空车型 地区 品牌
