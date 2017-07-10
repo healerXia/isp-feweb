@@ -5,7 +5,7 @@
         <div class="contentBox">
           <div class="orderMess">
             <div class="proBar">
-              <ProjectStep :status = '3'></ProjectStep>
+              <ProjectStep :status = '3' class="MT20"></ProjectStep>
             </div>
             <div class="pLR20">
               <div class="bar MB20">
@@ -36,10 +36,12 @@
 
 <script>
 import ProjectInfo from 'components/ProjectInfo';
+import ProjectStep from 'components/ProjectStep';
 import urlList from './config.js';
   export default {
     components: {
-        ProjectInfo
+        ProjectInfo,
+        ProjectStep
     },
     data() {
       return {

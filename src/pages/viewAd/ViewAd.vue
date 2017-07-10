@@ -93,15 +93,15 @@ export default {
                },
                {
                     title: '日均点击率',
-                   key: 'clickAmountDay'
+                    key: 'clickAmountDay'
                },
                {
                     title: '节假日日均曝光量',
-                   key: 'C'
+                    key: 'C'
                },
                {
                     title: '节假日日均点击量',
-                   key: 'D'
+                    key: 'D'
                },
                {
                     title: '月均曝光量',
@@ -124,8 +124,8 @@ export default {
                    singleClick: '',
                    // 统计数
                    clickAmountDay: '',
-                   C: '',
-                   D: '',
+                   C: '0',
+                   D: '0',
                    displayAmountMount: '',
                    displayClickMonth: '',
                    clickAmountMount: ''
