@@ -226,7 +226,7 @@ export default {
     },
     data() {
         return {
-            shrinkMes:{//zhoufeng
+            shrinkMes:{
                 shrinkValue:"1",
                 collapse:false
             },
@@ -280,27 +280,12 @@ export default {
             // 项目基本信息
             proMess: {},
             ruleValidate: {
-                // serialId: [
-                //     { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
-                // ],
                 beginTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
                 endTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
-                // pageName: [
-                //     { required: true,  message: '请选择页面名称', trigger: 'change' }
-                // ],
-                // brandId: [
-                //     { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
-                // ],
-                // cityId: [
-                //     { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
-                // ],
-                // typeAd: [
-                //     { required: true, type: 'string', message: '请选择广告类型', trigger: 'blur' }
-                // ]
             },
             action: 2,
             // 查询开关
@@ -550,7 +535,7 @@ export default {
             let arr = [];
             let monthList = [];
             let adList =  data.adStateList;
-            //console.log(data);
+
 
             let obj = Object.assign({}, adList);
             for (let attr in obj) {
@@ -869,11 +854,7 @@ export default {
             })
         },
         render() {
-            // /isp-kongming/ad
-
             // 初始化页数 隐藏无结果选项
-            //this.paging.totalCounts = -1;
-            // /isp-kongming/ad/select
             let search = {
                 // 媒体名称id
                 mediaId: this.searchInfo.mediaId,
@@ -891,8 +872,8 @@ export default {
                 brandIdList: this.searchInfo.brandId
             };
             window.sessionStorage.setItem('searchInfo', JSON.stringify(search));
-
-            this.$http.post('/isp-kongming/ad/select', {
+            axios.get('mock/resource', {
+            // this.$http.post('/isp-kongming/ad/select', {
                 // 开始时间
                 beginTime: `${this.searchInfo.beginTime}-01`,
                 // 结束时间
@@ -995,7 +976,6 @@ export default {
             list[index].className += ' active';
             this.initPageName();
             this.resetSearchInfo();
-            //this.tableList = [];
         },
         //触发重绘
         redrawed() {
@@ -1087,6 +1067,7 @@ export default {
             })
         },
         compare(propertyName) {
+            //排序
             return function (object1, object2) {
                 var value1 = object1[propertyName];
                 var value2 = object2[propertyName];
@@ -1100,7 +1081,7 @@ export default {
             };
         },
         // 新老数据对比
-        compared(oldData, newData,time) {
+        compared(oldData, newData, time) {
             let adPlaceId = -1;
             let obj = {};
 

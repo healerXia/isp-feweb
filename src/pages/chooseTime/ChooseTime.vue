@@ -137,51 +137,33 @@ export default {
             this.pageList = Object.assign({}, JSON.parse(window.sessionStorage.getItem('timePageList')));
             this.priceList = Object.assign([], JSON.parse(window.sessionStorage.getItem('timePriceList')));
             this.num = Object.assign([], JSON.parse(window.sessionStorage.getItem('monthList')));
+            //判断当前页面是否有选中日期
             this.dataListCount = this.$router.currentRoute.query.total;
             if (this.num.length == 0) {
                 return false;
             }
+            console.log(this.priceList);
+
 
             // 新插入数据容器
             let insertList = [];
             // 元数据容器
             let dataList = [];
             // 分析导入的数据
-            for(let i = 0;i < this.num.length;i++) {
-                let time = this.num[i];
-                insertList = insertData[time];
-                dataList = this.pageList[time];
-                if (dataList && insertList) {
-                    this.compared(dataList, insertList, time);
+            // for(let i = 0;i < this.num.length;i++) {
+            //     let time = this.num[i];
+            //     insertList = insertData[time];
+            //     dataList = this.pageList[time];
+            //     if (dataList && insertList) {
+            //         this.compared(dataList, insertList, time);
+            //
+            //     }
+            //     else if (insertList  && !dataList){
+            //         this.pageList[time] = insertData[time];
+            //     }
+            // }
 
-                }
-                else if (insertList  && !dataList){
-                    this.pageList[time] = insertData[time];
-                }
-            }
-
-            let priceLength = this.priceList.length;
-            for (let i = 0;i < this.num.length; i++) {
-               len += this.pageList[this.num[i]].length;
-               let status = false;
-               let times = '';
-               for (let j = 0; j < priceLength; j++) {
-                   if (this.priceList[j].time == this.num[i]) {
-                       status = true;
-                       times = this.num[i];
-                   }
-               }
-               if (!status) {
-                   this.$set(this.priceList, i, {
-                       time: times,
-                       total: 0,
-                       delivery: 0,
-                       exchange: 0,
-                       per: 0,
-                       proportion:'0:0'
-                   })
-               }
-           }
+            // let priceLength = this.priceList.length;
             //window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
             window.sessionStorage.setItem('timePageList', JSON.stringify(this.pageList));
         }
