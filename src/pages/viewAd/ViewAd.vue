@@ -176,6 +176,8 @@ export default {
            if (res.data.errorCode === 0) {
                let data = res.data.result;
                this.$set(this.exposureList, 0, data);
+               this.exposureList[0].C = 0;
+               this.exposureList[0].D = 0;
            }
            else {
                this.$Modal.info({
