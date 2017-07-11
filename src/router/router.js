@@ -16,9 +16,9 @@ const Wait = (resolve) => require(['../pages/wait/Wait.vue'], resolve);
 const ViewAd = (resolve) => require(['../pages/viewAd/ViewAd'], resolve);
 const ChooseTime = (resolve) =>  require(['../pages/chooseTime/ChooseTime'],resolve);
 const DemoForm = (resolve) => require(['../pages/demos/DemoForm.vue'], resolve);
+const DemoZhoufeng = (resolve) => require(['../pages/demos/DemoZhoufeng.vue'], resolve);
 
-
-
+const CreateUser  = (resolve) => require(['../pages/userModule/createUser/CreateUser'], resolve);
 
 Vue.use(VueRouter);
 
@@ -87,6 +87,11 @@ const routes = [
                 path: 'wait',
                 name: 'wait',
                 component: Wait
+            },
+             {
+                path: 'createUser',
+                name: 'createUser',
+                component: CreateUser
             }
         ]
     },
@@ -99,6 +104,11 @@ const routes = [
                 path: 'form',
                 name: 'form',
                 component: DemoForm
+            },
+             {
+                path: 'zhoufeng',
+                name: 'zhoufeng',
+                component: DemoZhoufeng
             }
         ]
     }
