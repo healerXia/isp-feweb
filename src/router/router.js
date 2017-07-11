@@ -18,6 +18,16 @@ const ChooseTime = (resolve) =>  require(['../pages/chooseTime/ChooseTime'],reso
 const DemoForm = (resolve) => require(['../pages/demos/DemoForm.vue'], resolve);
 
 
+// 审批链流程
+const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
+const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
+const addDoc = (resolve) => require(['../pages/approval/addDoc/AddDoc.vue'], resolve);
+const department = (resolve) => require(['../pages/approval/department/Department'], resolve);
+
+// demo
+
+const selectTab = (resolve) => require(['../pages/demos/selectTab'], resolve);
+
 
 
 Vue.use(VueRouter);
@@ -87,6 +97,26 @@ const routes = [
                 path: 'wait',
                 name: 'wait',
                 component: Wait
+            },
+            {
+                path: 'setUpDepartment',
+                name: 'setUpDepartment',
+                component: setUp
+            },
+            {
+                path: 'docManagemengt',
+                name: 'docManagemengt',
+                component: docManagemengt
+            },
+            {
+                path: 'addDoc',
+                name: 'addDoc',
+                component: addDoc
+            },
+            {
+                path: 'department',
+                name: 'department',
+                component: department
             }
         ]
     },
@@ -99,6 +129,11 @@ const routes = [
                 path: 'form',
                 name: 'form',
                 component: DemoForm
+            },
+            {
+                path: 'selectTab',
+                name: 'selectTab',
+                component: selectTab
             }
         ]
     }

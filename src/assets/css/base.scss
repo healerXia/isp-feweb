@@ -98,12 +98,14 @@ body {
 .fRight{float: right;}
 .cycle .ivu-form-item-error-tip{display: none !important;}
 .maxWid{max-width: 1166px}
-.createPro{
+.createPro, .setUp-de, #addDoc {
   .ivu-select-single .ivu-select-selection{height: 38px;line-height: 38px}
   .ivu-input{height: 38px}
   .ivu-select-multiple .ivu-select-input{height: 38px}
   .ivu-form-item-error-tip{height: 38px;line-height: 38px;padding-left: 19px}
 }
+
+
 
 //侧边栏样式
 .layout-menu-left{
@@ -206,7 +208,7 @@ border-radius: 2px;
 // }
 //
 // .select2-dropdown--below {
-//     width: 400px !important;
+//     width: 0px !important;
 // }
 //
 // .select2-selection__choice {
