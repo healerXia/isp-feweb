@@ -121,6 +121,7 @@
                     <router-view></router-view>
                 </div>
                 <div class="layout-copy">
+                    Copyright 2017 易车 All Right Reserved
                 </div>
             </i-col>
         </Row>

@@ -112,12 +112,12 @@ export default {
             this.brandNameArr=this.proMess.brandNames.split(",")
             this.serialNameArr=this.proMess.serialNames.split(",")
             for(let i=0;i<this.serialNameArr.length;i++){
-              if(this.brandNameArr[i]==""){
+              if(this.brandNameArr[i]==""||this.brandNameArr[i] == undefined){
                 this.serialBrand=this.serialBrand+this.serialNameArr[i]+","
               }else{
                 this.serialBrand=this.serialBrand+this.serialNameArr[i]+"("+this.brandNameArr[i]+"),"
               }
-              
+
             }
             this.serialBrand=this.serialBrand.replace(/(,)$/,"")
           }else if(this.proMess.brandNames==""&&this.proMess.serialNames!=""){

@@ -12,7 +12,7 @@
                 <li>
                     <Row>
                         <Col span="2">广告位尺寸：</Col>
-                        <Col span="17">{{size}}</Col>
+                        <Col span="17">{{size}}px ≤ 100k</Col>
                     </Row>
                 </li>
                 <li>
@@ -25,13 +25,13 @@
                         <td v-for='i in first'>{{i.time}}</td>
                     </tr>
                     <tr>
-                        <td v-for='i in first'>{{i.kprice}}</td>
+                        <td v-for='i in first'>{{i.kprice}}元/天</td>
                     </tr>
                     <tr class="time">
                         <td v-for='i in second'>{{i.time}}</td>
                     </tr>
                     <tr>
-                        <td v-for='i in second'>{{i.kprice}}</td>
+                        <td v-for='i in second'>{{i.kprice}}元/天</td>
                     </tr>
                 </table>
             </ul>
@@ -93,15 +93,15 @@ export default {
                },
                {
                     title: '日均点击率',
-                   key: 'clickAmountDay'
+                    key: 'clickAmountDay'
                },
                {
                     title: '节假日日均曝光量',
-                   key: 'C'
+                    key: 'C'
                },
                {
                     title: '节假日日均点击量',
-                   key: 'D'
+                    key: 'D'
                },
                {
                     title: '月均曝光量',
@@ -124,8 +124,8 @@ export default {
                    singleClick: '',
                    // 统计数
                    clickAmountDay: '',
-                   C: '',
-                   D: '',
+                   C: '0',
+                   D: '0',
                    displayAmountMount: '',
                    displayClickMonth: '',
                    clickAmountMount: ''
@@ -157,7 +157,7 @@ export default {
                let datas = res.data.result[0];
                datas.adStateList = this.initResult(datas);
                this.pageData = Object.assign({}, datas);
-               let year = Object.assign([], this.pageData.adStateList).reverse();
+               let year = Object.assign([], this.pageData.adStateList);
                this.first = year.slice(0,6);
                this.second = year.slice(6);
            }
@@ -176,6 +176,8 @@ export default {
            if (res.data.errorCode === 0) {
                let data = res.data.result;
                this.$set(this.exposureList, 0, data);
+               this.exposureList[0].C = 0;
+               this.exposureList[0].D = 0;
            }
            else {
                this.$Modal.info({
@@ -336,8 +338,7 @@ export default {
                        dayStates[k]  = '3';
                    }
                }
-
-               monthData.kprice = (total/30).toFixed(2);
+               monthData.kprice = (total/ad.length).toFixed(2);
                monthData.state = dayStates.join(',');
                monthData.skuIdList = skuIdList;
                arr.push(monthData);

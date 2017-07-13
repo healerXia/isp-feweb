@@ -57,7 +57,7 @@
 
                     <div class="price clear">
                         <div class="fl">
-                            <a href="javascript:;" @click='insert(index)'>新增本月广告位</a>
+                            <!-- <a href="javascript:;" @click='insert(index)'>新增本月广告位</a> -->
                         </div>
                         <div class="fr priceTotalList clear">
                             <span>购买净总价：{{formatNum(priceList[index].total, 2)}}元</span>
@@ -88,6 +88,7 @@ import DateRow from 'component/DateRow'
 export default {
     data() {
         return {
+            selectStyleState: false,
             pageStatus: false,
             // 已选择月份总和
             dataListCount: 0,
@@ -136,54 +137,34 @@ export default {
             this.pageList = Object.assign({}, JSON.parse(window.sessionStorage.getItem('timePageList')));
             this.priceList = Object.assign([], JSON.parse(window.sessionStorage.getItem('timePriceList')));
             this.num = Object.assign([], JSON.parse(window.sessionStorage.getItem('monthList')));
+            //判断当前页面是否有选中日期
             this.dataListCount = this.$router.currentRoute.query.total;
             if (this.num.length == 0) {
                 return false;
             }
+            console.log(this.priceList);
+
 
             // 新插入数据容器
             let insertList = [];
             // 元数据容器
             let dataList = [];
-
             // 分析导入的数据
-            for(let i = 0;i < this.num.length;i++) {
-                let time = this.num[i];
-                insertList = insertData[time];
-                dataList = this.pageList[time];
-                if (dataList && insertList) {
-                    this.compared(dataList, insertList, time);
+            // for(let i = 0;i < this.num.length;i++) {
+            //     let time = this.num[i];
+            //     insertList = insertData[time];
+            //     dataList = this.pageList[time];
+            //     if (dataList && insertList) {
+            //         this.compared(dataList, insertList, time);
+            //
+            //     }
+            //     else if (insertList  && !dataList){
+            //         this.pageList[time] = insertData[time];
+            //     }
+            // }
 
-                }
-                else if (insertList  && !dataList){
-                    this.pageList[time] = insertData[time];
-                }
-            }
-
-            let priceLength = this.priceList.length;
-
-            for (let i = 0;i < this.num.length; i++) {
-               len += this.pageList[this.num[i]].length;
-               let status = false;
-               let times = '';
-               for (let j = 0; j < priceLength; j++) {
-                   if (this.priceList[j].time == this.num[i]) {
-                       status = true;
-                       times = this.num[i];
-                   }
-               }
-               if (!status) {
-                   this.$set(this.priceList, i, {
-                       time: times,
-                       total: 0,
-                       delivery: 0,
-                       exchange: 0,
-                       per: 0,
-                       proportion:'0:0'
-                   })
-               }
-           }
-            window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
+            // let priceLength = this.priceList.length;
+            //window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
             window.sessionStorage.setItem('timePageList', JSON.stringify(this.pageList));
         }
         // 正常添加
@@ -283,12 +264,13 @@ export default {
             }
             else {
                 let percent = total/delivery;
-                return `1:${percent.toFixed(2)}`;
+                return `1:${percent.toFixed(1)}`;
             }
         },
         // 操作的是行单位
         // obj 选中数据 index 操作数据的索引 操作数据的时间 type 用途 action 添加还是删除
         edit(obj, index, date, type, action, dayIndex) {
+
             if (date.indexOf('-') < 0) {
                 let str = date.toString();
                 date = `${str.slice(0,4)}-${str.slice(4)}`;
@@ -314,7 +296,7 @@ export default {
             // console.log(tableIndex); // 表索引
             // console.log(index); // 表格所在行数索引
             this.pageList[date][index].dataList = Object.assign([], arr);
-            this.pageList[date][index].useStyle = 4001;
+            this.pageList[date][index].useStyle = type;
             if (!this.pageList[date][index].total) {
                 this.pageList[date][index].total = 0;
             }
@@ -378,7 +360,7 @@ export default {
                 if (!datas[i].delivery) {
                     datas[i].delivery = 0;
                 }
-                console.log(datas[i].total);
+
                 a += parseFloat(datas[i].total);
                 b += parseFloat(datas[i].delivery);
                 c += parseFloat(datas[i].exchange);
@@ -396,7 +378,7 @@ export default {
                 per: d,
                 proportion: str
             })
-            console.log(JSON.stringify(this.priceList[tableIndex]));
+
             window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
             window.sessionStorage.setItem('timePageList', JSON.stringify(this.pageList));
             this.dataListCount = 0;
@@ -413,6 +395,8 @@ export default {
                 let str = date.toString();
                 date = `${str.slice(0,4)}-${str.slice(4)}`;
             }
+
+
 
             if (!this.pageList[date][index].total) {
                 this.pageList[date][index].total = 0;
@@ -431,89 +415,98 @@ export default {
             let money = this.computedPrice(list, price);
             let tableIndex = this.num.indexOf(date);
             // this.pageList[date][index].useStyle = 4001;
-            switch (oldType) {
-                // 销售
-                case 4001:
-                    this.pageList[date][index].total -= money;
-                    this.pageList[date][index].useStyle = 4001;
-                    break;
-                // 配送
-                case 4003:
-                    this.pageList[date][index].delivery -= money;
-                    this.pageList[date][index].useStyle = 4003;
-                    break;
-                // 互换
-                case 4002:
-                    this.pageList[date][index].exchange -= money;
-                    this.pageList[date][index].useStyle = 4002;
-                    break;
-                // 自用
-                case 4004:
-                    this.pageList[date][index].per -= money;
-                    this.pageList[date][index].useStyle = 4004;
-                    break;
+            let action = this.$router.currentRoute.query.action;
+            if (action == 1 && ! this.selectStyleState) {
+                this.selectStyleState = true;
+            } else {
 
+                switch (oldType) {
+                    // 销售
+                    case 4001:
+                        this.pageList[date][index].total -= money;
+                        this.pageList[date][index].useStyle = 4001;
+                        break;
+                    // 配送
+                    case 4003:
+                        this.pageList[date][index].delivery -= money;
+                        this.pageList[date][index].useStyle = 4003;
+                        break;
+                    // 互换
+                    case 4002:
+                        this.pageList[date][index].exchange -= money;
+                        this.pageList[date][index].useStyle = 4002;
+                        break;
+                    // 自用
+                    case 4004:
+                        this.pageList[date][index].per -= money;
+                        this.pageList[date][index].useStyle = 4004;
+                        break;
+
+                }
+
+                switch (newType) {
+                    case 4001:
+                        this.pageList[date][index].total += money;
+                        this.pageList[date][index].useStyle = 4001;
+                        break;
+                    case 4003:
+                        this.pageList[date][index].delivery += money;
+                        this.pageList[date][index].useStyle = 4003;
+                        break;
+                    case 4002:
+                        this.pageList[date][index].exchange += money;
+                        this.pageList[date][index].useStyle = 4002;
+                        break;
+                    case 4004:
+                        this.pageList[date][index].per += money;
+                        this.pageList[date][index].useStyle = 4004;
+                        break;
+                }
+
+                let datas = this.pageList[date];
+                let a = 0;
+                let b = 0;
+                let c = 0;
+                let d = 0;
+                for (let i = 0; i < datas.length; i++) {
+                    if (!datas[i].total) {
+                        datas[i].total = 0;
+                    }
+
+                    if (!datas[i].delivery) {
+                        datas[i].delivery = 0;
+                    }
+
+                    if (!datas[i].exchange) {
+                        datas[i].exchange = 0;
+                    }
+
+                    if (!datas[i].per) {
+                        datas[i].per = 0;
+                    }
+
+
+                    a += parseFloat(datas[i].total);
+                    b += parseFloat(datas[i].delivery);
+                    c += parseFloat(datas[i].exchange);
+                    d += parseFloat(datas[i].per);
+                }
+
+                let str = this.ratio(a, b);
+                this.pageList[date][index].proportion = str;
+
+                this.$set(this.priceList, tableIndex, {
+                    time: date,
+                    total: a,
+                    delivery: b,
+                    exchange: c,
+                    per: d,
+                    proportion: str
+                })
             }
 
-            switch (newType) {
-                case 4001:
-                    this.pageList[date][index].total += money;
-                    this.pageList[date][index].useStyle = 4001;
-                    break;
-                case 4003:
-                    this.pageList[date][index].delivery += money;
-                    this.pageList[date][index].useStyle = 4003;
-                    break;
-                case 4002:
-                    this.pageList[date][index].exchange += money;
-                    this.pageList[date][index].useStyle = 4002;
-                    break;
-                case 4004:
-                    this.pageList[date][index].per += money;
-                    this.pageList[date][index].useStyle = 4004;
-                    break;
-            }
-
-            let datas = this.pageList[date];
-            let a = 0;
-            let b = 0;
-            let c = 0;
-            let d = 0;
-            for (let i = 0; i < datas.length; i++) {
-                if (!datas[i].total) {
-                    datas[i].total = 0;
-                }
-
-                if (!datas[i].delivery) {
-                    datas[i].delivery = 0;
-                }
-
-                if (!datas[i].exchange) {
-                    datas[i].exchange = 0;
-                }
-
-                if (!datas[i].per) {
-                    datas[i].per = 0;
-                }
 
 
-                a += parseFloat(datas[i].total);
-                b += parseFloat(datas[i].delivery);
-                c += parseFloat(datas[i].exchange);
-                d += parseFloat(datas[i].per);
-            }
-
-            let str = this.ratio(a, b);
-            this.pageList[date][index].proportion = str;
-
-            this.$set(this.priceList, tableIndex, {
-                time: date,
-                total: a,
-                delivery: b,
-                exchange: c,
-                per: d,
-                proportion: str
-            })
             window.sessionStorage.setItem('timePriceList', JSON.stringify(this.priceList));
             window.sessionStorage.setItem('timePageList', JSON.stringify(this.pageList));
         },
@@ -575,7 +568,7 @@ export default {
                      "projectName": this.proMess.projectName,
                      "detailList": datas
                  }).then((res) => {
-                     this.saveStatus = false;
+                    this.saveStatus = false;
                     if (res.data.errorCode == 0) {
                         window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));
                         this.$Modal.success({
@@ -601,6 +594,7 @@ export default {
                      "projectName": this.proMess.projectName,
                      "detailList": datas
                  }).then((res) => {
+                     this.saveStatus = false;
                     if (res.data.errorCode == 0) {
                         this.adOrderCode = res.data.result;
                         window.sessionStorage.setItem('adOrderCode', res.data.result);
@@ -717,7 +711,7 @@ export default {
                             }
                        });
                        this.saveStatus = false;
-                       this.proMess.contractCode = res.data.result;
+                       //this.proMess.contractCode = res.data.result;
                        window.sessionStorage.setItem('proMess', JSON.stringify(this.proMess));
                    }
                    else {

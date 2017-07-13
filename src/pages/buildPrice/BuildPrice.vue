@@ -5,7 +5,7 @@
         <div class="contentBox">
           <div class="orderMess">
             <div class="proBar">
-              <ProjectStep :status = '3'></ProjectStep>
+              <ProjectStep :status = '3' class="MT20"></ProjectStep>
             </div>
             <div class="pLR20">
               <div class="bar MB20">
@@ -36,10 +36,12 @@
 
 <script>
 import ProjectInfo from 'components/ProjectInfo';
+import ProjectStep from 'components/ProjectStep';
 import urlList from './config.js';
   export default {
     components: {
-        ProjectInfo
+        ProjectInfo,
+        ProjectStep
     },
     data() {
       return {
@@ -182,7 +184,7 @@ import urlList from './config.js';
         handleReset (name) {
             let id = this.$router.currentRoute.query.id;
             this.$refs[name].resetFields();
-            this.$router.push({path: 'details', query: {id: id}});
+            this.$router.push({path: 'details', query: {id: window.sessionStorage.getItem('proMessId')}});
         },
         handleSubmit (name, id) {
             if (this.errorTxt != '') {
@@ -244,7 +246,7 @@ import urlList from './config.js';
                                     title: '提示',
                                     content:  res.data.errorMsg,
                                     onOk () {
-                                         self.$router.push({path: 'details', query: {id: self.proMess.id}});
+                                         self.$router.push({path: 'details', query: {id: window.sessionStorage.getItem('proMessId')}});
                                     }
                                 });
                             }
@@ -254,7 +256,7 @@ import urlList from './config.js';
                                     title: '提示',
                                     content: res.data.errorMsg,
                                     onOk () {
-                                         self.$router.push({path: 'details', query: {id: self.proMess.id}});
+                                         self.$router.push({path: 'details', query: {id: window.sessionStorage.getItem('proMessId')}});
                                      }
                                 });
 
@@ -347,7 +349,7 @@ import urlList from './config.js';
             }
             else {
                 let percent = total/delivery;
-                return `1:${percent.toFixed(2)}`;
+                return `1:${percent.toFixed(1)}`;
             }
         }
     }

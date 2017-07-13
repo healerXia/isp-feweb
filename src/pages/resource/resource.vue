@@ -21,18 +21,19 @@
                     <span class='query-ad-title'>查询广告位</span>
                     <span class="fRight MR20" v-if="shrinkMes.collapse">展开&nbsp;<Icon type="chevron-up"></Icon></span>
                     <span class="fRight MR20" v-else="shrinkMes.collapse">收起&nbsp;<Icon type="chevron-down"></Icon></span>
-                    <div class="query-ad" slot="content">
+                    <div class="query-ad" slot="content" style="position: relative">
                         <Form ref="formValidate" :model="searchInfo" :rules="ruleValidate" :label-width="90">
+                        <span style="position: absolute;color: red;left: 8px;">*</span>
                         <Form-item label="选择日期：">
                             <Row>
                                 <Col span="5">
                                     <Form-item prop="beginTime">
-                                        <Date-picker  :value="this.searchInfo.beginTime"  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>                            </Form-item>
+                                        <Date-picker  :value="this.searchInfo.beginTime" @on-clear='clearBeginTime'  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>                            </Form-item>
                                 </Col>
                                 <Col span="1" style="text-align: center">-</Col>
                                 <Col span="5">
                                     <Form-item prop="endTime" :error='timeTxt' id='endTime'>
-                                        <Date-picker   :editable = 'false' :value="this.searchInfo.endTime"  @on-change="chooseEndTime"   type="month" :options="date2" placeholder="选择日期"></Date-picker>
+                                        <Date-picker   :editable = 'false' :value="this.searchInfo.endTime" @on-clear='clearEndTime'  @on-change="chooseEndTime"   type="month" :options="date2" placeholder="选择日期"></Date-picker>
                                     </Form-item>
                                 </Col>
                             </Row>
@@ -97,6 +98,7 @@
                 </Row>
                 <p v-if='paging.totalCounts == 0'>无查询结果！</p>
             </div>
+
 
             <div class="result clear" v-if ='paging.totalCounts > 0'>
                 <!-- v-if ='paging.totalCounts' -->
@@ -224,7 +226,7 @@ export default {
     },
     data() {
         return {
-            shrinkMes:{//zhoufeng
+            shrinkMes:{
                 shrinkValue:"1",
                 collapse:false
             },
@@ -278,27 +280,12 @@ export default {
             // 项目基本信息
             proMess: {},
             ruleValidate: {
-                serialId: [
-                    { required: true, type: 'string', message: '请选投放车型', trigger: 'blur' }
-                ],
                 beginTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
                 endTime: [
                     { required: true, type: 'string', message: '请选择日期', trigger: 'change' }
                 ],
-                pageName: [
-                    { required: true,  message: '请选择页面名称', trigger: 'change' }
-                ],
-                brandId: [
-                    { required: true, type: 'string', message: '请选择投放品牌', trigger: 'blur' }
-                ],
-                cityId: [
-                    { required: true, type: 'string', message: '请选择投放地区', trigger: 'blur' }
-                ],
-                // typeAd: [
-                //     { required: true, type: 'string', message: '请选择广告类型', trigger: 'blur' }
-                // ]
             },
             action: 2,
             // 查询开关
@@ -454,7 +441,7 @@ export default {
 
         this.searchInfoTxt = [false, false, false];
         if (window.sessionStorage.getItem('viewState') == '2') {
-            //window.sessionStorage.setItem('viewState', '1');
+            window.sessionStorage.setItem('viewState', '1');
             let datas = JSON.parse(window.sessionStorage.getItem('viewTable'));
             this.checkBoxList = JSON.parse(window.sessionStorage.getItem('checkBoxList'));
             this.monthList = JSON.parse(window.sessionStorage.getItem('monthList'));
@@ -491,7 +478,7 @@ export default {
 
             if (this.selectTableData[time]) {
                 this.showSelect = this.selectTableData[time];
-                console.log(this.showSelect);
+
                 for (let i = 0; i < this.showSelect.length; i++) {
                     let stateList = Object.assign([], this.showSelect[i].adStateList);
 
@@ -510,7 +497,11 @@ export default {
             }
 
             this.redrawed();
+
         }
+        setTimeout(() => {
+            this.redrawed();
+        });
     },
     methods: {
         showCollapse(){
@@ -544,7 +535,7 @@ export default {
             let arr = [];
             let monthList = [];
             let adList =  data.adStateList;
-            //console.log(data);
+
 
             let obj = Object.assign({}, adList);
             for (let attr in obj) {
@@ -649,7 +640,7 @@ export default {
                         ajax: {
                             transport: function(params, success, failure) {
                                 if (!params.data.term) {
-                                    axios.post('/api/isp-kongming/ad/channelSelect',{
+                                    axios.post('/isp-kongming/ad/channelSelect',{
                                         // 媒体名称id
                                         mediaId: postData.mediaId,
                                         // 页面类型
@@ -662,7 +653,7 @@ export default {
                                     })
                                     return false;
                                 }
-                                axios.post('/api/isp-kongming/ad/channelSelect',{
+                                axios.post('/isp-kongming/ad/channelSelect',{
                                     // 媒体名称id
                                     mediaId: postData.mediaId,
                                     // 页面类型
@@ -759,8 +750,7 @@ export default {
             }
             else {
                 setTimeout(() => {
-                    console.log(this.searchInfo.pageName);
-                    initSelect('#adType', '/api/isp-kongming/ad/placeTypeSelect', {
+                    initSelect('#adType', '/isp-kongming/ad/placeTypeSelect', {
                         channelId: this.searchInfo.pageName,
                         mediaId: this.searchInfo.mediaId,
                         name: ''
@@ -864,11 +854,7 @@ export default {
             })
         },
         render() {
-            // /isp-kongming/ad
-
             // 初始化页数 隐藏无结果选项
-            //this.paging.totalCounts = -1;
-            // /isp-kongming/ad/select
             let search = {
                 // 媒体名称id
                 mediaId: this.searchInfo.mediaId,
@@ -886,7 +872,7 @@ export default {
                 brandIdList: this.searchInfo.brandId
             };
             window.sessionStorage.setItem('searchInfo', JSON.stringify(search));
-            //
+
             this.$http.post('/isp-kongming/ad/select', {
                 // 开始时间
                 beginTime: `${this.searchInfo.beginTime}-01`,
@@ -911,15 +897,16 @@ export default {
 
             }).then((res) => {
                 if (res.data.errorCode == 0) {
+                    window.sessionStorage.setItem('beginTime', this.searchInfo.beginTime)
                     // this.tableList = Object.assign([], res.data.result);
                     // this.paging.count = this.tableList.length;
                     let datas = Object.assign([], res.data.result);
                     window.sessionStorage.setItem('viewTable', JSON.stringify(datas));
-                    if (datas[0].totalCounts > 0) {
+                    if (datas.length > 0 && datas[0].totalCounts > 0) {
                         this.paging.totalCounts = datas[0].totalCounts;
                         this.searching = false;
                     }
-                    else if (datas[0].totalCounts == 0 || !datas[0].totalCounts) {
+                    else if (datas.length == 0){
 
                         this.paging.totalCounts = 0;
                         this.searching = false;
@@ -989,7 +976,6 @@ export default {
             list[index].className += ' active';
             this.initPageName();
             this.resetSearchInfo();
-            //this.tableList = [];
         },
         //触发重绘
         redrawed() {
@@ -1065,7 +1051,6 @@ export default {
             this.redrawed();
         },
         search(name) {
-            this.typeAd = '2321312'
             if(this.timeTxt) {
                 return false;
             }
@@ -1082,6 +1067,7 @@ export default {
             })
         },
         compare(propertyName) {
+            //排序
             return function (object1, object2) {
                 var value1 = object1[propertyName];
                 var value2 = object2[propertyName];
@@ -1095,7 +1081,7 @@ export default {
             };
         },
         // 新老数据对比
-        compared(oldData, newData,time) {
+        compared(oldData, newData, time) {
             let adPlaceId = -1;
             let obj = {};
 
@@ -1527,9 +1513,15 @@ export default {
             window.sessionStorage.setItem('tableData', JSON.stringify(this.selectTableData));
             window.sessionStorage.setItem('checkBoxList', JSON.stringify(this.checkBoxList));
             window.localStorage.setItem('viewAd', JSON.stringify(obj));
-            this.$router.push({path: 'viewAd', query: {'viewTime': this.searchInfo.beginTime}})
+            this.$router.push({path: 'viewAd', query: {'viewTime': window.sessionStorage.getItem('beginTime')}});
         },
         // 重置搜索条件 清空车型 地区 品牌
+        clearBeginTime() {
+            this.searchInfo.beginTime = '';
+        },
+        clearEndTime() {
+            this.searchInfo.endTime = '';
+        },
         resetSearchInfo() {
             $("#pageName").val('请选择').trigger("change");
             $("#adType").val('请选择').trigger("change");

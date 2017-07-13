@@ -1,11 +1,6 @@
 <template>
 	<div> 
 		<div class="checkGroup">
-			<Checkbox
-	            :value="checkAll"
-	            @click.prevent.native="proCheckAll">
-	            全选
-	        </Checkbox>
 	        <div>
 	        	<span>{{checkProventArr.join(',')}}</span>
 	        </div>
@@ -127,23 +122,6 @@
 
         		
         	},
-            proCheckAll () {//省的全选
-                if (this.indeterminate) {
-                    this.checkAll = false;
-                } else {
-                    this.checkAll = !this.checkAll;
-                }
-                this.indeterminate = false;
-                if (this.checkAll) {
-                	this.checkProventArr = []
-                	for(var i=0;i<this.provents.length;i++){
-					 	this.checkProventArr.push(this.provents[i].name)
-					}
-					this.totalData.proArr=this.checkProventArr
-                } else {
-                    this.checkProventArr = [];
-                }
-            },
             checkAllProvent (data) {//省的选择，返回数组
                 if (data.length === this.provents.length) {
                     this.checkAll = true;

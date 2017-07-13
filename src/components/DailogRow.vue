@@ -15,12 +15,15 @@
                         <p>占用人：{{layer.dutyUserName ? layer.dutyUserName : '-'}}</p>
                         <p>订单号：{{layer.adOrderCode ? layer.adOrderCode: '-'}}</p>
                         <p>订单状态：{{layer.statusName ? layer.statusName: '-'}}</p>
-                        <p>  
-                            <Row>
-                                <Col span="6">最终客户：</Col>
-                                <Col span="17">{{layer.adCustomerName ? layer.adCustomerName : '-'}} </Col>
-                            </Row>
+
+                        <p class="clear">
+                            <span class="fl">最终客户：</span>
+                            <span class="fl" style="width:204px; text-indent:0">
+                                {{layer.adCustomerName ? layer.adCustomerName : '-'}}
+                            </span>
                         </p>
+
+
                         <p>点击/曝光：{{layer.singleClick ? layer.singleClick : '-'}}/{{layer.singleDisplay ? layer.singleDisplay : '-'}}</p>
                     </div>
                 </div>
@@ -117,7 +120,7 @@ export default {
     },
     methods: {
         initDate(time) {
-            
+
             // 获取数据传输的年月
             let arry = this.time.split('-');
             let dataYear = arry[0];
@@ -186,13 +189,26 @@ export default {
                                 this.layer.width = `${this.layer.width}`;
                                 this.layer.height = `${this.layer.height}`;
                                 this.layer.pSize = `${this.info.width} * ${this.info.height}`;
-                                let skuDatas = JSON.parse(this.info.adStateLists);
-                                for (let attr in skuDatas) {
-                                    if(attr == this.time) {
-                                        let n = skuDatas[attr];
-                                        this.layer.skuPrice = n[dateIndexs].skuPrice;
+
+
+                                if (window.sessionStorage.getItem('viewState') == 2) {
+                                    let sk = this.info.adStateList;
+                                    for (let i = 0; i < sk.length; i++) {
+                                        if (sk[i].time == this.time) {
+                                            this.layer.skuPrice = sk[i].dayStatus[dateIndexs].skuPrice;
+                                        }
                                     }
                                 }
+                                else {
+                                    let skuDatas = JSON.parse(this.info.adStateLists);
+                                    for (let attr in skuDatas) {
+                                        if(attr == this.time) {
+                                            let n = skuDatas[attr];
+                                            this.layer.skuPrice = n[dateIndexs].skuPrice;
+                                        }
+                                    }
+                                }
+
                             }
                             else if (res.data.errorCode == 50000){
                                 this.$Modal.info({
@@ -281,7 +297,7 @@ export default {
         a {
             display: block;
             height: 28px;
-            width: 18px;
+            width: 26px;
         }
     }
 

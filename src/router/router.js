@@ -18,7 +18,21 @@ const ChooseTime = (resolve) =>  require(['../pages/chooseTime/ChooseTime'],reso
 const DemoForm = (resolve) => require(['../pages/demos/DemoForm.vue'], resolve);
 const DemoZhoufeng = (resolve) => require(['../pages/demos/DemoZhoufeng.vue'], resolve);
 
+
 const CreateUser  = (resolve) => require(['../pages/userModule/createUser/CreateUser'], resolve);
+
+// 审批链流程
+const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
+const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
+const addDoc = (resolve) => require(['../pages/approval/addDoc/AddDoc.vue'], resolve);
+const department = (resolve) => require(['../pages/approval/department/Department'], resolve);
+
+// demo
+
+const selectTab = (resolve) => require(['../pages/demos/selectTab'], resolve);
+
+
+
 
 Vue.use(VueRouter);
 
@@ -92,6 +106,27 @@ const routes = [
                 path: 'createUser',
                 name: 'createUser',
                 component: CreateUser
+            },
+
+            {
+                path: 'setUpDepartment',
+                name: 'setUpDepartment',
+                component: setUp
+            },
+            {
+                path: 'docManagemengt',
+                name: 'docManagemengt',
+                component: docManagemengt
+            },
+            {
+                path: 'addDoc',
+                name: 'addDoc',
+                component: addDoc
+            },
+            {
+                path: 'department',
+                name: 'department',
+                component: department
             }
         ]
     },
@@ -105,10 +140,18 @@ const routes = [
                 name: 'form',
                 component: DemoForm
             },
+
              {
                 path: 'zhoufeng',
                 name: 'zhoufeng',
                 component: DemoZhoufeng
+            },
+
+            {
+                path: 'selectTab',
+                name: 'selectTab',
+                component: selectTab
+
             }
         ]
     }
