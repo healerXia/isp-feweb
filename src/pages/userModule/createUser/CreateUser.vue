@@ -3,12 +3,12 @@
     <div class="content">
        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90">
           <div class="contentBox">
-            <div class="title MT20 MB20">编辑客户信息</div>
+            <div class="title MT20 MB20">新添客户信息</div>
             <div class="formBox">
-              <Form-item label="客户名称:" prop="custName">
-                <Input v-model="formValidate.custName" placeholder="请填写客户名称" maxlength="25" class='createInput fl'></Input>
+              <Form-item label="客户名称:" prop="cust_name" :class="showNeed.cust_name_show">
+                <Input v-model="formValidate.cust_name" placeholder="请填写客户名称" class='createInput fl'></Input>
               </Form-item>
-              <Form-item label="客户类别:" prop="custType">
+              <Form-item label="客户类别:" prop="custType" v-bind:class='showNeed.cust_type_show'>
                   <Select
                   :clearable="true"
                   placeholder="请选择客户类别"
@@ -16,100 +16,97 @@
                  <Option v-for="option in custTypeOption" :value="option.value" :key="new Date()">{{option.name}}</Option>
                  </Select>
               </Form-item>
-              <Form-item label="客户子类别:" prop="custSub"
+              <Form-item label="客户子类别:" prop="custSub" :class="showNeed.custSub_show"
                v-if="formValidate.custType==4||formValidate.custType==5||formValidate.custType==6||formValidate.custType==7||formValidate.custType==8||formValidate.custType==9||formValidate.custType==''"
               >
                   <Select
                   :clearable="true"
                   placeholder="请选择客户子类别"
                   v-model="formValidate.custSub">
-                 <Option >111</Option>
+                 <Option :value="1">111</Option>
                  </Select>
               </Form-item>
-              <Form-item label="客户简称:" prop="custType">
-                 <Input v-model="formValidate.custAbb" placeholder="请填写客户简称" maxlength="25" class='createInput fl'></Input>
+              <Form-item label="客户简称:" prop="abbr_name" :class="showNeed.abbr_name_show">
+                 <Input v-model="formValidate.abbr_name" placeholder="请填写客户简称" maxlength="25" class='createInput fl'></Input>
               </Form-item>
-              <Form-item label="所属集团:" prop="custType" 
+              <Form-item label="所属集团:" prop="group_id" :class="showNeed.group_id_show"
               v-if="!(formValidate.custType==1||formValidate.custType==2||formValidate.custType==3)||formValidate.custType==''">
                   <Select
                   :clearable="true"
                   placeholder="请选择所属集团"
-                  v-model="formValidate.group">
+                  v-model="formValidate.group_id">
                  <Option >111</Option>
                  </Select>
               </Form-item>
-               <Form-item label="所属厂商:" prop="custType" 
+               <Form-item label="所属厂商:" prop="cust_pid" :class="showNeed.cust_pid_show"
               v-if="!(formValidate.custType==1||formValidate.custType==6||formValidate.custType==3)||formValidate.custType==''">
                   <Select
                   :clearable="true"
                   placeholder="请选择所属厂商"
-                  v-model="formValidate.custType">
-                 <Option >111</Option>
+                  v-model="formValidate.cust_pid">
+                 <Option :value="1">111</Option>
                  </Select>
               </Form-item>
-              <Form-item label="销售网络:" prop="custType" 
+              <Form-item label="销售网络:" prop="custType" :class="showNeed.sellWeb_show"
               v-if="formValidate.custType==2">
                   <Select
                   :clearable="true"
                   placeholder="请选择销售网络"
                   v-model="formValidate.sellWeb">
-                 <Option >111</Option>
+                 <Option :value="1">111</Option>
                  </Select>
               </Form-item>
-              <Form-item label="管辖区域:" prop="precinct" v-if="formValidate.custType==2">
+              <Form-item label="管辖区域:" prop="precinct" :class="showNeed.precinct_show" 
+              v-if="formValidate.custType==2">
                 <Input v-model="formValidate.precinct" placeholder="请填写管辖区域" maxlength="50" class='createInput fl'></Input>
               </Form-item>
-              <Form-item label="客户行业:" prop="custWork" 
+              <Form-item label="客户行业:" prop="industry_id"  :class="showNeed.industry_id_show"
               v-if="formValidate.custType==1||formValidate.custType==3||formValidate.custType==4||formValidate.custType==5||formValidate.custType==6||formValidate.custType==''||
               formValidate.custType==10||formValidate.custType==11
               ">
                   <Select
                   :clearable="true"
                   placeholder="请选择客户行业"
-                  v-model="formValidate.custWork">
-                 <Option >111</Option>
+                  v-model="formValidate.industry_id">
+                 <Option :value="1">111</Option>
                  </Select>
               </Form-item>
-              <Form-item label="经营店级别:" prop="custWork" 
-              v-if="formValidate.custType==2||formValidate.custType==4||formValidate.custType==5||formValidate.custType==6||formValidate.custType==10||formValidate.custType==11||formValidate.custType==''">
-                  <Select
-                  :clearable="true"
-                  placeholder="请选择经营店级别"
-                  v-model="formValidate.shopLeave">
-                 <Option >111</Option>
-                 </Select>
-              </Form-item>
-               <Form-item label="主营品牌:" prop="mainBrand"
+               <Form-item label="主营品牌:" prop="brand_id" :class="showNeed.brand_id_show"
                v-if="formValidate.custType!=2||formValidate.custType==''"
                >
                   <Select
                   :clearable="true"
                   placeholder="请选择主营品牌"
-                  v-model="formValidate.mainBrand">
-                 <Option >111</Option>
+                  v-model="formValidate.brand_id">
+                 <Option :value="1">111</Option>
+                 <Option :value="2">2221</Option>
                  </Select>
               </Form-item>
-              <Form-item label="客户地区:"  width=200>
+              <Form-item label="客户地区:" width=200 prop="province_id" :class="showNeed.province_id_show">
                 <Select class="w127 MR11"
+                  v-model="formValidate.province_id"
                   :clearable="true"
                   placeholder="请选择省份"                 
                   >
-                  <Option >111</Option>
+                  <Option :value="1">111</Option>
+                  <Option :value="2">22</Option>
                 </Select>
                 <Select class="w127 MR11"
+                 v-model="formValidate.city_id"
                   :clearable="true"
-                  placeholder="请选择省份"                 
+                  placeholder="请选择城市"                 
                   >
-                  <Option >111</Option>
+                  <Option :value="1">111</Option>
                 </Select>
                 <Select class="w127 MR11"
+                 v-model="formValidate.county_id"
                   :clearable="true"
-                  placeholder="请选择省份"                 
+                  placeholder="请选择区县"                 
                   >
-                  <Option >111</Option>
+                  <Option :value="1">111</Option>
                 </Select>
               </Form-item>
-              <Form-item label="所属4S:" prop="the4S" 
+              <Form-item label="所属4S:" prop="the4S" :class="showNeed.the4S_show"
               v-if="formValidate.custType==5">
                   <Select
                   :clearable="true"
@@ -118,35 +115,35 @@
                  <Option >111</Option>
                  </Select>
               </Form-item>
-              <Form-item label="销售地址:" prop="sellArea"
+              <Form-item label="客户地址:" prop="sellArea" :class="showNeed.sellArea_show"
                v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
               >
-                <Input v-model="formValidate.sellArea" placeholder="请填写销售地址" maxlength="50" class='createInput fl'></Input>
+                <Input v-model="formValidate.sellArea" placeholder="请填写客户地址" maxlength="50" class='createInput fl'></Input>
               </Form-item>
-              <Form-item label="地图:" prop="map"
+              <Form-item label="地图:" prop="map" :class="showNeed.map_show"
                v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
               >
                 <Input v-model="formValidate.map" placeholder="请选择地图标记" maxlength="50" class='createInput fl'></Input>
               </Form-item>
-              <Form-item label="厂商代码:" prop="vendorCode"
+              <Form-item label="厂商代码:" prop="vendorCode" :class="showNeed.vendorCode_show"
                v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
               >
                 <Input v-model="formValidate.vendorCode" placeholder="请填写厂商代码" maxlength="20" class='createInput fl'></Input>
               </Form-item>
-               <Form-item label="企业简介:" prop="companyIntro"
+               <Form-item label="企业简介:" prop="companyIntro" :class="showNeed.companyIntro_show"
                v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
                >
                 <Input v-model="formValidate.companyIntro" type="textarea" :autosize="{minRows: 2,maxRows: 6}" placeholder="请输入企业简介" maxlength="500" ></Input>
               </Form-item>
-              <Form-item label="备注:" prop="remarks"
+              <Form-item label="备注:" prop="notes" :class="showNeed.notes_show"
               v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
               >
-                <Input v-model="formValidate.remarks" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注" maxlength="200" ></Input>
+                <Input v-model="formValidate.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注" maxlength="200" ></Input>
               </Form-item>
 
 
               <Form-item label="营业执照:" prop="custName">
-                <UploadBusiness></UploadBusiness>
+                <UploadBusiness v-on:uploadbus="uploadBusiness"></UploadBusiness>
               </Form-item>
               <Form-item label="品牌授权书:" prop="custName">
                 <UploadBrand></UploadBrand>
@@ -155,11 +152,12 @@
                 <UploadPay></UploadPay>
               </Form-item>
               <Form-item>
-                <Button type="primary" class="btn bg4373F3">保存</Button >
+                <Button type="primary" class="btn bg4373F3" @click="submit('formValidate')">保存</Button >
                 <Button type="primary" class="btn bg4373F3 ML15">提交审核</Button>
-                <Button type="primary" class="btn bgCancle ML15">取消</Button>
+                <Button type="primary" class="btn bgCancle ML15" @click="cancle('formValidate')">取消</Button>
             </Form-item>
             <div class="h100">
+              <span v-show="false">{{custType}}</span>
             </div>
             </div>
           </div>
@@ -182,6 +180,8 @@
       },
       data () {
         return {
+          clearObj:null,
+          need:true,
           showOptions:{
             cust1:1,//厂商
             cust2:2,//厂商大区
@@ -195,28 +195,54 @@
             cust10:10,//汽车服务商
             cust11:11,//其他
           },
-          formValidate:{
-            custName:"",//客户名称
-            custType:"",//客户类别
-            custAbb:"",//客户简称           
-            custArea:"",//客户地区
+          showNeed:{//操作是否显示必填
 
-            mainBrand:"",//主营品牌
-            custWork:"",//客户行业
-            group:"",//所属集团
-            manufacturer:"",//所属厂商
+            cust_name_show:"",//客户名称+ 
+            custType_show:"",//客户类别
+            abbr_name_show:"",//客户简称 +         
+
+            brand_id_show:"",//主营品牌+
+            industry_id:"",//客户行业+
+            group_id_show:"",//所属集团+
+            cust_pid_show:"",//所属厂商+
+            sellWeb_show:"",//销售网络
+            precinct_show:"",//管辖区域
+            custSub_show:"",//客户子类别
+            the4S_show:"",//所属4s
+            sellArea_show:"",//客户地址
+            map_show:"",//地图
+            accessChildBrand_show:"",//关联子品牌
+            vendorCode_show:"",//厂商代码
+            companyIntro_show:"",//企业简介
+            notes_show:"",//备注+
+            province_id_show:"",//省+
+          },
+          formValidate:{//表单数据
+            //都有
+            cust_name:"",//客户名称+ 
+            custType:"",//客户类别
+            abbr_name:"",//客户简称 +         
+
+            brand_id:"",//主营品牌+
+            industry_id:"",//客户行业+
+            group_id:"",//所属集团+
+            cust_pid:"",//所属厂商+
             sellWeb:"",//销售网络
             precinct:"",//管辖区域
-            shopLeave:"",//经营店级别
             custSub:"",//客户子类别
             the4S:"",//所属4s
-            sellArea:"",//销售地址
+            sellArea:"",//客户地址
             map:"",//地图
             accessChildBrand:"",//关联子品牌
             vendorCode:"",//厂商代码
             companyIntro:"",//企业简介
-            remarks:"",//备注
+            notes:"",//备注+
+            province_id:"",//省+
+            city_id:"",//市+
+            county_id:"",//区+
           },
+
+
           custTypeOption:[
             {name:"厂商",value:1},{name:"厂商大区",value:2},
             {name:"集团",value:3},{name:"经销商-4S",value:4},
@@ -225,15 +251,375 @@
             {name:"门店-综合",value:9},{name:"汽车服务商",value:10},{name:"其他",value:11}
           ],
           ruleValidate: {//验证
-            // projectName: [{required: true, message:'请填写项目名称',trigger:'blur'}],
+            cust_name: [
+              {required: true, message:'请填写客户名称',trigger:'blur'},
+              {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ],
+            custType:[
+              {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
+            ],
+            abbr_name:[
+              {required: true, message:'请填写客户简称',trigger:'blur'},
+              {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ],
+            industry_id:[
+              {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
+            ],
+            brand_id:[
+              {required: true, message:'请选择主营品牌',trigger:'change',type:"number"},
+            ],
+            province_id:[
+              {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ],
+            custSub:[
+              {required: true, message:'请选择客户子类别',trigger:'change',type:"number"},
+            ]
           },
         }
       },
-      created() {//页面数据初始化       
+      created() {//页面数据初始化
       },
       methods:{
+        uploadBusiness(data){
+          console.log(data)
+        },
+        submit (name) {
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    this.$Message.success('提交成功!');
+                } else {
+                    this.$Message.error('表单验证失败!');
+                }
+            })
+        },
+        cancle (name) {
+          this.$refs[name].resetFields();
+        }
       },
       computed: {//计算属性
+        custType() {
+          if(this.formValidate.custType==1){
+            for(let item in this.ruleValidate){
+              this.ruleValidate[item]=[{required: false}]
+            }
+            for(let item in this.showNeed){
+              this.showNeed[item]="noneed"
+            }
+            this.ruleValidate.sellArea=[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ]; this.showNeed.sellArea_show="hasneed";
+
+            this.ruleValidate.cust_name=[
+                {required: true, message:'请填写客户名称',trigger:'blur'},
+                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ]; this.showNeed.cust_name_show="hasneed";
+            this.ruleValidate.custType=[
+                {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
+            ]; this.showNeed.cust_type_show="hasneed";
+            this.ruleValidate.abbr_name=[
+                {required: true, message:'请填写客户简称',trigger:'blur'},
+                {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ]; this.showNeed.abbr_name_show="hasneed";
+            this.ruleValidate.industry_id=[
+                {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
+            ]; this.showNeed.industry_id_show="hasneed"
+            this.ruleValidate.brand_id=[
+                  {required: true, message:'请选择主营品牌',trigger:'change',type:"number"}
+            ];this.showNeed.brand_id_show="hasneed"
+            this.ruleValidate.province_id=[
+                 {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ];this.showNeed.province_id_show="hasneed"  
+          }
+          if(this.formValidate.custType==2){
+            for(let item in this.ruleValidate){
+              this.ruleValidate[item]=[{required: false}]
+            }
+            for(let item in this.showNeed){
+              this.showNeed[item]="noneed"
+            }
+            this.ruleValidate.sellArea=[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ]; this.showNeed.sellArea_show="hasneed";
+            this.ruleValidate.custType=[
+                {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
+            ]; this.showNeed.cust_type_show="hasneed";
+
+            this.ruleValidate.cust_pid=[
+              {required: true, message:'请选择所属厂商',trigger:'change',type:"number"},
+            ]; this.showNeed.cust_pid_show="hasneed"  
+
+            this.ruleValidate.sellWeb=[
+              {required: true, message:'请选择销售网络',trigger:'change',type:"number"},
+            ]; this.showNeed.sellWeb_show="hasneed"
+
+            this.ruleValidate.cust_name=[
+                {required: true, message:'请填写客户名称',trigger:'blur'},
+                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ]; this.showNeed.cust_name_show="hasneed"; 
+
+            this.ruleValidate.abbr_name=[
+                {required: true, message:'请填写客户简称',trigger:'blur'},
+                {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ]; this.showNeed.abbr_name_show="hasneed";
+
+            this.ruleValidate.precinct=[
+                {required: true, message:'请填写管辖区域',trigger:'blur'},
+            ]; this.showNeed.precinct_show="hasneed"; 
+
+            this.ruleValidate.province_id=[
+                 {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ]; this.showNeed.province_id_show="hasneed"
+          }
+          if(this.formValidate.custType==3){
+            for(let item in this.ruleValidate){
+              this.ruleValidate[item]=[{required: false}]
+            }
+            for(let item in this.showNeed){
+              this.showNeed[item]="noneed"
+            }
+            this.ruleValidate.sellArea=[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ]; this.showNeed.sellArea_show="hasneed";
+            this.ruleValidate.custType=[
+                {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
+            ]; this.showNeed.cust_type_show="hasneed";
+
+            this.ruleValidate.cust_name=[
+                {required: true, message:'请填写客户名称',trigger:'blur'},
+                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ];  this.showNeed.cust_name_show="hasneed"; 
+
+            this.ruleValidate.abbr_name=[
+                {required: true, message:'请填写客户简称',trigger:'blur'},
+                {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ];  this.showNeed.abbr_name_show="hasneed";
+
+            this.ruleValidate.industry_id=[
+                {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
+            ]; this.showNeed.industry_id_show="hasneed"
+            this.ruleValidate.province_id=[
+                 {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ]; this.showNeed.province_id_show="hasneed"
+          }
+
+          if(this.formValidate.custType==4){
+            for(let item in this.ruleValidate){
+              this.ruleValidate[item]=[{required: false}]
+            }
+            for(let item in this.showNeed){
+              this.showNeed[item]="noneed"
+            }
+            this.ruleValidate.sellArea=[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ]; this.showNeed.sellArea_show="hasneed";
+            this.ruleValidate.custType=[
+                {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
+            ]; this.showNeed.cust_type_show="hasneed";
+            this.ruleValidate.custSub=[
+              {required: true, message:'请选择客户子类别',trigger:'change',type:"number"},
+            ]; this.showNeed.custSub_show="hasneed"
+            this.ruleValidate.cust_name=[
+                {required: true, message:'请填写客户名称',trigger:'blur'},
+                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ]; this.showNeed.cust_name_show="hasneed";  
+            this.ruleValidate.abbr_name=[
+                {required: true, message:'请填写客户简称',trigger:'blur'},
+                {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ];  this.showNeed.abbr_name_show="hasneed";
+            this.ruleValidate.industry_id=[
+                {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
+            ]; this.showNeed.industry_id_show="hasneed"
+
+            this.ruleValidate.brand_id=[
+              {required: true, message:'请选择主营品牌',trigger:'change',type:"number"},
+            ];  this.showNeed.brand_id_show="hasneed"
+
+            this.ruleValidate.province_id=[
+              {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ]; this.showNeed.province_id_show="hasneed"           
+          }
+
+          if(this.formValidate.custType==5){
+            for(let item in this.ruleValidate){
+              this.ruleValidate[item]=[{required: false}]
+            }
+            for(let item in this.showNeed){
+              this.showNeed[item]="noneed"
+            }
+            this.ruleValidate.sellArea=[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ]; this.showNeed.sellArea_show="hasneed";
+            this.ruleValidate.custType=[
+                {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
+            ]; this.showNeed.cust_type_show="hasneed";
+
+            this.ruleValidate.custSub=[
+              {required: true, message:'请选择客户子类别',trigger:'change',type:"number"},
+            ]; this.showNeed.custSub_show="hasneed";
+
+            this.ruleValidate.cust_name=[
+                {required: true, message:'请填写客户名称',trigger:'blur'},
+                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ]; this.showNeed.cust_name_show="hasneed"; 
+
+            this.ruleValidate.abbr_name=[
+                {required: true, message:'请填写客户简称',trigger:'blur'},
+                {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ];  this.showNeed.abbr_name_show="hasneed";
+
+            this.ruleValidate.industry_id=[
+                {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
+            ];this.showNeed.industry_id_show="hasneed";
+
+            this.ruleValidate.province_id=[
+              {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ]; this.showNeed.province_id_show="hasneed"   
+          }
+
+          if(this.formValidate.custType==6){
+            for(let item in this.ruleValidate){
+              this.ruleValidate[item]=[{required: false}]
+            }
+            for(let item in this.showNeed){
+              this.showNeed[item]="noneed"
+            }
+            this.ruleValidate.sellArea=[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ]; this.showNeed.sellArea_show="hasneed";
+            this.ruleValidate.custType=[
+                {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
+            ]; this.showNeed.cust_type_show="hasneed";
+            this.ruleValidate.custSub=[
+              {required: true, message:'请选择客户子类别',trigger:'change',type:"number"},
+            ]; this.showNeed.custSub_show="hasneed";
+            this.ruleValidate.cust_name=[
+                {required: true, message:'请填写客户名称',trigger:'blur'},
+                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ]; this.showNeed.cust_name_show="hasneed";  
+            this.ruleValidate.abbr_name=[
+                {required: true, message:'请填写客户简称',trigger:'blur'},
+                {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ]; this.showNeed.abbr_name_show="hasneed"; 
+            this.ruleValidate.industry_id=[
+                {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
+            ]; this.showNeed.industry_id_show="hasneed";
+            this.ruleValidate.province_id=[
+              {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ]; this.showNeed.province_id_show="hasneed" ;       
+
+          }
+          if(this.formValidate.custType==7||this.formValidate.custType==8||this.formValidate.custType==9){
+            for(let item in this.ruleValidate){
+              this.ruleValidate[item]=[{required: false}]
+            }
+            for(let item in this.showNeed){
+              this.showNeed[item]="noneed"
+            }
+            this.ruleValidate.custType=[
+                {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
+            ]; this.showNeed.cust_type_show="hasneed";
+
+            this.ruleValidate.custSub=[
+              {required: true, message:'请选择客户子类别',trigger:'change',type:"number"},
+            ]; this.showNeed.custSub_show="hasneed";
+
+            this.ruleValidate.cust_name=[
+                {required: true, message:'请填写客户名称',trigger:'blur'},
+                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ]; this.showNeed.cust_name_show="hasneed"; 
+
+            this.ruleValidate.abbr_name=[
+                {required: true, message:'请填写客户简称',trigger:'blur'},
+                {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ];  this.showNeed.abbr_name_show="hasneed";
+
+            this.ruleValidate.province_id=[
+              {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ]; this.showNeed.province_id_show="hasneed" ;
+
+            this.ruleValidate.sellArea=[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ]; this.showNeed.sellArea_show="hasneed";
+
+            if(this.formValidate.custType==7||this.formValidate.custType==8){
+              this.ruleValidate.brand_id=[
+               {required: true, message:'请选择主营品牌',trigger:'change',type:"number"},
+              ];
+              this.showNeed.brand_id_show="hasneed";
+            }
+          }
+          if(this.formValidate.custType==10){
+            for(let item in this.ruleValidate){
+              this.ruleValidate[item]=[{required: false}]
+            }
+            for(let item in this.showNeed){
+              this.showNeed[item]="noneed"
+            }
+            this.ruleValidate.sellArea=[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ]; this.showNeed.sellArea_show="hasneed";
+            this.ruleValidate.custType=[
+                {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
+            ]; this.showNeed.cust_type_show="hasneed";
+
+            this.ruleValidate.cust_name=[
+                {required: true, message:'请填写客户名称',trigger:'blur'},
+                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ]; this.showNeed.cust_name_show="hasneed"; 
+
+            this.ruleValidate.abbr_name=[
+                {required: true, message:'请填写客户简称',trigger:'blur'},
+                {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ];  this.showNeed.abbr_name_show="hasneed";
+
+            this.ruleValidate.industry_id=[
+                {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
+            ];this.showNeed.industry_id_show="hasneed";
+
+            this.ruleValidate.province_id=[
+              {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ]; this.showNeed.province_id_show="hasneed";     
+          }
+
+          if(this.formValidate.custType==11){
+            for(let item in this.ruleValidate){
+              this.ruleValidate[item]=[{required: false}]
+            }
+            for(let item in this.showNeed){
+              this.showNeed[item]="noneed"
+            }
+            this.ruleValidate.sellArea=[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ]; this.showNeed.sellArea_show="hasneed";
+            this.ruleValidate.cust_name=[
+                {required: true, message:'请填写客户名称',trigger:'blur'},
+                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+            ];  this.showNeed.cust_name_show="hasneed";
+
+            this.ruleValidate.abbr_name=[
+                {required: true, message:'请填写客户简称',trigger:'blur'},
+                {max:15, message:'不能超过15个汉字',trigger:'blur'}
+            ];  this.showNeed.abbr_name_show="hasneed";
+
+            this.ruleValidate.industry_id=[
+                {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
+            ]; this.showNeed.industry_id_show="hasneed";
+
+            this.ruleValidate.province_id=[
+              {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
+            ]; this.showNeed.province_id_show="hasneed";   
+          }
+          return this.formValidate.custType
+        }
       }
   }
 </script>

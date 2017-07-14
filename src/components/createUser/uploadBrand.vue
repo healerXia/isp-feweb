@@ -4,9 +4,8 @@
         <Modal class="brandDialog"
             v-model="modal1"
             title="上传品牌授权书"
-            @on-ok="ok"
-            @on-cancel="cancel">
-           <Form ref="formValidate" :model="uploadBrand" :rules="checkValue" :label-width="120">
+           >
+           <Form ref="uploadBrand" :model="uploadBrand" :rules="checkValue" :label-width="120">
               <Form-item label="授权品牌:" prop="brand_id">
                   <Select class="fl"
                   :clearable="true"
@@ -19,23 +18,27 @@
               <Form-item label="有效期:" prop="valid_time">
                  <Date-picker type="date" placeholder="请选择有效期"  v-model="uploadBrand.valid_time" :editable="false" class="fl"></Date-picker>
               </Form-item>
-              <Form-item label="附件:" prop="custName">
+              <div class="upload">
+                <span class="label">附件:</span>
                 <Upload 
-                  action=""
+                   action="//jsonplaceholder.typicode.com/posts/"
                   :format="['jpg','jpeg','png']"
-                  :max-size="1024"
+                  :max-size="10240"
                   :on-format-error="handleFormatError"
                   :on-exceeded-size="handleMaxSize"
                   :on-success="fileUploadSuccess"
                   >
                   <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                  <span>请上传1M以内的文件</span>
+                  <span  class="ML15">请上传1M以内的文件</span> 
                 </Upload>
-              </Form-item>
+                <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
+              </div> 
+              <Form-item>
+                <Button type="primary" class="btn bg4373F3" @click="submit('uploadBrand')">提交</Button >
+                <Button type="primary" class="btn bgCancle ML15" @click="cancel('uploadBrand')">取消</Button>
+              </Form-item>      
             </Form> 
-            <div slot="footer" class="footer">
-              <Button type="primary" class="btn bg4373F3" @click="submit">提交</Button >
-              <Button type="primary" class="btn bgCancle ML15" @click="cancel">取消</Button>
+            <div slot="footer" class="footer">             
             </div>
         </Modal>
     </div>
@@ -52,35 +55,46 @@ export default {
               valid_time:"",//有效期
               salve:""//  授权书附件
             },
+            judgeErr:{
+              uploadErrShow:false
+            },
+            errorCon:{
+              uploadErr:""
+            },
             checkValue:{
               brand_id:[
-                 {required:true,message:'请选择授权品牌',trigger:'change',type:"string"}
+                 {required:true,message:'请选择授权品牌',trigger:'change',type:"number"}
               ],
               valid_time: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
             }
         }
     },
     methods: {
-        ok () {
-            // this.$Message.info('点击了确定');
+        submit (name) {
+          this.$emit('uploadbrand',this.uploadBrand)
+          this.$refs[name].validate((valid) => {
+              if (valid) {
+                  this.$Message.success('提交成功!');
+                  this.modal1=false
+              } else {
+                  this.$Message.error('表单验证失败!');
+              }
+          })
         },
-        cancel () {
-            // this.$Message.info('点击了取消');
+        cancel (name) {
+          this.$refs[name].resetFields();
+          this.modal1=false
         },
         handleFormatError(file){
-           this.$Notice.warning({
-              title: '文件格式不正确',
-              desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
-            });
+           this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
+           this.judgeErr.uploadErrShow=true
         },
-        handleMaxSize (file) {
-            this.$Notice.warning({
-                title: '超出文件大小限制',
-                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
-            });
+        handleMaxSize (file) {           
+          this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
+          this.judgeErr.uploadErrShow=true
         },
         fileUploadSuccess(response, file, fileList){
-
+            
         }
     }
 }
@@ -92,6 +106,31 @@ export default {
   .ivu-modal{width:700px !important; height:500px;} 
    display: inline-block;
    input{width:350px}
+  .upload{
+    width: 100%;
+    padding-bottom: 20px;
+    .label{
+      display:inline-block;
+      width:130px;
+      height: 38px;
+      line-height: 38px;
+      text-align:right;
+      padding: 10px 12px 10px 0;
+      &::before {
+        content: '*';
+        display: inline-block;
+        margin-right: 4px;
+        line-height: 1;
+        font-family: SimSun;
+        font-size: 12px;
+        color: #ed3f14;
+      }
+    }
+    .ivu-upload{
+      display:inline-block;
+    }
+    .uperror{padding-left:130px;width:100%;display:block}
+  }
   .footer{text-align:center;}
 }
 
