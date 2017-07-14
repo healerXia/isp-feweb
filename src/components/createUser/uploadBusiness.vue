@@ -1,6 +1,37 @@
 <template lang="html">
-    <div>
+    <div class="business">
         <Button type="primary" class="btn bg4373F3" @click="modal1 = true">上传</Button>
+        <div class="mess_show" v-show="showMessBox">
+          <div class="mess_title">营业执照</div>
+          <div class="mess_con">
+            <ul>
+              <li>
+                <span>统一社会信用码:</span><span>11等各环节爱的呼唤2空间</span>
+              </li>
+              <li>
+                <span>营业期限:</span><span>111(万元)</span>
+              </li>
+              <li>
+                <span>成立日期:</span><span>111</span>
+              </li>
+              <li>
+                <span>法定代表人:</span><span>111</span>
+              </li>
+              <li>
+                <span>经营住所:</span><span>111</span>
+              </li>
+              <li>
+                <span>组织机构代码:</span><span>111</span>
+              </li>
+              <li>
+                <span>客户名称:</span><span>111</span>
+              </li>
+              <li>
+                <span>附件:</span><span>111</span>
+              </li>
+            </ul>
+          </div>
+        </div>
         <Modal class="businessDialog"
             v-model="modal1"
             title="上传营业执照"
@@ -71,88 +102,140 @@
 
 <script>
 export default {
-     data () {
-        return {
-            modal1: false,
-            uploadBusi:{
-              license_number:"",//统一社会信用代码
-              registered_capital:"",//注册资本
-              begin_time:"",//营业开始时间
-              end_time:"",//营业结束时间
-              create_time:"",//创建时间
-              legal_person:"",//法定代表人
-              business_address:"",//经营住所
-              organization_code:"",//组织机构代码
-              salve:"",//营业执照附件
-            },
-            checkValue:{
-              license_number: [
-                {required: true, message:'请填写统一社会信用代码',trigger:'blur'},
-                { type: 'string', max: 30, message: '不能超过30个字符', trigger: 'blur'}
-              ],
-              registered_capital: [
-                {required:true,message:'请填写注册资本',trigger:'blur'},
-                { type:'string', max:10, message: '不能超过10个字符', trigger: 'blur'}
-              ],
-              legal_person: [
-                {required:true,message:'请填写法定代表人',trigger:'blur',type:"string"},
-                { type: 'string', max:10, message: '不能超过10个字符', trigger: 'blur'}
-              ],
-              business_address:[{required:true,message:'请填写经营住所',trigger: 'blur',type:"string"}],
-              begin_time: [{required:true,message:'请填写开始日期',trigger:'change',type:"date"}],
-              end_time: [{required: true,message:'请填写结束日期',trigger:'change',type:"date"}],
-              create_time: [{required: true,message:'请填写成立日期',trigger:'change',type:"date"}],
-            },
-            judgeErr:{
-              dateErrShow:true,
-              uploadErrShow:false,
-              reg_cap_err_show:true
-            },
-            errorCon:{
-              dateErr:"",
-              uploadErr:"",
-              reg_cap_err:""
-            }
-        }
-    },
-    methods: {
-        submit (name) {
-          this.$emit('uploadbus',this.uploadBusi)
-          this.$refs[name].validate((valid) => {
-              if (valid) {
+  data () {
+    return {
+      showMessBox:false,
+      modal1: false,
+      uploadBusi:{
+        license_number:"",//统一社会信用代码
+        registered_capital:"",//注册资本
+        begin_time:"",//营业开始时间
+        end_time:"",//营业结束时间
+        create_time:"",//创建时间
+        legal_person:"",//法定代表人
+        business_address:"",//经营住所
+        organization_code:"",//组织机构代码
+        salve:"",//营业执照附件
+      },
+      checkValue:{
+        license_number: [
+          {required: true, message:'请填写统一社会信用代码',trigger:'blur'},
+          { type: 'string', max: 30, message: '不能超过30个字符', trigger: 'blur'}
+        ],
+        registered_capital: [
+          {required:true,message:'请填写注册资本',trigger:'blur'},
+          { type:'string', max:10, message: '不能超过10个字符', trigger: 'blur'}
+        ],
+        legal_person: [
+          {required:true,message:'请填写法定代表人',trigger:'blur',type:"string"},
+          { type: 'string', max:10, message: '不能超过10个字符', trigger: 'blur'}
+        ],
+        business_address:[{required:true,message:'请填写经营住所',trigger: 'blur',type:"string"}],
+        begin_time: [{required:true,message:'请填写开始日期',trigger:'change',type:"date"}],
+        end_time: [{required: true,message:'请填写结束日期',trigger:'change',type:"date"}],
+        create_time: [{required: true,message:'请填写成立日期',trigger:'change',type:"date"}],
+      },
+      judgeErr:{
+        dateErrShow:false,
+        uploadErrShow:false,
+        reg_cap_err_show:false
+      },
+      errorCon:{
+        dateErr:"",
+        uploadErr:"",
+        reg_cap_err:""
+      }
+    }
+  },
+  methods: {
+      submit (name) {
+        this.$emit('uploadbus',this.uploadBusi)
+        this.$refs[name].validate((valid) => {
+            if (valid) {
+                let check_result=this.valueCheck()
+                if(check_result){
                   this.$Message.success('提交成功!');
                   this.modal1=false
-              } else {
-                  this.$Message.error('表单验证失败!');
-              }
-          })
+                }
+                
+            } else {
+                this.$Message.error('表单验证失败!');
+            }
+        })
 
-        },
-        cancel (name) {
-          this.$refs[name].resetFields();
-          this.modal1=false
-        },
-        valueCheck(){
-          // if(this.uploadBusi.registered_capital.match(/^(\d+)$/g)){
-
-          // }
-        },
-        handleFormatError(file){
-           this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
-           this.judgeErr.uploadErrShow=true
-        },
-        handleMaxSize (file) {           
-          this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
-          this.judgeErr.uploadErrShow=true
-        },
-        fileUploadSuccess(response, file, fileList){
-            
+      },
+      cancel (name) {
+        this.$refs[name].resetFields();
+        this.modal1=false
+      },
+      valueCheck(){
+        //验证注册资本
+        let reg_capital=/^(\d+)\.(\d+)$/
+        if(!this.uploadBusi.registered_capital.match(reg_capital)){//没有匹配到
+          this.judgeErr.reg_cap_err_show=true;
+          this.errorCon.reg_cap_err="格式错误,请填写阿拉伯数字"
+          return false
+        }else if(this.uploadBusi.registered_capital.match(reg_capital)){//没有匹配到
+          this.judgeErr.reg_cap_err_show=false;
+          this.errorCon.reg_cap_err=""
+          return true
+        }else{
+          this.judgeErr.reg_cap_err_show=false;
+          this.errorCon.reg_cap_err=""
+          return true
         }
-    }
+
+      },
+      handleFormatError(file){
+         this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
+         this.judgeErr.uploadErrShow=true
+      },
+      handleMaxSize (file) {           
+        this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
+        this.judgeErr.uploadErrShow=true
+      },
+      fileUploadSuccess(response, file, fileList){
+          
+      }
+  }
 }
 </script>
 
 <style lang="scss">
+.business{ 
+  .mess_show{
+      margin-top: 20px;
+      width:400px;
+      height: 300px;
+      overflow: auto;
+      border:1px solid #ccc;
+      border-radius: 10px;
+      .mess_title{
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        border-bottom:1px solid #ccc;
+        text-align:center;
+      }
+      .mess_con{
+        width: 100%;
+        padding: 10px 20px;
+        height: 100px;
+        ul{
+          width:100%;
+          li{
+            float: left;
+            width: 100%;
+            span{
+              max-width: 250px;
+              display:block;
+              float:left;
+            }
+          }
+        }
+      }
+  }
+}
 .businessDialog {  
     display: inline-block; 
     .ivu-input-type,input{width:350px}
@@ -162,33 +245,33 @@ export default {
       }
       .ivu-input-type,input{width:164px}
     }
-  .upload{
-    width: 100%;
-    padding-bottom: 20px;
-    .label{
-      display:inline-block;
-      width:130px;
-      height: 38px;
-      line-height: 38px;
-      text-align:right;
-      padding: 10px 12px 10px 0;
-      &::before {
-        content: '*';
-        display: inline-block;
-        margin-right: 4px;
-        line-height: 1;
-        font-family: SimSun;
-        font-size: 12px;
-        color: #ed3f14;
+    .upload{
+      width: 100%;
+      padding-bottom: 20px;
+      .label{
+        display:inline-block;
+        width:130px;
+        height: 38px;
+        line-height: 38px;
+        text-align:right;
+        padding: 10px 12px 10px 0;
+        &::before {
+          content: '*';
+          display: inline-block;
+          margin-right: 4px;
+          line-height: 1;
+          font-family: SimSun;
+          font-size: 12px;
+          color: #ed3f14;
+        }
       }
+      .ivu-upload{
+        display:inline-block;
+      }
+      .uperror{padding-left:130px;width:100%;display:block}
     }
-    .ivu-upload{
-      display:inline-block;
-    }
-    .uperror{padding-left:130px;width:100%;display:block}
-  }
-  .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px} 
-  .footer{text-align:center;}
+    .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px} 
+    .footer{text-align:center;}
 }
 
 </style>

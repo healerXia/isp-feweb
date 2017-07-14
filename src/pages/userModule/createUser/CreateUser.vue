@@ -5,143 +5,172 @@
           <div class="contentBox">
             <div class="title MT20 MB20">新添客户信息</div>
             <div class="formBox">
-              <Form-item label="客户名称:" prop="cust_name" :class="showNeed.cust_name_show">
-                <Input v-model="formValidate.cust_name" placeholder="请填写客户名称" class='createInput fl'></Input>
-              </Form-item>
-              <Form-item label="客户类别:" prop="custType" v-bind:class='showNeed.cust_type_show'>
-                  <Select
-                  :clearable="true"
-                  placeholder="请选择客户类别"
-                  v-model="formValidate.custType">
-                 <Option v-for="option in custTypeOption" :value="option.value" :key="new Date()">{{option.name}}</Option>
-                 </Select>
-              </Form-item>
-              <Form-item label="客户子类别:" prop="custSub" :class="showNeed.custSub_show"
-               v-if="formValidate.custType==4||formValidate.custType==5||formValidate.custType==6||formValidate.custType==7||formValidate.custType==8||formValidate.custType==9||formValidate.custType==''"
-              >
-                  <Select
-                  :clearable="true"
-                  placeholder="请选择客户子类别"
-                  v-model="formValidate.custSub">
-                 <Option :value="1">111</Option>
-                 </Select>
-              </Form-item>
-              <Form-item label="客户简称:" prop="abbr_name" :class="showNeed.abbr_name_show">
-                 <Input v-model="formValidate.abbr_name" placeholder="请填写客户简称" maxlength="25" class='createInput fl'></Input>
-              </Form-item>
-              <Form-item label="所属集团:" prop="group_id" :class="showNeed.group_id_show"
-              v-if="!(formValidate.custType==1||formValidate.custType==2||formValidate.custType==3)||formValidate.custType==''">
+              <div :class="showNeed.cust_name_show">
+                <Form-item label="客户名称:" prop="cust_name" >
+                  <Input v-model="formValidate.cust_name" placeholder="请填写客户名称" class='createInput fl'></Input>
+                </Form-item>
+              </div>
+              <div v-bind:class='showNeed.cust_type_show'>
+                <Form-item label="客户类别:" prop="custType" >
+                    <Select
+                    :clearable="true"
+                    placeholder="请选择客户类别"
+                    v-model="formValidate.custType">
+                   <Option v-for="option in custTypeOption" :value="option.value" :key="new Date()">{{option.name}}</Option>
+                   </Select>
+                </Form-item>
+              </div>
+              <div :class="showNeed.custSub_show">
+                <Form-item label="客户子类别:" prop="custSub" 
+                    v-if="formValidate.custType==4||formValidate.custType==5||formValidate.custType==6||formValidate.custType==7||formValidate.custType==8||formValidate.custType==9||formValidate.custType==''"
+                    >
+                    <Select
+                    :clearable="true"
+                    placeholder="请选择客户子类别"
+                    v-model="formValidate.custSub">
+                  <Option :value="1">111</Option>
+                  </Select>
+                </Form-item>
+              </div>
+              <div :class="showNeed.abbr_name_show">
+                <Form-item label="客户简称:" prop="abbr_name">
+                 <Input v-model="formValidate.abbr_name" placeholder="请填写客户简称" class='createInput fl'></Input>
+                  <span v-show="judgeShow.abbr_name_err_show" class="colorRed ML5">
+                  {{errorMess.abbr_name_err}}
+                  </span>
+                </Form-item>
+              </div>
+              <div :class="showNeed.group_id_show">
+                <Form-item label="所属集团:" prop="group_id"
+                v-if="!(formValidate.custType==1||formValidate.custType==2||formValidate.custType==3)||formValidate.custType==''">
                   <Select
                   :clearable="true"
                   placeholder="请选择所属集团"
                   v-model="formValidate.group_id">
                  <Option >111</Option>
                  </Select>
-              </Form-item>
-               <Form-item label="所属厂商:" prop="cust_pid" :class="showNeed.cust_pid_show"
-              v-if="!(formValidate.custType==1||formValidate.custType==6||formValidate.custType==3)||formValidate.custType==''">
-                  <Select
-                  :clearable="true"
-                  placeholder="请选择所属厂商"
-                  v-model="formValidate.cust_pid">
-                 <Option :value="1">111</Option>
-                 </Select>
-              </Form-item>
-              <Form-item label="销售网络:" prop="custType" :class="showNeed.sellWeb_show"
-              v-if="formValidate.custType==2">
-                  <Select
-                  :clearable="true"
-                  placeholder="请选择销售网络"
-                  v-model="formValidate.sellWeb">
-                 <Option :value="1">111</Option>
-                 </Select>
-              </Form-item>
-              <Form-item label="管辖区域:" prop="precinct" :class="showNeed.precinct_show" 
-              v-if="formValidate.custType==2">
-                <Input v-model="formValidate.precinct" placeholder="请填写管辖区域" maxlength="50" class='createInput fl'></Input>
-              </Form-item>
-              <Form-item label="客户行业:" prop="industry_id"  :class="showNeed.industry_id_show"
-              v-if="formValidate.custType==1||formValidate.custType==3||formValidate.custType==4||formValidate.custType==5||formValidate.custType==6||formValidate.custType==''||
-              formValidate.custType==10||formValidate.custType==11
-              ">
-                  <Select
-                  :clearable="true"
-                  placeholder="请选择客户行业"
-                  v-model="formValidate.industry_id">
-                 <Option :value="1">111</Option>
-                 </Select>
-              </Form-item>
-               <Form-item label="主营品牌:" prop="brand_id" :class="showNeed.brand_id_show"
-               v-if="formValidate.custType!=2||formValidate.custType==''"
-               >
-                  <Select
-                  :clearable="true"
-                  placeholder="请选择主营品牌"
-                  v-model="formValidate.brand_id">
-                 <Option :value="1">111</Option>
-                 <Option :value="2">2221</Option>
-                 </Select>
-              </Form-item>
-              <Form-item label="客户地区:" width=200 prop="province_id" :class="showNeed.province_id_show">
-                <Select class="w127 MR11"
-                  v-model="formValidate.province_id"
-                  :clearable="true"
-                  placeholder="请选择省份"                 
-                  >
-                  <Option :value="1">111</Option>
-                  <Option :value="2">22</Option>
-                </Select>
-                <Select class="w127 MR11"
-                 v-model="formValidate.city_id"
-                  :clearable="true"
-                  placeholder="请选择城市"                 
-                  >
-                  <Option :value="1">111</Option>
-                </Select>
-                <Select class="w127 MR11"
-                 v-model="formValidate.county_id"
-                  :clearable="true"
-                  placeholder="请选择区县"                 
-                  >
-                  <Option :value="1">111</Option>
-                </Select>
-              </Form-item>
-              <Form-item label="所属4S:" prop="the4S" :class="showNeed.the4S_show"
-              v-if="formValidate.custType==5">
-                  <Select
-                  :clearable="true"
-                  placeholder="请选择所属4S"
-                  v-model="formValidate.the4S">
-                 <Option >111</Option>
-                 </Select>
-              </Form-item>
-              <Form-item label="客户地址:" prop="sellArea" :class="showNeed.sellArea_show"
-               v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
-              >
-                <Input v-model="formValidate.sellArea" placeholder="请填写客户地址" maxlength="50" class='createInput fl'></Input>
-              </Form-item>
-              <Form-item label="地图:" prop="map" :class="showNeed.map_show"
-               v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
-              >
-                <Input v-model="formValidate.map" placeholder="请选择地图标记" maxlength="50" class='createInput fl'></Input>
-              </Form-item>
-              <Form-item label="厂商代码:" prop="vendorCode" :class="showNeed.vendorCode_show"
-               v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
-              >
-                <Input v-model="formValidate.vendorCode" placeholder="请填写厂商代码" maxlength="20" class='createInput fl'></Input>
-              </Form-item>
-               <Form-item label="企业简介:" prop="companyIntro" :class="showNeed.companyIntro_show"
-               v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
-               >
-                <Input v-model="formValidate.companyIntro" type="textarea" :autosize="{minRows: 2,maxRows: 6}" placeholder="请输入企业简介" maxlength="500" ></Input>
-              </Form-item>
-              <Form-item label="备注:" prop="notes" :class="showNeed.notes_show"
-              v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9"
-              >
-                <Input v-model="formValidate.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注" maxlength="200" ></Input>
-              </Form-item>
-
-
+                </Form-item>
+              </div>
+              <div :class="showNeed.cust_pid_show">
+                <Form-item label="所属厂商:" prop="cust_pid"
+                 v-if="!(formValidate.custType==1||formValidate.custType==6||formValidate.custType==3)||formValidate.custType==''">
+                    <Select
+                    :clearable="true"
+                    placeholder="请选择所属厂商"
+                    v-model="formValidate.cust_pid">
+                   <Option :value="1">111</Option>
+                   </Select>
+                </Form-item>
+              </div>
+              <div :class="showNeed.sellWeb_show">
+                <Form-item label="销售网络:" prop="sellWeb" 
+                  v-if="formValidate.custType==2">
+                    <Select
+                    :clearable="true"
+                    placeholder="请选择销售网络"
+                    v-model="formValidate.sellWeb">
+                   <Option :value="1">111</Option>
+                   <Option :value="2">2222</Option>
+                   </Select>
+                </Form-item>
+              </div>
+              <div :class="showNeed.precinct_show">
+                <Form-item label="管辖区域:" prop="precinct"  
+                 v-if="formValidate.custType==2">
+                  <Input v-model="formValidate.precinct" placeholder="请填写管辖区域" maxlength="50" class='createInput fl'></Input>
+                </Form-item>
+              </div>
+              <div :class="showNeed.industry_id_show">
+                <Form-item label="客户行业:" prop="industry_id" 
+                  v-if="formValidate.custType==1||formValidate.custType==3||formValidate.custType==4||formValidate.custType==5||formValidate.custType==6||formValidate.custType==''||
+                   formValidate.custType==10||formValidate.custType==11">
+                    <Select
+                    :clearable="true"
+                    placeholder="请选择客户行业"
+                    v-model="formValidate.industry_id">
+                   <Option :value="1">111</Option>
+                   </Select>
+                </Form-item>
+              </div>
+              <div :class="showNeed.brand_id_show">
+                <Form-item label="主营品牌:" prop="brand_id"
+                  v-if="formValidate.custType!=2||formValidate.custType==''">
+                    <Select
+                    :clearable="true"
+                    placeholder="请选择主营品牌"
+                    v-model="formValidate.brand_id">
+                   <Option :value="1">111</Option>
+                   <Option :value="2">2221</Option>
+                   </Select>
+                </Form-item>
+              </div>
+              <div :class="showNeed.province_id_show">
+                <Form-item label="客户地区:" width=200 prop="province_id">
+                  <Select class="w127 MR11"
+                    v-model="formValidate.province_id"
+                    :clearable="true"
+                    placeholder="请选择省份"                 
+                    >
+                    <Option :value="1">111</Option>
+                    <Option :value="2">22</Option>
+                  </Select>
+                  <Select class="w127 MR11"
+                   v-model="formValidate.city_id"
+                    :clearable="true"
+                    placeholder="请选择城市"                 
+                    >
+                    <Option :value="1">111</Option>
+                  </Select>
+                  <Select class="w127 MR11"
+                   v-model="formValidate.county_id"
+                    :clearable="true"
+                    placeholder="请选择区县"                 
+                    >
+                    <Option :value="1">111</Option>
+                  </Select>
+                </Form-item>
+              </div>
+              <div :class="showNeed.the4S_show">
+                <Form-item label="所属4S:" prop="the4S"
+                  v-if="formValidate.custType==5">
+                    <Select
+                    :clearable="true"
+                    placeholder="请选择所属4S"
+                    v-model="formValidate.the4S">
+                   <Option >111</Option>
+                   </Select>
+                </Form-item>
+              </div>
+              <div :class="showNeed.sellArea_show">
+                <Form-item label="客户地址:" prop="sellArea">
+                  <Input v-model="formValidate.sellArea" placeholder="请填写客户地址" class='createInput fl'></Input>
+                </Form-item>
+              </div>
+              <div :class="showNeed.map_show">
+                <Form-item label="地图:" prop="map" 
+                 v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9">
+                 <DialogMap></DialogMap>
+                </Form-item>
+              </div>
+              <div :class="showNeed.vendorCode_show">
+                <Form-item label="厂商代码:" prop="vendorCode"
+                  v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9">
+                  <Input v-model="formValidate.vendorCode" placeholder="请填写厂商代码" maxlength="20" class='createInput fl'></Input>
+                </Form-item>
+              </div>
+              <div :class="showNeed.companyIntro_show">
+                <Form-item label="企业简介:" prop="companyIntro"
+                 v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9">
+                  <Input v-model="formValidate.companyIntro" type="textarea" :autosize="{minRows: 2,maxRows: 6}" placeholder="请输入企业简介" maxlength="500" ></Input>
+                </Form-item>
+              </div>
+              <div :class="showNeed.notes_show">
+                <Form-item label="备注:" prop="notes"
+                  v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9">
+                  <Input v-model="formValidate.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注" maxlength="200" ></Input>
+                </Form-item>
+              </div>
+              
               <Form-item label="营业执照:" prop="custName">
                 <UploadBusiness v-on:uploadbus="uploadBusiness"></UploadBusiness>
               </Form-item>
@@ -155,15 +184,14 @@
                 <Button type="primary" class="btn bg4373F3" @click="submit('formValidate')">保存</Button >
                 <Button type="primary" class="btn bg4373F3 ML15">提交审核</Button>
                 <Button type="primary" class="btn bgCancle ML15" @click="cancle('formValidate')">取消</Button>
-            </Form-item>
-            <div class="h100">
-              <span v-show="false">{{custType}}</span>
-            </div>
+              </Form-item>
+              <div class="h100">
+                <span v-show="false">{{custType}}</span>
+              </div>
             </div>
           </div>
        </Form>
-    </div>
-   
+    </div>   
   </div>
 </template>
 
@@ -171,12 +199,14 @@
   import UploadBrand from 'components/createUser/UploadBrand';
   import UploadBusiness from 'components/createUser/uploadBusiness';
   import UploadPay from 'components/createUser/uploadPay';
+  import DialogMap from 'components/createUser/map';
   import config from './config.js';
   export default {
       components:{
         UploadBusiness,
         UploadBrand,
-        UploadPay
+        UploadPay,
+        DialogMap
       },
       data () {
         return {
@@ -196,7 +226,6 @@
             cust11:11,//其他
           },
           showNeed:{//操作是否显示必填
-
             cust_name_show:"",//客户名称+ 
             custType_show:"",//客户类别
             abbr_name_show:"",//客户简称 +         
@@ -241,8 +270,6 @@
             city_id:"",//市+
             county_id:"",//区+
           },
-
-
           custTypeOption:[
             {name:"厂商",value:1},{name:"厂商大区",value:2},
             {name:"集团",value:3},{name:"经销商-4S",value:4},
@@ -253,7 +280,7 @@
           ruleValidate: {//验证
             cust_name: [
               {required: true, message:'请填写客户名称',trigger:'blur'},
-              {max:25, message:'不能超过25个汉字',trigger:'blur'}
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ],
             custType:[
               {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
@@ -273,8 +300,21 @@
             ],
             custSub:[
               {required: true, message:'请选择客户子类别',trigger:'change',type:"number"},
+            ],
+            sellArea:[
+              {required: true, message:'请填写客户地址',trigger:'blur'},
+              {max:50, message:'不能超过50个汉字',trigger:'blur'}
+            ],
+            sellWeb:[
+              {required: false}
             ]
           },
+          judgeShow:{
+            abbr_name_err_show:false
+          },
+          errorMess:{
+            abbr_name_err:""
+          }
         }
       },
       created() {//页面数据初始化
@@ -286,7 +326,12 @@
         submit (name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                  let lastCheck=this.checkValue()
+
+                  if (lastCheck) {
                     this.$Message.success('提交成功!');
+                  }
+                  
                 } else {
                     this.$Message.error('表单验证失败!');
                 }
@@ -294,6 +339,17 @@
         },
         cancle (name) {
           this.$refs[name].resetFields();
+        },
+        checkValue(){
+          if(this.formValidate.custType==7||this.formValidate.custType==8||this.formValidate.custType==9){
+            if(this.formValidate.abbr_name.length>8){
+              this.judgeShow.abbr_name_err_show=true;
+              this.errorMess.abbr_name_err="不能超过8个汉字"
+              return false
+            }else{
+              return true
+            }
+          }
         }
       },
       computed: {//计算属性

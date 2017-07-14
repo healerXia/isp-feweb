@@ -349,7 +349,7 @@ border-radius: 2px;
     textarea.ivu-input{
       width: 398px !important
     }
-    .noneed.ivu-form-item-required .ivu-form-item-label:before{content:"" !important;color:blue}
+    .noneed .ivu-form-item-required .ivu-form-item-label:before{content:"" !important;color:blue}
     .hasneed .ivu-form-item-label:before{    
       content: '*' !important;
       display: inline-block;
@@ -359,7 +359,7 @@ border-radius: 2px;
       font-size: 12px;
       color: #ed3f14;
     }
-    .hasneed.ivu-form-item-error .ivu-input {
+    .hasneed .ivu-form-item-error .ivu-input {
       border: 1px solid #ed3f14;
     }
     .hasneed .ivu-form-item-error-tip{
