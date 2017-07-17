@@ -53,6 +53,35 @@
         },
         methods: {
             submit(){
+                let result=[]
+                for(let i=0;i<this.areaList.length;i++){
+                    if(this.areaList[i].status==true){
+                        let obj={}
+                        obj['name']=this.areaList[i].name
+                        obj['id']=this.areaList[i].value
+                        obj['status']=true
+                        result.push(obj)
+                    }else{
+                        let obj={};
+                        let checkChildren=[];
+                        let children=this.areaList[i].children;
+                        if(children){
+                            for(let j=0;j<children.length;j++){
+                                if(children[j].sttaus==true){
+                                    checkChildren.push(children[j])
+                                }
+                            }
+                        }
+                        if(checkChildren.length>0){
+                            obj['name']=this.areaList[i].name
+                            obj['id']=this.areaList[i].value
+                            obj['status']=false
+                            obj['children']=checkChildren
+                            result.push(obj)
+                        }
+                    }
+                }
+                this.$emit('area',result)
                 this.modal1=false
             },
             cancel(){

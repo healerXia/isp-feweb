@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="brand">
-    <Button type="primary" class="btn bg4373F3" @click="modal1 = true">上传</Button>
+    <Button type="primary" class="btn bg4373F3" @click="openDialog">上传</Button>
     <div class="mess_show" v-show="showMessBox">
       <div class="mess_title">品牌授权书</div>
       <div class="mess_con">
@@ -59,6 +59,7 @@
 
 <script>
 export default {
+  props:['editData'],
   data () {
     return {
         showMessBox:false,
@@ -80,18 +81,37 @@ export default {
              {required:true,message:'请选择授权品牌',trigger:'change',type:"number"}
           ],
           valid_time: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
-        }
+        },
+        storeEditDate:{},
     }
   },
+  created(){
+    this.storeEditDate=this.editData
+  },
   methods: {
+    openDialog(){
+      this.modal1=true      
+      if(this.storeEditDate.brand_id){//进行回填数据
+        this.uploadBrand.brand_name=this.storeEditDate.brand_name
+        this.uploadBrand.brand_id=this.storeEditDate.brand_id
+        this.uploadBrand.valid_time=new Date(this.storeEditDate.valid_time)
+      }
+
+    },
     submit (name) {
-      this.$emit('uploadbrand',this.uploadBrand)
       this.$refs[name].validate((valid) => {
           if (valid) {
-              this.$Message.success('提交成功!');
+              this.$emit('uploadbrand',this.uploadBrand)
+              this.$Modal.success({
+                title: "提示",
+                content: "添加成功",
+              })
               this.modal1=false
           } else {
-              this.$Message.error('表单验证失败!');
+            this.$Modal.error({
+                title: '提示',
+                content: "表单验证失败！"
+            })
           }
       })
     },
@@ -107,8 +127,14 @@ export default {
       this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
       this.judgeErr.uploadErrShow=true
     },
-    fileUploadSuccess(response, file, fileList){
-        
+    fileUploadSuccess(response, file, fileList){       
+    }
+  },
+  watch:{
+    editData:{
+      handler:function(){
+         this.storeEditDate=this.editData
+      }
     }
   }
 }

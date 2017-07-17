@@ -336,18 +336,24 @@ export default {
       fileUploadSuccess(response, file, fileList){
       },
       submit (name) {
-        this.$emit('uploadPay',this.uploadPay)
         this.$refs[name].validate((valid) => {
           if (valid) {
               let check_account=this.accountMessCheck()
               let check_tax=this.taxCodeCheck()
               if(check_account&&check_tax){
-                this.$Message.success('提交成功!');
+                this.$emit('uploadpay',this.uploadPay)
+                this.$Modal.success({
+                  title: "提示",
+                  content: "添加成功",
+                })
                 this.modal1=false
               }
              
           } else {
-              this.$Message.error('表单验证失败!');
+            this.$Modal.error({
+                title: '提示',
+                content: "表单验证失败！"
+            })
           }
         })
       },
