@@ -23,10 +23,13 @@ const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
 const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
 const addDoc = (resolve) => require(['../pages/approval/addDoc/AddDoc.vue'], resolve);
 const department = (resolve) => require(['../pages/approval/department/Department'], resolve);
+const createChain = (resolve) => require(['../pages/approval/createUser/createUser'], resolve);
+// const createChain = (resolve) => require('[../pages/approval/createUser/createUser]', resolve);
 
 // demo
 
 const selectTab = (resolve) => require(['../pages/demos/selectTab'], resolve);
+const fromVal = (resolve) => require(['../pages/demos/formValidate'], resolve);
 
 
 
@@ -117,6 +120,11 @@ const routes = [
                 path: 'department',
                 name: 'department',
                 component: department
+            },
+            {
+                path: 'createChain',
+                name: createChain,
+                component: createChain
             }
         ]
     },

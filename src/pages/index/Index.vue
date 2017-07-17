@@ -3,6 +3,11 @@
         border: 1px solid #d7dde4;
         background: #f5f7f9;
         position: relative;
+        min-width: 1356px;
+    }
+    .ivu-row-flex {
+        display:flex;/*设为伸缩容器*/
+        flex-flow:row;/*伸缩项目单行排列*/  
     }
     .layout-breadcrumb{
         padding: 10px 15px 0;
@@ -16,6 +21,9 @@
     }
     .layout-content-main{
         padding: 10px;
+    }
+    .layout-content-right {
+        flex: 1;
     }
     .layout-copy{
         text-align: center;
@@ -116,7 +124,7 @@
             <i-col class="layout-menu-left">
                 <LeftSide></LeftSide>
             </i-col>
-            <i-col style="flex:1">
+            <i-col class="layout-content-right">
                 <div class="layout-content">
                     <router-view></router-view>
                 </div>

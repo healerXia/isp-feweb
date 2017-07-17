@@ -2,7 +2,7 @@
   <Form ref="formDynamic" :model="formDynamic" :label-width="80">
       <div v-for="(item, index) in formDynamic.items" :key="item">
           <Form-item label="姓名" :prop="'items.' + index + '.name'"
-            :rules="[{required: true, message: '姓名不能为空', trigger: 'blur'}, {type: 'number', message: '2131231', trigger: 'blur'}]">
+            :rules="[{required: true, type: 'number', message: 'aaaa', trigger: 'blur'}]">
                 <Input type="text" v-model.number="item.name"></Input>
           </Form-item>
           <Form-item label="年龄" :prop="'items.' + index + '.age'"
