@@ -184,7 +184,7 @@
 	.singleCheckBox .ivu-icon{cursor: pointer;}
 	.child{width: 100%;background: #eee;padding:10px 0;}
 	.label{display: inline-block;position: relative;}
-	.label::after{
+	.label:after{
 		content: "";
 		display:block;
 		width: 0;

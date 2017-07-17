@@ -1,7 +1,8 @@
 <template lang="html">
-  <div class="brand">
+  <div class="map">
     <Button type="primary" class="btn bg4373F3" @click="open">标记</Button>
-    
+    <div id="litter_map" v-show="litter_map_show">
+    </div>
     <Modal class="mapDialog"
         v-model="modal1"
         title="地图"
@@ -12,9 +13,15 @@
         <span class="searchBtn" @click="searchLocaton">搜索</span>
       </div>
       <div id="allmap"></div>
-      <Button type="primary" class="btn bg4373F3" @click="submit">提交</Button >
+      <span v-show="no_sign_error_show" class="colorRed ML5 MT10">
+        你没有标记位置,请标记。
+      </span>
+      <div class="MT20">
+        <Button type="primary" class="btn bg4373F3" @click="submit">标记</Button >
         <Button type="primary" class="btn bgCancle ML15" @click="cancel">取消</Button>
-      <div slot="footer" class="footer">             
+      </div>
+      
+      <div slot="footer" class="footer">   
       </div>
     </Modal>
   </div>
@@ -22,22 +29,30 @@
 
 <script>
 export default {
+  props:['location'],
   data () {
     return {
-       mapShow:true,
-       modal1:false,
-       keyWord:'',
-       mapObj:null,
-       mapStatus: false
+      litter_map_show:false,
+      no_sign_error_show:false,
+      modal1:false,
+      keyWord:'',//输入的关键字
+      mapObj:null,//保存地图对象，用于后期搜索等功能
+      mapStatus: false,//判断地图是否存在，存在就不初始化了
+      signLocation:{//标记的位置
+        lng:null,
+        lat:null
+      }
     }
+  },
+  created(){
+    this.signLocation=this.location
+    this.showLitterMaps()
   },
   methods: {
     open(){//相当于弹出层初始化
-     this.modal1=true
-     this.mapShow=true;
-      if (!this.mapStatus) {
-        console.log(this.mapStatus)
-        // 百度地图API功能
+      this.showLitterMap=false
+      this.modal1=true
+      if (!this.mapStatus) {// 百度地图API功能
         document.getElementById('allmap').innerHTML=""
         document.getElementById('allmap').style.width="600px"
         document.getElementById('allmap').style.height="400px"
@@ -49,49 +64,64 @@ export default {
             this.mapObj = new BMap.LocalSearch(map, {
               renderOptions:{map: map}
             });
+            map.addEventListener("click", this.showInfo);
             this.mapObj.search("昌平");
             map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
             this.mapStatus = true;
         },0)
-       
-        
       }
-
-      setTimeout(()=>{
-        
-      },0)   
     },
     searchLocaton(){
       if(this.mapObj!=null){
         this.mapObj.search(this.keyWord);
       }
     },
-    submit () {
-      // this.$emit('uploadbrand',this.uploadBrand)
-      // this.$refs[name].validate((valid) => {
-      //     if (valid) {
-      //         this.$Message.success('提交成功!');
-      //         this.modal1=false
-      //     } else {
-      //         this.$Message.error('表单验证失败!');
-      //     }
-      // })
+    showInfo(e){
+      this.signLocation.lng=e.point.lng;
+      this.signLocation.lat=e.point.lat;
+    },
+    submit () {//标记的时候刷新小地图，如果没有标记提示错误
+      if(this.signLocation!=null){
+        this.showLitterMaps()
+        this.modal1=false
+        this.$emit('stroe',this.signLocation);
+      }else{
+        this.no_sign_error_show=true
+      }
     },
     cancel () {
-      this.mapShow=false;
-      // this.$refs[name].resetFields();
       this.modal1=false
     },
-    handleFormatError(file){
-       this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
-       this.judgeErr.uploadErrShow=true
-    },
-    handleMaxSize (file) {           
-      this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
-      this.judgeErr.uploadErrShow=true
-    },
-    fileUploadSuccess(response, file, fileList){
+    showLitterMaps(){//小地图的显示与创建
+      if(this.signLocation.lng==null){
+        this.litter_map_show=false;
+      }else{
+        this.litter_map_show=true;
+        document.getElementById('litter_map').innerHTML=""
+        document.getElementById('litter_map').style.width="300px"
+        document.getElementById('litter_map').style.height="200px"
+        setTimeout(()=>{
+          var litterMap = new BMap.Map("litter_map");    // 创建Map实例
+          litterMap.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+          litterMap.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+          litterMap.setCurrentCity("中国");          // 设置地图显示的城市 此项是必须设置的
+          litterMap.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+          litterMap.clearOverlays(); 
+          var new_point = new BMap.Point(this.signLocation.lng,this.signLocation.lat);
+          var marker = new BMap.Marker(new_point);  // 创建标注
+          litterMap.addOverlay(marker);              // 将标注添加到地图中
+          litterMap.panTo(new_point); 
+        },0)
+       
         
+      }
+    }
+  },
+  watch:{
+    location:{
+      handler:function(){
+        this.signLocation=this.location;
+      }
     }
   }
 }
@@ -100,7 +130,7 @@ export default {
 <style lang="scss">
 .mapDialog{
   .ivu-modal{width:700px !important; height:500px;} 
-  #allmap{width:600px;height:400px}
+  #allmap{width:600px;height:400px;margin-bottom:10px}
   .search{
     width: 100%;
     height: 50px;
@@ -121,6 +151,9 @@ export default {
       cursor:pointer;
     }
   }
+}
+.map{
+  #litter_map{width:300px;height:200px;border:1px solid #ccc;margin-top:20px}
 }
 
 

@@ -77,7 +77,8 @@
               <div :class="showNeed.precinct_show">
                 <Form-item label="管辖区域:" prop="precinct"  
                  v-if="formValidate.custType==2">
-                  <Input v-model="formValidate.precinct" placeholder="请填写管辖区域" maxlength="50" class='createInput fl'></Input>
+                  <!-- <Input v-model="formValidate.precinct" placeholder="请填写管辖区域" maxlength="50" class='createInput fl'></Input> -->
+                  <DialogArea :checkedAreaList="checkedAreaList"></DialogArea>
                 </Form-item>
               </div>
               <div :class="showNeed.industry_id_show">
@@ -148,8 +149,26 @@
               </div>
               <div :class="showNeed.map_show">
                 <Form-item label="地图:" prop="map" 
-                 v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9">
-                 <DialogMap></DialogMap>
+                 v-if="formValidate.custType==7">
+                  <DialogMap 
+                    v-bind:location="mapLocation.store_4s" v-on:stroe="getFourSLoation">                  
+                  </DialogMap>
+                </Form-item>
+              </div>
+              <div :class="showNeed.map_show">
+                <Form-item label="地图:" prop="map" 
+                 v-if="formValidate.custType==8">
+                  <DialogMap 
+                    v-bind:location="mapLocation.store_agency" v-on:stroe="getAgencyLoation">
+                  </DialogMap>
+                </Form-item>
+              </div>
+              <div :class="showNeed.map_show">
+                <Form-item label="地图:" prop="map" 
+                 v-if="formValidate.custType==9">
+                  <DialogMap 
+                    v-bind:location="mapLocation.store_colligate" v-on:stroe="getColligateLoation">                  
+                  </DialogMap>
                 </Form-item>
               </div>
               <div :class="showNeed.vendorCode_show">
@@ -170,16 +189,17 @@
                   <Input v-model="formValidate.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注" maxlength="200" ></Input>
                 </Form-item>
               </div>
-              
-              <Form-item label="营业执照:" prop="custName">
-                <UploadBusiness v-on:uploadbus="uploadBusiness"></UploadBusiness>
-              </Form-item>
-              <Form-item label="品牌授权书:" prop="custName">
-                <UploadBrand></UploadBrand>
-              </Form-item>
-              <Form-item label="纳税资质证明:" prop="custName">
-                <UploadPay></UploadPay>
-              </Form-item>
+              <div v-if="formValidate.custType!=7&&formValidate.custType!=8&&formValidate.custType!=9">
+                <Form-item label="营业执照:" prop="custName">
+                  <UploadBusiness v-on:uploadbus="uploadBusiness"></UploadBusiness>
+                </Form-item>
+                <Form-item label="品牌授权书:" prop="custName">
+                  <UploadBrand></UploadBrand>
+                </Form-item>
+                <Form-item label="纳税资质证明:" prop="custName">
+                  <UploadPay></UploadPay>
+                </Form-item>
+              </div>
               <Form-item>
                 <Button type="primary" class="btn bg4373F3" @click="submit('formValidate')">保存</Button >
                 <Button type="primary" class="btn bg4373F3 ML15">提交审核</Button>
@@ -200,13 +220,15 @@
   import UploadBusiness from 'components/createUser/uploadBusiness';
   import UploadPay from 'components/createUser/uploadPay';
   import DialogMap from 'components/createUser/map';
+  import DialogArea from 'components/createUser/juristicArea';
   import config from './config.js';
   export default {
       components:{
         UploadBusiness,
         UploadBrand,
         UploadPay,
-        DialogMap
+        DialogMap,
+        DialogArea
       },
       data () {
         return {
@@ -229,7 +251,6 @@
             cust_name_show:"",//客户名称+ 
             custType_show:"",//客户类别
             abbr_name_show:"",//客户简称 +         
-
             brand_id_show:"",//主营品牌+
             industry_id:"",//客户行业+
             group_id_show:"",//所属集团+
@@ -309,17 +330,65 @@
               {required: false}
             ]
           },
-          judgeShow:{
+          judgeShow:{//错误是否显示
             abbr_name_err_show:false
           },
-          errorMess:{
+          errorMess:{//错误信息
             abbr_name_err:""
-          }
+          },
+          mapLocation:{
+            store_4s:{
+               lng:null,
+                lat:null
+            },
+            store_colligate:{
+               lng:null,
+              lat:null
+            },
+            store_agency:{
+              lng:null,
+              lat:null
+            }
+          },
+          checkedAreaList:[//管辖区域地址
+            {
+              name: '安徽省',
+              status: false,
+              id:430,
+              children: [
+                  {
+                      name: '合肥',
+                  },
+                  {
+                      name: '芜湖',
+                  }
+              ]
+            },
+            {
+              id:435,
+              name: '河北省',
+              status: true,
+            },
+            {
+              id:431,
+              name: '北京市',
+              status: true,
+            }                 
+          ]
         }
       },
       created() {//页面数据初始化
       },
       methods:{
+        getFourSLoation(location){
+          this.mapLocation.store_4s=location
+        },
+        getColligateLoation(location){
+          this.mapLocation.store_colligate=location
+        },
+        getAgencyLoation(location){
+          this.mapLocation.store_agency=location
+        },
         uploadBusiness(data){
           console.log(data)
         },
@@ -460,7 +529,6 @@
                  {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
             ]; this.showNeed.province_id_show="hasneed"
           }
-
           if(this.formValidate.custType==4){
             for(let item in this.ruleValidate){
               this.ruleValidate[item]=[{required: false}]
@@ -498,7 +566,6 @@
               {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
             ]; this.showNeed.province_id_show="hasneed"           
           }
-
           if(this.formValidate.custType==5){
             for(let item in this.ruleValidate){
               this.ruleValidate[item]=[{required: false}]
@@ -536,7 +603,6 @@
               {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
             ]; this.showNeed.province_id_show="hasneed"   
           }
-
           if(this.formValidate.custType==6){
             for(let item in this.ruleValidate){
               this.ruleValidate[item]=[{required: false}]
@@ -568,7 +634,6 @@
             this.ruleValidate.province_id=[
               {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
             ]; this.showNeed.province_id_show="hasneed" ;       
-
           }
           if(this.formValidate.custType==7||this.formValidate.custType==8||this.formValidate.custType==9){
             for(let item in this.ruleValidate){

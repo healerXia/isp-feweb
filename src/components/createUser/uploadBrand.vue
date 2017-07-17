@@ -18,7 +18,7 @@
         v-model="modal1"
         title="上传品牌授权书"
        >
-       <Form ref="uploadBrand" :model="uploadBrand" :rules="checkValue" :label-width="120">
+        <Form ref="uploadBrand" :model="uploadBrand" :rules="checkValue" :label-width="120">
           <Form-item label="授权品牌:" prop="brand_id">
               <Select class="fl"
               :clearable="true"

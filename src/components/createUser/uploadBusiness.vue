@@ -170,7 +170,7 @@ export default {
       },
       valueCheck(){
         //验证注册资本
-        let reg_capital=/^(\d+)\.(\d+)$/
+        let reg_capital=/^\d*$/
         if(!this.uploadBusi.registered_capital.match(reg_capital)){//没有匹配到
           this.judgeErr.reg_cap_err_show=true;
           this.errorCon.reg_cap_err="格式错误,请填写阿拉伯数字"
