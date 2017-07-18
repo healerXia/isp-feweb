@@ -98,7 +98,7 @@ body {
 .fRight{float: right;}
 .cycle .ivu-form-item-error-tip{display: none !important;}
 .maxWid{max-width: 1166px}
-.createPro, .setUp-de, #addDoc, #createUser {
+.createPro, .setUp-de, #addDoc, #createUser, #chainConfig {
   .ivu-select-single .ivu-select-selection{height: 38px;line-height: 38px}
   .ivu-input{height: 38px}
   .ivu-select-multiple .ivu-select-input{height: 38px}
@@ -166,6 +166,13 @@ body {
 }
 
 // 表单样式重置
+
+
+// 重置下拉
+.ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value {
+    height: 38px;
+    line-height: 38px;
+}
 
 
 .ivu-input-icon {

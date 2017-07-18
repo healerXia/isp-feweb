@@ -47,6 +47,16 @@
 <script>
 export default {
     data() {
+        const validateName = (rule, value, callback) => {
+            if (value.trim() === '') {
+                callback(new Error('请填写单据名称'));
+            }
+            else if (value.trim().length > 50){
+                callback(new Error('长度不能超过50个字'));
+            }else {
+                callback();
+            }
+        };
         return {
             id: '',
             pageName: '新增单据',
@@ -65,7 +75,7 @@ export default {
             ruleValidate: {
                 formTypeName: [
                      {required: true, message: '请填写单据名称', trigger: 'blur'},
-                     {max: 50, message: '长度不能超过50个字', trigger: 'blur'}
+                     {validator: validateName, trigger: 'blur'}
                 ]
             },
             submitData: {},
@@ -135,9 +145,15 @@ export default {
                     if (docs.length > 0) {
                         subDocs = `${this.formValidate.subFormType},${docs.join(',')}`;
                     }
+                    else {
+                        subDocs = `${this.formValidate.subFormType}`;
+                    }
 
                     if (condition.length > 0) {
                         subCon = `${this.formValidate.formVariable},${condition.join(',')}`;
+                    }
+                    else {
+                        subCon = `${this.formValidate.formVariable}`;
                     }
 
                     this.submitData = {

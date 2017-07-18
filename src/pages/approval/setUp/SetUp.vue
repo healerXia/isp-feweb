@@ -61,7 +61,7 @@ export default {
             ruleValidate: {
                 name: [
                     {required: true, message: '请填写部门名称', trigger: 'change' },
-                    {validator: validateName, trigger: 'blur'},
+                    {validator: validateName, trigger: 'blur'}
                     // {max: 50, message: '长度不能超过50个字', trigger: 'change'}
                 ],
                 manage: [

@@ -8,5 +8,9 @@
 #### createUser     --- 创建用户组
 #### userManagement --- 用户组管理
 #### chainManagement --- 审批链管理
-#### createChain    --- 创建审批链
+
+
+
+
+#### chainConfig   --- 配置审批链(创建审批链)
 #### 

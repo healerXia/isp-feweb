@@ -122,6 +122,10 @@ export default {
         tbody {
             tr {
                 box-shadow: 0 1px 0 0 #DEE1E5;
+
+                &:hover {
+                    background: #ebf7ff;
+                }
             }
 
             td {
