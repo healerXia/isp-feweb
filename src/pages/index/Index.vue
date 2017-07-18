@@ -118,7 +118,7 @@
                     <span class='fl'>智能销售支撑平台</span>
                 </div>
                 <div class="header-r fr">
-                    <a @click='jump' class='back fl' href="javascript:void(0);"></a>
+                    <a @click='jump' class='back fl' href="javascript:void(0);" title='主页'></a>
                     <span class='fl'>欢迎您，{{username}}</span>
                     <div class="border fl"></div>
                     <a href="javascript:;" @click='signOut'>

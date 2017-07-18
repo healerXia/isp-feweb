@@ -1,0 +1,48 @@
+{
+    "errorCode": 0,
+    "errorMsg": "OK",
+    "result": [
+        {
+            "displayAmount": 0,
+            "singleClick": 0,
+            "singleDisplay": 0,
+            "visibleDisplay": 0,
+            "clickAmount": 10,
+            "clickRate": "0.0000%",
+            "requestAmount": 0,
+            "fillRate": "0.0000%",
+            "singleRate": "0.0000%",
+            "rateTime": "2016-12-07",
+            "beginTime": null,
+            "endTime": null,
+            "adPlaceId": 0,
+            "displayAmountMount": null,
+            "clickAmountMount": null,
+            "displayAmountDay": null,
+            "clickAmountDay": null,
+            "displayClickDay": null,
+            "displayClickMonth": null
+        },
+        {
+            "displayAmount": 0,
+            "singleClick": 0,
+            "singleDisplay": 0,
+            "visibleDisplay": 0,
+            "clickAmount": 2,
+            "clickRate": "0.0000%",
+            "requestAmount": 0,
+            "fillRate": "0.0000%",
+            "singleRate": "0.0000%",
+            "rateTime": "2016-12-08",
+            "beginTime": null,
+            "endTime": null,
+            "adPlaceId": 0,
+            "displayAmountMount": null,
+            "clickAmountMount": null,
+            "displayAmountDay": null,
+            "clickAmountDay": null,
+            "displayClickDay": null,
+            "displayClickMonth": null
+        }
+    ]
+}
