@@ -9,7 +9,7 @@
        >
        <div></div>
       <div class="search">
-        <input type="" name="" v-model="keyWord" placeholder="请输入.....">
+        <input type="" name="" v-model="keyWord" placeholder="输入地点进行查询">
         <span class="searchBtn" @click="searchLocaton">搜索</span>
       </div>
       <div id="allmap"></div>
@@ -50,7 +50,6 @@ export default {
   },
   methods: {
     open(){//相当于弹出层初始化
-      this.showLitterMap=false
       this.modal1=true
       if (!this.mapStatus) {// 百度地图API功能
         document.getElementById('allmap').innerHTML=""
@@ -65,7 +64,15 @@ export default {
               renderOptions:{map: map}
             });
             map.addEventListener("click", this.showInfo);
-            this.mapObj.search("昌平");
+            if(this.signLocation.lng==null){
+              this.mapObj.search("昌平");
+            }else{
+              var new_point = new BMap.Point(this.signLocation.lng,this.signLocation.lat);
+              var marker = new BMap.Marker(new_point);  // 创建标注
+              map.addOverlay(marker);              // 将标注添加到地图中
+              map.panTo(new_point); 
+            }
+            
             map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
             this.mapStatus = true;
         },0)
@@ -97,9 +104,12 @@ export default {
         this.litter_map_show=false;
       }else{
         this.litter_map_show=true;
-        document.getElementById('litter_map').innerHTML=""
-        document.getElementById('litter_map').style.width="300px"
-        document.getElementById('litter_map').style.height="200px"
+        setTimeout(()=>{
+          document.getElementById('litter_map').innerHTML=""
+          document.getElementById('litter_map').style.width="300px"
+          document.getElementById('litter_map').style.height="200px"
+        },0)
+        
         setTimeout(()=>{
           var litterMap = new BMap.Map("litter_map");    // 创建Map实例
           litterMap.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
@@ -111,7 +121,7 @@ export default {
           var marker = new BMap.Marker(new_point);  // 创建标注
           litterMap.addOverlay(marker);              // 将标注添加到地图中
           litterMap.panTo(new_point); 
-        },0)
+        },10)
        
         
       }
@@ -121,6 +131,7 @@ export default {
     location:{
       handler:function(){
         this.signLocation=this.location;
+        this.showLitterMaps()
       }
     }
   }
@@ -138,7 +149,7 @@ export default {
       width:300px;height:38px;
       border:1px solid #ccc;
       float: left;
-      text-indent:20px
+      text-indent:10px
     }
     span.searchBtn{
       float: left;

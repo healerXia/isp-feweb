@@ -6,28 +6,31 @@
           <div class="mess_con">
             <ul>
               <li>
-                <span>统一社会信用码:</span><span>11等各环节爱的呼唤2空间</span>
+                <span>统一社会信用码：</span><span>{{storeEditDate.licenseNumber}}</span>
               </li>
               <li>
-                <span>营业期限:</span><span>111(万元)</span>
+                <span>注册资本：</span><span>{{storeEditDate.registeredCapital}}(万元)</span>
               </li>
               <li>
-                <span>成立日期:</span><span>111</span>
+                <span>营业期限：</span><span>{{storeEditDate.time}}</span>
               </li>
               <li>
-                <span>法定代表人:</span><span>111</span>
+                <span>成立日期：</span><span>{{storeEditDate.createTime}}</span>
               </li>
               <li>
-                <span>经营住所:</span><span>111</span>
+                <span>法定代表人：</span><span>{{storeEditDate.legalPerson}}</span>
               </li>
               <li>
-                <span>组织机构代码:</span><span>111</span>
+                <span>经营住所：</span><span>{{storeEditDate.businessAddress}}</span>
               </li>
               <li>
-                <span>客户名称:</span><span>111</span>
+                <span>组织机构代码：</span><span>{{storeEditDate.organizationCode}}</span>
               </li>
               <li>
-                <span>附件:</span><span>111</span>
+                <span>客户名称：</span><span>{{storeEditDate.custName}}</span>
+              </li>
+              <li>
+                <span>附件：</span><span>111</span>
               </li>
             </ul>
           </div>
@@ -48,14 +51,14 @@
                 </span>
               </Form-item>
               <div class="cycle">
-                <Form-item label="营业期限:" prop="begin_time" class='dateInput'>
-                  <Form-item prop="begin_time">
-                    <Date-picker type="date" placeholder="选择开始日期"  v-model="uploadBusi.begin_time"
+                <Form-item label="营业期限:" prop="beginTime" class='dateInput'>
+                  <Form-item prop="beginTime">
+                    <Date-picker type="date" placeholder="选择开始日期"  v-model="uploadBusi.beginTime"
                     :editable="false"></Date-picker>
                   </Form-item>
                   <span class="space">-</span>
-                  <Form-item prop="end_time">
-                    <Date-picker type="date" placeholder="选择结束日期"  v-model="uploadBusi.end_time" 
+                  <Form-item prop="endTime">
+                    <Date-picker type="date" placeholder="选择结束日期"  v-model="uploadBusi.endTime" 
                     :editable="false"></Date-picker>
                   </Form-item>
                   <Checkbox v-model="uploadBusi.forever">
@@ -113,8 +116,8 @@ export default {
         forever:false,
         licenseNumber:"",//统一社会信用代码
         registeredCapital:"",//注册资本
-        begin_time:"",//营业开始时间  ！
-        end_time:"",//营业结束时间  ！
+        beginTime:"",//营业开始时间  ！
+        endTime:"",//营业结束时间  ！
         createTime:"",//创建时间
         legalPerson:"",//法定代表人
         businessAddress:"",//经营住所
@@ -135,7 +138,7 @@ export default {
           { type: 'string', max:10, message: '不能超过10个字符', trigger: 'blur'}
         ],
         businessAddress:[{required:true,message:'请填写经营住所',trigger: 'blur',type:"string"}],
-        begin_time: [{required:true,message:'请填写开始日期',trigger:'change',type:"date"}],
+        beginTime: [{required:true,message:'请填写开始日期',trigger:'change',type:"date"}],
         createTime: [{required: true,message:'请填写成立日期',trigger:'change',type:"date"}],
       },
       judgeErr:{
@@ -147,19 +150,34 @@ export default {
         uploadErr:"",
         reg_cap_err:""
       },
-      storeEditDate:{},
+      storeEditDate:{
+        licenseNumber: "",//统一社会信用代码
+        registeredCapital: "",//注册资本
+        time: "",//营业期限
+        beginTime:"",
+        endTime:"",
+        createTime: "",//年检年份
+        legalPerson: "",//法定代表人
+        businessAddress: "",//经营住所
+        organizationCode: "",//组织机构代码
+        custName: "",//客户名称
+        salve: ""//营业执照附件
+      },
     }
   },
   created(){
     this.storeEditDate=this.editData
+    if(this.storeEditDate.licenseNumber){
+      this.showMessBox=true
+    }
   },
   methods: {
       openDialog(){
         this.modal1=true      
         if(this.storeEditDate.licenseNumber){//进行回填数据
           this.uploadBusi.registeredCapital=this.storeEditDate.registeredCapital
-          this.uploadBusi.begin_time=new Date(this.storeEditDate.beginTime)
-          this.uploadBusi.end_time=new Date(this.storeEditDate.beginTime)
+          this.uploadBusi.beginTime=new Date(this.storeEditDate.beginTime)
+          this.uploadBusi.endTime=new Date(this.storeEditDate.endTime)
           this.uploadBusi.licenseNumber=this.storeEditDate.licenseNumber;
           this.uploadBusi.createTime=new Date(this.storeEditDate.createTime)
           this.uploadBusi.legalPerson=this.storeEditDate.legalPerson
@@ -191,7 +209,10 @@ export default {
         })
       },
       cancel (name) {
-        this.$refs[name].resetFields();
+        if(this.storeEditDate.licenseNumber){
+          this.$refs[name].resetFields();
+        }
+        
         this.modal1=false
       },
       valueCheck(){
@@ -212,17 +233,17 @@ export default {
         }
       },
       dateChange(){//提示时间错误信息
-          if(this.uploadBusi.begin_time==""){
+          if(this.uploadBusi.beginTime==""){
              this.errorCon.dateErr="请填写营业期限"
              return false
           }
           if(!this.uploadBusi.forever){
-            if(this.uploadBusi.end_time==""){
+            if(this.uploadBusi.endTime==""){
               this.errorCon.dateErr="请填写营业期限"
               return false
             }else{
-              let bdateStamp=new Date(this.uploadBusi.begin_time)
-              let edateStamp=new Date(this.uploadBusi.end_time)
+              let bdateStamp=new Date(this.uploadBusi.beginTime)
+              let edateStamp=new Date(this.uploadBusi.endTime)
               if(bdateStamp>edateStamp){
                 this.errorCon.dateErr="开始不能大于结束"
                 return false
@@ -246,12 +267,27 @@ export default {
       },
       fileUploadSuccess(response, file, fileList){
           
+      },
+      formatTen(num) { 
+        return num > 9 ? (num + "") : ("0" + num); 
+      },
+      formatDate(date) { //时间格式的转换 标准->正常
+        var year = date.getFullYear(); 
+        var month = date.getMonth() + 1; 
+        var day = date.getDate(); 
+        var hour = date.getHours(); 
+        var minute = date.getMinutes(); 
+        var second = date.getSeconds(); 
+        return year + "-" + this.formatTen(month) + "-" + this.formatTen(day); 
       }
   },
   watch:{
     editData:{
       handler:function(){
-         this.storeEditDate=this.editData
+          this.storeEditDate=this.editData
+          if(this.storeEditDate.licenseNumber){
+            this.showMessBox=true
+          }
       }
     }
   }

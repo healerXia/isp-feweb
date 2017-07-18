@@ -6,21 +6,24 @@
           <div class="mess_con">
             <ul>
               <li>
-                <span>纳税人识别号:</span><span>111</span>
+                <span>纳税人识别号：</span><span>{{storeEditDate[0].taxCode}}</span>
               </li>
               <li>
-                <span>有效期:</span><span>111</span>
+                <span>有效期：</span><span>{{storeEditDate[0].validTime}}</span>
               </li>
               <li>
-                <span>资质状态:</span><span>111</span>
+                <span>资质状态：</span><span>{{storeEditDate[0].status}}</span>
               </li>
-              <li v-for="index in 2">
+              <li v-for="(item,index) in storeEditDate">
                 <ul>
-                  <li><span>开户银行({{index}}):</span><span>111</span></li>
-                  <li><span>开户银行({{index}}):</span><span>111</span></li>
-                  <li><span>开户银行({{index}}):</span><span>111</span></li>
-                  <li><span>开户银行({{index}}):</span><span>111</span></li>
+                  <li><span>开户银行({{index+1}})：</span><span>{{item.bank}}</span></li>
+                  <li><span>开户账号({{index+1}})：</span><span>{{item.bankAccount}}</span></li>
+                  <li><span>电话({{index+1}})：</span><span>{{item.phone}}</span></li>
+                  <li><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
                 </ul>
+              </li>
+               <li>
+                <span>附件:</span><span>111</span>
               </li>
             </ul>
           </div>
@@ -104,9 +107,10 @@
 
 <script>
 export default {
+    props:['editData'],
     data () {
         return {
-          showMessBox:false,
+          showMessBox:true,
           modal1: false,
           uploadPay:{
             tax_code:"",//纳税人识别号
@@ -142,16 +146,47 @@ export default {
           ],
           checkValue:{
             tax_code:[{required:true,message:'请输入纳税人识别号',trigger:'blue',type:"string"}]
-          }          
+          },
+          storeEditDate:[]
         }
     },
+    created(){
+      this.storeEditDate=this.editData
+      if(this.storeEditDate.length>=1){
+        this.showMessBox=true
+      }
+    },
     methods: {
-      open(){//相当于弹出层初始化
-        
+      open(){//相当于弹出层初始化      
         //如果是接口
         //进来，先判断纳税人识别号是不是空，如果是空，隐藏框子
         //如果不是打开框子
         //然后看开户信息， 有几条显示几条，没有的话就显示一行空的
+        if(this.storeEditDate[0].taxCode){//进行回填数据
+          this.uploadPay.tax_code=this.storeEditDate[0].taxCode
+          this.accMessArr=[];
+          for(let i=0;i<this.storeEditDate.length;i++){
+            let obj={}
+            obj.bank=this.storeEditDate[i].bank;
+            obj.bank_account=this.storeEditDate[i].bankAccount;
+            obj.tel=this.storeEditDate[i].phone;
+            obj.address=this.storeEditDate[i].address;
+            obj.errShow={
+              scale_acc:false,
+              bank_account_err_show:false,
+              tel_err_show:false,
+              bank_err_show:false,
+              address_err_show:false
+            },
+            obj.errMess={
+              bank_account_err:"",
+              tel_err:"",
+              bank_err:"",
+              address_err:""
+            }
+            this.accMessArr.push(obj);
+          }
+        }
         setTimeout(()=>{
           this.modal1=true
         },0)        
@@ -176,7 +211,7 @@ export default {
             tel:"",//电话
             address:"",//地址
             errShow:{
-              scale_acc:false,
+              scale_acc:false,//放大
               bank_account_err_show:false,
               tel_err_show:false,
               bank_err_show:false,
@@ -361,6 +396,16 @@ export default {
         this.$refs[name].resetFields();
         this.modal1=false
       },
+    },
+    watch:{
+      editData:{
+        handler:function(){
+          this.storeEditDate=this.editData
+          if(this.storeEditDate.length>=1){
+            this.showMessBox=true
+          }
+        }
+      }
     }
 }
 </script>

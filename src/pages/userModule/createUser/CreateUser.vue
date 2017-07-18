@@ -34,6 +34,25 @@
                    </Select>
                 </Form-item>
               </div>
+              <div :class="showNeed.agence_id_show">
+                <Form-item label="所属经销商:" prop="agence_id"
+                v-if="formValidate.custType==7||formValidate.custType==8||formValidate.custType==9">
+                  <Select
+                  :clearable="true"
+                  placeholder="请选择所属经销商"
+                  v-model="formValidate.agence_id"
+                  :loading="loading.agenceIdLoad"
+                  filterable
+                  remote
+                  :label-in-value="true"
+                  :remote-method="agenceIdChoose"
+                   @on-change="agenceIdChange"
+                  >
+                 <Option :key="new Date()" v-for="option in optionArr.agenceIdOption" :value="option.value">{{option.name}}</Option>
+                   </Select>
+                 </Select>
+                </Form-item>
+              </div>
               <div :class="showNeed.custSub_show">
                 <Form-item label="客户子类别:" prop="custSub" 
                     v-if="formValidate.custType==4||formValidate.custType==5||formValidate.custType==6||formValidate.custType==7||formValidate.custType==8||formValidate.custType==9||formValidate.custType==''"
@@ -42,7 +61,7 @@
                     :clearable="true"
                     placeholder="请选择客户子类别"
                     v-model="formValidate.custSub">
-                  <Option :value="1">111</Option>
+                  <Option :value="option.value" v-for="option in optionArr.custSubOption" :key="new Date()">{{option.name}}</Option>
                   </Select>
                 </Form-item>
               </div>
@@ -58,10 +77,16 @@
                 <Form-item label="所属集团:" prop="group_id"
                 v-if="!(formValidate.custType==1||formValidate.custType==2||formValidate.custType==3)||formValidate.custType==''">
                   <Select
-                  :clearable="true"
-                  placeholder="请选择所属集团"
-                  v-model="formValidate.group_id">
-                 <Option >111</Option>
+                   :clearable="true"
+                    placeholder="请选择所属集团"
+                    v-model="formValidate.group_id"
+                   :loading="loading.groupIdLoad"
+                    filterable
+                    remote
+                    :label-in-value="true"
+                    :remote-method="groupIdChoose"
+                  >
+                 <Option :key="new Date()" v-for="option in optionArr.groupIdOption" :value="option.value">{{option.name}}</Option>
                  </Select>
                 </Form-item>
               </div>
@@ -71,8 +96,14 @@
                     <Select
                     :clearable="true"
                     placeholder="请选择所属厂商"
-                    v-model="formValidate.cust_pid">
-                   <Option :value="1">111</Option>
+                    v-model="formValidate.cust_pid"
+                    :loading="loading.custPidLoad"
+                    filterable
+                    remote
+                    :label-in-value="true"
+                    :remote-method="custPidChoose"
+                    >
+                   <Option :key="new Date()" v-for="option in optionArr.custPidOption" :value="option.value">{{option.name}}</Option>
                    </Select>
                 </Form-item>
               </div>
@@ -82,9 +113,14 @@
                     <Select
                     :clearable="true"
                     placeholder="请选择销售网络"
-                    v-model="formValidate.sellWeb">
-                   <Option :value="1">111</Option>
-                   <Option :value="2">2222</Option>
+                    v-model="formValidate.sellWeb"
+                    :loading="loading.sellWebLoad"
+                    filterable
+                    remote
+                    :label-in-value="true"
+                    :remote-method="sellWebChoose"
+                    >
+                   <Option :key="new Date()" v-for="option in optionArr.sellWebOption" :value="option.value">{{option.name}}</Option>
                    </Select>
                 </Form-item>
               </div>
@@ -101,8 +137,9 @@
                     <Select
                     :clearable="true"
                     placeholder="请选择客户行业"
-                    v-model="formValidate.industry_id">
-                   <Option :value="1">111</Option>
+                    v-model="formValidate.industry_id"
+                    >
+                   <Option :key="new Date()" :value="option.value" v-for="option in optionArr.industryOption">{{option.name}}</Option>
                    </Select>
                 </Form-item>
               </div>
@@ -110,11 +147,18 @@
                 <Form-item label="主营品牌:" prop="brand_id"
                   v-if="formValidate.custType!=2||formValidate.custType==''">
                     <Select
+                    multiple
                     :clearable="true"
                     placeholder="请选择主营品牌"
-                    v-model="formValidate.brand_id">
-                   <Option :value="1">111</Option>
-                   <Option :value="2">2221</Option>
+                    v-model="formValidate.brand_id"
+                    :loading="loading.brandIdLoad"
+                    filterable
+                    remote
+                    :label-in-value="true"
+                    :remote-method="brandIdChoose"
+                    @on-change="brandIdChange"
+                    >
+                   <Option :key="new Date()" :value="option.value" v-for="option in optionArr.brandIdOption">{{option.name}}</Option>
                    </Select>
                 </Form-item>
               </div>
@@ -154,8 +198,14 @@
                     <Select
                     :clearable="true"
                     placeholder="请选择所属4S"
-                    v-model="formValidate.the4S">
-                   <Option >111</Option>
+                    v-model="formValidate.the4S"
+                    :loading="loading.the4SLoad"
+                    filterable
+                    remote
+                    :label-in-value="true"
+                    :remote-method="the4SChoose"
+                    >
+                    <Option :key="new Date()" v-for="option in optionArr.the4SOption" :value="option.value">{{option.name}}</Option>
                    </Select>
                 </Form-item>
               </div>
@@ -168,7 +218,7 @@
                 <Form-item label="地图:" prop="map" 
                  v-if="formValidate.custType==7">
                   <DialogMap 
-                    v-bind:location="mapLocation.store_4s" v-on:stroe="getFourSLoation">                  
+                    v-bind:location="mapLocation.store_4s" v-on:stroe="getFourSLoation">               
                   </DialogMap>
                 </Form-item>
               </div>
@@ -211,10 +261,10 @@
                   <UploadBusiness v-on:uploadbus="getUploadBusiness" :editData="uploadBusiObj"></UploadBusiness>
                 </Form-item>
                 <Form-item label="品牌授权书:" prop="custName">
-                  <UploadBrand v-on:uploadbrand="getUploadBrand"></UploadBrand>
+                  <UploadBrand v-on:uploadbrand="getUploadBrand" :editData="uploadBrandArr"></UploadBrand>
                 </Form-item>
                 <Form-item label="纳税资质证明:" prop="custName">
-                  <UploadPay v-on:uploadpay="getUploadPay"></UploadPay>
+                  <UploadPay v-on:uploadpay="getUploadPay" :editData="uploadPayArr"></UploadPay>
                 </Form-item>
               </div>
               <Form-item>
@@ -249,8 +299,39 @@
       },
       data () {
         return {
+          selectedBrand:[],//选中的品牌
           clearObj:null,
           need:true,
+          loading:{
+            custPidLoad:true,//所属厂商
+            groupIdLoad:true,//所属集团
+            the4SLoad:true,//所属4s
+            agenceIdLoad:true,//经销商
+            sellWebLoad:true,//销售网络
+            brandIdLoad:true,//主营品牌
+          },
+          optionArr:{//下拉列表
+            provinceOption:[],//省列表
+            cityOption:[],//城市列表
+            areaOption:[],//区县列表
+            custSubOption:[//客户子类别
+              {name:"4s",value:1},
+              {name:"特许经销商",value:2},
+              {name:"综合店",value:3}
+            ],
+            industryOption:[//客户行业
+              {name:"汽车销售",value:1},
+              {name:"汽车生产",value:2},
+              {name:"汽车服务",value:3},
+              {name:"其他",value:4}
+            ],
+            custPidOption:[],//所属厂商
+            groupIdOption:[],//所属集团
+            the4SOption:[],//所属4s
+            agenceIdOption:[],//经销商
+            sellWebOption:[],//销售网络
+            brandIdOption:[]//主营品牌
+          },
           showOptions:{
             cust1:1,//厂商
             cust2:2,//厂商大区
@@ -267,6 +348,7 @@
           showNeed:{//操作是否显示必填
             cust_name_show:"",//客户名称+ 
             custType_show:"",//客户类别
+            agence_id_show:"",//所属经销商
             abbr_name_show:"",//客户简称 +         
             brand_id_show:"",//主营品牌+
             industry_id:"",//客户行业+
@@ -290,10 +372,11 @@
             custType:"",//客户类别
             abbr_name:"",//客户简称 +         
 
-            brand_id:"",//主营品牌+
+            brand_id:[],//主营品牌+
             industry_id:"",//客户行业+
             group_id:"",//所属集团+
             cust_pid:"",//所属厂商+
+            agence_id:"",//所属经销商
             sellWeb:"",//销售网络
             precinct:"",//管辖区域
             custSub:"",//客户子类别
@@ -315,11 +398,6 @@
             {name:"门店-4S",value:7},{name:"门店-特许经销商",value:8},
             {name:"门店-综合",value:9},{name:"汽车服务商",value:10},{name:"其他",value:11}
           ],
-          optionArr:{//下拉列表
-            provinceOption:[],
-            cityOption:[],
-            areaOption:[]
-          },
           ruleValidate: {//验证
             cust_name: [
               {required: true, message:'请填写客户名称',trigger:'blur'},
@@ -336,7 +414,7 @@
               {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
             ],
             brand_id:[
-              {required: true, message:'请选择主营品牌',trigger:'change',type:"number"},
+              {required: true, message:'请选择主营品牌',trigger:'change',type:"array"},
             ],
             province_id:[
               {required: true, message:' ',trigger:'change',type:"number"},
@@ -363,44 +441,46 @@
           //组件里的信息
           mapLocation:{//地图标记点
             store_4s:{
-               lng:null,
-                lat:null
-            },
-            store_colligate:{
-               lng:null,
-              lat:null
-            },
-            store_agency:{
+              // lng:116.399084,
+              // lat:39.852553
               lng:null,
               lat:null
+            },
+            store_colligate:{
+              lng:115.539011,
+              lat:40.405972
+            },
+            store_agency:{
+              lng:115.199811,
+              lat:38.758242
             }
           },
           checkedAreaList:[//管辖区域地址
-            {
-              name: '安徽省',
-              status: false,
-              id:430,
-              children: [
-                  {
-                      name: '合肥',
-                  },
-                  {
-                      name: '芜湖',
-                  }
-              ]
-            },
-            {
-              id:435,
-              name: '河北省',
-              status: true,
-            },
-            {
-              id:431,
-              name: '北京市',
-              status: true,
-            }                 
+            // {
+            //   name: '安徽省',
+            //   status: false,
+            //   id:430,
+            //   children: [
+            //       {
+            //           name: '合肥',
+            //       },
+            //       {
+            //           name: '芜湖',
+            //       }
+            //   ]
+            // },
+            // {
+            //   id:435,
+            //   name: '河北省',
+            //   status: true,
+            // },
+            // {
+            //   id:431,
+            //   name: '北京市',
+            //   status: true,
+            // }                 
           ],
-          uploadBusiObj:{
+          uploadBusiObj:{//上传营业执照
             licenseNumber: "12356789",//统一社会信用代码
             registeredCapital: "1000000",//注册资本
             time: " 2016-12-29至永久",//营业期限
@@ -413,27 +493,57 @@
             custName: "易车网",//客户名称
             salve: ""//营业执照附件
           },
-          uploadBrandObj:{
-
-          }
+          uploadBrandArr:[//上传品牌授权书
+            {
+              brand_id: "22",
+              brand_name: "授权品牌名称",
+              validTime: "2016-12-29",
+              createTime: "2016-12-29",
+              salve: ""
+            }
+          ],
+          uploadPayArr:[
+            {
+              taxCode: "AA456456465461",
+              validTime:"2016-12-29",
+              status: "1",
+              bank: "中国银行",
+              bankAccount: "HUOXIN888",
+              phone:"18610659554",
+              address:"北京市昌平区",
+              salve: ""
+            },
+            {
+              taxCode: "AA456456465461",
+              validTime: " 2016-12-29",
+              status: "1",
+              bank: "中国银行",
+              bankAccount: "HUOXIN888",
+              phone:"18610659554",
+              address:"北京市昌平区",
+              salve: ""
+            }
+          ]
         }
       },
       created() {//页面数据初始化
-        setTimeout(()=>{
-          this.uploadBusiObj={
-            licenseNumber: "12356789",//统一社会信用代码
-            registeredCapital: "1000000",//注册资本
-            time: " 2016-12-29至永久",//营业期限
-            createTime: "2016-12-29",//年检年份
-            beginTime:"2016-12-29",
-            endTime:"2017-01-10",
-            legalPerson: "张三",//法定代表人
-            businessAddress: "北京市昌平区",//经营住所
-            organizationCode: "AE86110",//组织机构代码
-            custName: "易车网",//客户名称
-            salve: "1111"//营业执照附件
-          }
-        },1000)
+        // if(!this.$router.currentRoute.query.id){//不是编辑页面
+        //   this.setSelectOption("","","","","")
+        //   this.$http.get(config.urlList.getSerial+"?pageSize=10").then((res) => {//主营品牌
+        //     if(res.data.errorCode===0){
+        //       this.optionArr.brandIdOption=res.data.result;
+        //       this.loading.brandIdOption=false
+        //     }
+        //     else {
+        //       this.$Modal.info({
+        //           title: '提示',
+        //           content: res.data.errorMsg
+        //       });
+        //     }
+        //     }).catch((err) => {
+        //   })
+        // }
+        /***********页面创建区域***********/
         this.$http.get(config.urlList.getArea+"?pId=-1&pageSize=32").then((res)=>{//获取省级地区
           if(res.data.errorCode===0){
              this.optionArr.provinceOption=res.data.result
@@ -444,8 +554,16 @@
                 content: res.data.errorMsg
             });
           }
-          }).catch((res)=>{}
-        )
+          }).catch((res)=>{
+        })
+        /******编辑区域**********/
+        setTimeout(()=>{
+          let id=this.$router.currentRoute.query.id
+          if(true){
+            this.setSelectOption("奔驰E级（进口）停用","奔驰R级","奔驰R级","奔驰R级","奔驰R级")
+            this.getBrandOption(["朗杰","大切诺基","帕杰罗速跑"],[1559,1560,1561])
+          }
+        },0)
       },
       methods:{
         getCheckArea(data){//组件 获取选择的地区
@@ -461,20 +579,143 @@
           this.mapLocation.store_agency=location
         },
         getUploadBusiness(data){//组件 获取上传营业执照
-          console.log(data)
+          let obj={}
+          for(let i in data){
+            obj[i]=data[i]
+          }
+          obj.createTime=this.formatDate(obj.createTime)
+          obj.beginTime=this.formatDate(obj.beginTime)
+          obj.endTime=this.formatDate(obj.endTime)
+
+          obj.time=
+          obj.forever?
+          obj.beginTime+"至永久"
+          :obj.beginTime+"至"+obj.endTime
+          this.uploadBusiObj=obj
         },
-        getUploadBrand(data){//组件 获取上传营业执照
-          console.log(data)
+        getUploadBrand(data){//组件 获取上传品牌授权书
+          let obj={}
+          for(let i in data){
+            obj[i]=data[i]
+          }
+          obj.validTime=this.formatDate(data.validTime)
+          obj['createTime']=this.formatDate(data.validTime)
+          this.uploadBrandArr.push(obj)
         },
-        getUploadPay(data){//组件 获取上传营业执照
-          console.log(data)
+        getUploadPay(data){//组件 获取上传纳税资质证明
+        },
+        /*********编辑与新建的时候下拉的回填************/
+        setSelectOption(group,custPid,the4S,agence,sellWeb){//单选
+          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+group).then((res) => {//所属集团
+            if(res.data.errorCode===0){
+              this.optionArr.groupIdOption=res.data.result;
+              setTimeout(()=>{
+                if(group!=""&&this.optionArr.groupIdOption.length==1){
+                  this.formValidate.group_id=this.optionArr.groupIdOption[0].value
+                }
+              },0)
+              this.loading.groupIdLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+custPid).then((res) => {//所属厂商
+            if(res.data.errorCode===0){
+              this.optionArr.custPidOption=res.data.result;
+              setTimeout(()=>{
+                if(custPid!=""&&this.optionArr.custPidOption.length==1){
+                  this.formValidate.cust_pid=this.optionArr.custPidOption[0].value
+                }
+              },0)
+              this.loading.custPidLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+the4S).then((res) => {//所属4S
+            if(res.data.errorCode===0){
+              this.optionArr.the4SOption=res.data.result;
+              setTimeout(()=>{
+                if(the4S!=""&&this.optionArr.the4SOption.length==1){
+                  this.formValidate.the4S=this.optionArr.the4SOption[0].value
+                }
+              },0)
+              this.loading.the4SLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+agence).then((res) => {//所属经销商
+            if(res.data.errorCode===0){
+              this.optionArr.agenceIdOption=res.data.result;
+              setTimeout(()=>{
+                if(agence!=""&&this.optionArr.agenceIdOption.length==1){
+                  this.formValidate.the4S=this.optionArr.agenceIdOption[0].value
+                }
+              },0)
+              this.loading.agenceIdLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+sellWeb).then((res) => {//销售网络
+            if(res.data.errorCode===0){
+              this.optionArr.sellWebOption=res.data.result;
+              setTimeout(()=>{
+                if(sellWeb!=""&&this.optionArr.sellWebOption.length==1){
+                  this.formValidate.sellWeb=this.optionArr.sellWebOption[0].value
+                }
+              },0)
+              this.loading.sellWebLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+        },
+        getBrandOption(nameArr,idArr){//主营品牌回填的时候
+          var resultArr=[]
+          for(let i=0;i<nameArr.length;i++){
+            let item={};
+            item['name']=nameArr[i];
+            item['value']=idArr[i];
+            resultArr.push(item);
+          }
+          this.optionArr.brandIdOption=resultArr
+          this.loading.brandIdLoad=false
+          setTimeout(()=>{
+            this.formValidate.brand_id=idArr
+          },0)
         },
         //提交数据
         submit (name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
                   let lastCheck=this.checkValue()
-
                   if (lastCheck) {
                     this.$Message.success('提交成功!');
                   }
@@ -487,6 +728,7 @@
         cancle (name) {
           this.$refs[name].resetFields();
         },
+        //提交数据的时候，值得处理
         operSubmitData(){
           let submitData={};
           //公共都有的
@@ -522,9 +764,11 @@
             submitData['brand_id']=this.formValidate.brand_id//主营品牌
           }else if(this.formValidate.custType==6){
             submitData['group_id']=this.formValidate.group_id//所属集团
+            submitData['custSub']=this.formValidate.custSub//客户子类别
             submitData['industry_id']=this.formValidate.industry_id//客户行业
             submitData['brand_id']=this.formValidate.brand_id//主营品牌
           }else if(this.formValidate.custType==7||this.formValidate.custType==8||this.formValidate.custType==9){
+             submitData['agence_id']=this.formValidate.agence_id//所属经销商
             submitData['custSub']=this.formValidate.custSub//客户子类别
             submitData['group_id']=this.formValidate.group_id//所属集团
             submitData['brand_id']=this.formValidate.brand_id//主营品牌
@@ -541,6 +785,7 @@
             submitData['brand_id']=this.formValidate.brand_id//主营品牌
           }
         },
+        //提交前对数据进行检查
         checkValue(){
           this.areaCheck()//这个是提交的时候检查地区的，显示错误提示
 
@@ -553,6 +798,9 @@
               return true
             }
           }
+        },
+        brandIdChange(value){
+          this.selectedBrand=value;
         },
         provinceChange(){//省列表change事件
           this.judgeShow.areaErrShow=false
@@ -609,6 +857,177 @@
           }else{
             this.judgeShow.areaErrShow=false
           }
+        },
+        agenceIdChange(value){
+          //当所属经销商的值发生变化时
+          //客户子类别的下拉选项也要发生变化
+          if(value==1){
+            this.optionArr.custSubOption=[
+              {name:"4s",value:1},
+              {name:"特许经销商",value:2},
+              {name:"综合店",value:3}
+            ]
+            this.formValidate.custSub=""
+          }else if(value==2){
+            this.optionArr.custSubOption=[
+              {name:"特许经销商",value:2},
+              {name:"综合店",value:3}
+            ]
+            this.formValidate.custSub=""
+          }else if(value==3){
+            this.optionArr.custSubOption=[{name:"综合店",value:3}]
+            this.formValidate.custSub=""
+          }
+        },
+        formatTen(num) { 
+          return num > 9 ? (num + "") : ("0" + num); 
+        },
+        formatDate(date) { //时间格式的转换 标准->正常
+          console.log(date)
+          var year = date.getFullYear(); 
+          var month = date.getMonth() + 1; 
+          var day = date.getDate(); 
+          var hour = date.getHours(); 
+          var minute = date.getMinutes(); 
+          var second = date.getSeconds(); 
+          return year + "-" + this.formatTen(month) + "-" + this.formatTen(day); 
+        },
+        //下拉列表过滤
+        groupIdChoose (query) {//所属集团过滤
+          if(query==""){
+            this.formValidate.group_id=""
+          }
+          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//所属集团
+            if(res.data.errorCode===0){
+              this.optionArr.groupIdOption=res.data.result;
+              this.loading.groupIdLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {})
+        },
+        custPidChoose (query){//所属厂商过滤
+          if(query==""){
+            this.formValidate.cust_pid=""
+          }
+          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//所属集团
+            if(res.data.errorCode===0){
+              this.optionArr.custPidOption=res.data.result;
+              this.loading.custPidLoadi=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {})
+        },
+        the4SChoose (query) {//所属4s
+          if(query==""){
+            this.formValidate.the4S=""
+          }
+          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {
+            if(res.data.errorCode===0){
+              this.optionArr.the4SOption=res.data.result;
+              this.loading.the4SLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {})
+        },
+        agenceIdChoose (query){//所属经销商
+          if(query==""){
+            this.formValidate.agence_id=""
+          }
+          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//所属集团
+            if(res.data.errorCode===0){
+              this.optionArr.agenceIdOption=res.data.result;
+              this.loading.agenceIdLoadn=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {})
+        },
+        sellWebChoose (query){//销售网络
+          if(query==""){
+            this.formValidate.sellWeb=""
+          }
+          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//所属集团
+            if(res.data.errorCode===0){
+              this.optionArr.sellWebOption=res.data.result;
+              this.loading.sellWebLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {})
+        },
+        brandIdChoose(query){//主营品牌
+          console.log(query)
+          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//投放品牌
+            if(res.data.errorCode===0){
+              console.log(res.data.result)
+              for(let i=0;i<res.data.result.length;i++){
+                for(let j=0;j<this.selectedBrand.length;j++){
+                  if(this.selectedBrand[j].value==res.data.result[i].value){
+                    res.data.result.splice(i,1)
+                  }
+                }
+              }
+              this.optionArr.brandIdOption=res.data.result
+              for(let i=0;i<this.selectedBrand.length;i++){
+                this.selectedBrand[i].name=this.selectedBrand[i].label;
+                this.optionArr.brandIdOption.push(this.selectedBrand[i])
+              }
+              this.loading.brandIdLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+        },
+        toArr(str){//把字符串变成数组
+          if(str==null){
+            return [];
+          }
+          if(str.length==0){
+            return []
+          }else if(str.length==1){
+            return [parseInt(str)]
+          }else if(str.replace(/\,/g,"").match(/^(\d+)$/)){
+            return  Array.from(str.split(","), (x) => parseInt(x))
+          }else {
+            return str.split(",")
+          }
+        },
+        toStr(arr){//把字符串变成数组
+          if(arr.length==0){
+            return ""
+          }else if(arr.length==1){
+            return ''+arr[0]
+          }else{
+            return  arr.join(',')
+          }
         }
       },
       computed: {//计算属性
@@ -640,7 +1059,7 @@
                 {required: true, message:'请选择客户行业',trigger:'change',type:"number"},
             ]; this.showNeed.industry_id_show="hasneed"
             this.ruleValidate.brand_id=[
-                  {required: true, message:'请选择主营品牌',trigger:'change',type:"number"}
+                  {required: true, message:'请选择主营品牌',trigger:'change',type:"array"}
             ];this.showNeed.brand_id_show="hasneed"
             this.ruleValidate.province_id=[
                  {required: true, message:' ',trigger:'change',type:"number"},
@@ -749,7 +1168,7 @@
             ]; this.showNeed.industry_id_show="hasneed"
 
             this.ruleValidate.brand_id=[
-              {required: true, message:'请选择主营品牌',trigger:'change',type:"number"},
+              {required: true, message:'请选择主营品牌',trigger:'change',type:"array"},
             ];  this.showNeed.brand_id_show="hasneed"
 
             this.ruleValidate.province_id=[
@@ -840,6 +1259,10 @@
               {required: true, message:'请选择客户子类别',trigger:'change',type:"number"},
             ]; this.showNeed.custSub_show="hasneed";
 
+            this.ruleValidate.agence_id=[
+                {required: true, message:'请选择所属经销商',trigger:'change',type:"number"}
+            ]; this.showNeed.agence_id_show="hasneed";
+
             this.ruleValidate.cust_name=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
                 {max:25, message:'不能超过25个汉字',trigger:'blur'}
@@ -861,7 +1284,7 @@
 
             if(this.formValidate.custType==7||this.formValidate.custType==8){
               this.ruleValidate.brand_id=[
-               {required: true, message:'请选择主营品牌',trigger:'change',type:"number"},
+               {required: true, message:'请选择主营品牌',trigger:'change',type:"array"},
               ];
               this.showNeed.brand_id_show="hasneed";
             }

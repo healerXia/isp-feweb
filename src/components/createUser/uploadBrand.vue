@@ -9,7 +9,10 @@
             <tr><td>授权品牌</td><td>有效期</td><td>上传日期</td><td>附件</td></tr>
           </thead>
           <tbody>
-            <tr><td>111</td><td>222</td><td>3333</td><td>查看</td></tr>
+            <tr v-for="item in storeEditDate">
+              <td v-for="key in tableKey">{{item[key]}}</td>
+              <td>查看</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -23,13 +26,15 @@
               <Select class="fl"
               :clearable="true"
               placeholder="请选择授权品牌"
+              :label-in-value="true"
+              @on-change="brandChange"
               v-model="uploadBrand.brand_id">
                 <Option :value="322" :key="new Date()">111</Option>
                 <Option :value="22" :key="new Date()">211</Option>
              </Select>
           </Form-item>
-          <Form-item label="有效期:" prop="valid_time">
-             <Date-picker type="date" placeholder="请选择有效期"  v-model="uploadBrand.valid_time" :editable="false" class="fl"></Date-picker>
+          <Form-item label="有效期:" prop="validTime">
+             <Date-picker type="date" placeholder="请选择有效期"  v-model="uploadBrand.validTime" :editable="false" class="fl"></Date-picker>
           </Form-item>
           <div class="upload">
             <span class="label">附件:</span>
@@ -67,7 +72,7 @@ export default {
         uploadBrand:{
           brand_id:"",//授权品牌id
           brand_name:"",//授权品牌名称
-          valid_time:"",//有效期
+          validTime:"",//有效期
           salve:""//  授权书附件
         },
         judgeErr:{
@@ -80,23 +85,24 @@ export default {
           brand_id:[
              {required:true,message:'请选择授权品牌',trigger:'change',type:"number"}
           ],
-          valid_time: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
+          validTime: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
         },
-        storeEditDate:{},
+        storeEditDate:[],
+        tableKey:["brand_name","createTime","validTime"]
     }
   },
   created(){
-    this.storeEditDate=this.editData
+    this.storeEditDate=this.editData;
+    if(this.storeEditDate.length>=1){
+      this.showMessBox=true
+    }
   },
   methods: {
+    brandChange(value){
+      this.uploadBrand.brand_name=value.label;
+    },
     openDialog(){
-      this.modal1=true      
-      if(this.storeEditDate.brand_id){//进行回填数据
-        this.uploadBrand.brand_name=this.storeEditDate.brand_name
-        this.uploadBrand.brand_id=this.storeEditDate.brand_id
-        this.uploadBrand.valid_time=new Date(this.storeEditDate.valid_time)
-      }
-
+      this.modal1=true   
     },
     submit (name) {
       this.$refs[name].validate((valid) => {
@@ -133,7 +139,10 @@ export default {
   watch:{
     editData:{
       handler:function(){
-         this.storeEditDate=this.editData
+        this.storeEditDate=this.editData;
+        if(this.storeEditDate.length>=1){
+          this.showMessBox=true
+        }
       }
     }
   }

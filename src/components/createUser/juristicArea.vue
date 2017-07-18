@@ -28,7 +28,7 @@
             </div>
         </div>
         <div slot="footer" class="footer">           
-            <Button type="primary" class="btn bg4373F3" @click="submit">提交</Button >
+            <Button type="primary" class="btn bg4373F3" @click="submit" :disabled="clickSubmit">提交</Button >
             <Button type="primary" class="btn bgCancle ML15" @click="cancel">取消</Button>
         </div>
     </Modal>
@@ -40,6 +40,7 @@
         props:['checkedAreaList'],
         data() {
             return {
+                clickSubmit:true,
                 positions:false,
                 modal1:false,
                 value: -1,
@@ -49,7 +50,8 @@
             }
         },
         created(){
-           this.lists=this.checkedAreaList 
+            console.log(11)
+            this.lists=this.checkedAreaList 
         },
         methods: {
             submit(){
@@ -65,9 +67,10 @@
                         let obj={};
                         let checkChildren=[];
                         let children=this.areaList[i].children;
+                        // console.log(this.areaList[i].children)
                         if(children){
                             for(let j=0;j<children.length;j++){
-                                if(children[j].sttaus==true){
+                                if(children[j].status==true){
                                     checkChildren.push(children[j])
                                 }
                             }
@@ -98,9 +101,11 @@
                             this.areaList[i]['operate']=false;
                             this.areaList[i]['children']=null;
                         }
-                        if(this.lists){
+                        if(this.lists.length>=1){
                             this.initProvence()
                             this.initLable()
+                        }else{
+                            this.clickSubmit=false
                         }
                     }
                     else {
@@ -228,6 +233,10 @@
                         if(this.lists[i].status==true){
                             if(this.lists[i].name==this.areaList[j].name){
                                 this.areaList[j].status=true
+                                if(i==this.lists.length-1){
+                                    this.clickSubmit=false
+                                }
+                               
                             }
                         }else{
                             if(this.lists[i].name==this.areaList[j].name){
@@ -239,7 +248,11 @@
                                         }
                                         this.areaList[j]['children']=cityArr
                                         this.initCity();
-                                        this.initLable() 
+                                        this.initLable();                                    
+                                        if(i==this.lists.length-1){
+                                            this.clickSubmit=false
+                                        }
+                                       
                                     }
                                     else {
                                         this.$Modal.info({
@@ -248,8 +261,7 @@
                                         });
                                     }
                                 }).catch((res)=>{})   
-                            }
-                            
+                            }                            
                         }
                     }                
                 } 
@@ -259,7 +271,6 @@
                     if(this.lists[i].status==false){
                         for(let j=0;j<this.areaList.length;j++){
                             if(this.lists[i].name==this.areaList[j].name){
-                                console.log(this.areaList[j].children)
                                 let checkedArr=this.lists[i].children;
                                 let areaArr=this.areaList[j].children;
                                 if(areaArr){
@@ -276,6 +287,14 @@
                     }
                 }   
             }
+        },
+        watch:{
+          checkedAreaList:{
+            handler:function(){
+                console.log(111)
+                this.lists=this.checkedAreaList   
+            }
+          }
         }
     }
 </script>
