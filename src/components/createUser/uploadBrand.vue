@@ -22,13 +22,13 @@
         title="上传品牌授权书"
        >
         <Form ref="uploadBrand" :model="uploadBrand" :rules="checkValue" :label-width="120">
-          <Form-item label="授权品牌:" prop="brand_id">
+          <Form-item label="授权品牌:" prop="brandId">
               <Select class="fl"
               :clearable="true"
               placeholder="请选择授权品牌"
               :label-in-value="true"
               @on-change="brandChange"
-              v-model="uploadBrand.brand_id">
+              v-model="uploadBrand.brandId">
                 <Option :value="322" :key="new Date()">111</Option>
                 <Option :value="22" :key="new Date()">211</Option>
              </Select>
@@ -70,8 +70,8 @@ export default {
         showMessBox:false,
         modal1: false,
         uploadBrand:{
-          brand_id:"",//授权品牌id
-          brand_name:"",//授权品牌名称
+          brandId:"",//授权品牌id
+          brandName:"",//授权品牌名称
           validTime:"",//有效期
           salve:""//  授权书附件
         },
@@ -82,13 +82,13 @@ export default {
           uploadErr:""
         },
         checkValue:{
-          brand_id:[
+          brandId:[
              {required:true,message:'请选择授权品牌',trigger:'change',type:"number"}
           ],
           validTime: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
         },
         storeEditDate:[],
-        tableKey:["brand_name","createTime","validTime"]
+        tableKey:["brandName","createTime","validTime"]
     }
   },
   created(){
@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     brandChange(value){
-      this.uploadBrand.brand_name=value.label;
+      this.uploadBrand.brandName=value.label;
     },
     openDialog(){
       this.modal1=true   

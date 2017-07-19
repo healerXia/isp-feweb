@@ -6,13 +6,21 @@
           <div class="mess_con">
             <ul>
               <li>
-                <span>纳税人识别号：</span><span>{{storeEditDate[0].taxCode}}</span>
+                <span>纳税人识别号：</span>
+                <span>
+                {{storeEditDate.length>=1?storeEditDate[0].taxCode:""}}
+                </span>
               </li>
               <li>
-                <span>有效期：</span><span>{{storeEditDate[0].validTime}}</span>
+                <span>有效期：</span><span>
+                {{storeEditDate.length>=1?storeEditDate[0].validTime:""}}
+                </span>
               </li>
               <li>
-                <span>资质状态：</span><span>{{storeEditDate[0].status}}</span>
+                <span>资质状态：</span>
+                <span>
+                {{storeEditDate.length>=1?storeEditDate[0].status:""}}
+                </span>
               </li>
               <li v-for="(item,index) in storeEditDate">
                 <ul>
@@ -33,10 +41,10 @@
             title="上传纳税资质"
             >
             <Form ref="uploadPay" :model="uploadPay" :rules="checkValue" :label-width="120">
-              <Form-item label="纳税人识别号:" prop="tax_code">
-                <Input v-model="uploadPay.tax_code" placeholder="请填写纳税人识别号" class='fl'></Input>
-                <span v-show="judgeErr.tax_code_err_show" class="colorRed ML5">
-                  {{errorCon.tax_code_err}}
+              <Form-item label="纳税人识别号:" prop="taxCode">
+                <Input v-model="uploadPay.taxCode" placeholder="请填写纳税人识别号" class='fl'></Input>
+                <span v-show="judgeErr.taxCode_err_show" class="colorRed ML5">
+                  {{errorCon.taxCode_err}}
                 </span>
               </Form-item>
               <div class="accountOpenInfo">
@@ -53,21 +61,21 @@
                       </span>
                     </Form-item> 
                     <Form-item class="positions":label="'开户账号' + (index + 1)">
-                      <Input v-model="item.bank_account" placeholder="请填写开户账号" class='fl' 
+                      <Input v-model="item.bankAccount" placeholder="请填写开户账号" class='fl' 
                       @on-focus="showAccount(index)"
                       @on-blur="hideAccount(index)"
                       ></Input>
                       <span class="show_account" v-show="item.errShow.scale_acc">
-                        {{item.bank_account.replace(/(.{4})/g,'$&'+' ')}}
+                        {{item.bankAccount.replace(/(.{4})/g,'$&'+' ')}}
                       </span>
-                      <span v-show="item.errShow.bank_account_err_show" class="colorRed ML5">
-                        {{item.errMess.bank_account_err}}
+                      <span v-show="item.errShow.bankAccount_err_show" class="colorRed ML5">
+                        {{item.errMess.bankAccount_err}}
                       </span>
                     </Form-item> 
                     <Form-item :label="'电话' + (index + 1)">
-                      <Input v-model="item.tel" placeholder="请填写电话" class='fl'></Input>
-                      <span v-show="item.errShow.tel_err_show" class="colorRed ML5">
-                        {{item.errMess.tel_err}}
+                      <Input v-model="item.phone" placeholder="请填写电话" class='fl'></Input>
+                      <span v-show="item.errShow.phone_err_show" class="colorRed ML5">
+                        {{item.errMess.phone_err}}
                       </span>
                     </Form-item> 
                     <Form-item :label="'地址' + (index + 1)">
@@ -110,42 +118,42 @@ export default {
     props:['editData'],
     data () {
         return {
-          showMessBox:true,
+          showMessBox:false,
           modal1: false,
           uploadPay:{
-            tax_code:"",//纳税人识别号
+            taxCode:"",//纳税人识别号
           },
           judgeErr:{
-            tax_code_err_show:false,
+            taxCode_err_show:false,
             uploadErrShow:false
           },
           errorCon:{
-            tax_code_err:"",
+            taxCode_err:"",
             uploadErr:""
           },
           accMessArr:[
             {
               bank:"",//开户银行
-              bank_account:"",//银行账号
-              tel:"",//电话
+              bankAccount:"",//银行账号
+              phone:"",//电话
               address:"",//地址
               errShow:{
                 scale_acc:false,
-                bank_account_err_show:false,
-                tel_err_show:false,
+                bankAccount_err_show:false,
+                phone_err_show:false,
                 bank_err_show:false,
                 address_err_show:false
               },
               errMess:{
-                bank_account_err:"",
-                tel_err:"",
+                bankAccount_err:"",
+                phone_err:"",
                 bank_err:"",
                 address_err:""
               }
             }
           ],
           checkValue:{
-            tax_code:[{required:true,message:'请输入纳税人识别号',trigger:'blue',type:"string"}]
+            taxCode:[{required:true,message:'请输入纳税人识别号',trigger:'blue',type:"string"}]
           },
           storeEditDate:[]
         }
@@ -162,25 +170,25 @@ export default {
         //进来，先判断纳税人识别号是不是空，如果是空，隐藏框子
         //如果不是打开框子
         //然后看开户信息， 有几条显示几条，没有的话就显示一行空的
-        if(this.storeEditDate[0].taxCode){//进行回填数据
-          this.uploadPay.tax_code=this.storeEditDate[0].taxCode
+        if(this.storeEditDate.length>1){//进行回填数据
+          this.uploadPay.taxCode=this.storeEditDate[0].taxCode
           this.accMessArr=[];
           for(let i=0;i<this.storeEditDate.length;i++){
             let obj={}
             obj.bank=this.storeEditDate[i].bank;
-            obj.bank_account=this.storeEditDate[i].bankAccount;
-            obj.tel=this.storeEditDate[i].phone;
+            obj.bankAccount=this.storeEditDate[i].bankAccount;
+            obj.phone=this.storeEditDate[i].phone;
             obj.address=this.storeEditDate[i].address;
             obj.errShow={
               scale_acc:false,
-              bank_account_err_show:false,
-              tel_err_show:false,
+              bankAccount_err_show:false,
+              phone_err_show:false,
               bank_err_show:false,
               address_err_show:false
             },
             obj.errMess={
-              bank_account_err:"",
-              tel_err:"",
+              bankAccount_err:"",
+              phone_err:"",
               bank_err:"",
               address_err:""
             }
@@ -194,32 +202,32 @@ export default {
       resetValue(){//弹出层进来时重置
         this.modal1=false
         this.uploadPay={
-          tax_code:"",//纳税人识别号
+          taxCode:"",//纳税人识别号
         }
         this.judgeErr={
-            tax_code_err_show:false,
+            taxCode_err_show:false,
             uploadErrShow:false
         }
         this.errorCon={
-            tax_code_err:"",
+            taxCode_err:"",
             uploadErr:""
         }
         this.accMessArr=[
           {
             bank:"",//开户银行
-            bank_account:"",//银行账号
-            tel:"",//电话
+            bankAccount:"",//银行账号
+            phone:"",//电话
             address:"",//地址
             errShow:{
               scale_acc:false,//放大
-              bank_account_err_show:false,
-              tel_err_show:false,
+              bankAccount_err_show:false,
+              phone_err_show:false,
               bank_err_show:false,
               address_err_show:false
             },
             errMess:{
-              bank_account_err:"",
-              tel_err:"",
+              bankAccount_err:"",
+              phone_err:"",
               bank_err:"",
               address_err:""
             }
@@ -234,17 +242,17 @@ export default {
       },
       taxCodeCheck(){
         let reg=/^(\d|[a-zA-Z])([\da-zA-Z])*(\d|[a-zA-Z])$/g
-        if(!this.uploadPay.tax_code.match(reg)){//纳税人识别号验证
-          this.judgeErr.tax_code_err_show=true
-          this.errorCon.tax_code_err="只能输入英文或数字"
+        if(!this.uploadPay.taxCode.match(reg)){//纳税人识别号验证
+          this.judgeErr.taxCode_err_show=true
+          this.errorCon.taxCode_err="只能输入英文或数字"
           return false
-        }else if(this.uploadPay.tax_code.match(reg)){
-          this.judgeErr.tax_code_err_show=false
-          this.errorCon.tax_code_err=""
+        }else if(this.uploadPay.taxCode.match(reg)){
+          this.judgeErr.taxCode_err_show=false
+          this.errorCon.taxCode_err=""
           return true
         }else{
-          this.judgeErr.tax_code_err_show=false
-          this.errorCon.tax_code_err=""
+          this.judgeErr.taxCode_err_show=false
+          this.errorCon.taxCode_err=""
           return true
         }
       },
@@ -287,36 +295,36 @@ export default {
             }
             //验证开户账号
             let reg1_account=/^\d(\d{14})\d$/g
-            var bank_account_match1=this.accMessArr[i].bank_account.match(reg1_account)
-            if(!bank_account_match1){
-              this.accMessArr[i].errShow.bank_account_err_show=true
-              this.accMessArr[i].errMess.bank_account_err="格式不正确"
+            var bankAccount_match1=this.accMessArr[i].bankAccount.match(reg1_account)
+            if(!bankAccount_match1){
+              this.accMessArr[i].errShow.bankAccount_err_show=true
+              this.accMessArr[i].errMess.bankAccount_err="格式不正确"
               resultArr.push(false)
-            }else if(bank_account_match1){
-              this.accMessArr[i].errShow.bank_account_err_show=false
-              this.accMessArr[i].errMess.bank_account_err=""
+            }else if(bankAccount_match1){
+              this.accMessArr[i].errShow.bankAccount_err_show=false
+              this.accMessArr[i].errMess.bankAccount_err=""
               resultArr.push(true)
             }else{
-              this.accMessArr[i].errShow.bank_account_err_show=false
-              this.accMessArr[i].errMess.bank_account_err=""
+              this.accMessArr[i].errShow.bankAccount_err_show=false
+              this.accMessArr[i].errMess.bankAccount_err=""
               resultArr.push(true)
             }
             //验证电话号码
-            let reg1_tel=/^\d{11}$/g
-            let reg2_tel=/^\d{3}\-\d{8}$/g
-            var tel_match1=this.accMessArr[i].tel.match(reg1_tel)
-            var tel_match2=this.accMessArr[i].tel.match(reg2_tel)
-            if(!tel_match1&&!tel_match2){
-              this.accMessArr[i].errShow.tel_err_show=true
-              this.accMessArr[i].errMess.tel_err="格式不正确"
+            let reg1_phone=/^\d{11}$/g
+            let reg2_phone=/^\d{3}\-\d{8}$/g
+            var phone_match1=this.accMessArr[i].phone.match(reg1_phone)
+            var phone_match2=this.accMessArr[i].phone.match(reg2_phone)
+            if(!phone_match1&&!phone_match2){
+              this.accMessArr[i].errShow.phone_err_show=true
+              this.accMessArr[i].errMess.phone_err="格式不正确"
               resultArr.push(false)
-            }else if(tel_match1||tel_match2){
-              this.accMessArr[i].errShow.tel_err_show=false
-              this.accMessArr[i].errMess.tel_err=""
+            }else if(phone_match1||phone_match2){
+              this.accMessArr[i].errShow.phone_err_show=false
+              this.accMessArr[i].errMess.phone_err=""
               resultArr.push(true)
             }else{
-              this.accMessArr[i].errShow.tel_err_show=false
-              this.accMessArr[i].errMess.tel_err=""
+              this.accMessArr[i].errShow.phone_err_show=false
+              this.accMessArr[i].errMess.phone_err=""
               resultArr.push(true)
             }
           }else{
@@ -324,10 +332,10 @@ export default {
             this.accMessArr[i].errMess.bank_err=""
             this.accMessArr[i].errShow.address_err_show=true
             this.accMessArr[i].errMess.address_err=""
-            this.accMessArr[i].errShow.bank_account_err_show=false
-            this.accMessArr[i].errMess.bank_account_err=""
-            this.accMessArr[i].errShow.tel_err_show=false
-            this.accMessArr[i].errMess.tel_err=""
+            this.accMessArr[i].errShow.bankAccount_err_show=false
+            this.accMessArr[i].errMess.bankAccount_err=""
+            this.accMessArr[i].errShow.phone_err_show=false
+            this.accMessArr[i].errMess.phone_err=""
             resultArr.push(true)
           }
         } 
@@ -345,17 +353,17 @@ export default {
       addGroup(){
         let oneGroup={          
             bank:"",//开户银行
-            bank_account:"",//银行账号
-            tel:"",//电话
+            bankAccount:"",//银行账号
+            phone:"",//电话
             address:"",//地址
             errShow:{
-              bank_account_err_show:false,
-              tel_err_show:false,
+              bankAccount_err_show:false,
+              phone_err_show:false,
               scale_acc:false
             },
             errMess:{
-              bank_account_err:"",
-              tel_err:""
+              bankAccount_err:"",
+              phone_err:""
             }              
         }
         this.accMessArr.push(oneGroup)
