@@ -26,11 +26,15 @@
               <Select class="fl"
               :clearable="true"
               placeholder="请选择授权品牌"
-              :label-in-value="true"
+              :label-in-value="true"              
+               v-model="uploadBrand.brandId"
+              :loading="brandLoad"
+              filterable
+              remote
+              :remote-method="brandChoose"
               @on-change="brandChange"
-              v-model="uploadBrand.brandId">
-                <Option :value="322" :key="new Date()">111</Option>
-                <Option :value="22" :key="new Date()">211</Option>
+              >
+              <Option :key="new Date()" :value="option.value" v-for="option in brandOption">{{option.name}}</Option>
              </Select>
           </Form-item>
           <Form-item label="有效期:" prop="validTime">
@@ -88,10 +92,30 @@ export default {
           validTime: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
         },
         storeEditDate:[],
-        tableKey:["brandName","createTime","validTime"]
+        tableKey:["brandName","createTime","validTime"],
+        brandOption:[],
+        brandLoad:true
     }
   },
   created(){
+      this.$http.get('/isp-kongming-cust/basic/getBrand?pageSize=10&name='+this.uploadBrand.brandName).then((res) => {//主营品牌
+        if(res.data.errorCode===0){
+          this.brandOption=res.data.result.splice(0,10);
+          this.brandLoad=false
+          setTimeout(()=>{
+            if(this.uploadBrand.brandName!=""&&this.brandOption.length==1){
+              this.uploadBrand.brandId=this.brandOption[0].value
+            }
+          },0)
+        }
+        else {
+          this.$Modal.info({
+              title: '提示',
+              content: res.data.errorMsg
+          });
+        }
+      }).catch((err) => {})
+    
     this.storeEditDate=this.editData;
     if(this.storeEditDate.length>=1){
       this.showMessBox=true
@@ -101,6 +125,21 @@ export default {
     brandChange(value){
       this.uploadBrand.brandName=value.label;
     },
+    brandChoose(query){
+      this.$http.get('/isp-kongming-cust/basic/getBrand?pageSize=10&name='+query).then((res) => {//主营品牌
+        if(res.data.errorCode===0){
+          console.log(res.data.result)
+          this.brandOption=res.data.result.splice(0,10);
+          this.brandLoad=false
+        }
+        else {
+          this.$Modal.info({
+              title: '提示',
+              content: res.data.errorMsg
+          });
+        }
+      }).catch((err) => {})
+    },
     openDialog(){
       this.modal1=true   
     },
@@ -108,10 +147,23 @@ export default {
       this.$refs[name].validate((valid) => {
           if (valid) {
               this.$emit('uploadbrand',this.uploadBrand)
-              this.$Modal.success({
-                title: "提示",
-                content: "添加成功",
-              })
+              this.$http.post('/isp-kongming-cust/cust/adCustBrandLicense',
+                    this.uploadBrand,
+                    ).then((res) => {
+                      if(res.data.errorCode===0){
+                        this.modal1=false
+                        this.$Modal.success({
+                          title: "提示",
+                          content: "添加成功",
+                        })
+                      }
+                    else {
+                      this.$Modal.info({
+                          title: '提示',
+                          content: res.data.errorMsg
+                      });
+                    }
+                }).catch((err) => {})
               this.modal1=false
           } else {
             this.$Modal.error({

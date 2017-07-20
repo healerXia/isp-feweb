@@ -150,7 +150,9 @@ export default {
         uploadErr:"",
         reg_cap_err:""
       },
+      brandIdOption:[],
       storeEditDate:{
+        custId:"",//客户id
         licenseNumber: "",//统一社会信用代码
         registeredCapital: "",//注册资本
         time: "",//营业期限
@@ -191,14 +193,26 @@ export default {
                 let check_result=this.valueCheck()//注册资本为数字
                 let data_check=this.dateChange();//时间区间的错误提示
                 if(check_result&&data_check){
+                  this.uploadBusi.custId=1
                   this.$emit('uploadbus',this.uploadBusi)
                   this.modal1=false
-                  this.$Modal.success({
-                    title: "提示",
-                    content: "添加成功",
-                  })
-                }
-                
+                  this.$http.post('/isp-kongming-cust/cust/adBusinessLicense',
+                    this.uploadBusi,
+                    ).then((res) => {
+                      if(res.data.errorCode===0){
+                        this.$Modal.success({
+                          title: "提示",
+                          content: "添加成功",
+                        })
+                      }
+                    else {
+                      this.$Modal.info({
+                          title: '提示',
+                          content: res.data.errorMsg
+                      });
+                    }
+                  }).catch((err) => {})
+                }               
             } else {
                 let data_check=this.dateChange();//时间区间的错误提示
                 this.$Modal.error({
@@ -266,7 +280,6 @@ export default {
         this.judgeErr.uploadErrShow=true
       },
       fileUploadSuccess(response, file, fileList){
-          
       },
       formatTen(num) { 
         return num > 9 ? (num + "") : ("0" + num); 

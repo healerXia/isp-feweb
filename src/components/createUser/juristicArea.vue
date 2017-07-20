@@ -15,9 +15,7 @@
                 <span @click='openChild(index,list.value)' class="open_icon"><Icon type="arrow-down-b" ></Icon></span>
                 <div v-if='index == value' 
                 :class='["child", 
-                    {"child_right": 
-                        (index<=5&&index>=3)||(index<=11&&index>=9)||(index<=17&&index>=15)||
-                        (index<=23&&index>=21)||(index<=29&&index>=27)||(index<=35&&index>=33)
+                    {"child_right": false
                     }]'
                 >
                     <Checkbox v-model="i.status" v-for='(i, n) in list.children' :key='index' 
@@ -50,7 +48,6 @@
             }
         },
         created(){
-            console.log(11)
             this.lists=this.checkedAreaList 
         },
         methods: {
@@ -67,7 +64,6 @@
                         let obj={};
                         let checkChildren=[];
                         let children=this.areaList[i].children;
-                        // console.log(this.areaList[i].children)
                         if(children){
                             for(let j=0;j<children.length;j++){
                                 if(children[j].status==true){
@@ -92,7 +88,7 @@
             },
             openDialog(){
                 this.modal1=true
-                this.$http.get('/isp-kongming/basic/getArea'+"?pId=-1&pageSize=32").then((res)=>{//获取省级地区
+                this.$http.get('/isp-kongming/basic/getArea'+"?pId=-1&pageSize=50").then((res)=>{//获取省级地区
                     if(res.data.errorCode===0){
                         this.areaList=res.data.result;
                         for(let i=0;i<this.areaList.length;i++){
@@ -103,7 +99,7 @@
                         }
                         if(this.lists.length>=1){
                             this.initProvence()
-                            this.initLable()
+                            // this.initLable()
                         }else{
                             this.clickSubmit=false
                         }
@@ -230,22 +226,21 @@
             initProvence(){//主要是用于编辑，当弹出层打开时。省的回填和初始化
                 for(let i=0;i<this.lists.length;i++){
                     for(let j=0;j<this.areaList.length;j++){
-                        if(this.lists[i].status==true){
-                            if(this.lists[i].name==this.areaList[j].name){
+                        if(this.lists[i].name==this.areaList[j].name){
+                           if(this.lists[i].status==true){
                                 this.areaList[j].status=true
                                 if(i==this.lists.length-1){
                                     this.clickSubmit=false
                                 }
-                               
-                            }
-                        }else{
-                            if(this.lists[i].name==this.areaList[j].name){
-                                this.$http.get('/isp-kongming/basic/getArea'+"?pId="+this.lists[i].id+"&pageSize=100").then((res)=>{//获取省级地区
+                               this.initLable();   
+                           }else if(this.lists[i].status==false){
+                                 this.$http.get("/isp-kongming/basic/getArea?pId="+this.lists[i].id+"&pageSize=100").then((res)=>{//获取省级地区
                                     if(res.data.errorCode===0){
                                        let cityArr=res.data.result
                                         for(let i=0;i<cityArr.length;i++){
                                             cityArr[i]['status']=false;
                                         }
+                                        
                                         this.areaList[j]['children']=cityArr
                                         this.initCity();
                                         this.initLable();                                    
@@ -261,7 +256,7 @@
                                         });
                                     }
                                 }).catch((res)=>{})   
-                            }                            
+                           }
                         }
                     }                
                 } 
@@ -291,8 +286,7 @@
         watch:{
           checkedAreaList:{
             handler:function(){
-                console.log(111)
-                this.lists=this.checkedAreaList   
+                this.lists=this.checkedAreaList  
             }
           }
         }
@@ -314,7 +308,7 @@
         height:350px;
         overflow:auto;
         .box {
-            width: 100px;
+            min-width: 140px;
             margin-top: 20px;
             position: relative;
         }
@@ -333,7 +327,7 @@
                 display:block;
                 width: 0;
                 height: 0;
-                border-bottom:10px solid #F9FAFC;
+                border-bottom:10px solid #ccc;
                 border-top:none;
                 border-left: 7px solid transparent;
                 border-right: 7px solid transparent;
@@ -343,7 +337,7 @@
         }
         .child {
             z-index: 100;
-            background: #F9FAFC;
+            background: #ccc;
             position: absolute;
             top: 30px;
             width: 400px;

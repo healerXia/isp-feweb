@@ -28,11 +28,6 @@
           .unit+ .ivu-form-item-error-tip{
             left: 430px;
           }
-        },
-        .checkedPrecinct{
-          span{
-            margin-left: 10px;
-          }
         }
       }
     }
@@ -47,5 +42,11 @@
   .ivu-form .ivu-form-item-label{
     padding: 12px 12px 10px 0;
   }
-	
+	.checkedGovernArealist{
+    span{
+      float: left;
+      margin-right: 10px;
+      margin-left: 0
+    }
+  }
 }

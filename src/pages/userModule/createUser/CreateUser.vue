@@ -8,6 +8,9 @@
               <div :class="showNeed.custName_show">
                 <Form-item label="客户名称:" prop="custName" >
                   <Input v-model="formValidate.custName" placeholder="请填写客户名称" class='createInput fl'></Input>
+                  <span v-show="judgeShow.custNameErrShow" class="colorRed ML5">
+                  {{errorMess.custNameErr}}
+                  </span>
                 </Form-item>
               </div>
               <div v-bind:class='showNeed.cust_type_show'>
@@ -45,14 +48,14 @@
                   :clearable="true"
                   placeholder="请选择所属经销商"
                   v-model="formValidate.dealerId"
-                  :loading="loading.agenceIdLoad"
+                  :loading="loading.dealerIdLoad"
                   filterable
                   remote
                   :label-in-value="true"
-                  :remote-method="agenceIdChoose"
-                   @on-change="agenceIdChange"
+                  :remote-method="dealerIdChoose"
+                   @on-change="dealerIdChange"
                   >
-                 <Option :key="new Date()" v-for="option in optionArr.agenceIdOption" :value="option.value">{{option.name}}</Option>
+                 <Option :key="new Date()" v-for="option in optionArr.dealerIdOption" :value="option.custId">{{option.custName}}</Option>
                    </Select>
                  </Select>
                 </Form-item>
@@ -82,7 +85,7 @@
                     :label-in-value="true"
                     :remote-method="groupIdChoose"
                   >
-                 <Option :key="new Date()" v-for="option in optionArr.groupIdOption" :value="option.value">{{option.name}}</Option>
+                 <Option :key="new Date()" v-for="option in optionArr.groupIdOption" :value="option.custId">{{option.custName}}</Option>
                  </Select>
                 </Form-item>
               </div>
@@ -103,7 +106,7 @@
                     :label-in-value="true"
                     :remote-method="custPidChoose"
                     >
-                   <Option :key="new Date()" v-for="option in optionArr.custPidOption" :value="option.value">{{option.name}}</Option>
+                   <Option :key="new Date()" v-for="option in optionArr.custPidOption" :value="option.custId">{{option.custName}}</Option>
                    </Select>
                 </Form-item>
               </div>
@@ -114,12 +117,8 @@
                     :clearable="true"
                     placeholder="请选择销售网络"
                     v-model="formValidate.salenet"
-                    :loading="loading.salenetLoad"
-                    filterable
-                    remote
                     :label-in-value="true"
-                    :remote-method="salenetChoose"
-                    >
+                                        >
                    <Option :key="new Date()" v-for="option in optionArr.salenetOption" :value="option.value">{{option.name}}</Option>
                    </Select>
                 </Form-item>
@@ -131,13 +130,13 @@
                   <span v-show="judgeShow.GovernArealist_err_show" class="colorRed ML5">
                    {{errorMess.GovernArealist_err}}
                   </span>
+                  <div class="checkedGovernArealist">
+                    <span v-for="item in checkedAreaList" >
+                      <span v-if="item.status">{{item.name}}</span>
+                      <span v-else v-for="child in item.children" >{{child.name}}</span>
+                    </span>
+                  </div>
                 </Form-item>
-                <div class="checkedGovernArealist">
-                  <span v-for="item in checkedAreaList" >
-                    <span v-if="item.status">{{item.name}}</span>
-                    <span v-else v-for="child in item.children" >{{child.name}}</span>
-                  </span>
-                </div>
               </div>
               <div :class="showNeed.brandId_show">
                 <Form-item label="主营品牌:" prop="brandId"
@@ -165,6 +164,7 @@
                     :clearable="true"
                     placeholder="请选择客户行业"
                     v-model="formValidate.industryId"
+                    :label-in-value="true"
                     >
                    <Option :key="new Date()" :value="option.value" v-for="option in optionArr.industryOption">{{option.name}}</Option>
                    </Select>
@@ -213,7 +213,7 @@
                     :label-in-value="true"
                     :remote-method="foursIdChoose"
                     >
-                    <Option :key="new Date()" v-for="option in optionArr.foursIdOption" :value="option.value">{{option.name}}</Option>
+                    <Option :key="new Date()" v-for="option in optionArr.foursIdOption" :value="option.custId">{{option.custName}}</Option>
                    </Select>
                 </Form-item>
               </div>
@@ -236,6 +236,9 @@
                   <DialogMap 
                     v-bind:location="mapLocation.store_4s" v-on:stroe="getFourSLoation">               
                   </DialogMap>
+                   <span v-show="judgeShow.mapErr_show" class="colorRed ML5">
+                  {{errorMess.mapErr}}
+                  </span>
                 </Form-item>
               </div>
               <div :class="showNeed.map_show">
@@ -244,6 +247,9 @@
                   <DialogMap 
                     v-bind:location="mapLocation.store_agency" v-on:stroe="getAgencyLoation">
                   </DialogMap>
+                   <span v-show="judgeShow.mapErr_show" class="colorRed ML5">
+                  {{errorMess.mapErr}}
+                  </span>
                 </Form-item>
               </div>
               <div :class="showNeed.map_show">
@@ -252,6 +258,9 @@
                   <DialogMap 
                     v-bind:location="mapLocation.store_colligate" v-on:stroe="getColligateLoation">
                   </DialogMap>
+                  <span v-show="judgeShow.mapErr_show" class="colorRed ML5">
+                  {{errorMess.mapErr}}
+                  </span>
                 </Form-item>
               </div>
               <div :class="showNeed.vendorCode_show">
@@ -272,14 +281,14 @@
                   <Input v-model="formValidate.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注" maxlength="200" ></Input>
                 </Form-item>
               </div>
-              <div v-if="formValidate.typeId!=5">
-                <Form-item label="营业执照:" prop="custName" >
+              <div v-if="formValidate.typeId!=5&&judgeShow.showUpload">
+                <Form-item label="营业执照:">
                   <UploadBusiness v-on:uploadbus="getUploadBusiness" :editData="uploadBusiObj"></UploadBusiness>
                 </Form-item>
-                <Form-item label="品牌授权书:" prop="custName">
+                <Form-item label="品牌授权书:">
                   <UploadBrand v-on:uploadbrand="getUploadBrand" :editData="uploadBrandArr"></UploadBrand>
                 </Form-item>
-                <Form-item label="纳税资质证明:" prop="custName">
+                <Form-item label="纳税资质证明:">
                   <UploadPay v-on:uploadpay="getUploadPay" :editData="uploadPayArr"></UploadPay>
                 </Form-item>
               </div>
@@ -315,6 +324,7 @@
       },
       data () {
         return {
+          governArealist:[],
           selectedBrand:[],//选中的品牌
           clearObj:null,
           need:true,
@@ -322,7 +332,7 @@
             custPidLoad:true,//所属厂商
             groupIdLoad:true,//所属集团
             foursIdLoad:true,//所属4s
-            agenceIdLoad:true,//经销商
+            dealerIdLoad:true,//经销商
             salenetLoad:true,//销售网络
             brandIdLoad:true,//主营品牌
           },
@@ -344,8 +354,14 @@
             custPidOption:[],//所属厂商
             groupIdOption:[],//所属集团
             foursIdOption:[],//所属4s
-            agenceIdOption:[],//经销商
-            salenetOption:[],//销售网络
+            dealerIdOption:[],//所属经销商
+            salenetOption:[
+            {name:"销售网络1",value:1},
+            {name:"销售网络2",value:2},
+            {name:"销售网络3",value:3},
+            {name:"销售网络4",value:4},
+            {name:"销售网络5",value:5},
+            ],//销售网络
             brandIdOption:[]//主营品牌
           },
           showNeed:{//操作是否显示必填
@@ -374,8 +390,10 @@
             typeId:"",//客户类别
             abbrName:"",//客户简称 +         
 
-            brandId:[],//主营品牌+
-            industryId:"",//客户行业+
+            brandId:[],//主营品牌id+
+            brandName:[],//主营品牌名称
+            custBrandMapList:[],//主营品牌名称加id
+            industryId:"",//客户行业id+
             groupId:"",//所属集团+
             custPid:"",//所属厂商+
             dealerId:"",//所属经销商
@@ -429,14 +447,19 @@
             ]
           },
           judgeShow:{//错误是否显示
-            areaErrShow:true,//客户地区
-            abbrName_err_show:false,
-            GovernArealist_err_show:false//管辖区域
+            custNameErrShow:false,//客户名称重复
+            areaErrShow:false,//客户地区
+            abbrName_err_show:false,//客户简称
+            GovernArealist_err_show:false,//管辖区域
+            mapErr_show:false,//地图
+            showUpload:false
           },
           errorMess:{//错误信息
+            custNameErr:"客户名称重复,请重新输入",//客户名称重复
             areaErr:"",
             abbrName_err:"",
-            GovernArealist_err:""
+            GovernArealist_err:"",
+            mapErr:""//地图
           },
           //组件里的信息
           mapLocation:{//地图标记点
@@ -457,26 +480,20 @@
           },
           checkedAreaList:[//管辖区域地址
             {
-              name: '安徽省',
+              name: '河南省',
               status: false,
-              id:430,
+              id:10,
               children: [
-                  {
-                      name: '合肥',
-                  },
-                  {
-                      name: '芜湖',
-                  }
+                {
+                  name:"洛阳市",
+                  id:1002,
+                  status:true
+                }
               ]
             },
             {
-              id:435,
-              name: '河北省',
-              status: true,
-            },
-            {
               id:431,
-              name: '北京市',
+              name: '北京',
               status: true,
             }                 
           ],
@@ -523,26 +540,32 @@
             //   address:"北京市昌平区",
             //   salve: ""
             // }
-          ]
+          ],
+          addressObj:{
+            provinceId:"",
+            cityId:"",
+            countyId:""
+          }
         }
       },
       created() {//页面数据初始化
-        // if(!this.$router.currentRoute.query.id){//不是编辑页面
-        //   this.setSelectOption("","","","","")
-        //   this.$http.get(config.urlList.getSerial+"?pageSize=10").then((res) => {//主营品牌
-        //     if(res.data.errorCode===0){
-        //       this.optionArr.brandIdOption=res.data.result;
-        //       this.loading.brandIdOption=false
-        //     }
-        //     else {
-        //       this.$Modal.info({
-        //           title: '提示',
-        //           content: res.data.errorMsg
-        //       });
-        //     }
-        //     }).catch((err) => {
-        //   })
-        // }
+        let id=this.$router.currentRoute.query.id
+        if(!id){//不是编辑页面
+          this.setSelectOption("","","","","")
+          this.$http.get(config.urlList.getBrand+"?pageSize=10").then((res) => {//主营品牌
+            if(res.data.errorCode===0){
+              this.optionArr.brandIdOption=res.data.result;
+              this.loading.brandIdLoad=false
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((err) => {
+          })
+        }
         /***********页面创建区域***********/
         this.$http.get(config.urlList.getArea+"?pId=-1&pageSize=32").then((res)=>{//获取省级地区
           if(res.data.errorCode===0){
@@ -558,10 +581,21 @@
         })
         /******编辑区域**********/
         setTimeout(()=>{
-          let id=this.$router.currentRoute.query.id
-          if(true){
-            this.setSelectOption("奔驰E级（进口）停用","奔驰R级","奔驰R级","奔驰R级","奔驰R级")
-            this.getBrandOption(["朗杰","大切诺基","帕杰罗速跑"],[1559,1560,1561])
+          if(id){
+            this.judgeShow.showUpload=true
+            this.$http.post(config.urlList.select,
+            {custId:1000785672}
+            ).then((res)=>{
+              if(res.data.errorCode===0){
+                this.edit(res.data.result[0])
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((res)=>{})
           }
         },0)
       },
@@ -569,6 +603,34 @@
         /*******组件的信息接收*******/
         getCheckArea(data){//组件 获取选择的地区
           this.checkedAreaList=data;
+          if(this.checkedAreaList.length>=1){
+            this.judgeShow.GovernArealist_err_show=false;
+            this.errorMess.GovernArealist_err=""
+          }
+          var arr=[]
+          for(let i=0;i<this.checkedAreaList.length;i++){
+            let obj={}
+            if(this.checkedAreaList[i].status==true){
+              obj.name=this.checkedAreaList[i].name;
+              obj.id=this.checkedAreaList[i].id;
+              obj.status=true;
+              arr.push(obj)
+            }else if(this.checkedAreaList[i].status==false){
+              obj.name=this.checkedAreaList[i].name;
+              obj.id=this.checkedAreaList[i].id;
+              obj.status=false;
+              let children=[]
+              let childObj={}
+              for(let j=0;j<this.checkedAreaList[i]['children'].length;j++){
+                childObj.name=this.checkedAreaList[i].children[j].name
+                childObj.id=this.checkedAreaList[i].children[j].value
+                children.push(childObj)
+              }
+              obj.children=children
+              arr.push(obj)
+            }
+          }
+          this.governArealist=arr;
         },
         getFourSLoation(location){//组件 获取门店4s的位置
           this.mapLocation.store_4s=location
@@ -606,48 +668,57 @@
         getUploadPay(data){//组件 获取上传纳税资质证明
         },
         /*********编辑与新建的时候下拉的回填************/
-        setSelectOption(group,custPid,foursId,agence,salenet){//单选
-          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+group).then((res) => {//所属集团
-            if(res.data.errorCode===0){
-              this.optionArr.groupIdOption=res.data.result;
-              setTimeout(()=>{
-                if(group!=""&&this.optionArr.groupIdOption.length==1){
-                  this.formValidate.groupId=this.optionArr.groupIdOption[0].value
-                }
-              },0)
-              this.loading.groupIdLoad=false
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
+        setSelectOption(group,custName,fourName,dealer,salenet){//单选
+          this.$http.post(config.urlList.custInfoson,//所属集团
+            {typeId:3,custName:custName},
+            {emulateJSON:true}
+            ).then((res) => {
+              if(res.data.errorCode===0){
+                this.optionArr.groupIdOption=res.data.result;
+                setTimeout(()=>{
+                  if(group!=""&&this.optionArr.groupIdOption.length==1){
+                    this.formValidate.groupId=this.optionArr.groupIdOption[0].value
+                  }
+                },0)
+                this.loading.groupIdLoad=false
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
             }).catch((err) => {
           })
-          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+custPid).then((res) => {//所属厂商
+          this.$http.post(config.urlList.custInfoson,//所属厂商
+            {typeId:1,custName:custName},
+            {emulateJSON:true,}
+            ).then((res) => {
+              if(res.data.errorCode===0){
+                this.optionArr.custPidOption=res.data.result.splice(0,10);
+                setTimeout(()=>{
+                  if(custName!=""&&this.optionArr.custPidOption.length==1){
+                    this.formValidate.custPid=this.optionArr.custPidOption[0].value
+                  }
+                },0)
+                this.loading.custPidLoad=false
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((err) => {})
+
+          this.$http.post(config.urlList.custInfoson,//所属4s
+            {typeId:4,custName:fourName,subclassId:1},
+            {emulateJSON:true}
+           ).then((res) => {
             if(res.data.errorCode===0){
-              this.optionArr.custPidOption=res.data.result;
+              this.optionArr.foursIdOption=res.data.result.splice(0,10);
               setTimeout(()=>{
-                if(custPid!=""&&this.optionArr.custPidOption.length==1){
-                  this.formValidate.custPid=this.optionArr.custPidOption[0].value
-                }
-              },0)
-              this.loading.custPidLoad=false
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
-            }).catch((err) => {
-          })
-          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+foursId).then((res) => {//所属4S
-            if(res.data.errorCode===0){
-              this.optionArr.foursIdOption=res.data.result;
-              setTimeout(()=>{
-                if(foursId!=""&&this.optionArr.foursIdOption.length==1){
+                if(fourName!=""&&this.optionArr.foursIdOption.length==1){
                   this.formValidate.foursId=this.optionArr.foursIdOption[0].value
                 }
               },0)
@@ -661,33 +732,18 @@
             }
             }).catch((err) => {
           })
-          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+agence).then((res) => {//所属经销商
+          this.$http.post(config.urlList.custInfoson,//所属经销商
+            {typeId:4,custName:dealer},
+            {emulateJSON:true}
+            ).then((res) => {
             if(res.data.errorCode===0){
-              this.optionArr.agenceIdOption=res.data.result;
+              this.optionArr.dealerIdOption=res.data.result.splice(0,10);
               setTimeout(()=>{
-                if(agence!=""&&this.optionArr.agenceIdOption.length==1){
-                  this.formValidate.foursId=this.optionArr.agenceIdOption[0].value
+                if(dealer!=""&&this.optionArr.dealerIdOption.length==1){
+                  this.formValidate.dealerId=this.optionArr.dealerIdOption[0].value
                 }
               },0)
-              this.loading.agenceIdLoad=false
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
-            }).catch((err) => {
-          })
-          this.$http.get(config.urlList.getSerial+"?pageSize=10&name="+salenet).then((res) => {//销售网络
-            if(res.data.errorCode===0){
-              this.optionArr.salenetOption=res.data.result;
-              setTimeout(()=>{
-                if(salenet!=""&&this.optionArr.salenetOption.length==1){
-                  this.formValidate.salenet=this.optionArr.salenetOption[0].value
-                }
-              },0)
-              this.loading.salenetLoad=false
+              this.loading.dealerIdLoad=false
             }
             else {
               this.$Modal.info({
@@ -699,6 +755,7 @@
           })
         },
         getBrandOption(nameArr,idArr){//主营品牌回填的时候
+          this.formValidate.brandName=nameArr;
           var resultArr=[]
           for(let i=0;i<nameArr.length;i++){
             let item={};
@@ -713,15 +770,17 @@
           },0)
         },
         edit(data){
+          console.log(data)
           //所属集团,所属厂商,所属4S,所属经销商,销售网络,主营品牌  都不需要回填
           let submitData={};
           //公共都有的
-          this.formValidate.typeId=data.typeId;//客户类别
+          this.formValidate.typeId=parseInt(data.typeId);//客户类别
           this.formValidate.custName=data.custName//客户名称
           this.formValidate.abbrName=data.abbrName//客户简称
-          this.formValidate.provinceId=data.provinceId?data.provinceId:""//客户地区
-          this.formValidate.cityId=data.cityId?data.cityId:""
-          this.formValidate.countyId=data.areaId?data.countyId:""
+          this.formValidate.provinceId=data.provinceId
+          this.addressObj.cityId=data.cityId
+          this.addressObj.countyId=data.countyId
+
           this.formValidate.address=data.address;//客户地址
           if(this.formValidate.typeId==1){
             this.formValidate.industryId=data.industryId//客户行业
@@ -764,17 +823,33 @@
                 if (valid) {
                   let lastCheck=this.checkValue()
                   if (lastCheck&&this.formValidate.countyId) {
-                    this.$Modal.success({
-                      title: "提示",
-                      content: "添加成功",
-                    })
+                    let submitData=this.operSubmitData();
+                    this.$http.post(config.urlList.addCustInfo,//提交数据
+                      submitData,
+                      {emulateJSON:true,}
+                      ).then((res) => {
+                        if(res.data.errorCode===0){
+                          this.$Modal.success({
+                            title: "提示",
+                            content: "添加客户成功,请上传证件",
+                          })
+                          //添加成功,调到该页面上传
+                          this.$router.push({path:"createUser",query:{id:res.data.result}})
+                        }
+                        else {
+                          this.$Modal.info({
+                              title: '提示',
+                              content: res.data.errorMsg
+                          });
+                        }
+                    }).catch((err) => {})
                   }else{
                     this.$Modal.error({
                         title: '提示',
                         content: "表单验证失败！"
                     })
                   }
-                  
+                
                 } else {
                     this.$Modal.error({
                         title: '提示',
@@ -802,6 +877,7 @@
 
         //提交数据的时候，值得处理
         operSubmitData(){
+          //下拉  主营品牌
           let submitData={};
           //公共都有的
           submitData['typeId']=this.formValidate.typeId;//客户类别
@@ -811,57 +887,93 @@
           submitData['cityId']=this.formValidate.cityId//客户地区
           submitData['countyId']=this.formValidate.countyId//客户地区
           submitData['address']=this.formValidate.address//客户地址
+          submitData['governArealist']=[]//管辖区域
+          submitData['custBrandMapList']=[]//主营品牌
           if(this.formValidate.typeId==1){
             submitData['industryId']=this.formValidate.industryId//客户行业
-            submitData['brandId']=this.formValidate.brandId//主营品牌
+            submitData['custBrandMapList']=this.formValidate.custBrandMapList//主营品牌
           }else if(this.formValidate.typeId==2){
             submitData['groupId']=this.formValidate.groupId//所属集团
             submitData['salenet']=this.formValidate.salenet//销售网络
-            submitData['GovernArealist']=this.formValidate.GovernArealist//管辖区域
+            submitData['governArealist']=this.governArealist//管辖区域
           }else if(this.formValidate.typeId==3){
             submitData['industryId']=this.formValidate.industryId//客户行业
-            submitData['brandId']=this.formValidate.brandId//主营品牌
+            submitData['custBrandMapList']=this.formValidate.custBrandMapList//主营品牌
           }else if(this.formValidate.typeId==4&&this.formValidate.subclassId==1){
             submitData['subclassId']=this.formValidate.subclassId//客户子类别
             submitData['custPid']=this.formValidate.custPid//所属厂商
             submitData['groupId']=this.formValidate.groupId//所属集团
             submitData['industryId']=this.formValidate.industryId//客户行业
-            submitData['brandId']=this.formValidate.brandId//主营品牌
+            submitData['custBrandMapList']=this.formValidate.custBrandMapList//主营品牌
           }else if(this.formValidate.typeId==4&&this.formValidate.subclassId==2){
             submitData['subclassId']=this.formValidate.subclassId//客户子类别
             submitData['foursId']=this.formValidate.foursId//所属4s
             submitData['custPid']=this.formValidate.custPid//所属厂商
             submitData['groupId']=this.formValidate.groupId//所属集团
             submitData['industryId']=this.formValidate.industryId//客户行业
-            submitData['brandId']=this.formValidate.brandId//主营品牌
+            submitData['custBrandMapList']=this.formValidate.custBrandMapList//主营品牌
           }else if(this.formValidate.typeId==4&&this.formValidate.subclassId==3){
             submitData['groupId']=this.formValidate.groupId//所属集团
             submitData['subclassId']=this.formValidate.subclassId//客户子类别
             submitData['industryId']=this.formValidate.industryId//客户行业
-            submitData['brandId']=this.formValidate.brandId//主营品牌
-          }else if(this.formValidate.typeId==4){
-             submitData['dealerId']=this.formValidate.dealerId//所属经销商
+            submitData['custBrandMapList']=this.formValidate.custBrandMapList//主营品牌
+          }else if(this.formValidate.typeId==5){
+            submitData['dealerId']=this.formValidate.dealerId//所属经销商
             submitData['subclassId']=this.formValidate.subclassId//客户子类别
             submitData['groupId']=this.formValidate.groupId//所属集团
-            submitData['brandId']=this.formValidate.brandId//主营品牌
+            submitData['custBrandMapList']=this.formValidate.custBrandMapList//主营品牌
             submitData['vendorCode']=this.formValidate.vendorCode//厂商代码
             submitData['companypro']=this.formValidate.companypro//企业简介
             submitData['notes']=this.formValidate.notes//备注
             if(this.formValidate.subclassId!=3){
               submitData['custPid']=this.formValidate.custPid//所属厂商
+              submitData['longitude']=this.mapLocation.store_colligate.lng//地图精度
+              submitData['latitude']=this.mapLocation.store_colligate.lat//地图纬度
+            }else if(this.formValidate.subclassId==1){
+              submitData['longitude']=this.mapLocation.store_4s.lng//地图精度
+              submitData['latitude']=this.mapLocation.store_4s.lat//地图纬度
+            }else if(this.formValidate.subclassId==2){
+              submitData['longitude']=this.mapLocation.store_agency.lng//地图精度
+              submitData['latitude']=this.mapLocation.store_agency.lat//地图纬度
             }
           }else if(this.formValidate.typeId==6||this.formValidate.typeId==7){
             submitData['custPid']=this.formValidate.custPid//所属厂商
             submitData['groupId']=this.formValidate.groupId//所属集团
             submitData['industryId']=this.formValidate.industryId//客户行业
-            submitData['brandId']=this.formValidate.brandId//主营品牌
+            submitData['custBrandMapList']=this.formValidate.custBrandMapList//主营品牌
+          }
+          return submitData
+        },
+        mapCheck(){//地图检查
+          if(this.formValidate.typeId==5){
+            if(this.formValidate.subclassId==1){
+              if(this.mapLocation.store_4s.lng==null||this.mapLocation.store_4s.lng==""){
+                this.judgeShow.mapErr_show=true;
+                this.errorMess.mapErr="请标记地图位置"
+              }else{
+                this.judgeShow.mapErr_show=false;
+              }
+            }else if(this.formValidate.subclassId==2){
+              if(this.mapLocation.store_agency.lng==null||this.mapLocation.store_agency.lng==""){
+                this.judgeShow.mapErr_show=true;
+                this.errorMess.mapErr="请标记地图位置"
+              }else{
+                this.judgeShow.mapErr_show=false;
+              }
+            }else if(this.formValidate.subclassId==3){
+              if(this.mapLocation.store_colligate.lng==null||this.mapLocation.store_colligate.lng==""){
+                this.judgeShow.mapErr_show=true;
+                this.errorMess.mapErr="请标记地图位置"
+              }else{
+                this.judgeShow.mapErr_show=false;
+              }
+            }
           }
         },
         //提交前对数据进行检查
         checkValue(){
           this.areaCheck()//这个是提交的时候检查地区的，显示错误提示
           if(this.formValidate.typeId==2){//检查复选管辖区域
-            console.log(this.checkedAreaList)
             if(this.checkedAreaList.length==0){
               this.judgeShow.GovernArealist_err_show=true;
               this.errorMess.GovernArealist_err=" 请选择管辖区域"
@@ -872,32 +984,56 @@
               return true
             }
           }
-          if(this.formValidate.typeId==5){
+          if(this.formValidate.typeId==5){//门店-->客户简称,地图
             if(this.formValidate.abbrName.length>8){
               this.judgeShow.abbrName_err_show=true;
               this.errorMess.abbrName_err="不能超过8个汉字"
               return false
-            }else{
+            }
+            else{
+              this.mapCheck()
+              if(this.judgeShow.mapErr_show===true){
+                return false
+              }
               return true
             }
           }
           return true
         },
-        brandIdChange(value){
+        brandIdChange(value){//品牌下拉事件
+          let arr=[]
+          let arr1=[]
+          for(let i=0;i<value.length;i++){
+            let obj={}
+            arr.push(value[i].label);
+            obj['brandName']=value[i].label
+            obj['brandId']=value[i].value
+            arr1.push(obj);
+          }
+          this.formValidate.brandName=arr
           this.selectedBrand=value;
+          this.formValidate.custBrandMapList=arr1;
         },
-        provinceChange(){//省列表change事件
+        provinceChange(value){//省列表change事件
           this.judgeShow.areaErrShow=false
           this.$http.get(config.urlList.getArea+"?pId="+this.formValidate.provinceId+"&pageSize=100")
           .then((res)=>{
               if(res.data.errorCode===0){
                 this.optionArr.cityOption=res.data.result
-                if(this.formValidate.provinceId==""){
+                if(this.addressObj.cityId!=""){
+                  this.formValidate.cityId=this.addressObj.cityId;
+                  this.addressObj.cityId=""
+                }else if(this.formValidate.provinceId==""){
                   this.optionArr.cityOption=[]
+                  this.optionArr.areaOption=[]
+                  this.formValidate.cityId=""
+                  this.formValidate.countyId=""
+                }else if(this.formValidate.provinceId!=""){
+                  this.optionArr.areaOption=[]
+                  this.formValidate.cityId=""
+                  this.formValidate.countyId=""
                 }
-                this.optionArr.areaOption=[]
-                this.formValidate.cityId=""
-                this.formValidate.countyId=""
+                
               }
 
               else {
@@ -908,17 +1044,22 @@
               }
           }).catch((res)=>{})
         },
-        cityChange(){//市列表change事件
+        cityChange(value){//市列表change事件
           this.judgeShow.areaErrShow=false
           this.$http.post(config.urlList.getArea+"?pId="+this.formValidate.cityId+"&pageSize=100").
           then((res)=>{
             if(res.data.errorCode===0){
                 this.optionArr.areaOption=res.data.result
-                if(this.cityId==""){
+                if(this.addressObj.countyId!=""){
+                  this.formValidate.countyId=this.addressObj.countyId;
+                  this.addressObj.countyId=""
+                }else if(this.cityId==""){
                   this.optionArr.areaOption=[]
+                  this.formValidate.countyId=""
+                }else if(this.cityId!=""){
+                  this.formValidate.countyId=""
                 }
-                this.formValidate.countyId=""
-                
+                              
             }
             else {
               this.$Modal.info({
@@ -928,8 +1069,8 @@
             }
           }).catch((res)=>{})
         },
-        areaChange(){//区县列表change事件
-           this.judgeShow.areaErrShow=false
+        areaChange(value){//区县列表change事件
+          this.judgeShow.areaErrShow=false
         },
         areaCheck(){//签署地区检查
           if(this.formValidate.provinceId==""){
@@ -946,25 +1087,61 @@
             this.judgeShow.areaErrShow=false
           }
         },
-        agenceIdChange(value){
-          //当所属经销商的值发生变化时
-          //客户子类别的下拉选项也要发生变化
-          if(value==1){
-            this.optionArr.subclassIdOption=[
-              {name:"4s",value:1},
-              {name:"特许经销商",value:2},
-              {name:"综合店",value:3}
-            ]
-            this.formValidate.subclassId=""
-          }else if(value==2){
-            this.optionArr.subclassIdOption=[
-              {name:"特许经销商",value:2},
-              {name:"综合店",value:3}
-            ]
-            this.formValidate.subclassId=""
-          }else if(value==3){
-            this.optionArr.subclassIdOption=[{name:"综合店",value:3}]
-            this.formValidate.subclassId=""
+        dealerIdChange(data){
+          //所属经销商变化，客户子类别发生变化
+          //所属经销商变化，客户地区回填
+          //所属经销商变化，主营品牌变化
+          //所属经销商变化，客户地址变化
+          if(data.value){
+            this.$http.post(config.urlList.dealer,
+              {custId:data.value},
+              {emulateJSON:true}
+              ).then((res) => {
+              if(res.data.errorCode===0){
+                let pid=res.data.result[0].provinceId
+                let cid=res.data.result[0].cityId
+                let counid=res.data.result[0].countyId
+                if(this.formValidate.provinceId==pid){
+                  if(this.formValidate.cityId==cid){
+                    if(this.formValidate.countyId!=counid){
+                      this.formValidate.countyId=cid
+                    }
+                  }else{
+                    this.formValidate.cityId=cid
+                    this.addressObj.countyId=counid
+                  }
+                }else{
+                  this.formValidate.provinceId=pid
+                  this.addressObj.cityId=cid
+                  this.addressObj.countyId=counid
+                }
+                if(res.data.result[0].subclassId==1){
+                  this.optionArr.subclassIdOption=[
+                    {name:"4s",value:1},
+                    {name:"特许经销商",value:2},
+                    {name:"综合店",value:3}
+                  ]
+                  this.formValidate.subclassId=""
+                }else if(res.data.result[0].subclassId==2){
+                  this.optionArr.subclassIdOption=[
+                    {name:"特许经销商",value:2},
+                    {name:"综合店",value:3}
+                  ]
+                  this.formValidate.subclassId=""
+                }else if(res.data.result[0].subclassId==3){
+                  this.optionArr.subclassIdOption=[{name:"综合店",value:3}]
+                  this.formValidate.subclassId=""
+                }
+                this.formValidate.address=res.data.result[0].address
+                // this.getBrandOption(["朗杰","大切诺基","帕杰罗速跑"],[1559,1560,1561])
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((err) => {})
           }
         },
         formatTen(num) { 
@@ -984,7 +1161,10 @@
           if(query==""){
             this.formValidate.groupId=""
           }
-          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//所属集团
+          this.$http.post(config.urlList.custInfoson,
+            {typeId:1,custName:query},
+            {emulateJSON:true}
+          ).then((res) => {//所属集团
             if(res.data.errorCode===0){
               this.optionArr.groupIdOption=res.data.result;
               this.loading.groupIdLoad=false
@@ -1001,26 +1181,33 @@
           if(query==""){
             this.formValidate.custPid=""
           }
-          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//所属集团
-            if(res.data.errorCode===0){
-              this.optionArr.custPidOption=res.data.result;
-              this.loading.custPidLoadi=false
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
-            }).catch((err) => {})
+          this.$http.post(config.urlList.custInfoson,
+            {typeId:3,custName:query},
+            {emulateJSON:true}
+            )
+            .then((res) => {//所属集团
+              if(res.data.errorCode===0){
+                this.optionArr.custPidOption=res.data.result.splice(0,10);
+                this.loading.custPidLoadi=false
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+          }).catch((err) => {})
         },
         foursIdChoose (query) {//所属4s
           if(query==""){
             this.formValidate.foursId=""
           }
-          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {
+          this.$http.post(config.urlList.custInfoson,
+             {typeId:4,custName:query,subclassId:1},
+              {emulateJSON:true}
+            ).then((res) => {
             if(res.data.errorCode===0){
-              this.optionArr.foursIdOption=res.data.result;
+              this.optionArr.foursIdOption=res.data.result.splice(0,10);
               this.loading.foursIdLoad=false
             }
             else {
@@ -1031,14 +1218,17 @@
             }
             }).catch((err) => {})
         },
-        agenceIdChoose (query){//所属经销商
+        dealerIdChoose (query){//所属经销商
           if(query==""){
             this.formValidate.dealerId=""
           }
-          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//所属集团
+          this.$http.post(config.urlList.custInfoson,
+            {typeId:4,custName:query},
+            {emulateJSON:true}
+          ).then((res) => {
             if(res.data.errorCode===0){
-              this.optionArr.agenceIdOption=res.data.result;
-              this.loading.agenceIdLoadn=false
+              this.optionArr.dealerIdOption=res.data.result.splice(0,10);
+              this.loading.dealerIdLoad=false
             }
             else {
               this.$Modal.info({
@@ -1049,24 +1239,24 @@
             }).catch((err) => {})
         },
         salenetChoose (query){//销售网络
-          if(query==""){
-            this.formValidate.salenet=""
-          }
-          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//所属集团
-            if(res.data.errorCode===0){
-              this.optionArr.salenetOption=res.data.result;
-              this.loading.salenetLoad=false
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
-            }).catch((err) => {})
+          // if(query==""){
+          //   this.formValidate.salenet=""
+          // }
+          // this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//所属集团
+          //   if(res.data.errorCode===0){
+          //     this.optionArr.salenetOption=res.data.result;
+          //     this.loading.salenetLoad=false
+          //   }
+          //   else {
+          //     this.$Modal.info({
+          //         title: '提示',
+          //         content: res.data.errorMsg
+          //     });
+          //   }
+          //   }).catch((err) => {})
         },
         brandIdChoose(query){//主营品牌
-          this.$http.get(config.urlList.getSerial+'?pageSize=10&name='+query).then((res) => {//投放品牌
+          this.$http.get(config.urlList.getBrand+'?pageSize=10&name='+query).then((res) => {//投放品牌
             if(res.data.errorCode===0){
               for(let i=0;i<res.data.result.length;i++){
                 for(let j=0;j<this.selectedBrand.length;j++){
@@ -1256,7 +1446,7 @@
 
             this.ruleValidate.provinceId=[
               {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
-            ]; this.showNeed.provinceId_show="hasneed"           
+            ]; this.showNeed.provinceId_show="hasneed"         
           }
           if(this.formValidate.typeId==4&&this.formValidate.subclassId==2){
             for(let item in this.ruleValidate){
@@ -1325,7 +1515,7 @@
             ]; this.showNeed.industryId_show="hasneed";
             this.ruleValidate.provinceId=[
               {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
-            ]; this.showNeed.provinceId_show="hasneed" ;       
+            ]; this.showNeed.provinceId_show="hasneed" ;    
           }
           if(this.formValidate.typeId==5&&this.formValidate.subclassId!=""){
             for(let item in this.ruleValidate){
@@ -1489,6 +1679,7 @@
 
             }          
           }
+
           return this.formValidate.typeId
         }
       }

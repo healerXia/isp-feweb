@@ -122,6 +122,8 @@ export default {
           modal1: false,
           uploadPay:{
             taxCode:"",//纳税人识别号
+            salve: "",//营业执照附件
+            custBankAccountList:[]//开户行
           },
           judgeErr:{
             taxCode_err_show:false,
@@ -155,7 +157,7 @@ export default {
           checkValue:{
             taxCode:[{required:true,message:'请输入纳税人识别号',trigger:'blue',type:"string"}]
           },
-          storeEditDate:[]
+          storeEditDate:[],
         }
     },
     created(){
@@ -165,6 +167,18 @@ export default {
       }
     },
     methods: {
+      getCustBankAccountList(){
+        let arr=[]
+        for(let i=0;i<this.accMessArr.length;i++){
+          let obj={}
+          obj.bank=this.accMessArr[i].bank;
+          obj.bankAccount=this.accMessArr[i].bankAccount
+          obj.phone=this.accMessArr[i].phone;
+          obj.address=this.accMessArr[i].address
+          arr.push(obj)
+        }
+        this.uploadPay.custBankAccountList=arr
+      },
       open(){//相当于弹出层初始化      
         //如果是接口
         //进来，先判断纳税人识别号是不是空，如果是空，隐藏框子
@@ -385,11 +399,24 @@ export default {
               let check_tax=this.taxCodeCheck()
               if(check_account&&check_tax){
                 this.$emit('uploadpay',this.uploadPay)
-                this.$Modal.success({
-                  title: "提示",
-                  content: "添加成功",
-                })
-                this.modal1=false
+                this.getCustBankAccountList();
+                this.$http.post('/isp-kongming-cust/cust/adCustBankAccount',
+                    this.uploadPay,
+                    ).then((res) => {
+                      if(res.data.errorCode===0){
+                        this.modal1=false
+                        this.$Modal.success({
+                          title: "提示",
+                          content: "添加成功",
+                        })
+                      }
+                    else {
+                      this.$Modal.info({
+                          title: '提示',
+                          content: res.data.errorMsg
+                      });
+                    }
+                }).catch((err) => {})
               }
              
           } else {
