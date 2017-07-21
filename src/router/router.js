@@ -21,15 +21,10 @@ const DemoZhoufeng = (resolve) => require(['../pages/demos/DemoZhoufeng.vue'], r
 
 const CreateUser  = (resolve) => require(['../pages/userModule/createUser/CreateUser'], resolve);
 
-// 审批链流程
-const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
-const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
-const addDoc = (resolve) => require(['../pages/approval/addDoc/AddDoc.vue'], resolve);
-const department = (resolve) => require(['../pages/approval/department/Department'], resolve);
 
-// demo
 
-const selectTab = (resolve) => require(['../pages/demos/selectTab'], resolve);
+
+
 
 
 // 审批链流程
@@ -37,10 +32,16 @@ const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
 const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
 const addDoc = (resolve) => require(['../pages/approval/addDoc/AddDoc.vue'], resolve);
 const department = (resolve) => require(['../pages/approval/department/Department'], resolve);
+const createChain = (resolve) => require(['../pages/approval/createUser/createUser'], resolve);
+const chainManagement = (resolve) => require(['../pages/approval/chainManagement/chainManagement'], resolve);
+const chainConfig = (resolve) => require(['../pages/approval/chainConfig/chainConfig'], resolve);
+const ApprovalManagement = (resolve) => require(['../pages/approval/approvalManagement/management'], resolve);
+// const createChain = (resolve) => require('[../pages/approval/createUser/createUser]', resolve);
 
 // demo
 
 const selectTab = (resolve) => require(['../pages/demos/selectTab'], resolve);
+const fromVal = (resolve) => require(['../pages/demos/formValidate'], resolve);
 
 
 
@@ -112,15 +113,11 @@ const routes = [
                 name: 'wait',
                 component: Wait
             },
-<<<<<<< HEAD
              {
                 path: 'createUser',
                 name: 'createUser',
                 component: CreateUser
             },
-
-=======
->>>>>>> master
             {
                 path: 'setUpDepartment',
                 name: 'setUpDepartment',
@@ -140,6 +137,26 @@ const routes = [
                 path: 'department',
                 name: 'department',
                 component: department
+            },
+            {
+                path: 'createChain',
+                name: createChain,
+                component: createChain
+            },
+            {
+                path: 'chainManagement',
+                name: chainManagement,
+                component: chainManagement
+            },
+            {
+                path: 'chainConfig',
+                name: chainConfig,
+                component: chainConfig
+            },
+            {
+                path: 'approvalManagement',
+                name: 'ApprovalManagement',
+                component: ApprovalManagement
             }
         ]
     },
@@ -153,7 +170,6 @@ const routes = [
                 name: 'form',
                 component: DemoForm
             },
-<<<<<<< HEAD
 
              {
                 path: 'zhoufeng',
@@ -161,16 +177,15 @@ const routes = [
                 component: DemoZhoufeng
             },
 
-=======
->>>>>>> master
             {
                 path: 'selectTab',
                 name: 'selectTab',
                 component: selectTab
-<<<<<<< HEAD
-
-=======
->>>>>>> master
+            },
+            {
+                path: 'fromVal',
+                name: 'fromVal',
+                component: fromVal
             }
         ]
     }

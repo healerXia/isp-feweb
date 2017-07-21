@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="18px" viewBox="0 0 24 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.1 (39012) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="8.57142857" y="0" width="6.85714286" height="18" rx="2"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="易车网平台广告投放平台系统" transform="translate(-1333.000000, -3080.000000)">
+            <g id="Group" transform="translate(1333.000000, 3080.000000)">
+                <rect id="Rectangle-15" stroke="#252834" stroke-width="2" x="1" y="1" width="4.85714286" height="16" rx="2"></rect>
+                <g id="Rectangle-15">
+                    <use fill="#252834" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    <rect stroke="#252834" stroke-width="2" x="9.57142857" y="1" width="4.85714286" height="16" rx="2"></rect>
+                </g>
+                <rect id="Rectangle-15" stroke="#252834" stroke-width="2" x="18.1428571" y="1" width="4.85714286" height="16" rx="2"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

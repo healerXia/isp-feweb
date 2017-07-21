@@ -1,34 +1,68 @@
 <template lang="html">
-<<<<<<< HEAD
-  <div class="area">
-=======
   <div class="">
->>>>>>> master
       <div class="">
           <p>展示:</p>
           <label v-for='(i, index) in selectList'>{{i.name}}<a href="javascript:;" @click='del(i, index)'>x</a></label>
       </div>
-<<<<<<< HEAD
-       <div v-for='(list, index) in lists' :key='index' class="fl box">
-            <Checkbox v-model="list.status" @on-change='checkAll(index)'>{{list.name}}</Checkbox>
-            <span @click='open(index)'><Icon type="arrow-down-b" ></Icon></span>
-            <div class="" v-if='index == value' class="child">
-=======
        <div v-for='(list, index) in lists' :key='index' class="fl">
             <Checkbox v-model="list.status" @on-change='checkAll(index)'>{{list.name}}</Checkbox>
             <a href="javascript:;" @click='open(index)'>+</a>
             <div class="" v-if='index == value'>
->>>>>>> master
                 <Checkbox v-model="i.status" v-for='(i, n) in list.children' :key='index' @on-change='check(index, n, i.status)'>{{i.name}}</Checkbox>
             </div>
        </div>
+       <!-- <baidu-map class="bm-view" :center = 'center'  :zoom="15" @ready="handler" ak="GX2qqxiZ7R9zqpm25SAqUk9fLpq9kyDR">
+           <bm-scale anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-scale>
+           <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
+           <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
+           <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT"></bm-city-list>
+           <bm-marker :position="center" :dragging="true" animation="BMAP_ANIMATION_BOUNCE">
+               <bm-label content="我爱北京天安门" :labelStyle="{color: 'red', fontSize : '24px'}" :offset="{width: -35, height: 30}"/>
+           </bm-marker>
+           <!-- <bm-view class="map"></bm-view> -->
+           <!-- <bm-control :offset="{width: '10px', height: '10px'}">
+                <bm-auto-complete v-model="keyword">
+                  <search-box placeholder="请输入地名关键字"></search-box> <!-- 这里指代一个自定义搜索框组件 -->
+                <!-- </bm-auto-complete>
+           </bm-control>
+          <bm-local-search :keyword="keyword" :auto-viewport="true" ></bm-local-search>
+    </baidu-map> -->
+    <baidu-map :center="{lng: 116.403765, lat: 39.914850}" :zoom="11"  @ready="handler" ak="GX2qqxiZ7R9zqpm25SAqUk9fLpq9kyDR">
+<bm-view class="map"></bm-view>
+<bm-control :offset="{width: '10px', height: '10px'}">
+<bm-auto-complete v-model="keyword">
+   <!-- 这里指代一个自定义搜索框组件 -->
+</bm-auto-complete>
+</bm-control>
+<bm-local-search :keyword="keyword" :auto-viewport="true" ></bm-local-search>
+</baidu-map>
   </div>
 </template>
-
 <script>
+import Vue from 'vue'
+import {BaiduMap, BmScale, BmNavigation, BmGeolocation, BmCityList, BmMarker, BmLabel, BmView, BmLocalSearch, BmControl, BmAutoComplete, SearchBox} from 'vue-baidu-map'
+
 export default {
+    components: {
+        BaiduMap,
+        BmScale,
+        BmNavigation,
+        BmGeolocation,
+        BmCityList,
+        BmMarker,
+        BmLabel,
+        BmView,
+        BmLocalSearch,
+        BmControl,
+        BmAutoComplete,
+        SearchBox
+
+    },
     data() {
         return {
+            location: '北京',
+            keyword: '百度',
+            center: {lng: 0, lat: 0},
             value: -1,
             selectList: [],
             lists: [
@@ -61,60 +95,6 @@ export default {
                         {
                             name: '石家庄',
                             status: false
-<<<<<<< HEAD
-                        },
-                        {
-                            name: '111',
-                            status: false
-                        },
-                        {
-                            name: '222',
-                            status: false
-                        }
-                    ]
-                },
-                 {
-                    name: '河北',
-                    statue: false,
-                    children: [
-                        {
-                            name: '承德',
-                            status: false
-                        },
-                        {
-                            name: '石家庄',
-                            status: false
-                        },
-                        {
-                            name: '111',
-                            status: false
-                        },
-                        {
-                            name: '222',
-                            status: false
-                        }
-                    ]
-                }, {
-                    name: '河北',
-                    statue: false,
-                    children: [
-                        {
-                            name: '承德',
-                            status: false
-                        },
-                        {
-                            name: '石家庄',
-                            status: false
-                        },
-                        {
-                            name: '111',
-                            status: false
-                        },
-                        {
-                            name: '222',
-                            status: false
-=======
->>>>>>> master
                         }
                     ]
                 }
@@ -122,17 +102,12 @@ export default {
         }
     },
     methods: {
+        handler ({BMap, map}) {
+            this.center.lng = 116.404;
+            this.center.lat = 39.915;
+        },
         open(index) {
-<<<<<<< HEAD
-            if(this.value==index){
-                this.value=-1
-            }else{
-                this.value = index;
-            }
-            
-=======
             this.value = index;
->>>>>>> master
         },
         check(index, n, status) {
             this.initCheck(index);
@@ -214,24 +189,8 @@ export default {
 </script>
 
 <style lang="css">
-<<<<<<< HEAD
-.area{width: 200px}
-.f1{overflow:hidden;}
-.box {
-    position: relative;
-
-
+.bm-view {
+  width: 100%;
+  height: 300px;
 }
-
-.child {
-    z-index: 100;
-    background: #ccc;
-    position: absolute;
-    top: 20px;
-    left: 0;
-    width: 200px;
-}
-=======
-
->>>>>>> master
 </style>
