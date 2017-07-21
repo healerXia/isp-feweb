@@ -151,7 +151,6 @@ export default {
                     for(let i = 0; i < this.upList.length; i++) {
                         this.upList[i].id = this.upList[i].id.toString();
                     }
-                    console.log(this.upList);
                 }
             }).catch((err) => {
                 console.log(err);

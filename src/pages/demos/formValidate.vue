@@ -1,59 +1,69 @@
 <template lang="html">
-  <Form ref="formDynamic" :model="formDynamic" :label-width="80">
-      <div v-for="(item, index) in formDynamic.items" :key="item">
-          <Form-item label="姓名" :prop="'items.' + index + '.name'"
-            :rules="[{required: true, type: 'number', message: 'aaaa', trigger: 'blur'}]">
-                <Input type="text" v-model.number="item.name"></Input>
-          </Form-item>
-          <Form-item label="年龄" :prop="'items.' + index + '.age'"
-            :rules="{required: true, message: '年龄不能为空', trigger: 'blur'}">
-                <Input type="text" v-model="item.age"></Input>
-          </Form-item>
-      </div>
-      <Form-item>
-           <Row>
-               <Col span="12">
-                   <Button type="dashed" long @click="handleAdd" icon="plus-round">新增</Button>
-               </Col>
-           </Row>
-       </Form-item>
-      <Form-item>
-            <Button type="primary" @click="handleSubmit('formDynamic')">提交</Button>
-            <Button type="ghost" @click="handleReset('formDynamic')" style="margin-left: 8px">重置</Button>
-     </Form-item>
-  </Form>
+  <div class="">
+      <Select
+        v-model="model13"
+        filterable
+        remote
+        placeholder='请输入'
+        :remote-method="remoteMethod1"
+        :loading="loading1">
+        <Option v-for="option in options1" :value="option.value" :key="option.value">{{option.label}}</Option>
+    </Select>
+    {{model13}}
+  </div>
 </template>
 
 <script>
 export default {
-    data () {
-            return {
-                formDynamic: {
-                    items: [
-                        {
-                            name: '',
-                            age: ''
-                        }
-                    ]
+    data() {
+        return {
+            model13: '',
+            loading1: false,
+            options1: [],
+            list: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming']
+        }
+    },
+    mounted() {
+        setTimeout(() => {
+            this.options1 = [
+                {
+                    value: 'Alabama',
+                    label: 'Alabama'
+                },
+                {
+                    value: 'Alaska',
+                    label: 'Alaska'
+                }
+            ];
+            this.init();
+        }, 1000)
+
+        setTimeout(() => {
+            //this.init();
+            this.model13 =  '12312'
+        }, 2000)
+    },
+    methods: {
+        init() {
+            document.querySelector('.ivu-select-input').value = 'Alabama';
+        },
+        remoteMethod1 (query) {
+                if (query !== '') {
+                    this.loading1 = true;
+                    setTimeout(() => {
+                        this.loading1 = false;
+                        const list = this.list.map(item => {
+                            return {
+                                value: item,
+                                label: item
+                            };
+                        });
+                        this.options1 = list.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
+                    }, 200);
+                } else {
+                    this.options1 = [];
                 }
             }
-        },
-    methods: {
-        handleSubmit (name) {
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    this.$Message.success('提交成功!');
-                } else {
-                    this.$Message.error('表单验证失败!');
-                }
-            })
-        },
-        handleAdd () {
-            this.formDynamic.items.push({
-                name: '',
-                age: ''
-            });
-        },
     }
 }
 </script>

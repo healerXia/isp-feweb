@@ -98,13 +98,24 @@ body {
 .fRight{float: right;}
 .cycle .ivu-form-item-error-tip{display: none !important;}
 .maxWid{max-width: 1166px}
-.createPro, .setUp-de, #addDoc, #createUser, #chainConfig {
+.createPro, .setUp-de, #addDoc, #chainConfig {
   .ivu-select-single .ivu-select-selection{height: 38px;line-height: 38px}
   .ivu-input{height: 38px}
   .ivu-select-multiple .ivu-select-input{height: 38px}
   .ivu-form-item-error-tip{height: 38px;line-height: 38px;padding-left: 19px}
 }
 
+
+// #createUser {
+//     .ivu-select-single .ivu-select-input {
+//         left: -24px;
+//     }
+//
+//     .ivu-select-multiple .ivu-select-input {
+//         left: -24px;
+//     }
+//     .ivu-form-item-error-tip{height: 38px;line-height: 38px;padding-left: 0}
+// }
 
 
 //侧边栏样式

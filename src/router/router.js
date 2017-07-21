@@ -18,6 +18,7 @@ const ChooseTime = (resolve) =>  require(['../pages/chooseTime/ChooseTime'],reso
 const DemoForm = (resolve) => require(['../pages/demos/DemoForm.vue'], resolve);
 
 
+
 // 审批链流程
 const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
 const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
@@ -26,6 +27,7 @@ const department = (resolve) => require(['../pages/approval/department/Departmen
 const createChain = (resolve) => require(['../pages/approval/createUser/createUser'], resolve);
 const chainManagement = (resolve) => require(['../pages/approval/chainManagement/chainManagement'], resolve);
 const chainConfig = (resolve) => require(['../pages/approval/chainConfig/chainConfig'], resolve);
+const ApprovalManagement = (resolve) => require(['../pages/approval/approvalManagement/management'], resolve);
 // const createChain = (resolve) => require('[../pages/approval/createUser/createUser]', resolve);
 
 // demo
@@ -137,6 +139,11 @@ const routes = [
                 path: 'chainConfig',
                 name: chainConfig,
                 component: chainConfig
+            },
+            {
+                path: 'approvalManagement',
+                name: 'ApprovalManagement',
+                component: ApprovalManagement
             }
         ]
     },
@@ -151,9 +158,9 @@ const routes = [
                 component: DemoForm
             },
             {
-                path: 'selectTab',
-                name: 'selectTab',
-                component: selectTab
+                path: 'fromVal',
+                name: 'fromVal',
+                component: fromVal
             }
         ]
     }
