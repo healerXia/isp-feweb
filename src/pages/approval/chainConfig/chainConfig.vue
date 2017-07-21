@@ -51,9 +51,11 @@
                                     :remote-method="remoteGroup"
                                     :clearable = "true"
                                     :loading="loading1"
+                                    :label-in-value ="true"
                                     class='selectText fl'>
-                                    <Option v-for="option in groups[index]" :value="option.groupId" :key="new Date()">{{option.groupName}}</Option>
+                                    <Option v-for="option in groups" :value="option.groupId" :key="new Date()">{{option.groupName}}</Option>
                                 </Select>
+
                             </td>
                             <td  class="clear">
                                 <Checkbox v-model="i.passAlert" class='pass'>通过</Checkbox>
@@ -270,7 +272,7 @@ export default {
                     }
 
                     let userGroups = [];
-
+                    console.log(this.data);
                     for (let i = 0; i < this.data.length; i++) {
                         if (!this.data[i].group.groupId) {
                             this.$Modal.info({

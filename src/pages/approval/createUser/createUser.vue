@@ -317,7 +317,7 @@ export default {
                         }
                     }).then((res) => {
                         if (res.data.errorCode == 0) {
-                            this.groups = Object.assign([], res.data.result).map(item => {
+                            this.groups = Object.assign([], res.data.result.resultList).map(item => {
                                 return {
                                     code: item.id,
                                     name: item.deptName

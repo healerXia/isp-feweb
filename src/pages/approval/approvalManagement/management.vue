@@ -180,7 +180,7 @@ export default {
                         else {
                             this.$Modal.info({
                                 title: '提示',
-                                content: res.data.rspMsg.errorMsg
+                                content: res.data.errorMsg
                             });
                         }
                     }).catch((err) => {
