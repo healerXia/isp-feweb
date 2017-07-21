@@ -114,7 +114,7 @@ export default {
     },
     methods: {
         render() {
-            this.$http.get('isp-process-server/userGroup/getList', {
+            this.$http.get('/isp-process-server/userGroup/getList', {
                 params: this.searchInfo
             }).then((res) => {
                 if (res.data.errorCode == 0) {
