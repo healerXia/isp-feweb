@@ -1,13 +1,24 @@
 <template lang="html">
+<<<<<<< HEAD
   <div class="area">
+=======
+  <div class="">
+>>>>>>> master
       <div class="">
           <p>展示:</p>
           <label v-for='(i, index) in selectList'>{{i.name}}<a href="javascript:;" @click='del(i, index)'>x</a></label>
       </div>
+<<<<<<< HEAD
        <div v-for='(list, index) in lists' :key='index' class="fl box">
             <Checkbox v-model="list.status" @on-change='checkAll(index)'>{{list.name}}</Checkbox>
             <span @click='open(index)'><Icon type="arrow-down-b" ></Icon></span>
             <div class="" v-if='index == value' class="child">
+=======
+       <div v-for='(list, index) in lists' :key='index' class="fl">
+            <Checkbox v-model="list.status" @on-change='checkAll(index)'>{{list.name}}</Checkbox>
+            <a href="javascript:;" @click='open(index)'>+</a>
+            <div class="" v-if='index == value'>
+>>>>>>> master
                 <Checkbox v-model="i.status" v-for='(i, n) in list.children' :key='index' @on-change='check(index, n, i.status)'>{{i.name}}</Checkbox>
             </div>
        </div>
@@ -50,6 +61,7 @@ export default {
                         {
                             name: '石家庄',
                             status: false
+<<<<<<< HEAD
                         },
                         {
                             name: '111',
@@ -101,6 +113,8 @@ export default {
                         {
                             name: '222',
                             status: false
+=======
+>>>>>>> master
                         }
                     ]
                 }
@@ -109,12 +123,16 @@ export default {
     },
     methods: {
         open(index) {
+<<<<<<< HEAD
             if(this.value==index){
                 this.value=-1
             }else{
                 this.value = index;
             }
             
+=======
+            this.value = index;
+>>>>>>> master
         },
         check(index, n, status) {
             this.initCheck(index);
@@ -196,6 +214,7 @@ export default {
 </script>
 
 <style lang="css">
+<<<<<<< HEAD
 .area{width: 200px}
 .f1{overflow:hidden;}
 .box {
@@ -212,4 +231,7 @@ export default {
     left: 0;
     width: 200px;
 }
+=======
+
+>>>>>>> master
 </style>

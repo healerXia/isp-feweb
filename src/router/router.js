@@ -32,6 +32,16 @@ const department = (resolve) => require(['../pages/approval/department/Departmen
 const selectTab = (resolve) => require(['../pages/demos/selectTab'], resolve);
 
 
+// 审批链流程
+const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
+const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
+const addDoc = (resolve) => require(['../pages/approval/addDoc/AddDoc.vue'], resolve);
+const department = (resolve) => require(['../pages/approval/department/Department'], resolve);
+
+// demo
+
+const selectTab = (resolve) => require(['../pages/demos/selectTab'], resolve);
+
 
 
 Vue.use(VueRouter);
@@ -102,12 +112,15 @@ const routes = [
                 name: 'wait',
                 component: Wait
             },
+<<<<<<< HEAD
              {
                 path: 'createUser',
                 name: 'createUser',
                 component: CreateUser
             },
 
+=======
+>>>>>>> master
             {
                 path: 'setUpDepartment',
                 name: 'setUpDepartment',
@@ -140,6 +153,7 @@ const routes = [
                 name: 'form',
                 component: DemoForm
             },
+<<<<<<< HEAD
 
              {
                 path: 'zhoufeng',
@@ -147,11 +161,16 @@ const routes = [
                 component: DemoZhoufeng
             },
 
+=======
+>>>>>>> master
             {
                 path: 'selectTab',
                 name: 'selectTab',
                 component: selectTab
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
             }
         ]
     }
