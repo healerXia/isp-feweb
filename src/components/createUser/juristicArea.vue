@@ -38,7 +38,7 @@
         props:['checkedAreaList'],
         data() {
             return {
-                clickSubmit:true,
+                clickSubmit:false,
                 positions:false,
                 modal1:false,
                 value: -1,
@@ -87,6 +87,7 @@
                 this.modal1=false
             },
             openDialog(){
+                this.value=-1
                 this.modal1=true
                 this.$http.get('/isp-kongming/basic/getArea'+"?pId=-1&pageSize=50").then((res)=>{//获取省级地区
                     if(res.data.errorCode===0){
@@ -101,7 +102,7 @@
                             this.initProvence()
                             // this.initLable()
                         }else{
-                            this.clickSubmit=false
+                            // this.clickSubmit=false
                         }
                     }
                     else {
@@ -230,7 +231,7 @@
                            if(this.lists[i].status==true){
                                 this.areaList[j].status=true
                                 if(i==this.lists.length-1){
-                                    this.clickSubmit=false
+                                    // this.clickSubmit=false
                                 }
                                this.initLable();   
                            }else if(this.lists[i].status==false){
@@ -245,7 +246,7 @@
                                         this.initCity();
                                         this.initLable();                                    
                                         if(i==this.lists.length-1){
-                                            this.clickSubmit=false
+                                            // this.clickSubmit=false
                                         }
                                        
                                     }
@@ -287,7 +288,8 @@
           checkedAreaList:{
             handler:function(){
                 this.lists=this.checkedAreaList  
-            }
+            },
+            deep:true
           }
         }
     }
@@ -366,7 +368,6 @@
             }
         }
     } 
-    
 }
 
 </style>

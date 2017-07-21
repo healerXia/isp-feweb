@@ -14,7 +14,10 @@ const urlList = {
   custInfoson:'/isp-kongming-cust/cust/custInfoson',//获取下拉列表
   getBrand:'/isp-kongming-cust/basic/getBrand',//主营品牌
   dealer:'/isp-kongming-cust/cust/dealer',//所属经销商回填
-  select:'/isp-kongming-cust/cust/select',//编辑
+  select:'/isp-kongming-cust/cust/select',//获取客户信息
+  custBankAccount:"/isp-kongming-cust/cust/custBankAccount",//获取纳税纳税资质证明
+  custBrandLicense :"/isp-kongming-cust/cust/custBrandLicense ",//获取品牌授权书编辑
+  businessLicense:"/isp-kongming-cust/cust/businessLicense",//获取营业执照权书编辑
 }
 
 

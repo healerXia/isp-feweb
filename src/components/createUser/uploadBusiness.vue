@@ -61,7 +61,7 @@
                     <Date-picker type="date" placeholder="选择结束日期"  v-model="uploadBusi.endTime" 
                     :editable="false"></Date-picker>
                   </Form-item>
-                  <Checkbox v-model="uploadBusi.forever">
+                  <Checkbox v-model="forever">
                     永久
                   </Checkbox>
                   <span class="colorRed">{{errorCon.dateErr}}</span>
@@ -82,7 +82,7 @@
               <div class="upload">
                 <span class="label">附件:</span>
                 <Upload 
-                   action="//jsonplaceholder.typicode.com/posts/"
+                  action="http://dev-isp.yiche.com:8081/cust/fileUpload2"
                   :format="['jpg','jpeg','png']"
                   :max-size="10240"
                   :on-format-error="handleFormatError"
@@ -112,8 +112,8 @@ export default {
     return {
       showMessBox:false,
       modal1: false,
+      forever:false,
       uploadBusi:{
-        forever:false,
         licenseNumber:"",//统一社会信用代码
         registeredCapital:"",//注册资本
         beginTime:"",//营业开始时间  ！
@@ -179,7 +179,12 @@ export default {
         if(this.storeEditDate.licenseNumber){//进行回填数据
           this.uploadBusi.registeredCapital=this.storeEditDate.registeredCapital
           this.uploadBusi.beginTime=new Date(this.storeEditDate.beginTime)
-          this.uploadBusi.endTime=new Date(this.storeEditDate.endTime)
+          if(this.uploadBusi.endTime!=""){
+            this.uploadBusi.endTime=new Date(this.storeEditDate.endTime)
+          }else if(this.uploadBusi.endTime=="永久"){
+            this.forever=true
+            this.uploadBusi.endTime=""
+          }        
           this.uploadBusi.licenseNumber=this.storeEditDate.licenseNumber;
           this.uploadBusi.createTime=new Date(this.storeEditDate.createTime)
           this.uploadBusi.legalPerson=this.storeEditDate.legalPerson
@@ -193,24 +198,27 @@ export default {
                 let check_result=this.valueCheck()//注册资本为数字
                 let data_check=this.dateChange();//时间区间的错误提示
                 if(check_result&&data_check){
-                  this.uploadBusi.custId=1
-                  this.$emit('uploadbus',this.uploadBusi)
-                  this.modal1=false
+                  this.uploadBusi.custId=this.$router.currentRoute.query.id;
+                  if(this.uploadBusi.endTime==""){
+                    this.uploadBusi.endTime="永久"
+                  }
+                  let uploadMess=this.getuploadBusi()
                   this.$http.post('/isp-kongming-cust/cust/adBusinessLicense',
-                    this.uploadBusi,
+                    uploadMess,
                     ).then((res) => {
+                      this.$emit('uploadbus',this.uploadBusi)
                       if(res.data.errorCode===0){
                         this.$Modal.success({
                           title: "提示",
                           content: "添加成功",
                         })
+                        this.modal1=false
+                      }else {
+                        this.$Modal.info({
+                            title: '提示',
+                            content: res.data.errorMsg
+                        });
                       }
-                    else {
-                      this.$Modal.info({
-                          title: '提示',
-                          content: res.data.errorMsg
-                      });
-                    }
                   }).catch((err) => {})
                 }               
             } else {
@@ -221,6 +229,18 @@ export default {
                 })
             }
         })
+      },
+      getuploadBusi(){
+        let obj={}
+        for(let item in this.uploadBusi){
+          obj[item]=this.uploadBusi[item]
+        }
+        obj.beginTime=this.formatDate(this.uploadBusi.beginTime)
+        if(obj.endTime!="永久"){
+          obj.endTime=this.formatDate(this.uploadBusi.endTime)
+        }        
+        obj.createTime=this.formatDate(this.uploadBusi.createTime)
+        return obj
       },
       cancel (name) {
         if(this.storeEditDate.licenseNumber){
@@ -251,7 +271,7 @@ export default {
              this.errorCon.dateErr="请填写营业期限"
              return false
           }
-          if(!this.uploadBusi.forever){
+          if(!this.forever){
             if(this.uploadBusi.endTime==""){
               this.errorCon.dateErr="请填写营业期限"
               return false
@@ -270,7 +290,7 @@ export default {
           }
           this.errorCon.dateErr=""
           return true
-        },
+      },
       handleFormatError(file){
          this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
          this.judgeErr.uploadErrShow=true
@@ -280,6 +300,7 @@ export default {
         this.judgeErr.uploadErrShow=true
       },
       fileUploadSuccess(response, file, fileList){
+        console.log(111)
       },
       formatTen(num) { 
         return num > 9 ? (num + "") : ("0" + num); 
@@ -297,11 +318,12 @@ export default {
   watch:{
     editData:{
       handler:function(){
-          this.storeEditDate=this.editData
-          if(this.storeEditDate.licenseNumber){
-            this.showMessBox=true
-          }
-      }
+        this.storeEditDate=this.editData
+        if(this.storeEditDate.licenseNumber){
+          this.showMessBox=true
+        }
+      },
+      deep:true
     }
   }
 

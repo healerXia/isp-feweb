@@ -289,11 +289,11 @@
                   <UploadBrand v-on:uploadbrand="getUploadBrand" :editData="uploadBrandArr"></UploadBrand>
                 </Form-item>
                 <Form-item label="纳税资质证明:">
-                  <UploadPay v-on:uploadpay="getUploadPay" :editData="uploadPayArr"></UploadPay>
+                  <UploadPay v-on:uploadpay="getUploadPay" :editData="uploadPayObj"></UploadPay>
                 </Form-item>
               </div>
               <Form-item>
-                <Button type="primary" class="btn bg4373F3" @click="submit('formValidate')">保存</Button >
+                <Button type="primary" class="btn bg4373F3" @click="submit('formValidate')" :disabled="judgeShow.submitClick">保存</Button >
                 <Button type="primary" class="btn bg4373F3 ML15">提交审核</Button>
                 <Button type="primary" class="btn bgCancle ML15" @click="cancle('formValidate')">取消</Button>
               </Form-item>
@@ -346,10 +346,10 @@
               {name:"综合店",value:3}
             ],
             industryOption:[//客户行业
-              {name:"汽车销售",value:1},
-              {name:"汽车生产",value:2},
-              {name:"汽车服务",value:3},
-              {name:"其他",value:4}
+              {name:"汽车销售",value:10001},
+              {name:"汽车生产",value:10002},
+              {name:"汽车服务",value:10003},
+              {name:"其他",value:10004}
             ],
             custPidOption:[],//所属厂商
             groupIdOption:[],//所属集团
@@ -398,7 +398,6 @@
             custPid:"",//所属厂商+
             dealerId:"",//所属经销商
             salenet:"",//销售网络
-            governArealist:"",//管辖区域
 
             subclassId:"",//客户子类别
             foursId:"",//所属4s
@@ -447,6 +446,7 @@
             ]
           },
           judgeShow:{//错误是否显示
+            submitClick:false,//是否可以点击保存
             custNameErrShow:false,//客户名称重复
             areaErrShow:false,//客户地区
             abbrName_err_show:false,//客户简称
@@ -470,32 +470,36 @@
               lat:null
             },
             store_colligate:{
-              lng:115.539011,
-              lat:40.405972
+              lng:null,
+              lat:null
+              // lng:115.539011,
+              // lat:40.405972
             },
             store_agency:{
-              lng:115.199811,
-              lat:38.758242
+              lng:null,
+              lat:null
+              // lng:115.199811,
+              // lat:38.758242
             }
           },
           checkedAreaList:[//管辖区域地址
-            {
-              name: '河南省',
-              status: false,
-              id:10,
-              children: [
-                {
-                  name:"洛阳市",
-                  id:1002,
-                  status:true
-                }
-              ]
-            },
-            {
-              id:431,
-              name: '北京',
-              status: true,
-            }                 
+            // {
+            //   name: '河南省',
+            //   status: false,
+            //   id:10,
+            //   children: [
+            //     {
+            //       name:"洛阳市",
+            //       id:1002,
+            //       status:true
+            //     }
+            //   ]
+            // },
+            // {
+            //   id:431,
+            //   name: '北京',
+            //   status: true,
+            // }                 
           ],
           uploadBusiObj:{//上传营业执照
             // licenseNumber: "12356789",//统一社会信用代码
@@ -519,28 +523,13 @@
             //   salve: ""
             // }
           ],
-          uploadPayArr:[
-            // {
-            //   taxCode: "AA456456465461",
-            //   validTime:"2016-12-29",
-            //   status: "1",
-            //   bank: "中国银行",
-            //   bankAccount: "HUOXIN888",
-            //   phone:"18610659554",
-            //   address:"北京市昌平区",
-            //   salve: ""
-            // },
-            // {
-            //   taxCode: "AA456456465461",
-            //   validTime: " 2016-12-29",
-            //   status: "1",
-            //   bank: "中国银行",
-            //   bankAccount: "HUOXIN888",
-            //   phone:"18610659554",
-            //   address:"北京市昌平区",
-            //   salve: ""
-            // }
-          ],
+          uploadPayObj:{
+            taxCode:"",
+            custBankAccountList:[],
+            salve:"",
+            validTime:"",
+            status:"",
+          },
           addressObj:{
             provinceId:"",
             cityId:"",
@@ -550,21 +539,9 @@
       },
       created() {//页面数据初始化
         let id=this.$router.currentRoute.query.id
-        if(!id){//不是编辑页面
-          this.setSelectOption("","","","","")
-          this.$http.get(config.urlList.getBrand+"?pageSize=10").then((res) => {//主营品牌
-            if(res.data.errorCode===0){
-              this.optionArr.brandIdOption=res.data.result;
-              this.loading.brandIdLoad=false
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
-            }).catch((err) => {
-          })
+        if(!id){//新建页面时，初始化页面中的下拉列表
+          this.setSelectOption("","","","")//单选
+          this.getBrandOption([],[])//多选
         }
         /***********页面创建区域***********/
         this.$http.get(config.urlList.getArea+"?pId=-1&pageSize=32").then((res)=>{//获取省级地区
@@ -584,10 +561,24 @@
           if(id){
             this.judgeShow.showUpload=true
             this.$http.post(config.urlList.select,
-            {custId:1000785672}
+            {custId:this.$router.currentRoute.query.id}
             ).then((res)=>{
               if(res.data.errorCode===0){
                 this.edit(res.data.result[0])
+                let groupName=res.data.result[0].groupName?res.data.result[0].groupName:""
+
+                let custPName=res.data.result[0].custPName?res.data.result[0].custPName:""
+                let dealerName=res.data.result[0].dealerName?res.data.result[0].dealerName:""
+                let foursName=res.data.result[0].foursName?res.data.result[0].foursName:""
+                let brandnameArr=[];
+                let brandidArr=[];
+                // for(let i=0;i<res.data.result[0].custBrandMapList.length;i++){
+                //   brandnameArr.push(res.data.result[0].custBrandMapList[i].brandName)
+                //   brandidArr.push(res.data.result[0].custBrandMapList[i].brandId)
+                // }
+                this.setSelectOption(groupName,custPName,dealerName,foursName)
+                this.getBrandOption(brandnameArr,brandidArr)
+
               }
               else {
                 this.$Modal.info({
@@ -607,6 +598,7 @@
             this.judgeShow.GovernArealist_err_show=false;
             this.errorMess.GovernArealist_err=""
           }
+          //获取最后上传的governArealist
           var arr=[]
           for(let i=0;i<this.checkedAreaList.length;i++){
             let obj={}
@@ -618,15 +610,17 @@
             }else if(this.checkedAreaList[i].status==false){
               obj.name=this.checkedAreaList[i].name;
               obj.id=this.checkedAreaList[i].id;
+              let children=this.checkedAreaList[i].children
               obj.status=false;
-              let children=[]
-              let childObj={}
-              for(let j=0;j<this.checkedAreaList[i]['children'].length;j++){
-                childObj.name=this.checkedAreaList[i].children[j].name
-                childObj.id=this.checkedAreaList[i].children[j].value
-                children.push(childObj)
+              let child=[]
+              for(let z=0;z<children.length;z++){
+                let childObj={}
+                childObj['name']=children[z].name
+                childObj['id']=children[z].value
+                child.push(childObj)
               }
-              obj.children=children
+
+              obj.children=child
               arr.push(obj)
             }
           }
@@ -666,11 +660,18 @@
           this.uploadBrandArr.push(obj)
         },
         getUploadPay(data){//组件 获取上传纳税资质证明
+          this.uploadPayObj.taxCode=data.taxCode
+          this.uploadPayObj.custBankAccountList=data.custBankAccountList
+          this.uploadPayObj.salve=data.salve
+          if(data.validTime){
+            this.uploadPayObj.validTime=data.validTime
+            this.uploadpayObj.status=data.status
+          }
         },
         /*********编辑与新建的时候下拉的回填************/
-        setSelectOption(group,custName,fourName,dealer,salenet){//单选
+        setSelectOption(group,custNames,fourName,dealer){//单选
           this.$http.post(config.urlList.custInfoson,//所属集团
-            {typeId:3,custName:custName},
+            {typeId:3,custName:group},
             {emulateJSON:true}
             ).then((res) => {
               if(res.data.errorCode===0){
@@ -691,13 +692,13 @@
             }).catch((err) => {
           })
           this.$http.post(config.urlList.custInfoson,//所属厂商
-            {typeId:1,custName:custName},
+            {typeId:1,custName:custNames},
             {emulateJSON:true,}
             ).then((res) => {
               if(res.data.errorCode===0){
                 this.optionArr.custPidOption=res.data.result.splice(0,10);
                 setTimeout(()=>{
-                  if(custName!=""&&this.optionArr.custPidOption.length==1){
+                  if(custNames!=""&&this.optionArr.custPidOption.length==1){
                     this.formValidate.custPid=this.optionArr.custPidOption[0].value
                   }
                 },0)
@@ -754,70 +755,144 @@
             }).catch((err) => {
           })
         },
-        getBrandOption(nameArr,idArr){//主营品牌回填的时候
-          this.formValidate.brandName=nameArr;
-          var resultArr=[]
-          for(let i=0;i<nameArr.length;i++){
-            let item={};
-            item['name']=nameArr[i];
-            item['value']=idArr[i];
-            resultArr.push(item);
-          }
-          this.optionArr.brandIdOption=resultArr
-          this.loading.brandIdLoad=false
-          setTimeout(()=>{
-            this.formValidate.brandId=idArr
-          },0)
+        getBrandOption(nameArr,idArr){//主营品牌新建回填的时候
+          if(nameArr.length==0){//新建
+            this.$http.get(config.urlList.getBrand+"?pageSize=10").then((res) => {//主营品牌
+              if(res.data.errorCode===0){
+                this.optionArr.brandIdOption=res.data.result;
+                this.loading.brandIdLoad=false
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+              }).catch((err) => {
+            })
+          }else{//回填
+            this.formValidate.brandName=nameArr;
+            var resultArr=[]
+            for(let i=0;i<nameArr.length;i++){
+              let item={};
+              item['name']=nameArr[i];
+              item['value']=idArr[i];
+              resultArr.push(item);
+            }
+            this.optionArr.brandIdOption=resultArr
+            this.loading.brandIdLoad=false
+            setTimeout(()=>{
+              this.formValidate.brandId=idArr
+            },0)
+          }         
         },
         edit(data){
-          console.log(data)
-          //所属集团,所属厂商,所属4S,所属经销商,销售网络,主营品牌  都不需要回填
+          //所属集团,所属厂商,所属4S,所属经销商,主营品牌  下拉做特殊处理，不需要自己回填
           let submitData={};
           //公共都有的
           this.formValidate.typeId=parseInt(data.typeId);//客户类别
           this.formValidate.custName=data.custName//客户名称
           this.formValidate.abbrName=data.abbrName//客户简称
-          this.formValidate.provinceId=data.provinceId
+          this.formValidate.provinceId=data.provinceId//地区
           this.addressObj.cityId=data.cityId
           this.addressObj.countyId=data.countyId
-
           this.formValidate.address=data.address;//客户地址
+          this.formValidate.subclassId=data.subclassId?data.subclassId:""
+          this.backFillUpload(this.formValidate.typeId,data);//回填上个上传组件
           if(this.formValidate.typeId==1){
-            this.formValidate.industryId=data.industryId//客户行业
-            //主营品牌 多选下拉回填，已处理
+            this.formValidate.industryId=parseInt(data.industryId)//客户行业
           }else if(this.formValidate.typeId==2){
-            this.formValidate.salenet=data.salenet//销售网络
-            this.formValidate.GovernArealist=data.GovernArealist//管辖区域
+            this.getCheckArea(data.governArealist)//回填管辖区域
+            this.formValidate.salenet=parseInt(data.salenet)//销售网络
           }else if(this.formValidate.typeId==3){
-            this.formValidate.industryId=data.industryId//客户行业
+            this.formValidate.industryId=parseInt(data.industryId)//客户行业
           }else if(this.formValidate.typeId==4&&this.formValidate.subclassId==1){
+            console.log(data.industryId)
             this.formValidate.subclassId=data.subclassId//客户子类别
-            this.formValidate.industryId=data.industryId//客户行业
+            this.formValidate.industryId=parseInt(data.industryId)//客户行业
           }else if(this.formValidate.typeId==4&&this.formValidate.subclassId==2){
             this.formValidate.subclassId=data.subclassId//客户子类别
-            this.formValidate.industryId=data.industryId//客户行业
+            this.formValidate.industryId=parseInt(data.industryId)//客户行业
           }else if(this.formValidate.typeId==4&&this.formValidate.subclassId==3){
             this.formValidate.subclassId=data.subclassId//客户子类别
-            this.formValidate.industryId=data.industryId//客户行业
+            this.formValidate.industryId=parseInt(data.industryId)//客户行业
           }else if(this.formValidate.typeId==5){
             this.formValidate.subclassId=data.subclassId//客户子类别
-            submitData['groupId']=this.formValidate.groupId//所属集团
-            submitData['brandId']=this.formValidate.brandId//主营品牌
-            submitData['vendorCode']=this.formValidate.vendorCode//厂商代码
-            submitData['companypro']=this.formValidate.companypro//企业简介
-            submitData['notes']=this.formValidate.notes//备注
-            if(this.formValidate.subclassId!=3){
-              submitData['custPid']=this.formValidate.custPid//所属厂商
+            this.formValidate.vendorCode=data.vendorCode//厂商代码
+            this.formValidate.companypro=data.companypro//企业简介
+            this.formValidate.notes=data.notes//备注
+            if(this.formValidate.subclassId==1){
+              this.mapLocation.store_4s.lng=data.longitude
+              this.mapLocation.store_4s.lat=data.latitude
+            }else if(this.formValidate.subclassId==2){
+              this.mapLocation.store_agency.lng=data.longitude
+              this.mapLocation.store_agency.lat=data.latitude
+            }else if(this.formValidate.subclassId==3){
+              this.mapLocation.store_agency.lng=data.longitude
+              this.mapLocation.store_agency.lat=data.latitude
             }
           }else if(this.formValidate.typeId==6||this.formValidate.typeId==7){
-            submitData['custPid']=this.formValidate.custPid//所属厂商
-            submitData['groupId']=this.formValidate.groupId//所属集团
-            submitData['industryId']=this.formValidate.industryId//客户行业
-            submitData['brandId']=this.formValidate.brandId//主营品牌
+            this.formValidate.industryId=data.industryId//客户行业
+          }
+        },
+        backFillUpload(typeId,data){//上传组件的回填
+          let id=this.$router.currentRoute.query.id
+          if(typeId!=5){//三个上传
+            this.$http.post(config.urlList.custBankAccount,//获取纳税纳税资质证明
+              {custId:id},
+              {emulateJSON:true}
+              ).then((res)=>{
+              if(res.data.errorCode===0){
+                if(res.data.result.length>=1){
+                  this.getUploadPay({})
+                }
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((res)=>{})
+
+            this.$http.post(config.urlList.custBrandLicense,//获取品牌授权书编辑
+              {custId:id},
+              {emulateJSON:true}
+              ).then((res)=>{
+              if(res.data.errorCode===0){
+                if(res.data.result.length>=1){
+                  this.getUploadBrand(res.data.result[0])
+                }
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((res)=>{})
+
+            this.$http.post(config.urlList.businessLicense,//获取营业执照权书编辑
+              {custId:id},
+              {emulateJSON:true}
+              ).then((res)=>{
+              if(res.data.errorCode===0){
+                if(res.data.result.length>=1){
+                  this.getUploadBusiness(res.data.result[0])
+                }
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((res)=>{})
           }
         },
         //提交数据
         submit (name) {
+            this.judgeShow.submitClick=true
             this.$refs[name].validate((valid) => {
                 this.areaCheck()//这个是提交的时候检查地区的，显示错误提示
                 if (valid) {
@@ -826,17 +901,29 @@
                     let submitData=this.operSubmitData();
                     this.$http.post(config.urlList.addCustInfo,//提交数据
                       submitData,
-                      {emulateJSON:true,}
+                      {emulateJSON:true}
                       ).then((res) => {
                         if(res.data.errorCode===0){
                           this.$Modal.success({
                             title: "提示",
                             content: "添加客户成功,请上传证件",
+                            onOk: () =>{
+                              this.showUpload=true
+                              this.judgeShow.submitClick=false//可以点击
+                              // this.$router.push({path:"createUser",query:{id:res.data.result}})
+                              // this.$router.go(0)//刷新当前页面
+                            }
                           })
                           //添加成功,调到该页面上传
-                          this.$router.push({path:"createUser",query:{id:res.data.result}})
+                          // setTimeout(()=>{
+                          //   this.$router.push({path:"createUser",query:{id:res.data.result}})
+                          //   this.$router.go(0)//刷新当前页面
+                          //   this.judgeShow.submitClick=false//可以点击
+                          // },3000)
+                          
                         }
                         else {
+                          this.judgeShow.submitClick=false//可以点击
                           this.$Modal.info({
                               title: '提示',
                               content: res.data.errorMsg
@@ -844,21 +931,22 @@
                         }
                     }).catch((err) => {})
                   }else{
+                    this.judgeShow.submitClick=false//可以点击
                     this.$Modal.error({
                         title: '提示',
                         content: "表单验证失败！"
                     })
                   }
-                
-                } else {
-                    this.$Modal.error({
-                        title: '提示',
-                        content: "表单验证失败！"
-                    })
+                }else {
+                  this.judgeShow.submitClick=false
+                  this.$Modal.error({
+                      title: '提示',
+                      content: "表单验证失败！"
+                  })
                 }
             })
         },
-        submitAudit(name){
+        submitAudit(name){//
           this.$refs[name].validate((valid) => {
             if (valid) {
                 let lastCheck=this.checkValue()
@@ -925,14 +1013,15 @@
             submitData['vendorCode']=this.formValidate.vendorCode//厂商代码
             submitData['companypro']=this.formValidate.companypro//企业简介
             submitData['notes']=this.formValidate.notes//备注
-            if(this.formValidate.subclassId!=3){
-              submitData['custPid']=this.formValidate.custPid//所属厂商
+            if(this.formValidate.subclassId==3){
               submitData['longitude']=this.mapLocation.store_colligate.lng//地图精度
               submitData['latitude']=this.mapLocation.store_colligate.lat//地图纬度
             }else if(this.formValidate.subclassId==1){
+              submitData['custPid']=this.formValidate.custPid//所属厂商
               submitData['longitude']=this.mapLocation.store_4s.lng//地图精度
               submitData['latitude']=this.mapLocation.store_4s.lat//地图纬度
             }else if(this.formValidate.subclassId==2){
+              submitData['custPid']=this.formValidate.custPid//所属厂商
               submitData['longitude']=this.mapLocation.store_agency.lng//地图精度
               submitData['latitude']=this.mapLocation.store_agency.lat//地图纬度
             }
@@ -1255,7 +1344,7 @@
           //   }
           //   }).catch((err) => {})
         },
-        brandIdChoose(query){//主营品牌
+        brandIdChoose(query){//主营品牌，多选，要处理
           this.$http.get(config.urlList.getBrand+'?pageSize=10&name='+query).then((res) => {//投放品牌
             if(res.data.errorCode===0){
               for(let i=0;i<res.data.result.length;i++){

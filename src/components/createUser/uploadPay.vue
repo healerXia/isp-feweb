@@ -8,21 +8,21 @@
               <li>
                 <span>纳税人识别号：</span>
                 <span>
-                {{storeEditDate.length>=1?storeEditDate[0].taxCode:""}}
+                {{storeEditDate.taxCode!=""?storeEditDate.taxCode:""}}
                 </span>
               </li>
               <li>
                 <span>有效期：</span><span>
-                {{storeEditDate.length>=1?storeEditDate[0].validTime:""}}
+                {{storeEditDate.taxCode!=""?storeEditDate.validTime:""}}
                 </span>
               </li>
               <li>
                 <span>资质状态：</span>
                 <span>
-                {{storeEditDate.length>=1?storeEditDate[0].status:""}}
+                {{storeEditDate.taxCode!=""?storeEditDate.status:""}}
                 </span>
               </li>
-              <li v-for="(item,index) in storeEditDate">
+              <li v-for="(item,index) in storeEditDate.custBankAccountList" v-if="item.bank">
                 <ul>
                   <li><span>开户银行({{index+1}})：</span><span>{{item.bank}}</span></li>
                   <li><span>开户账号({{index+1}})：</span><span>{{item.bankAccount}}</span></li>
@@ -31,7 +31,7 @@
                 </ul>
               </li>
                <li>
-                <span>附件:</span><span>111</span>
+                <span>附件：</span><span>1111</span>
               </li>
             </ul>
           </div>
@@ -157,12 +157,13 @@ export default {
           checkValue:{
             taxCode:[{required:true,message:'请输入纳税人识别号',trigger:'blue',type:"string"}]
           },
-          storeEditDate:[],
+          storeEditDate:{},
         }
     },
     created(){
       this.storeEditDate=this.editData
-      if(this.storeEditDate.length>=1){
+      if(this.storeEditDate.taxCode){
+        console.log(this.storeEditDate.taxCode)
         this.showMessBox=true
       }
     },
@@ -184,15 +185,15 @@ export default {
         //进来，先判断纳税人识别号是不是空，如果是空，隐藏框子
         //如果不是打开框子
         //然后看开户信息， 有几条显示几条，没有的话就显示一行空的
-        if(this.storeEditDate.length>1){//进行回填数据
-          this.uploadPay.taxCode=this.storeEditDate[0].taxCode
+        if(this.storeEditDate.taxCode){//进行回填数据
+          this.uploadPay.taxCode=this.storeEditDate.taxCode
           this.accMessArr=[];
-          for(let i=0;i<this.storeEditDate.length;i++){
+          for(let i=0;i<this.storeEditDate.custBankAccountList.length;i++){
             let obj={}
-            obj.bank=this.storeEditDate[i].bank;
-            obj.bankAccount=this.storeEditDate[i].bankAccount;
-            obj.phone=this.storeEditDate[i].phone;
-            obj.address=this.storeEditDate[i].address;
+            obj.bank=this.storeEditDate.custBankAccountList[i].bank;
+            obj.bankAccount=this.storeEditDate.custBankAccountList[i].bankAccount;
+            obj.phone=this.storeEditDate.custBankAccountList[i].phone;
+            obj.address=this.storeEditDate.custBankAccountList[i].address;
             obj.errShow={
               scale_acc:false,
               bankAccount_err_show:false,
@@ -398,23 +399,25 @@ export default {
               let check_account=this.accountMessCheck()
               let check_tax=this.taxCodeCheck()
               if(check_account&&check_tax){
-                this.$emit('uploadpay',this.uploadPay)
                 this.getCustBankAccountList();
+                this.uploadPay.custId=this.$router.currentRoute.query.id;    
+                this.$emit('uploadpay',this.uploadPay)   
                 this.$http.post('/isp-kongming-cust/cust/adCustBankAccount',
                     this.uploadPay,
                     ).then((res) => {
-                      if(res.data.errorCode===0){
-                        this.modal1=false
+                    if(res.data.errorCode===0){                       
                         this.$Modal.success({
                           title: "提示",
                           content: "添加成功",
                         })
+                        this.modal1=false
                       }
                     else {
                       this.$Modal.info({
                           title: '提示',
                           content: res.data.errorMsg
                       });
+                      this.modal1=false
                     }
                 }).catch((err) => {})
               }
@@ -436,10 +439,11 @@ export default {
       editData:{
         handler:function(){
           this.storeEditDate=this.editData
-          if(this.storeEditDate.length>=1){
+          if(this.storeEditDate.taxCode!=""){
             this.showMessBox=true
           }
-        }
+        },
+        deep:true
       }
     }
 }

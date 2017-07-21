@@ -98,24 +98,23 @@ export default {
     }
   },
   created(){
-      this.$http.get('/isp-kongming-cust/basic/getBrand?pageSize=10&name='+this.uploadBrand.brandName).then((res) => {//主营品牌
-        if(res.data.errorCode===0){
-          this.brandOption=res.data.result.splice(0,10);
-          this.brandLoad=false
-          setTimeout(()=>{
-            if(this.uploadBrand.brandName!=""&&this.brandOption.length==1){
-              this.uploadBrand.brandId=this.brandOption[0].value
-            }
-          },0)
-        }
-        else {
-          this.$Modal.info({
-              title: '提示',
-              content: res.data.errorMsg
-          });
-        }
-      }).catch((err) => {})
-    
+    this.$http.get('/isp-kongming-cust/basic/getBrand?pageSize=10&name='+this.uploadBrand.brandName).then((res) => {//主营品牌
+      if(res.data.errorCode===0){
+        this.brandOption=res.data.result.splice(0,10);
+        this.brandLoad=false
+        setTimeout(()=>{
+          if(this.uploadBrand.brandName!=""&&this.brandOption.length==1){
+            this.uploadBrand.brandId=this.brandOption[0].value
+          }
+        },0)
+      }
+      else {
+        this.$Modal.info({
+            title: '提示',
+            content: res.data.errorMsg
+        });
+      }
+    }).catch((err) => {})
     this.storeEditDate=this.editData;
     if(this.storeEditDate.length>=1){
       this.showMessBox=true
@@ -128,7 +127,6 @@ export default {
     brandChoose(query){
       this.$http.get('/isp-kongming-cust/basic/getBrand?pageSize=10&name='+query).then((res) => {//主营品牌
         if(res.data.errorCode===0){
-          console.log(res.data.result)
           this.brandOption=res.data.result.splice(0,10);
           this.brandLoad=false
         }
@@ -146,16 +144,18 @@ export default {
     submit (name) {
       this.$refs[name].validate((valid) => {
           if (valid) {
+              this.uploadBrand.custId=this.$router.currentRoute.query.id;
               this.$emit('uploadbrand',this.uploadBrand)
+              let uploadMess=this.getUploadMess()
               this.$http.post('/isp-kongming-cust/cust/adCustBrandLicense',
-                    this.uploadBrand,
+                    uploadMess,
                     ).then((res) => {
                       if(res.data.errorCode===0){
-                        this.modal1=false
                         this.$Modal.success({
                           title: "提示",
-                          content: "添加成功",
+                          content: "提交成功",
                         })
+                        this.modal1=false
                       }
                     else {
                       this.$Modal.info({
@@ -164,7 +164,6 @@ export default {
                       });
                     }
                 }).catch((err) => {})
-              this.modal1=false
           } else {
             this.$Modal.error({
                 title: '提示',
@@ -172,6 +171,14 @@ export default {
             })
           }
       })
+    },
+    getUploadMess(){
+      let obj={}
+      for(let item in this.uploadBrand){
+        obj[item]=this.uploadBrand[item]
+      }
+      obj.validTime=this.formatDate(this.uploadBrand.validTime)
+      return obj
     },
     cancel (name) {
       this.$refs[name].resetFields();
@@ -186,6 +193,18 @@ export default {
       this.judgeErr.uploadErrShow=true
     },
     fileUploadSuccess(response, file, fileList){       
+    },
+    formatTen(num) { 
+      return num > 9 ? (num + "") : ("0" + num); 
+    },
+    formatDate(date) { //时间格式的转换 标准->正常
+      var year = date.getFullYear(); 
+      var month = date.getMonth() + 1; 
+      var day = date.getDate(); 
+      var hour = date.getHours(); 
+      var minute = date.getMinutes(); 
+      var second = date.getSeconds(); 
+      return year + "-" + this.formatTen(month) + "-" + this.formatTen(day); 
     }
   },
   watch:{
@@ -195,7 +214,8 @@ export default {
         if(this.storeEditDate.length>=1){
           this.showMessBox=true
         }
-      }
+      },
+      deep:true
     }
   }
 }
