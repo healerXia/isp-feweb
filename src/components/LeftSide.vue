@@ -55,9 +55,9 @@
             </template>
             <Menu-item name="4-1">
                 <router-link class="white"
-                :to="{path:'wait'}">
+                :to="{path:'createUser'}">
                     <span class="menuCircle"></span>
-                     客户管理
+                     新增客户
                 </router-link>
             </Menu-item>
             <Menu-item name="4-2">

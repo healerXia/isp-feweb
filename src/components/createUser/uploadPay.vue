@@ -19,7 +19,7 @@
               <li>
                 <span>资质状态：</span>
                 <span>
-                {{storeEditDate.taxCode!=""?storeEditDate.status:""}}
+                {{storeEditDate.taxCode!=""?storeEditDate.status:"待审核"}}
                 </span>
               </li>
               <li v-for="(item,index) in storeEditDate.custBankAccountList" v-if="item.bank">
@@ -402,24 +402,7 @@ export default {
                 this.getCustBankAccountList();
                 this.uploadPay.custId=this.$router.currentRoute.query.id;    
                 this.$emit('uploadpay',this.uploadPay)   
-                this.$http.post('/isp-kongming-cust/cust/adCustBankAccount',
-                    this.uploadPay,
-                    ).then((res) => {
-                    if(res.data.errorCode===0){                       
-                        this.$Modal.success({
-                          title: "提示",
-                          content: "添加成功",
-                        })
-                        this.modal1=false
-                      }
-                    else {
-                      this.$Modal.info({
-                          title: '提示',
-                          content: res.data.errorMsg
-                      });
-                      this.modal1=false
-                    }
-                }).catch((err) => {})
+                this.modal1=false
               }
              
           } else {

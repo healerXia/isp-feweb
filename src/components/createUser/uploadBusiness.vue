@@ -201,25 +201,10 @@ export default {
                   this.uploadBusi.custId=this.$router.currentRoute.query.id;
                   if(this.uploadBusi.endTime==""){
                     this.uploadBusi.endTime="永久"
+
                   }
-                  let uploadMess=this.getuploadBusi()
-                  this.$http.post('/isp-kongming-cust/cust/adBusinessLicense',
-                    uploadMess,
-                    ).then((res) => {
-                      this.$emit('uploadbus',this.uploadBusi)
-                      if(res.data.errorCode===0){
-                        this.$Modal.success({
-                          title: "提示",
-                          content: "添加成功",
-                        })
-                        this.modal1=false
-                      }else {
-                        this.$Modal.info({
-                            title: '提示',
-                            content: res.data.errorMsg
-                        });
-                      }
-                  }).catch((err) => {})
+                  this.$emit('uploadbus',this.uploadBusi)
+                  this.modal1=false
                 }               
             } else {
                 let data_check=this.dateChange();//时间区间的错误提示
@@ -229,18 +214,6 @@ export default {
                 })
             }
         })
-      },
-      getuploadBusi(){
-        let obj={}
-        for(let item in this.uploadBusi){
-          obj[item]=this.uploadBusi[item]
-        }
-        obj.beginTime=this.formatDate(this.uploadBusi.beginTime)
-        if(obj.endTime!="永久"){
-          obj.endTime=this.formatDate(this.uploadBusi.endTime)
-        }        
-        obj.createTime=this.formatDate(this.uploadBusi.createTime)
-        return obj
       },
       cancel (name) {
         if(this.storeEditDate.licenseNumber){

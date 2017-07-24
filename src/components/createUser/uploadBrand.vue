@@ -146,24 +146,7 @@ export default {
           if (valid) {
               this.uploadBrand.custId=this.$router.currentRoute.query.id;
               this.$emit('uploadbrand',this.uploadBrand)
-              let uploadMess=this.getUploadMess()
-              this.$http.post('/isp-kongming-cust/cust/adCustBrandLicense',
-                    uploadMess,
-                    ).then((res) => {
-                      if(res.data.errorCode===0){
-                        this.$Modal.success({
-                          title: "提示",
-                          content: "提交成功",
-                        })
-                        this.modal1=false
-                      }
-                    else {
-                      this.$Modal.info({
-                          title: '提示',
-                          content: res.data.errorMsg
-                      });
-                    }
-                }).catch((err) => {})
+              this.modal1=false
           } else {
             this.$Modal.error({
                 title: '提示',
@@ -171,14 +154,6 @@ export default {
             })
           }
       })
-    },
-    getUploadMess(){
-      let obj={}
-      for(let item in this.uploadBrand){
-        obj[item]=this.uploadBrand[item]
-      }
-      obj.validTime=this.formatDate(this.uploadBrand.validTime)
-      return obj
     },
     cancel (name) {
       this.$refs[name].resetFields();
