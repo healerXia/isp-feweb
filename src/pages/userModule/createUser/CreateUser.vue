@@ -523,7 +523,7 @@
             //   salve: ""
             // }
           ],
-          uploadPayObj:{
+          uploadPayObj:{//上传纳税资质
             taxCode:"",
             custBankAccountList:[],
             salve:"",
