@@ -16,6 +16,15 @@ const Wait = (resolve) => require(['../pages/wait/Wait.vue'], resolve);
 const ViewAd = (resolve) => require(['../pages/viewAd/ViewAd'], resolve);
 const ChooseTime = (resolve) =>  require(['../pages/chooseTime/ChooseTime'],resolve);
 const DemoForm = (resolve) => require(['../pages/demos/DemoForm.vue'], resolve);
+const DemoZhoufeng = (resolve) => require(['../pages/demos/DemoZhoufeng.vue'], resolve);
+
+//客户模块
+const CreateUser  = (resolve) => require(['../pages/userModule/createUser/CreateUser'], resolve);
+const CustDetail  = (resolve) => require(['../pages/userModule/custDetail/CustDetail'], resolve);
+
+
+
+
 
 
 //个人中心
@@ -117,6 +126,16 @@ const routes = [
                 name: 'wait',
                 component: Wait
             },
+             {
+                path: 'createUser',
+                name: 'createUser',
+                component: CreateUser
+            },
+            {
+                path: 'custDetail',
+                name: 'custDetail',
+                component: CustDetail
+            },
             {
                 path: 'setUpDepartment',
                 name: 'setUpDepartment',
@@ -193,6 +212,18 @@ const routes = [
                 path: 'form',
                 name: 'form',
                 component: DemoForm
+            },
+
+             {
+                path: 'zhoufeng',
+                name: 'zhoufeng',
+                component: DemoZhoufeng
+            },
+
+            {
+                path: 'selectTab',
+                name: 'selectTab',
+                component: selectTab
             },
             {
                 path: 'selectTab',

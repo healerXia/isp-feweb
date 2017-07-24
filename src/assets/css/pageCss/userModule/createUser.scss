@@ -1,0 +1,52 @@
+.createUser{
+	width: 100%;
+	.content{
+    width: 100%;
+    .createInput {
+        width: 398px;
+    }
+    .dateInput {
+        width: 178px;
+    }
+    .contentBox{
+      padding-left: 30px;
+      width: 100%;
+      .title{
+        font-size: 14px;
+        color: #333;
+      }
+      .formBox{
+        $inputH:32px;
+        width: 100%;
+        box-sizing: border-box;
+        input,.ivu-select{width: 400px; float: left;}
+        .budget{
+          .unit{
+            float: left;
+            margin-left: 5px;
+          }
+          .unit+ .ivu-form-item-error-tip{
+            left: 430px;
+          }
+        }
+      }
+    }
+  }
+  .ivu-form-item .ivu-form-item {
+    display: inline-block;
+    margin-bottom: 0;
+  }
+  .ivu-input-number {
+    width: 400px
+  }
+  .ivu-form .ivu-form-item-label{
+    padding: 12px 12px 10px 0;
+  }
+	.checkedGovernArealist{
+    span{
+      float: left;
+      margin-right: 10px;
+      margin-left: 0
+    }
+  }
+}
