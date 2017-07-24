@@ -18,51 +18,22 @@
                   <tbody>
                       <tr class="tableInput" v-for='(i, index) in tableList'>
                           <td>
-                              <Select
-                                  v-model="i.name"
-                                  placeholder="请输入成员名字"
-                                  filterable
-                                  remote
-                                  :remote-method="remoteName"
-                                  :clearable = "true"
-                                  :loading="loading1"
-                                  label-in-value="true"
-                                  @on-change='selName(index)'
-                                  class='text fl nameList'>
-                                  <Option v-for="option in names" :value="option" :key="new Date()">{{option.userName}}</Option>
-                              </Select>
+                              <select :id="'member' + index" name="sample" style="width:80%;height:38px;" class="js-example-basic-multiple">
+                                  <option value=""></option>
+                                  <option v-for='i in names' :value="i.id" :id="i.id">{{i.value}}</option>
+                              </select>
                           </td>
                           <td>
-                              <Select
-                                  v-model="i.group"
-                                  placeholder="请输入负责部门"
-                                  multiple
-                                  filterable
-                                  remote
-                                  :remote-method="remoteGroup"
-                                  :clearable = "true"
-                                  :loading="loading1"
-                                  @on-change='selGroup(index)'
-                                  class='text fl'>
-                                  <Option v-for="option in groups" :value="option.code" :key="new Date()">{{option.name}}</Option>
-                              </Select>
+                              <select :id="'department'+ index" name="sample" style="width:80%;height:38px;" class="js-example-basic-multiple">
+                                  <!-- <option value=""></option> -->
+                                  <option v-for='i in groups' :value="i.id" :id="i.id">{{i.value}}</option>
+                              </select>
                           </td>
                           <td>
-                              <Select
-                                v-model="i.employee"
-                                placeholder="请输入负责员工姓名"
-                                multiple
-                                filterable
-                                remote
-                                :remote-method="remoteEmployee"
-                                :loading="loading1"
-                                :label-in-value = "true"
-                                class='text'
-                                @on-change='selEmployee(index)'
-                                :data-index='index'
-                                >
-                                <Option v-for="option in employees" :value="option.code" :key="new Date()">{{option.name}}</Option>
-                             </Select>
+                              <select :id="'employee' + index" name="sample" style="width:80%;height:38px;" class="js-example-basic-multiple">
+                                  <!-- <option value=""></option> -->
+                                  <option v-for='i in employees' :value="i.id" :id="i.id">{{i.value}}</option>
+                              </select>
                           </td>
                       </tr>
                   </tbody>
@@ -72,8 +43,8 @@
                  <Button type="button" long @click="handleAdd" icon="plus-round" class='text add'>继续添加</Button>
               </div>
               <Form-item class='btnList'>
-                  <Button type="primary" @click="handleSubmit('formValidate', 1)" class="saveNext fl">保存并继续</Button>
-                  <Button type="primary" @click="handleSubmit('formValidate', 2)" class="save fl">保存</Button>
+                  <Button type="primary" @click="handleSubmit('formValidate', 1)" class="saveNext fl" :disabled='submitStatus'>保存并继续</Button>
+                  <Button type="primary" @click="handleSubmit('formValidate', 2)" class="save fl" :disabled='submitStatus'>保存</Button>
                   <Button type="ghost" @click="handleReset('formValidate')"  class="cancel fl">取消</Button>
               </Form-item>
           </Form>
@@ -81,6 +52,10 @@
 </template>
 
 <script>
+import 'select2';
+import 'select2/dist/js/i18n/zh-CN.js';
+import 'select2/dist/css/select2.css';
+import 'select2-bootstrap-theme/dist/select2-bootstrap.css';
 export default {
     data() {
         const validateName = (rule, value, callback) => {
@@ -94,12 +69,14 @@ export default {
             }
         };
         return {
+            submitStatus: false,
             id: '',
             titleTxt: '新建用户组',
             loading1: false,
             names: [],
             groups: [],
             employees: [],
+            editData: null,
             formValidate: {
                 groupName: ''
             },
@@ -131,14 +108,14 @@ export default {
                     {required: true, message: '请填写用户组名称', trigger: 'change' },
                     {validator: validateName, trigger: 'blur'}
                 ]
-            },
-            editData: {}
+            }
         }
     },
     mounted() {
         let id = this.$router.currentRoute.query.id;
         if (id) {
             this.titleTxt = '配置用户组';
+            this.id = id;
             this.$http.get('/isp-process-server/userGroup/getModel', {
                 params: {
                     groupId: id
@@ -148,44 +125,35 @@ export default {
                     this.editData = Object.assign({}, res.data.result);
                     this.formValidate.groupName = this.editData.groupName;
                     let list = this.editData.list;
-                    this.tableList = [];
+
+                    if (list.length > this.tableList.length) {
+                        this.tableList = [];
+                        for (let i = 0; i < list.length; i++) {
+                            this.tableList.push({
+                                name: null,
+                                group: [],
+                                employee: [],
+                                groupList: [],
+                                employeeList: []
+                            })
+                        }
+                    }
+
+                    this.editData = list;
+
+                    this.initMember('/isp-process-server/employee/getList','#member', list);
+                    this.initDep('/isp-process-server/depart/getList','#department', list);
+                    this.initEmp('/isp-process-server/employee/getList','#employee', list);
+
+
                     for (let i = 0; i < list.length; i++) {
+                        // 初始化成员列表
                         let groupList = JSON.parse(list[i].responsibleDept);
                         let employeeList = JSON.parse(list[i].responsibleUser);
 
-                        let group = groupList.map(item => item.code);
-                        let employee = employeeList.map(item => item.code);
-
-                        this.names.push({
-                            userId: list[i].userId,
-                            userName: list[i].userName
-                        })
-
-                        setTimeout(() => {
-                            document.querySelectorAll('.nameList .ivu-select-input')[i].value = list[i].userName;
-                        },500)
-
-                        this.tableList.push({
-                            name: {
-                                userId: list[i].userId,
-                                userName: list[i].userName,
-                            },
-                            group: group,
-                            employee: employee,
-                            groupList: groupList,
-                            employeeList: employeeList
-                        })
                     }
 
-                    this.tableList.push({
-                        name: null,
-                        group: [],
-                        employee: [],
-                        groupList: [],
-                        employeeList: []
-                    })
 
-                    console.log(this.tableList);
                 }
             }).catch((err) => {
                 console.log(err);
@@ -193,37 +161,93 @@ export default {
         }
         else {
             this.titleTxt = '创建用户组';
+            this.initMember('/isp-process-server/employee/getList','#member');
+            this.initDep('/isp-process-server/depart/getList','#department');
+            this.initEmp('/isp-process-server/employee/getList','#employee');
         }
     },
     methods: {
         handleSubmit (name, status) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                    if (this.submitStatus) {
+                        return false;
+                    }
+                    this.submitStatus = true;
+                    for (let i = 0; i < this.tableList.length; i++) {
+                        let member = $(`#member${i}`).select2('data');
+                        let department = $(`#department${i}`).select2('data');
+                        let employee = $(`#employee${i}`).select2('data');
+
+                        if(member[0].id == '') {
+                            member.shift();
+                        }
+                        else {
+                            this.tableList[i].userId = member[0].id;
+                            this.tableList[i].userName = member[0].text;
+                        }
+
+                        if (department.length > 0) {
+                            let aDep = department.map(item => {
+                                return {
+                                    code: item.id,
+                                    name: item.text
+                                }
+                            });
+
+                            this.tableList[i].responsibleDept = JSON.stringify(aDep);
+                        }
+                        else {
+                            this.tableList[i].responsibleDept = [];
+                        }
+
+                        if (employee.length > 0) {
+                            let aEm = employee.map(item => {
+                                return {
+                                    code: item.id,
+                                    name: item.text
+                                }
+                            });
+
+                            this.tableList[i].responsibleUser = JSON.stringify(aEm);
+                        }
+                        else {
+                            this.tableList[i].responsibleUser = [];
+                        }
+                    }
+
                     let submitData = {
                         groupName: this.formValidate.groupName,
                         list: []
                     };
+                    if (this.id) {
+                        submitData.groupId = this.id;
+                    }
                     for (let i = 0; i < this.tableList.length; i++) {
-                        if (this.tableList[i].name) {
+                        if (this.tableList[i].userName) {
                             submitData.list[i] = {};
-                            submitData.list[i].userId = this.tableList[i].name.userId;
-                            submitData.list[i].userName = this.tableList[i].name.userName;
-                            submitData.list[i].responsibleDept = JSON.stringify(this.tableList[i].groupList);
-                            submitData.list[i].responsibleUser = JSON.stringify(this.tableList[i].employeeList);
+                            submitData.list[i].userId = this.tableList[i].userId;
+                            submitData.list[i].userName = this.tableList[i].userName;
+                            submitData.list[i].responsibleDept = this.tableList[i].responsibleDept;
+                            submitData.list[i].responsibleUser = this.tableList[i].responsibleUser;
                         }
                     }
+
                     this.$http.post("/isp-process-server/userGroup/save", submitData).then((res) => {
+                        this.submitStatus = false;
                         if (res.data.errorCode == 0) {
                             this.$Message.success('保存成功');
                             if (status == 1) {
                                 setTimeout(() => {
-                                    this.$router.push('setUpDepartment');
+                                    this.$router.go(0);
+                                    this.$router.push('createChain');
                                     this.$refs[name].resetFields();
                                     this.submitData = {};
                                 }, 1000)
                             }
                             else {
                                 setTimeout(() => {
+                                    this.submitStatus = true;
                                     this.$router.push('chainManagement');
                                     this.$refs[name].resetFields();
                                     this.submitData = {};
@@ -239,9 +263,13 @@ export default {
                                 }
                             });
                         }
+                    }).catch((err) => {
+                        console.log(err);
+                        this.submitStatus = false;
                     })
                 } else {
                     this.$Message.error('表单验证失败!');
+                    this.submitStatus = false;
                 }
             })
         },
@@ -262,112 +290,151 @@ export default {
                 employee: [],
                 groupList: [],
                 employeeList: []
+            });
+            let i = this.tableList.length - 1;
+            // 初始化新增
+            setTimeout(() => {
+                $(`#member${i}`).select2({
+                    allowClear:true,
+                    placeholder: "请选择",
+                    theme: "bootstrap",
+                    language: 'zh-CN',
+                }).val('').trigger('change');
+
+                $(`#department${i}`).select2({
+                    multiple: true,
+                    allowClear:true,
+                    placeholder: "请选择",
+                    theme: "bootstrap",
+                    language: 'zh-CN',
+                }).val('').trigger('change');
+
+                $(`#employee${i}`).select2({
+                    multiple: true,
+                    allowClear:true,
+                    placeholder: "请选择",
+                    theme: "bootstrap",
+                    language: 'zh-CN',
+                }).val('').trigger('change');
             })
+        },
+        initMember(url, id, lists) {
+            this.$http.get(url).then((res) => {
+                if (res.data.errorCode == 0) {
+                    let data = res.data.result;
+                    this.names = data.map(item => {
+                        return {
+                            id: item.employeeId,
+                            value: item.displayName
+                        }
+                    });
 
-            // this.names = [];
-            // this.groups = [];
-            // this.employees = [];
-        },
-        remoteName (query) {
-            if (query !== '') {
-                this.loading1 = true;
+                    for (let i = 0; i < this.tableList.length; i++) {
+                        $(`${id}${i}`).select2({
+                            allowClear:true,
+                            placeholder: "请选择",
+                            theme: "bootstrap",
+                            language: 'zh-CN',
+                        });
+                    }
 
-                setTimeout(() => {
-                    this.loading1 = false;
-                    if (!query) return false;
-                    this.$http.get('/isp-process-server/employee/getList', {
-                        params: {
-                            deptId: 0,
-                            displayName: query,
-                            pageIndex: 1,
-                            pageSize: 10
-                        }
-                    }).then((res) => {
-                        if (res.data.errorCode == 0) {
-                            this.names = Object.assign([], res.data.result).map(item => {
-                                return {
-                                    userId: item.employeeId,
-                                    userName: item.displayName
-                                }
-                            });
-                        }
-                        else {
-                            //this.names = [];
-                        }
-                    }).catch((err) => {
-                        console.log(err);
-                        //this.names = [];
-                    })
-                }, 200);
-            } else {
-                //this.names = [];
-            }
+                    if (lists) {
+                        setTimeout(() => {
+                            for (let i = 0; i < lists.length; i++) {
+                                $(`${id}${i}`).select2({
+                                    allowClear:true,
+                                    placeholder: "请选择",
+                                    theme: "bootstrap",
+                                    language: 'zh-CN',
+                                }).val(lists[i].userId).trigger("change");
+                            }
+                        })
+                    }
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
         },
-        remoteGroup (query) {
-            if (query !== '') {
-                this.loading1 = true;
-                setTimeout(() => {
-                    this.loading1 = false;
-                    if (!query) return false;
-                    this.$http.get('/isp-process-server/depart/getList', {
-                        params: {
-                            deptName: query,
-                            pageIndex: 1,
-                            pageSize: 10
+        initDep(url, id, lists) {
+            this.$http.get(url).then((res) => {
+                if (res.data.errorCode == 0) {
+                    let data = res.data.result.resultList;
+                    this.groups = data.map(item => {
+                        return {
+                            id: item.id,
+                            value: item.deptName,
                         }
-                    }).then((res) => {
-                        if (res.data.errorCode == 0) {
-                            this.groups = Object.assign([], res.data.result.resultList).map(item => {
-                                return {
-                                    code: item.id,
-                                    name: item.deptName
-                                }
-                            });
-                        }
-                        else {
-                            this.groups = [];
-                        }
-                    }).catch((err) => {
-                        console.log(err);
-                        this.groups = [];
-                    })
-                }, 200);
-            } else {
-                this.groups = [];
-            }
+                    });
+
+                    for (let i = 0; i < this.tableList.length; i++) {
+                        $(`${id}${i}`).select2({
+                            multiple: true,
+                            allowClear:true,
+                            placeholder: "请选择",
+                            theme: "bootstrap",
+                            language: 'zh-CN',
+                        });
+                    }
+
+
+                    if (lists) {
+                        setTimeout(() => {
+                            for (let i = 0; i < lists.length; i++) {
+                                let depart = JSON.parse(lists[i].responsibleDept);
+                                let arr = depart.map(item => item.code);
+                                $(`${id}${i}`).select2({
+                                    allowClear:true,
+                                    placeholder: "请选择",
+                                    theme: "bootstrap",
+                                    language: 'zh-CN',
+                                }).val(arr).trigger("change");
+                            }
+                        })
+                    }
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
         },
-        remoteEmployee (query) {
-            if (query !== '') {
-                this.loading1 = true;
-                setTimeout(() => {
-                    this.loading1 = false;
-                    if (!query) return false;
-                    this.$http.get('/isp-process-server/employee/getList', {
-                        params: {
-                            displayName: query,
-                            pageIndex: 1,
-                            pageSize: 10
+        initEmp(url, id, lists) {
+            this.$http.get(url).then((res) => {
+                if (res.data.errorCode == 0) {
+                    let data = res.data.result;
+                    this.employees = data.map(item => {
+                        return {
+                            id: item.employeeId,
+                            value: item.displayName
                         }
-                    }).then((res) => {
-                        if (res.data.errorCode == 0) {
-                            this.employees = Object.assign([], res.data.result).map(item => {
-                                return {
-                                    code: item.employeeId,
-                                    name: item.displayName
-                                }
-                            });
-                        }
-                        else {
-                            //this.names = [];
-                        }
-                    }).catch((err) => {
-                        console.log(err);
-                        //this.employees = [];
-                    })
-                }, 200);
-            } else {
-                //this.employees = [];
-            }
+                    });
+
+                    for (let i = 0; i < this.tableList.length; i++) {
+                        $(`${id}${i}`).select2({
+                            multiple: true,
+                            allowClear:true,
+                            placeholder: "请选择",
+                            theme: "bootstrap",
+                            language: 'zh-CN',
+                        });
+                    }
+
+                    if (lists) {
+                        setTimeout(() => {
+                            for (let i = 0; i < lists.length; i++) {
+                                let user = JSON.parse(lists[i].responsibleUser);
+                                let arr = user.map(item => item.code);
+                                $(`${id}${i}`).select2({
+                                    allowClear:true,
+                                    placeholder: "请选择",
+                                    theme: "bootstrap",
+                                    language: 'zh-CN',
+                                }).val(arr).trigger("change");
+                            }
+                        })
+                    }
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
         },
         back() {
             // 返回

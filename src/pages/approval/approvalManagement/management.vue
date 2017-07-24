@@ -56,8 +56,7 @@
                         <td>{{i.formType}}</td>
                         <td>{{i.updateTimeStr}}</td>
                         <td  class="clear">
-                            <!-- <a href="javascrip:void(0);" class="fl" @click='edit(i, index)'>编辑</a> -->
-                            <a href="javascrip:void(0);" class="fl">编辑</a>
+                            <a href="javascrip:void(0);" class="fl" @click='edit(i, index)'>编辑</a>
                             <a href="javascrip:void(0);" class="fl" style="margin-left: 50px;" @click='remove(i, index)'>删除</a>
                         </td>
                     </tr>

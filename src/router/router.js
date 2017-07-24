@@ -37,6 +37,7 @@ const createChain = (resolve) => require(['../pages/approval/createUser/createUs
 const chainManagement = (resolve) => require(['../pages/approval/chainManagement/chainManagement'], resolve);
 const chainConfig = (resolve) => require(['../pages/approval/chainConfig/chainConfig'], resolve);
 const ApprovalManagement = (resolve) => require(['../pages/approval/approvalManagement/management'], resolve);
+const AuditList = (resolve) => require(['../pages/approval/auditList/AuditList'], resolve);
 // const createChain = (resolve) => require('[../pages/approval/createUser/createUser]', resolve);
 
 // demo
@@ -163,6 +164,11 @@ const routes = [
                 path: 'approvalManagement',
                 name: 'ApprovalManagement',
                 component: ApprovalManagement
+            },
+            {
+                path: 'auditList',
+                name: 'AuditList',
+                component: AuditList
             }
         ]
     },

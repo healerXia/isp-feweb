@@ -6,29 +6,19 @@
                 <Input v-model="formValidate.name" placeholder="请输审批链名称" class='text fl'></Input>
             </Form-item>
             <Form-item label="流程名称" prop="processName" class='process'>
-                <div class="clear">
-                    <Select v-model="formValidate.processName" placeholder="请选择流程名称" class="text fl" :label-in-value="true" @on-change="checkProcess">
-                        <Option :value="i.formTypeName" v-for='i in dataList' :key='new Date()'>{{i.formTypeName}}</Option>
-                    </Select>
-                </div>
-                <div :class='["layer", {"active": active}]' v-if='orderNameList.length != 0' @click.stop='layerClick'>
-                    <p class="title">选择流程分类</p>
-                    <div style="border-bottom: 1px solid #e9e9e9;padding-bottom:6px;margin-bottom:6px;">
-                        <Checkbox
-                            :indeterminate="indeterminate"
-                            :value="checkAll"
-                            @click.prevent.native="handleCheckAll">全选</Checkbox>
-                    </div>
-                    <Checkbox-group v-model="formValidate.checkAllGroup" @on-change="checkAllGroupChange">
-                        <Checkbox :label="i" v-for='i in orderNameList' :key='i'></Checkbox>
-                    </Checkbox-group>
-                </div>
+                <Select v-model="formValidate.processName" placeholder="请选择流程名称" class="text fl" :label-in-value="true" @on-change="checkProcess">
+                    <Option :value="i.formTypeName" v-for='i in dataList' :key='new Date()'>{{i.formTypeName}}</Option>
+                </Select>
+            </Form-item>
+            <Form-item label="流程分类" prop="chainType" v-if ='orderNameList.length > 0'>
+                <Checkbox-group v-model="formValidate.chainType"  class='fl'>
+                    <Checkbox :label="i" v-for='i in orderNameList' :key='new Date()'></Checkbox>
+                </Checkbox-group>
             </Form-item>
             <Form-item label="业务类型" prop="orderType" v-if ='orderType.length > 0'>
                  <Checkbox-group  v-model="formValidate.orderType" class='fl'>
                      <Checkbox :label="i" v-for='i in orderType' :key='new Date()'></Checkbox>
                  </Checkbox-group>
-
             </Form-item>
             <div class="tableList">
                 <table cellspacing="1" cellpadding="0" class="user">
@@ -42,20 +32,11 @@
                     <tbody>
                         <tr v-for='(i, index) in data'>
                             <td>{{i.step}}</td>
-                            <td @click='searchClick(index)'>
-                                <Select
-                                    v-model="i.group"
-                                    placeholder="请输入用户组"
-                                    filterable
-                                    remote
-                                    :remote-method="remoteGroup"
-                                    :clearable = "true"
-                                    :loading="loading1"
-                                    :label-in-value ="true"
-                                    class='selectText fl'>
-                                    <Option v-for="option in groups" :value="option.groupId" :key="new Date()">{{option.groupName}}</Option>
-                                </Select>
-
+                            <td>
+                                <select :id="'group' + (index+1)" name="sample" style="width:80%;height:38px;" class="js-example-basic-multiple">
+                                    <option value=""></option>
+                                    <option v-for='i in selectList' :value="i.id" :id="i.id">{{i.value}}</option>
+                                </select>
                             </td>
                             <td  class="clear">
                                 <Checkbox v-model="i.passAlert" class='pass'>通过</Checkbox>
@@ -67,14 +48,21 @@
             </div>
 
             <Form-item>
-                <Button type="primary" @click.stop="handleSubmit('formValidate', 1)" class="saveNext fl">保存并继续</Button>
-                <Button type="primary" @click.stop="handleSubmit('formValidate', 2)" class="save fl">保存</Button>
+                <Button type="primary" @click.stop="handleSubmit('formValidate', 1)" class="saveNext fl" :disabled='submitStatus'>保存并继续</Button>
+                <Button type="primary" @click.stop="handleSubmit('formValidate', 2)" class="save fl" :disabled='submitStatus'>保存</Button>
                 <Button type="ghost" @click.stop="handleReset('formValidate')"  class="cancel fl">取消</Button>
             </Form-item>
         </Form>
     </div>
 </template>
 <script>
+import 'select2';
+import 'select2/dist/js/i18n/zh-CN.js';
+import 'select2/dist/css/select2.css';
+import 'select2-bootstrap-theme/dist/select2-bootstrap.css';
+import axios from 'axios';
+import {initSelect} from './config';
+
 export default {
     data() {
         const validateName = (rule, value, callback) => {
@@ -88,48 +76,35 @@ export default {
             }
         };
         return {
+            submitStatus: false,
             id: '',
             searchIndex: -1,
             titleTxt: '配置审批链',
             title: ['创建审批链', '配置审批链'],
             active: false,
-            groups: [],
-            // groupsList: [
-            //     {
-            //         groups: []
-            //     },
-            //     {
-            //         groups: []
-            //     },
-            //     {
-            //         groups: []
-            //     }
-            // ],
             formTypeId: 0,
             formValidate: {
                 name: '',
                 processName: '',
-                checkAllGroup: [],
+                chainType: [],
                 orderType: []
             },
             indeterminate: true,
             checkAll: false,
+            selectList: [],
             data: [
                 {
                     step: 1,
-                    group: '',
                     passAlert: false,
                     failAlert: false
                 },
                 {
                     step: 2,
-                    group: '',
                     passAlert: false,
                     failAlert: false
                 },
                 {
                     step: 3,
-                    group: '',
                     passAlert: false,
                     failAlert: false
                 }
@@ -142,6 +117,9 @@ export default {
                 ],
                 processName: [
                     { required: true, message: '请选择流程名称', trigger: 'change' }
+                ],
+                chainType: [
+                    {required: true, type: 'array', message: '请选择流程类型', trigger: 'change'}
                 ],
                 orderType: [
                     {required: true, type: 'array', message: '请选择业务类型', trigger: 'change'}
@@ -160,6 +138,33 @@ export default {
         else {
             this.titleTxt = '创建审批链';
         }
+        // 初始化下拉
+        this.$http.get('/isp-process-server/userGroup/getList').then((res) => {
+            if (res.data.errorCode == 0) {
+                let data = res.data.result.resultList;
+                this.selectList = data.map(item => {
+                    return {
+                        id: item.groupId,
+                        value: item.groupName
+                    }
+                });
+
+                for (let i = 1; i < 4; i++) {
+                    $(`#group${i}`).select2({
+                        allowClear:true,
+                        placeholder: "请选择",
+                        theme: "bootstrap",
+                        language: 'zh-CN',
+                    });
+                }
+            }
+        }).catch((err) => {
+            console.log(err)
+        })
+
+
+
+
         // 初始化流程名称
         this.$http.get('/isp-process-server/formType/all').then((res) => {
             if (res.data.errorCode == 0) {
@@ -167,7 +172,6 @@ export default {
                 for (let i = 0; i < this.dataList.length; i++) {
                     this.dataList[i].id = `${this.dataList[i].id}`;
                 }
-
                 if (id) {
                     this.id = id;
                     this.$http.get('/isp-process-server/auditChain/getModel', {
@@ -176,14 +180,9 @@ export default {
                         }
                     }).then((res) => {
                         if (res.data.errorCode == 0) {
-                            // chainName: this.formValidate.name,
-                            // formType: this.formValidate.processName,
-                            // subFormType: this.formValidate.checkAllGroup.join(','),
-                            // formVariable: this.formValidate.orderType.join(','),
-                            // userGroups: JSON.stringify(userGroups)
                             // 编辑初始化
                             let data = Object.assign({}, res.data.result);
-                            this.formValidate.name =data.chainName;
+                            this.formValidate.name = data.chainName;
                             this.formTypeId = `${data.formType}`;
 
                             for (let i = 0; i < this.dataList.length; i++) {
@@ -193,59 +192,31 @@ export default {
                                 }
                             }
 
-                            this.formValidate.checkAllGroup = data.subFormType.split(',');
+                            this.formValidate.chainType = data.subFormType.split(',');
                             this.formValidate.orderType = data.formVariable.split(',');
                             let groupList = [];
                             this.data = data.listUserGroup;
-
-                            for (let i = 0; i < data.listUserGroup.length; i++) {
-                                this.data[i].group = {
-                                    groupId: data.listUserGroup[i].groupId,
-                                    groupName: data.listUserGroup[i].groupName
-                                }
-                            }
-
-                            for (let i = 0; i < data.listUserGroup.length; i++) {
-                                groupList.push({
-                                    groupId: data.listUserGroup[i].groupId,
-                                    groupName: data.listUserGroup[i].groupName
-                                })
-                            }
-                            // 去重
-                            let json = {};
-                            let newA = [];
-                            for (let i = 0; i < groupList.length; i++) {
-                                if (!json[groupList[i].groupId]) {
-                                    newA.push(groupList[i]);
-                                    json[groupList[i].groupId] = 1;
-                                }
-                            }
-
-                            this.groups = newA;
-
                             setTimeout(() => {
-                                let allInput = document.querySelectorAll('.ivu-select-input');
-
-                                for (let i = 0; i < allInput.length; i++) {
-                                    allInput[i].value = groupList[i].groupName;
+                                for (let i = 0; i < data.listUserGroup.length; i++) {
+                                    $(`#group${i+1}`).select2({
+                                        allowClear:true,
+                                        placeholder: "请选择",
+                                        theme: "bootstrap",
+                                        language: 'zh-CN',
+                                    }).val(data.listUserGroup[i].groupId).trigger("change");
                                 }
-                            })
+                            }, 500);
                         }
                     }).catch((err) => {
                         console.log(err);
                     })
                 }
+                else {
+
+                }
             }
         }).catch((err) => {
             console.log(err);
-        })
-
-        setTimeout(() => {
-            document.querySelector('#chainConfig').onclick = function(event) {
-                if (document.querySelector('.layer')) {
-                    document.querySelector('.layer').setAttribute('class', 'layer');
-                }
-            }
         })
     },
     methods: {
@@ -255,40 +226,38 @@ export default {
         handleSubmit (name, status) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    if (this.formValidate.checkAllGroup.length == 0) {
+                    if (this.submitStatus) {
+                        return false;
+                    }
+                    this.submitStatus = true;
+                    let userGroups = [];
+                    let groupList = [];
+                    for (let i = 1; i <= 3; i++) {
+                        let data = $(`#group${i}`).select2('data')[0];
+                        if (data) {
+                            groupList.push({
+                                groupId: data.id,
+                                groupName: data.name
+                            });
+                        }
+                    }
 
+                    if (groupList.length < 3) {
                         this.$Modal.info({
                             title: '提示',
-                            content: '请选择流程分类',
+                            content: '请填写用户组',
                             onOk: ()=> {
-                                setTimeout(() => {
-                                    if (document.querySelector('.layer')) {
-                                        document.querySelector('.layer').setAttribute('class', 'layer active');
-                                    }
-                                })
+
                             }
                         });
                         return false;
                     }
 
-                    let userGroups = [];
-                    console.log(this.data);
                     for (let i = 0; i < this.data.length; i++) {
-                        if (!this.data[i].group.groupId) {
-                            this.$Modal.info({
-                                title: '提示',
-                                content: '请填写用户组',
-                                onOk: ()=> {
-
-                                }
-                            });
-                            return false;
-                        }
-
                         userGroups[i] = {
                             step: this.data[i].step,
-                            groupId: this.data[i].group.groupId,
-                            groupName: this.data[i].group.groupName,
+                            groupId: groupList[i].groupId,
+                            groupName: groupList[i].groupName,
                             passAlert: this.data[i].passAlert,
                             failAlert: this.data[i].failAlert
                         };
@@ -297,7 +266,7 @@ export default {
                     let submitData = {
                         chainName: this.formValidate.name,
                         formType: this.formTypeId,
-                        subFormType: this.formValidate.checkAllGroup.join(','),
+                        subFormType: this.formValidate.chainType.join(','),
                         formVariable: this.formValidate.orderType.join(','),
                         userGroups: JSON.stringify(userGroups)
                     }
@@ -305,18 +274,48 @@ export default {
                         submitData.id = this.id;
                     }
                     this.$http.post("/isp-process-server/auditChain/save", submitData).then((res) => {
+                        this.submitStatus = false;
                         if (res.data.errorCode == 0) {
                             this.$Message.success('保存成功');
                             if (status == 1) {
                                 setTimeout(() => {
-                                    // this.$router.push('setUpDepartment');
-                                    // this.$refs[name].resetFields();
-                                    // this.submitData = {};
-
                                     this.$router.push('chainConfig');
                                     this.$refs[name].resetFields();
                                     this.submitData = {};
-                                }, 1000)
+                                    this.formValidate = {
+                                        name: '',
+                                        processName: '',
+                                        chainType: [],
+                                        orderType: []
+                                    }
+
+                                    this.data = [
+                                        {
+                                            step: 1,
+                                            passAlert: false,
+                                            failAlert: false
+                                        },
+                                        {
+                                            step: 2,
+                                            passAlert: false,
+                                            failAlert: false
+                                        },
+                                        {
+                                            step: 3,
+                                            passAlert: false,
+                                            failAlert: false
+                                        }
+                                    ];
+
+                                    for (let i = 0; i < 3; i++) {
+                                        $(`#group${i+1}`).select2({
+                                            allowClear:true,
+                                            placeholder: "请选择",
+                                            theme: "bootstrap",
+                                            language: 'zh-CN',
+                                        }).val('').trigger("change");
+                                    }
+                                }, 500);
                             }
                             else {
                                 setTimeout(() => {
@@ -335,13 +334,16 @@ export default {
                                 }
                             });
                         }
+                    }).catch((err) => {
+                        console.log(err);
+                        this.submitStatus = false;
                     })
 
                 }
+                else {
+                    this.submitStatus = false;
+                }
             })
-        },
-        layerClick() {
-            document.querySelector('.layer').setAttribute('class', 'layer active');
         },
         handleReset (name) {
             this.$Modal.confirm({
@@ -355,41 +357,6 @@ export default {
                     //this.$Message.info('点击了取消');
                 }
             });
-        },
-        handleCheckAll () {
-            if (this.indeterminate) {
-                this.checkAll = false;
-            } else {
-                this.checkAll = !this.checkAll;
-            }
-            this.indeterminate = false;
-
-            if (this.checkAll) {
-                this.formValidate.checkAllGroup = Object.assign([], this.orderNameList);
-            } else {
-                this.formValidate.checkAllGroup = [];
-            }
-            if (document.querySelector('.layer')) {
-                document.querySelector('.layer').setAttribute('class', 'layer active');
-            }
-        },
-        checkAllGroupChange (data) {
-            if (data.length === this.orderNameList.length) {
-                this.indeterminate = false;
-                this.checkAll = true;
-            } else if (data.length > 0) {
-                this.indeterminate = true;
-                this.checkAll = false;
-            } else {
-                this.indeterminate = false;
-                this.checkAll = false;
-            }
-
-
-            if (document.querySelector('.layer')) {
-                document.querySelector('.layer').setAttribute('class', 'layer active');
-            }
-
         },
         checkProcess(data) {
             let datas = {};
@@ -408,44 +375,6 @@ export default {
             }
             else {
                 this.orderNameList = [];
-            }
-            this.active = true;
-            if (document.querySelector('.layer')) {
-                document.querySelector('.layer').setAttribute('class', 'layer active');
-            }
-
-        },
-        remoteGroup (query) {
-            if (query !== '') {
-                this.loading1 = true;
-                setTimeout(() => {
-                    this.loading1 = false;
-                    if (!query) return false;
-                    this.$http.get('/isp-process-server/userGroup/getList', {
-                        params: {
-                            groupName: query,
-                            pageIndex: 1,
-                            pageSize: 10
-                        }
-                    }).then((res) => {
-                        if (res.data.errorCode == 0) {
-                            this.groups = Object.assign([], res.data.result.resultList).map(item => {
-                                return {
-                                    groupId: item.groupId,
-                                    groupName: item.groupName
-                                }
-                            });
-                        }
-                        else {
-                            this.groups = [];
-                        }
-                    }).catch((err) => {
-                        console.log(err);
-                        //this.groups = [];
-                    })
-                }, 200);
-            } else {
-                //this.groups = [];
             }
         }
     }
