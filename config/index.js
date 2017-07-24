@@ -35,10 +35,7 @@ module.exports = {
             //target: 'http://192.168.70.184',http://172.20.11.89:8080,//'http://192.168.56.46:8080',
             target: 'http://192.168.70.184',
             //target: 'http://isp.yiche.com/',
-<<<<<<< HEAD
-=======
-            //target: 'http://172.20.11.84:8080',
->>>>>>> master
+
             changeOrigin: true,
             pathRewrite: {
                 '^/api': ''
