@@ -176,14 +176,21 @@
                 <i class="icon iconfont icon-navi-down"></i>
                 <i class="icon iconfont icon-navi-up"></i>
             </template>
-            <Menu-item name="1-1">
+            <Menu-item name="8-1">
                 <router-link class="white"
-                :to="{path:'wait'}">
+                :to="{path:'approvalManagement'}">
                     <span class="menuCircle"></span>
                     审批链管理
                 </router-link>
             </Menu-item>
             <Menu-item name="8-2">
+                <router-link class="white"
+                :to="{path:'chainManagement'}">
+                    <span class="menuCircle"></span>
+                    用户组管理
+                </router-link>
+            </Menu-item>
+            <Menu-item name="8-3">
                 <router-link class="white"
                 :to="{path:'wait'}">
                     <span class="menuCircle"></span>
@@ -198,6 +205,27 @@
                 <i class="icon iconfont icon-navi-down"></i>
                 <i class="icon iconfont icon-navi-up"></i>
             </template>
+            <Menu-item name="9-1">
+                <router-link class="white"
+                :to="{path:'docManagemengt'}">
+                    <span class="menuCircle"></span>
+                    单据管理
+                </router-link>
+            </Menu-item>
+            <Menu-item name="9-2">
+                <router-link class="white"
+                :to="{path:'setUpDepartment'}">
+                    <span class="menuCircle"></span>
+                    部门管理
+                </router-link>
+            </Menu-item>
+            <Menu-item name="9-3">
+             <router-link class="white"
+                :to="{path:'projectList'}">
+                    <span class="menuCircle"></span>
+                     人员管理
+                </router-link>
+            </Menu-item>
         </Submenu>
     </Menu>
 </template>

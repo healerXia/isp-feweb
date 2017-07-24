@@ -1,0 +1,26 @@
+{
+    "errorCode": 0,
+    "errorMsg": "OK",
+    "result": [
+        {
+            "id": 2,
+            "userId": "1",
+            "userName": "张三",
+            "responsibleDept": "[{\"code\":\"1\",\"name\":\"部门1\"},{\"code\":\"2\",\"name\":\"部门2\"}]",
+            "responsibleUser": "[{\"code\":\"1\",\"name\":\"张三\"},{\"code\":\"2\",\"name\":\"李四\"}]",
+            "groupName": "测试",
+            "updateTime": 1500364842000,
+            "updateTimeStr": "2017-07-18 16:00:42"
+        },
+        {
+            "id": 3,
+            "userId": "1",
+            "userName": "张三1",
+            "responsibleDept": "[{\"code\":\"1\",\"name\":\"部门11\"},{\"code\":\"2\",\"name\":\"部门12\"}]",
+            "responsibleUser": "[{\"code\":\"1\",\"name\":\"张三1\"},{\"code\":\"2\",\"name\":\"李四1\"}]",
+            "groupName": "测试1",
+            "updateTime": 1500364932000,
+            "updateTimeStr": "2017-07-18 16:02:12"
+        }
+    ]
+}
