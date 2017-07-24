@@ -17,15 +17,19 @@ const ViewAd = (resolve) => require(['../pages/viewAd/ViewAd'], resolve);
 const ChooseTime = (resolve) =>  require(['../pages/chooseTime/ChooseTime'],resolve);
 const DemoForm = (resolve) => require(['../pages/demos/DemoForm.vue'], resolve);
 
-
+//个人中心
+const edit = (resolve) => require(['../pages/personalCenter/editInfo/editInfo'],resolve);
+const test = (resolve) => require(['../pages/personalCenter/editInfo/demo'],resolve);
 // 审批链流程
 const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
 const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
 const addDoc = (resolve) => require(['../pages/approval/addDoc/AddDoc.vue'], resolve);
 const department = (resolve) => require(['../pages/approval/department/Department'], resolve);
-
+//购物车小栗子
+const goodsInfo = (resolve) => require(['../pages/shoppingCart/goodsInfo'], resolve);
+const shoppingCart = (resolve) => require(['../pages/shoppingCart/shoppingCart'], resolve);
 // demo
-
+const ListPages  = (resolve) => require(['../pages/demos/listPages'], resolve);
 const selectTab = (resolve) => require(['../pages/demos/selectTab'], resolve);
 
 
@@ -117,6 +121,26 @@ const routes = [
                 path: 'department',
                 name: 'department',
                 component: department
+            },
+            {
+                path: 'edit',
+                name: 'edit',
+                component: edit
+            },
+            {
+                path: 'test',
+                name: 'test',
+                component: test
+            },
+            {
+                path: 'goodsInfo',
+                name: 'goodsInfo',
+                component: goodsInfo
+            },
+            {
+                path: 'shoppingCart',
+                name: 'shoppingCart',
+                component: shoppingCart
             }
         ]
     },
@@ -134,6 +158,11 @@ const routes = [
                 path: 'selectTab',
                 name: 'selectTab',
                 component: selectTab
+            },
+            {
+                path: 'listPages',
+                name: 'listPages',
+                component: ListPages
             }
         ]
     }
