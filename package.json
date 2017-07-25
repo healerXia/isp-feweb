@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
+    "babel-polyfill": "^6.23.0",
     "expose-loader": "^0.7.3",
     "jquery": "^3.2.1",
     "mockjs": "^1.0.1-beta3",

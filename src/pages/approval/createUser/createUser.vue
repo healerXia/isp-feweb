@@ -18,19 +18,19 @@
                   <tbody>
                       <tr class="tableInput" v-for='(i, index) in tableList'>
                           <td>
-                              <select :id="'member' + index" name="sample" style="width:80%;height:38px;" class="js-example-basic-multiple">
+                              <select :id="'member' + index" name="sample" style="width:90%;min-width:310px;height:38px;" class="js-example-basic-multiple">
                                   <option value=""></option>
                                   <option v-for='i in names' :value="i.id" :id="i.id">{{i.value}}</option>
                               </select>
                           </td>
                           <td>
-                              <select :id="'department'+ index" name="sample" style="width:80%;height:38px;" class="js-example-basic-multiple">
+                              <select :id="'department'+ index" name="sample" style="width:90%; min-width:310px;height:38px;" class="js-example-basic-multiple">
                                   <!-- <option value=""></option> -->
                                   <option v-for='i in groups' :value="i.id" :id="i.id">{{i.value}}</option>
                               </select>
                           </td>
                           <td>
-                              <select :id="'employee' + index" name="sample" style="width:80%;height:38px;" class="js-example-basic-multiple">
+                              <select :id="'employee' + index" name="sample" style="width:90%;min-width:310px;height:38px;" class="js-example-basic-multiple">
                                   <!-- <option value=""></option> -->
                                   <option v-for='i in employees' :value="i.id" :id="i.id">{{i.value}}</option>
                               </select>
@@ -198,7 +198,7 @@ export default {
                             this.tableList[i].responsibleDept = JSON.stringify(aDep);
                         }
                         else {
-                            this.tableList[i].responsibleDept = [];
+                            this.tableList[i].responsibleDept = '';
                         }
 
                         if (employee.length > 0) {
@@ -212,7 +212,7 @@ export default {
                             this.tableList[i].responsibleUser = JSON.stringify(aEm);
                         }
                         else {
-                            this.tableList[i].responsibleUser = [];
+                            this.tableList[i].responsibleUser = '';
                         }
                     }
 
@@ -258,9 +258,7 @@ export default {
                             this.$Modal.error({
                                 title: '提示',
                                 content: res.data.errorMsg,
-                                onOk: () => {
-                                    this.formValidate.name = '';
-                                }
+                                onOk: () => {}
                             });
                         }
                     }).catch((err) => {
@@ -439,31 +437,6 @@ export default {
         back() {
             // 返回
             this.$router.push({path: 'chainManagement'})
-        },
-        selName(index) {
-            console.log(index);
-        },
-        selGroup(index) {
-            let data = this.tableList[index].group;
-            //this.tableList[index].groupList = [];
-            for (let i = 0; i < data.length; i++) {
-                for (let j = 0; j < this.groups.length; j++) {
-                    if (data[i] == this.groups[j].code) {
-                        this.tableList[index].groupList.push(this.groups[j]);
-                    }
-                }
-            }
-        },
-        selEmployee(index) {
-            let data = this.tableList[index].employee;
-            //this.tableList[index].employeeList = [];
-            for (let i = 0; i < data.length; i++) {
-                for (let j = 0; j < this.employees.length; j++) {
-                    if (data[i] == this.employees[j].code) {
-                        this.tableList[index].employeeList.push(this.employees[j]);
-                    }
-                }
-            }
         }
     }
 }

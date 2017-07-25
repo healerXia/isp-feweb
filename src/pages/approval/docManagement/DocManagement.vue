@@ -1,14 +1,14 @@
 <template lang="html">
   <div id = "docMangement">
       <div class="insert">
-          <Button type="success" @click='jump'>新增单据</Button>
+          <Button type="success" @click='jump'>新增流程</Button>
       </div>
       <div class="doclist">
           <table cellspacing="1" cellpadding="0" class="user">
               <thead>
                   <tr>
-                      <td width='15%'>单据编号</td>
-                      <td style="padding-right: 30px;">单据名称</td>
+                      <td width='15%'>流程编号</td>
+                      <td style="padding-right: 30px;">流程名称</td>
                       <td width='20%'>创建时间</td>
                       <td width='128px;'>操作</td>
                   </tr>
@@ -19,8 +19,8 @@
                       <td style="padding-right: 30px;">{{i.formTypeName}}</td>
                       <td>{{i. updateTimeStr}}</td>
                       <td  class="clear">
-                          <a href="javascrip:void(0);" class="fl" @click='edit(i, index)'>编辑</a>
-                          <a href="javascrip:void(0);" class="fl" style="margin-left: 50px;" @click='remove(i, index)'>删除</a>
+                          <a href="javascrip:;" class="fl" @click='edit(i, index)'>编辑</a>
+                          <a href="javascrip:;" class="fl" style="margin-left: 50px;" @click='remove(i, index)'>删除</a>
                       </td>
                   </tr>
               </tbody>
@@ -69,10 +69,12 @@ export default {
                             this.render();
                         }
                         else {
-                            this.$Modal.info({
-                                title: '提示',
-                                content: res.data.rspMsg.errorMsg
-                            });
+                            setTimeout(()=> {
+                                this.$Modal.info({
+                                    title: '提示',
+                                    content: res.data.errorMsg
+                                });
+                            }, 500)
                         }
                     }).catch((err) => {
                         console.log(err);

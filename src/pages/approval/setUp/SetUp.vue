@@ -147,19 +147,21 @@ export default {
             // 初始化部门
             this.$http.get('/isp-process-server/depart/getList').then((res) => {
                 if (res.data.errorCode == 0) {
-                    this.upList = Object.assign([], res.data.result);
+                    this.upList = Object.assign([], res.data.result.resultList);
                     for(let i = 0; i < this.upList.length; i++) {
                         this.upList[i].id = this.upList[i].id.toString();
                     }
+
+
                 }
             }).catch((err) => {
                 console.log(err);
             })
 
             // 初始化部门负责人
-            this.$http.get('/isp-process-server/employee/getList').then((res) => {
+            this.$http.get('/isp-process-server/employee/getPageList').then((res) => {
                 if (res.data.errorCode == 0) {
-                    this.personalList = Object.assign([], res.data.result);
+                    this.personalList = Object.assign([], res.data.result.resultList);
                 }
             }).catch((err) => {
                 console.log(err);
@@ -206,6 +208,8 @@ export default {
 
 <style lang="scss" scoped>
 .setUp-de {
+    padding-bottom: 200px;
+
     .title {
         margin: 58px 0 30px 36px;
         font-size: 14px;
