@@ -1,0 +1,149 @@
+.listPages{
+  .ivu-form{
+    background: #F9FAFC;
+    padding:50px 0 50px 24px;
+    .ivu-form-item{
+      width:362px;
+      height:38px;
+      margin-top:15px 0 0 0;
+      display:inline-block;
+      .ivu-form-item-label{
+        font-size:14px;
+        color: #7B8497;
+        letter-spacing: 0.52px;
+      }
+      input{
+        width:268px;
+        height:38px;
+        background: #FFFFFF;
+        border: 1px solid #DEE1E5;
+        border-radius: 2px;
+        font-size: 12px;
+        color: #bbbec4;
+        letter-spacing: 0.44px;
+        padding-left:8px;
+      }
+      .ivu-select{
+        width:268px;
+        height:38px;
+      }
+      .smallSelect{
+        width:84px;
+        height:38px;
+      }
+      .ML5{
+        margin-left:5px;
+      }
+      .ivu-btn{
+        height:38px;
+        width:120px;
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        color: #FFFFFF;
+        letter-spacing: 0.52px;
+      }
+      .ivu-btn-primary{
+        background: #3D70FB;
+        border-radius: 2px;
+      }
+      .ivu-btn-ghost{
+        margin-left:30px;
+        background: #484E58;
+        border-radius: 2px;
+      }
+    }
+  }
+
+  .listTable{
+    width: 100%;
+    padding: 30px;
+    .exportBtn{
+      border-radius: 2px;
+      padding-left: 12px;
+      box-sizing:border-box;
+      display: block;
+      width: 140px;
+      height: 32px;
+      border: 1px solid #B6BAC0;
+      line-height: 32px;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 15px;
+      float: left;
+      cursor: pointer;
+      i{font-size: 16px}
+      span{
+        color: #B6BAC0; 
+        padding:0 14px;
+      }
+
+    }
+    .addProBtn{
+      display: inline-block;
+      width: 154px;
+      height: 38px;
+      text-align: center;
+      line-height: 38px;
+      background-color: #38BC6E;
+      border-radius: 2px;
+      color: #fff;
+      a{  
+        display: inline-block;
+        width: 100%;height: 100%;
+        color: #fff
+      }
+    }
+    .ivu-page{
+      .ivu-page-item{
+        border:none;
+        width: 28px;
+        height: 28px;
+        line-height: 26px
+      }
+      .ivu-page-options-elevator{height: 28px;margin-top: -2px}
+      .ivu-page-item-jump-next, .ivu-page-item-jump-prev, .ivu-page-next, .ivu-page-prev {
+        border:none;
+        width: 28px;
+        height: 28px;
+        line-height: 26px
+      }
+      .ivu-page-options-elevator input{
+        height: 28px !important;
+        width: 48px;
+      }
+      .ivu-select-selection .ivu-select-selected-value{
+        height: 28px;
+        line-height: 26px;
+      }
+      .ivu-select-single .ivu-select-selection {
+        height:28px;
+        .ivu-select-placeholder,.ivu-select-selected-value{line-height:28px !important}
+      }
+    }
+    
+    table{
+      width: 100%;
+      margin-top:15px;
+      border-collapse:collapse;
+      thead{
+        background: #F9FAFC;
+        tr{
+          td{color: #7B8497;min-width: 100px;font-size: 14px;}
+          td:last-child{min-width: 80px !important}
+        }
+      }
+      tbody{
+        tr{
+          td{color: #333;height: 56px;padding: 10px 10px}
+          td:last-child{min-width: 80px !important}
+        }
+        tr:nth-of-type(even){
+          background-color: #F9FAFC;
+          box-shadow: 0 1px 0 0 #DEE1E5;
+          border-top:1px solid #DEE1E5;
+        }
+      }
+      td{font-size: 12px;min-width: 100px;height: 56px;word-wrap: break-word;max-width: 200px;padding: 0 10px}
+    }
+  }
+}

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <template>
 	<div class="edit" style="margin-left:32px">
 		<Form class="editform" ref="searchData" :model="searchData" :rules="ruleValidate">
@@ -321,18 +320,3 @@
 		}
 	}
 </script> 
-=======
-<template lang="html">
-  <div class="">
-      <span>111</span>
-  </div>
-</template>
-
-<script>
-export default {
-}
-</script>
-
-<style lang="css">
-</style>
->>>>>>> master

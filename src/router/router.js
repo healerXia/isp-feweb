@@ -21,7 +21,7 @@ const DemoZhoufeng = (resolve) => require(['../pages/demos/DemoZhoufeng.vue'], r
 //客户模块
 const CreateUser  = (resolve) => require(['../pages/userModule/createUser/CreateUser'], resolve);
 const CustDetail  = (resolve) => require(['../pages/userModule/custDetail/CustDetail'], resolve);
-
+const CustList = (resolve) => require(['../pages/userModule/custList/CustList'], resolve);
 
 
 
@@ -135,6 +135,11 @@ const routes = [
                 path: 'custDetail',
                 name: 'custDetail',
                 component: CustDetail
+            },
+             {
+                path: 'custList',
+                name: 'custList',
+                component: CustList
             },
             {
                 path: 'setUpDepartment',
