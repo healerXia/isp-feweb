@@ -2,7 +2,7 @@
     <div class="business">
         <Button type="primary" class="btn bg4373F3" @click="openDialog">上传</Button>
         <div class="mess_show" v-show="showMessBox">
-          <div class="mess_title">营业执照</div>
+          <!-- <div class="mess_title">营业执照</div> -->
           <div class="mess_con">
             <ul>
               <li>
@@ -30,7 +30,7 @@
                 <span>客户名称：</span><span>{{storeEditDate.custName}}</span>
               </li>
               <li>
-                <span>附件：</span><span>111</span>
+                <span>附件：</span><span class="salve" @click="showPic">111</span>
               </li>
             </ul>
           </div>
@@ -174,16 +174,20 @@ export default {
     }
   },
   methods: {
+      showPic(){
+        this.$emit('showPic',"pic2")
+      },
       openDialog(){
         this.modal1=true      
         if(this.storeEditDate.licenseNumber){//进行回填数据
           this.uploadBusi.registeredCapital=this.storeEditDate.registeredCapital
           this.uploadBusi.beginTime=new Date(this.storeEditDate.beginTime)
-          if(this.uploadBusi.endTime!=""){
-            this.uploadBusi.endTime=new Date(this.storeEditDate.endTime)
-          }else if(this.uploadBusi.endTime=="永久"){
+          if(this.storeEditDate.endTime=="永久"){
             this.forever=true
             this.uploadBusi.endTime=""
+          }else if(this.storeEditDate.endTime!="永久"){
+            this.uploadBusi.endTime=new Date(this.storeEditDate.endTime)
+            console.log(this.uploadBusi.endTime)
           }        
           this.uploadBusi.licenseNumber=this.storeEditDate.licenseNumber;
           this.uploadBusi.createTime=new Date(this.storeEditDate.createTime)
@@ -273,7 +277,6 @@ export default {
         this.judgeErr.uploadErrShow=true
       },
       fileUploadSuccess(response, file, fileList){
-        console.log(111)
       },
       formatTen(num) { 
         return num > 9 ? (num + "") : ("0" + num); 
@@ -306,12 +309,12 @@ export default {
 <style lang="scss">
 .business{ 
   .mess_show{
+      background: #F9FAFC;
       margin-top: 20px;
       width:400px;
-      height: 300px;
+      height: 240px;
       overflow: auto;
-      border:1px solid #ccc;
-      border-radius: 10px;
+      border-radius: 2px;
       .mess_title{
         width: 100%;
         height: 40px;
@@ -319,6 +322,7 @@ export default {
         border-bottom:1px solid #ccc;
         text-align:center;
       }
+      .salve{font-size:12px;color:blue;cursor:pointer}
       .mess_con{
         width: 100%;
         padding: 10px 20px;
@@ -328,6 +332,7 @@ export default {
           li{
             float: left;
             width: 100%;
+            height: 23px;
             span{
               max-width: 250px;
               display:block;

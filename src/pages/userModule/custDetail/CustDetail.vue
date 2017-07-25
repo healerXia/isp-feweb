@@ -9,7 +9,7 @@
         </span>
       </div>
       <div class="content pT30">
-        <div class="title MB20">
+        <div class="title pT30">
           <h1 class="MR15">客户信息</h1>
           <router-link
             :to="{path:'createUser',query:{id:$router.currentRoute.query.id}}" >
@@ -415,10 +415,10 @@
               </li>
             </ul>
           </div>
-          <div class="title MB20 MT30">
+          <div class="title MB20 MT30 bgNone" v-show="show.showLicence">
             <h1 class="MR15">资质证照区</h1>
           </div>
-          <div class="licence">
+          <div class="licence" v-show="show.showLicence">
               <div class="licenceBox">
                 <div class="licenceTitle">
                 营业执照
@@ -470,7 +470,7 @@
                   <tbody>
                     <tr v-for="item in brandLicense.brandLicenseArr">
                       <td v-for="key in brandLicense.tableKey">{{item[key]}}</td>
-                      <td>查看</td>
+                      <td ><span @click="showSalveDialog" class="salve">查看</span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -495,7 +495,7 @@
                   <li>
                     <span>资质状态：</span>
                     <span>
-                    {{bankAccount.taxCode!=""?bankAccount.status:""}}
+                    {{bankAccount.status?bankAccount.status:"待确认"}}
                     </span>
                   </li>
                   <li v-for="(item,index) in bankAccount.custBankAccountList" v-if="item.bank">
@@ -507,7 +507,7 @@
                     </ul>
                   </li>
                    <li>
-                    <span>附件：</span><span>1111</span>
+                    <span>附件：</span><span @click="showSalveDialog" class="salve">1111</span>
                   </li>
                 </ul>
               </div>
@@ -528,7 +528,7 @@
             <tbody>
               <tr v-for="item in businessTable.tableData">
                 <td v-for="key in businessTable.tableKey">
-                  <span v-if="key=='time'">{{item.beginTime}}-{{item.endTime}}</span>
+                  <span v-if="key=='time'">{{item.beginTime}}至{{item.endTime}}</span>
                   <span v-else>{{item[key]}}</span>                  
                 </td>
               </tr>
@@ -604,9 +604,9 @@
             imgPath:""
           },
           show:{
+            showLicence:false,
             showBaseMess:true,
-            competMess:false,
-           
+            competMess:false,           
           },
           custInfo:{//都有            
             custName:"",//客户名称+ 
@@ -641,101 +641,103 @@
           governArealist:[],
           custBrandMapList:[],
           businessLicense:{//上传营业执照
-            licenseNumber: "12356789",//统一社会信用代码
-            registeredCapital: "1000000",//注册资本
-            time: " 2016-12-29至永久",//营业期限
-            beginTime:"2016-12-29",
-            endTime:"2017-01-10",
-            createTime: "2016-12-29",//年检年份
-            legalPerson: "张三",//法定代表人
-            businessAddress: "北京市昌平区",//经营住所
-            organizationCode: "AE86110",//组织机构代码
-            custName: "易车网",//客户名称
-            salve: ""//营业执照附件
+            // licenseNumber: "12356789",//统一社会信用代码
+            // registeredCapital: "1000000",//注册资本
+            // time: " 2016-12-29至永久",//营业期限
+            // beginTime:"2016-12-29",
+            // endTime:"2017-01-10",
+            // createTime: "2016-12-29",//年检年份
+            // legalPerson: "张三",//法定代表人
+            // businessAddress: "北京市昌平区",//经营住所
+            // organizationCode: "AE86110",//组织机构代码
+            // custName: "易车网",//客户名称
+            // salve: ""//营业执照附件
           },
           businessTable:{
             tableHead:['统一社会信用代码','注册资本(万元)','营业期限','有效期','上传时间'],
             tableKey:['licenseNumber','registeredCapital','time','endTime','createTime'],
-            tableData:[{
-              licenseNumber: "12356789",//统一社会信用代码
-              registeredCapital: "1000000",//注册资本
-              beginTime:"2016-12-29",
-              endTime:"2017-01-10",
-              validTime: "2016-12-29",//年检年份
-              createTime:"2016-12-29",//年检年份
-            },
-            {
-              licenseNumber: "12356789",//统一社会信用代码
-              registeredCapital: "1000000",//注册资本
-              beginTime:"2016-12-29",
-              endTime:"2017-01-10",
-              validTime: "2016-12-29",//年检年份
-              createTime:"2016-12-29",//年检年份
-            }
+            tableData:[
+              // {
+              //   licenseNumber: "12356789",//统一社会信用代码
+              //   registeredCapital: "1000000",//注册资本
+              //   beginTime:"2016-12-29",
+              //   endTime:"2017-01-10",
+              //   validTime: "2016-12-29",//年检年份
+              //   createTime:"2016-12-29",//年检年份
+              // },
+              // {
+              //   licenseNumber: "12356789",//统一社会信用代码
+              //   registeredCapital: "1000000",//注册资本
+              //   beginTime:"2016-12-29",
+              //   endTime:"2017-01-10",
+              //   validTime: "2016-12-29",//年检年份
+              //   createTime:"2016-12-29",//年检年份
+              // }
             ]
           },
           brandLicense:{
             tableKey:["brandName","validTime","createTime"],
             tableHead:["授权品牌","有效期","上传日期","附件"],
             brandLicenseArr:[
-              {brandName:"品牌品牌名臣品牌名臣名臣",createTime:"2012-11-11",validTime:"2013-11-11",salve:"11"},
-              {brandName:"品牌名臣",uploadTime:"2012-11-11",validTime:"2013-11-11",salve:"11"},
-              {brandName:"品牌名臣",uploadTime:"2012-11-11",validTime:"2013-11-11",salve:"11"}
+              // {brandName:"品牌品牌名臣品牌名臣名臣",createTime:"2012-11-11",validTime:"2013-11-11",salve:"11"},
+              // {brandName:"品牌名臣",uploadTime:"2012-11-11",validTime:"2013-11-11",salve:"11"},
+              // {brandName:"品牌名臣",uploadTime:"2012-11-11",validTime:"2013-11-11",salve:"11"}
             ]
           },
           brandTable:{
             tableHead:['上传品牌','有效期','上传时间'],
             tableKey:['brandName','validTime','createTime'],
             tableData:[
-              {
-                brandName:"品牌品牌名臣品牌名臣名臣",
-                createTime:"2012-11-11",
-                validTime:"2013-11-11"
-              },
-              {
-                brandName:"品牌品牌名臣品牌名臣名臣",
-                createTime:"2012-11-11",
-                validTime:"2013-11-11"
-              }
+              // {
+              //   brandName:"品牌品牌名臣品牌名臣名臣",
+              //   createTime:"2012-11-11",
+              //   validTime:"2013-11-11"
+              // },
+              // {
+              //   brandName:"品牌品牌名臣品牌名臣名臣",
+              //   createTime:"2012-11-11",
+              //   validTime:"2013-11-11"
+              // }
               ]
           },
           bankAccount:{
-            taxCode:1000901110,
+            taxCode:"",
             custBankAccountList:[
-              {
-                bank:"中国银行",
-                bankAccount:"6500111122220000",
-                phone:"18602351793",
-                address:"北京市昌平区"
-              },
-              {
-                bank:"中国银行",
-                bankAccount:"6500111122220000",
-                phone:"18602351793",
-                address:"北京市昌平区"
-              } 
+              // {
+              //   bank:"中国银行",
+              //   bankAccount:"6500111122220000",
+              //   phone:"18602351793",
+              //   address:"北京市昌平区"
+              // },
+              // {
+              //   bank:"中国银行",
+              //   bankAccount:"6500111122220000",
+              //   phone:"18602351793",
+              //   address:"北京市昌平区"
+              // } 
             ],
             salve:"",
-            validTime:"2013-12-11",
-            status:"已确认"
+            validTime:"",
+            status:""
           },
           bankTable:{
             tableHead:['序号','操作人','有效期','操作时间','审核状态','备注'],
             tableKey:['operating','validTime','createTime','status','notes'],
-            tableData:[{
-              operating: "12356789",//操作人
-              validTime: "1000000",//
-              createTime:"2016-12-29",//操作时间
-              status: "审核通过",//审核审核状态
-              notes:"嗯嗯可以",//备注
-            },
-            {
-              operating: "12356789",//操作人
-              validTime: "1000000",//
-              createTime:"2016-12-29",//操作时间
-              status: "审核通过",//审核审核状态
-              notes:"嗯嗯可以",//备注
-            }
+            tableData:[
+            // {
+            //   operating: "12356789",//操作人
+            //   validTime: "1000000",//
+            //   createTime:"2016-12-29",//操作时间
+            //   status: "审核通过",//审核审核状态
+            //   notes:"嗯嗯可以",//备注
+            // },
+            // {
+            //   operating: "12356789",//操作人
+            //   validTime: "1000000",//
+            //   createTime:"2016-12-29",//操作时间
+            //   status: "审核通过",//审核审核状态
+            //   notes:"嗯嗯可以",//备注
+            // }
             ]
           },
         }
@@ -758,7 +760,6 @@
                 } 
                 this.governArealist.push(obj)
               }
-              console.log(res.data.result[0].custBrandMapList)
               this.custBrandMapList=res.data.result[0].custBrandMapList
               this.backFillUpload(this.custInfo.typeId,id)
               this.dealMess();
@@ -774,16 +775,31 @@
       methods:{
         backFillUpload(typeId,id){//上传组件的回填
           if(typeId!=5){//三个上传
+            this.show.showLicence=true
             this.$http.post(config.urlList.custBankAccount,//获取纳税纳税资质证明
-              {custId:id},
+              {custId:id,pageSize:10,pageIndex:1},
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
-                if(res.data.result.length>=1){
+                  console.log(res.data.result)
+                  if(res.data.result!=null){
+                    this.bankAccount=res.data.result 
+                  }                
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((res)=>{})
 
-                  // this.bankAccount=res.data.result[0]
-                  // // this.bankTable.tableData=res.data.result
-                }
+            this.$http.post(config.urlList.custBankAccountHistory,//获取纳税纳税资质历史
+              {custId:id,pageSize:10,pageIndex:1},
+              {emulateJSON:true}
+              ).then((res)=>{
+              if(res.data.errorCode===0){
+                  console.log(res.data.result)               
               }
               else {
                 this.$Modal.info({
@@ -794,16 +810,26 @@
             }).catch((res)=>{})
 
             this.$http.post(config.urlList.custBrandLicense,//获取品牌授权书编辑
-              {custId:id},
+              {custId:id,pageSize:10,pageIndex:1},
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
-                if(res.data.result.length>=1){
-                  this.brandLicense.brandLicenseArr=res.data.result
-                  this.brandTable.tableData=res.data.result
+                if(res.data.result.resultList.length>=1){
+
+                  this.brandLicense.brandLicenseArr=res.data.result.resultList
+                  this.brandTable.tableData=res.data.result.resultList
+                  for(let i=0;i<this.brandLicense.brandLicenseArr.length;i++){
+                    if(this.brandLicense.brandLicenseArr[i].validTime){
+                      this.brandLicense.brandLicenseArr[i].validTime=this.brandLicense.brandLicenseArr[i].validTime.substring(0,10);
+                    }
+                    if(this.brandLicense.brandLicenseArr[i].createTime){
+                      this.brandLicense.brandLicenseArr[i].createTime=this.brandLicense.brandLicenseArr[i].createTime.substring(0,10);
+                    }                    
+                  }
                 }
               }
               else {
+                console.log(111)
                 this.$Modal.info({
                     title: '提示',
                     content: res.data.errorMsg
@@ -812,26 +838,35 @@
             }).catch((res)=>{})
 
             this.$http.post(config.urlList.businessLicense,//获取营业执照权书编辑
-              {custId:id},
+              {custId:id,pageSize:10,pageIndex:1},
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
-                if(res.data.result.length>=1){
-                  this.businessLicense=res.data.result[res.data.result.length-1]
+                if(res.data.result.resultList.length>=1){
+                  this.businessLicense=res.data.result.resultList[0]
+                  console.log(this.businessLicense)
                   this.businessLicense.custName=this.custInfo.custName
-                  this.businessLicense.createTime=this.businessLicense.createTime.substring(0,11)
-                  if(res.data.result[0].endTime!="永久"){
+                  this.businessLicense.createTime=this.businessLicense.createTime.substring(0,10)
+                  if(this.businessLicense.endTime&&this.businessLicense.endTime!="永久"){
                     this.businessLicense.time=
-                    this.businessLicense.beginTime.substring(0,11)+"至 "+this.businessLicense.endTime.substring(0,11)
-                  }else{
+                    this.businessLicense.beginTime.substring(0,10)+"至 "+this.businessLicense.endTime.substring(0,11)
+                  }else if(this.businessLicense.endTime&&this.businessLicense.endTime=="永久"){
                     this.businessLicense.time=
-                    this.businessLicense.beginTime.substring(0,11)+"至 永久";
+                    this.businessLicense.beginTime.substring(0,10)+"至 永久";
                   }
-                  this.businessTable.tableData=res.data.result
+                  this.businessTable.tableData=res.data.result.resultList
                   for(let i=0;i<this.businessTable.tableData.length;i++){
-                    this.businessTable.tableData[i].beginTime=this.businessTable.tableData[i].beginTime.substring(0,11)
-                    this.businessTable.tableData[i].endTime=this.businessTable.tableData[i].endTime.substring(0,11)
-                    this.businessTable.tableData[i].createTime=this.businessTable.tableData[i].createTime.substring(0,11)
+                    if(this.businessTable.tableData[i].beginTime){
+                      this.businessTable.tableData[i].beginTime=this.businessTable.tableData[i].beginTime.substring(0,11)
+                    }
+                    
+                                      
+                    if(this.businessTable.tableData[i].endTime!="永久"&&this.businessTable.tableData[i].endTime){                    
+                      this.businessTable.tableData[i].endTime=this.businessTable.tableData[i].endTime.substring(0,11)
+                    }
+                    if(this.businessTable.tableData[i].createTime){
+                      this.businessTable.tableData[i].createTime=this.businessTable.tableData[i].createTime.substring(0,11)
+                    }
                   }
                 }
               }
@@ -842,6 +877,8 @@
                 });
               }
             }).catch((res)=>{})
+          }else{
+            this.show.showLicence=false
           }
         },
         dealMess(){
@@ -869,18 +906,25 @@
           this.custInfo.governArea=governArea
           //地图回显示
           if(this.custInfo.typeId==5){
-              var litterMap = new BMap.Map("map");    // 创建Map实例
-              litterMap.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
-              litterMap.addControl(new BMap.MapTypeControl());   //添加地图类型控件
-              litterMap.setCurrentCity("中国");          // 设置地图显示的城市 此项是必须设置的
-              litterMap.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-              litterMap.clearOverlays(); 
-              var new_point = new BMap.Point(this.custInfo.longitude,this.custInfo.latitude);
-              var marker = new BMap.Marker(new_point);  // 创建标注
-              litterMap.addOverlay(marker);              // 将标注添加到地图中
-              litterMap.panTo(new_point); 
+             setTimeout(()=>{
+                document.getElementById('map').innerHTML=""
+                document.getElementById('map').style.width="300px"
+                document.getElementById('map').style.height="200px"
+              },0)
+             setTimeout(()=>{
+                var litterMap = new BMap.Map("map");    // 创建Map实例
+                litterMap.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
+                litterMap.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+                litterMap.setCurrentCity("中国");          // 设置地图显示的城市 此项是必须设置的
+                litterMap.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+                litterMap.clearOverlays(); 
+                var new_point = new BMap.Point(this.custInfo.longitude,this.custInfo.latitude);
+                var marker = new BMap.Marker(new_point);  // 创建标注
+                litterMap.addOverlay(marker);              // 将标注添加到地图中
+                litterMap.panTo(new_point); 
+              },10)
+              
           }
-
         },
         tabCheck(){
           if(this.show.showBaseMess==true){
