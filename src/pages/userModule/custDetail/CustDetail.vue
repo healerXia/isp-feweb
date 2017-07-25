@@ -207,11 +207,11 @@
               </li>
               <li>
                 <span>客户名称：</span>
-                <span class="liWid">{{custInfo.abbrName}}</span>
+                <span class="liWid">{{custInfo.custName}}</span>
               </li>
               <li>
                 <span>客户简称：</span>
-                <span class="liWid">{{custInfo.custName}}</span>
+                <span class="liWid">{{custInfo.abbrName}}</span>
               </li>
               <li>
                 <span>客户行业：</span>
@@ -469,8 +469,11 @@
                   </thead>
                   <tbody>
                     <tr v-for="item in brandLicense.brandLicenseArr">
-                      <td v-for="key in brandLicense.tableKey">{{item[key]}}</td>
-                      <td ><span @click="showSalveDialog" class="salve">查看</span></td>
+                      <td v-for="key in brandLicense.tableKey">
+                        <span v-if="key!='createTime'&& key!='validTime'">{{item[key]}}</span>
+                        <span v-else>{{item[key].substring(0,10)}}</span>
+                      </td>
+                      <td><span @click="showSalveDialog" class="salve">查看</span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -534,7 +537,14 @@
               </tr>
             </tbody>
           </table>
-          <Page :total="100"  class="MT20" size="small"  @on-change="busiPageChange"></Page>
+          <Page 
+          :total="busiPage.totalPages" class="MT20"
+           :current="busiPage.current"
+           :page-size="5"
+           size="small"
+           @on-change="busiPageChange"
+          >
+          </Page>
         </div>
         <div class="MT20" v-show="modal.showUploadBrand">
           <table>
@@ -546,12 +556,20 @@
             <tbody>
               <tr v-for="item in brandTable.tableData">
                 <td v-for="key in brandTable.tableKey">
-                  {{item[key]}}                
+                  <span v-if="key!='createTime'&& key!='validTime'">{{item[key]}}</span>
+                  <span v-else>{{item[key].substring(0,10)}}</span>                
                 </td>
               </tr>
             </tbody>
           </table>
-          <Page :total="100" class="MT20" size="small" @on-change="brandPageChange"></Page>
+          <Page 
+            :total="brandPage.totalPages" class="MT20"
+            :current="brandPage.current"
+            :page-size="5"
+            size="small"
+            @on-change="brandPageChange"
+          >
+          </Page>
         </div>
         <div class="MT20" v-show="modal.showUploadBank">
           <table>
@@ -594,6 +612,18 @@
       },
       data () {
         return {
+          busiPage:{
+            current:1,
+            totalPages:0,
+          },
+          brandPage:{
+            current:1,
+            totalPages:0,
+          },
+          bankPage:{
+            current:1,
+            totalPages:0,
+          },
           modal:{
             showModal:false,
             title:"" ,
@@ -781,7 +811,6 @@
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
-                  console.log(res.data.result)
                   if(res.data.result!=null){
                     this.bankAccount=res.data.result 
                   }                
@@ -810,26 +839,32 @@
             }).catch((res)=>{})
 
             this.$http.post(config.urlList.custBrandLicense,//获取品牌授权书编辑
-              {custId:id,pageSize:10,pageIndex:1},
+              {custId:id,pageSize:5,pageIndex:1},
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
                 if(res.data.result.resultList.length>=1){
+                  this.brandPage.pageIndex=res.data.result.pageNo
+                  this.brandPage.totalPages=res.data.result.totalCount
 
-                  this.brandLicense.brandLicenseArr=res.data.result.resultList
-                  this.brandTable.tableData=res.data.result.resultList
-                  for(let i=0;i<this.brandLicense.brandLicenseArr.length;i++){
-                    if(this.brandLicense.brandLicenseArr[i].validTime){
-                      this.brandLicense.brandLicenseArr[i].validTime=this.brandLicense.brandLicenseArr[i].validTime.substring(0,10);
-                    }
-                    if(this.brandLicense.brandLicenseArr[i].createTime){
-                      this.brandLicense.brandLicenseArr[i].createTime=this.brandLicense.brandLicenseArr[i].createTime.substring(0,10);
-                    }                    
+                  for(let i=0;i<res.data.result.resultList.length;i++){
+                    if(res.data.result.resultList[i].validTime){
+                      res.data.result.resultList[i].validTime=res.data.result.resultList[i].validTime.substring(0,10);
+                    }                 
                   }
+                  this.brandLicense.brandLicenseArr=[];
+                  this.brandTable.tableData=res.data.result.resultList.slice(0)
+                  let create_time=res.data.result.resultList[0].createTime;            
+                  let arr=[]
+                  for(let i=0;i<res.data.result.resultList.length;i++){
+                    if(res.data.result.resultList[i].createTime==create_time){
+                      arr.push(res.data.result.resultList[i])
+                    }
+                  } 
+                  this.brandLicense.brandLicenseArr=arr.splice(0)
                 }
               }
               else {
-                console.log(111)
                 this.$Modal.info({
                     title: '提示',
                     content: res.data.errorMsg
@@ -838,18 +873,20 @@
             }).catch((res)=>{})
 
             this.$http.post(config.urlList.businessLicense,//获取营业执照权书编辑
-              {custId:id,pageSize:10,pageIndex:1},
+              {custId:id,pageSize:5,pageIndex:1},
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
                 if(res.data.result.resultList.length>=1){
+                  this.busiPage.pageIndex=res.data.result.pageNo
+                  this.busiPage.totalPages=res.data.result.totalCount
+
                   this.businessLicense=res.data.result.resultList[0]
-                  console.log(this.businessLicense)
                   this.businessLicense.custName=this.custInfo.custName
                   this.businessLicense.createTime=this.businessLicense.createTime.substring(0,10)
                   if(this.businessLicense.endTime&&this.businessLicense.endTime!="永久"){
                     this.businessLicense.time=
-                    this.businessLicense.beginTime.substring(0,10)+"至 "+this.businessLicense.endTime.substring(0,11)
+                    this.businessLicense.beginTime.substring(0,10)+"至 "+this.businessLicense.endTime.substring(0,10)
                   }else if(this.businessLicense.endTime&&this.businessLicense.endTime=="永久"){
                     this.businessLicense.time=
                     this.businessLicense.beginTime.substring(0,10)+"至 永久";
@@ -857,15 +894,14 @@
                   this.businessTable.tableData=res.data.result.resultList
                   for(let i=0;i<this.businessTable.tableData.length;i++){
                     if(this.businessTable.tableData[i].beginTime){
-                      this.businessTable.tableData[i].beginTime=this.businessTable.tableData[i].beginTime.substring(0,11)
+                      this.businessTable.tableData[i].beginTime=this.businessTable.tableData[i].beginTime.substring(0,10)
                     }
-                    
-                                      
+   
                     if(this.businessTable.tableData[i].endTime!="永久"&&this.businessTable.tableData[i].endTime){                    
-                      this.businessTable.tableData[i].endTime=this.businessTable.tableData[i].endTime.substring(0,11)
+                      this.businessTable.tableData[i].endTime=this.businessTable.tableData[i].endTime.substring(0,10)
                     }
                     if(this.businessTable.tableData[i].createTime){
-                      this.businessTable.tableData[i].createTime=this.businessTable.tableData[i].createTime.substring(0,11)
+                      this.businessTable.tableData[i].createTime=this.businessTable.tableData[i].createTime.substring(0,10)
                     }
                   }
                 }
@@ -959,10 +995,62 @@
         },
         //每个表格的分页
         busiPageChange(index){//营业执照
-          console.log(index)
+           this.$http.post(config.urlList.businessLicense,//获取营业执照权书编辑
+              {custId:this.$router.currentRoute.query.id,pageSize:5,pageIndex:index},
+              {emulateJSON:true}
+              ).then((res)=>{
+              if(res.data.errorCode===0){
+                if(res.data.result.resultList.length>=1){
+                  this.businessTable.tableData=res.data.result.resultList
+                  for(let i=0;i<this.businessTable.tableData.length;i++){
+                    if(this.businessTable.tableData[i].beginTime){
+                      this.businessTable.tableData[i].beginTime=this.businessTable.tableData[i].beginTime.substring(0,11)
+                    }
+                    
+                                      
+                    if(this.businessTable.tableData[i].endTime!="永久"&&this.businessTable.tableData[i].endTime){                    
+                      this.businessTable.tableData[i].endTime=this.businessTable.tableData[i].endTime.substring(0,11)
+                    }
+                    if(this.businessTable.tableData[i].createTime){
+                      this.businessTable.tableData[i].createTime=this.businessTable.tableData[i].createTime.substring(0,11)
+                    }
+                  }
+                }
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((res)=>{})
         },
         brandPageChange(index){//品牌授权书
-          console.log(index)
+          this.$http.post(config.urlList.custBrandLicense,//获取品牌授权书编辑
+            {custId:this.$router.currentRoute.query.id,pageSize:5,pageIndex:index},
+            {emulateJSON:true}
+            ).then((res)=>{
+            if(res.data.errorCode===0){
+              if(res.data.result.resultList.length>=1){
+                this.brandPage.pageIndex=res.data.result.pageNo
+                this.brandPage.totalPages=res.data.result.totalCount
+
+                for(let i=0;i<res.data.result.resultList.length;i++){
+                  if(res.data.result.resultList[i].validTime){
+                    res.data.result.resultList[i].validTime=res.data.result.resultList[i].validTime.substring(0,10);
+                  }                 
+                }
+                this.brandLicense.brandLicenseArr=[];
+                this.brandTable.tableData=res.data.result.resultList.slice(0)
+              }
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+          }).catch((res)=>{})
         },
         bankPageChange(index){//纳税资质
           console.log(index)

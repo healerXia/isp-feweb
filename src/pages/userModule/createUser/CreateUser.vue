@@ -344,6 +344,7 @@
       },
       data () {
         return {
+          uploadBrandLength:0,
           showSalve:false,
           imgPath:"",
           governArealist:[],
@@ -575,7 +576,6 @@
       methods:{
         showPicDialog(data){
           this.showSalve=true
-          console.log(data)
         },
         /*******组件的信息接收*******/
         getCheckArea(data){//组件 获取选择的地区
@@ -679,7 +679,6 @@
           this.uploadBrandArr.push(obj)        
         },
         getUploadPay(data){//组件 获取上传纳税资质证明
-          console.log(data)
           let obj={}
           this.uploadPayObj.taxCode=data.taxCode
           this.uploadPayObj.custBankAccountList=data.custBankAccountList
@@ -884,9 +883,13 @@
               ).then((res)=>{
               if(res.data.errorCode===0){
                 if(res.data.result.resultList.length>=1){
+                  let create_time=res.data.result.resultList[0].createTime;            
                   let arr=[]
-                  arr=res.data.result.resultList
-                  
+                  for(let i=0;i<res.data.result.resultList.length;i++){
+                    if(res.data.result.resultList[i].createTime==create_time){
+                      arr.push(res.data.result.resultList[i])
+                    }
+                  } 
                   for(let i=0;i<arr.length;i++){
                     if(arr[i].validTime){
                       arr[i].validTime=arr[i].validTime.substring(0,10);
@@ -895,6 +898,7 @@
                       arr[i].createTime=arr[i].createTime.substring(0,10);
                     }                    
                   }
+                  this.uploadBrandLength=arr.length
                   this.getUploadBrand(arr)
                 }
               }
@@ -912,8 +916,7 @@
               ).then((res)=>{
               if(res.data.errorCode===0){
                 if(res.data.result.resultList.length>=1){ 
-                  console.log(res.data.result.resultList[0])
-                  this.getUploadBusiness(res.data.result.resultList[2])
+                  this.getUploadBusiness(res.data.result.resultList[0])
                 }
               }
               else {
@@ -1026,8 +1029,16 @@
           }
         
           if(this.uploadBrandArr.length>=1){
+            let arr=[];
+            if(this.uploadBrandLength==0){
+              arr=this.uploadBrandArr.slice(0)
+            }else if(this.uploadBrandLength<this.uploadBrandArr.length){
+              arr=this.uploadBrandArr.slice(this.uploadBrandLength)
+            }else if(this.uploadBrandLength=this.uploadBrandArr.length){
+              arr=[]
+            }
             this.$http.post('/isp-kongming-cust/cust/adCustBrandLicense',
-              {custBrandLicenseList:this.uploadBrandArr},
+              {custBrandLicenseList:arr},
               ).then((res) => {
                 if(res.data.errorCode===0){
                 }else {
@@ -1045,8 +1056,7 @@
 
                 }
             }).catch((err) => {})
-          }
-          
+          }         
         },
         submitAudit(name){//
           this.$refs[name].validate((valid) => {
@@ -1064,7 +1074,6 @@
         cancle (name) {
           this.$refs[name].resetFields();
         },
-
         //提交数据的时候，值得处理
         operSubmitData(){
           //下拉  主营品牌
@@ -1283,15 +1292,23 @@
           //所属经销商变化，客户地区回填
           //所属经销商变化，主营品牌变化
           //所属经销商变化，客户地址变化
-          if(data.value){
+          if(data.value && !this.$router.currentRoute.query.id){
             this.$http.post(config.urlList.dealer,
               {custId:data.value},
               {emulateJSON:true}
               ).then((res) => {
               if(res.data.errorCode===0){
-                let pid=res.data.result[0].provinceId
-                let cid=res.data.result[0].cityId
-                let counid=res.data.result[0].countyId
+                let pid=res.data.result.provinceId
+                let cid=res.data.result.cityId
+                let counid=res.data.result.countyId
+                this.formValidate.address=res.data.result.address
+                let brandnameArr=[];
+                let brandidArr=[];
+                for(let i=0;i<res.data.result.custBrandMapList.length;i++){
+                  brandnameArr.push(res.data.result.custBrandMapList[i].brandName)
+                  brandidArr.push(res.data.result.custBrandMapList[i].brandId)
+                }
+                this.getBrandOption(brandnameArr,brandidArr)
                 if(this.formValidate.provinceId==pid){
                   if(this.formValidate.cityId==cid){
                     if(this.formValidate.countyId!=counid){
@@ -1323,7 +1340,6 @@
                   this.optionArr.subclassIdOption=[{name:"综合店",value:3}]
                   this.formValidate.subclassId=""
                 }
-                this.formValidate.address=res.data.result[0].address
               }
               else {
                 this.$Modal.info({
