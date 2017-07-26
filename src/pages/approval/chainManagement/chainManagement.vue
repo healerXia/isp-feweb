@@ -1,10 +1,10 @@
 <template lang="html">
     <div id="chainManagement">
-        <Form :label-width="80">
+        <Form :label-width="100" class="searchBox">
             <div class="formTop clear">
                 <div class="item fl">
                     <Form-item label="用户组名称:" prop="name">
-                        <Input v-model="searchInfo.groupName" placeholder="请输入姓名"></Input>
+                        <Input v-model="searchInfo.groupName" placeholder="请输入用户组名称"></Input>
                     </Form-item>
                 </div>
                 <div class="item fl">
@@ -114,6 +114,7 @@ export default {
     },
     methods: {
         render() {
+            this.searchInfo.groupName = this.searchInfo.groupName.trim();
             this.$http.get('/isp-process-server/userGroup/getList', {
                 params: this.searchInfo
             }).then((res) => {
@@ -134,21 +135,21 @@ export default {
                 setTimeout(() => {
                     this.loading1 = false;
                     if (!query) return false;
-                    this.$http.get('/isp-process-server/employee/getList', {
+                    this.$http.get('/isp-process-server/employee/getPageList', {
                         params: {
-                            userName: query,
+                            displayName: query,
                             pageIndex: 1,
                             pageSize: 10
                         }
                     }).then((res) => {
                         if (res.data.errorCode == 0) {
-                            this.groups = Object.assign([], res.data.result).map(item => {
+                            this.groups = Object.assign([], res.data.result.resultList).map(item => {
                                 return {
                                     userId: item.employeeId,
                                     userName: item.displayName
                                 }
                             });
-                            console.log(this.groups);
+
                         }
                         else {
                             this.groups = [];
@@ -198,10 +199,12 @@ export default {
                             this.render();
                         }
                         else {
-                            this.$Modal.info({
-                                title: '提示',
-                                content: res.data.errorMsg
-                            });
+                            setTimeout(()=> {
+                                this.$Modal.info({
+                                    title: '提示',
+                                    content: res.data.errorMsg
+                                });
+                            }, 500)
                         }
                     }).catch((err) => {
                         console.log(err);
@@ -219,7 +222,10 @@ export default {
 
 <style lang="scss" scoped>
 #chainManagement {
-    padding: 0 30px 0 30px;
+    .searchBox {
+        padding: 50px 30px;
+        background: #F9FAFC;
+    }
 
     .noRes {
         text-align: center;
@@ -237,7 +243,6 @@ export default {
     }
 
     .formTop {
-        margin-top: 50px;
 
         .item {
             width: 348px;
@@ -263,6 +268,10 @@ export default {
 
     .submitBtn {
         width: 726px;
+    }
+
+    .insert {
+        padding: 30px;
     }
 
     .insertButton {

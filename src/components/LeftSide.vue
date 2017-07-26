@@ -1,47 +1,19 @@
 <template lang="html">
-    <Menu active-name="2-1" theme="dark" width="auto" :open-names="['2']" class="iconChange">
+    <Menu active-name="2-1" :open-names="['2']"  theme="dark" width="auto"  class="iconChange">
         <div class="layout-logo-left"></div>
-        <Submenu name="1">
+        <Submenu v-for='(i, index) in menu' :key='index' :name="i.index">
             <template slot="title">
-                <i class="icon iconfont icon-index"></i>
-                首页
-                <i class="icon iconfont icon-navi-down"></i>
-                <i class="icon iconfont icon-navi-up"></i>
+                <i :class="['icon', 'iconfont', i.icon]"></i>
+                 {{i.name}}
+                 <span v-if='i.subNav'>
+                     <i class="icon iconfont icon-navi-down"></i>
+                     <i class="icon iconfont icon-navi-up"></i>
+                 </span>
             </template>
-        </Submenu>
-        <Submenu name="2">
-            <template slot="title">
-                <i class="icon iconfont icon-project"></i>
-                项目
-                <i class="icon iconfont icon-navi-down"></i>
-                <i class="icon iconfont icon-navi-up"></i>
-            </template>
-            <Menu-item name="2-1">
-                <router-link class="white"
-                :to="{path:'createPro'}">
+            <Menu-item v-if='i.subNav' v-for='(list, index) in i.subNav' :key='index' :name="list.index">
+                <router-link class="white" :to="{path: list.path}" @click='jump(i.index, list.index)'>
                     <span class="menuCircle"></span>
-                     创建项目
-                </router-link>
-            </Menu-item>
-            <Menu-item name="2-2">
-             <router-link class="white"
-                :to="{path:'projectList'}">
-                    <span class="menuCircle"></span>
-                     项目管理
-                </router-link>
-            </Menu-item>
-        </Submenu>
-        <Submenu name="3">
-            <template slot="title">
-                <i class="icon iconfont icon-orders"></i>
-                订单
-                <i class="icon iconfont icon-navi-down"></i>
-                <i class="icon iconfont icon-navi-up"></i>
-            </template>
-            <Menu-item name="3-1">
-                <router-link class="white"
-                :to="{path:'orderList'}">
-                    <span class="menuCircle"></span>
+<<<<<<< HEAD
                      订单管理
                 </router-link>
             </Menu-item>
@@ -224,6 +196,9 @@
                 :to="{path:'projectList'}">
                     <span class="menuCircle"></span>
                      人员管理
+=======
+                     {{list.name}}
+>>>>>>> master
                 </router-link>
             </Menu-item>
         </Submenu>
@@ -231,7 +206,21 @@
 </template>
 
 <script>
+import { menu } from '../config/menu.js';
+
 export default {
+    data() {
+       return {
+           menu: menu,
+           activeName: '2-1',
+           openName: "['2']"
+       }
+    },
+    methods: {
+        jump(n, m) {
+            connsole.log(n, m);
+        }
+    }
 }
 </script>
 

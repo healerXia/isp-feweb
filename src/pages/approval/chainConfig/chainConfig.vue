@@ -1,9 +1,9 @@
 <template lang="html">
     <div id='chainConfig'>
         <p class='title'>{{titleTxt}}</p>
-        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90">
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
             <Form-item label="审批链名称" prop="name">
-                <Input v-model="formValidate.name" placeholder="请输审批链名称" class='text fl'></Input>
+                <Input v-model="formValidate.name" placeholder="请输入审批链名称" class='text fl'></Input>
             </Form-item>
             <Form-item label="流程名称" prop="processName" class='process'>
                 <Select v-model="formValidate.processName" placeholder="请选择流程名称" class="text fl" :label-in-value="true" @on-change="checkProcess">
@@ -15,7 +15,7 @@
                     <Checkbox :label="i" v-for='i in orderNameList' :key='new Date()'></Checkbox>
                 </Checkbox-group>
             </Form-item>
-            <Form-item label="业务类型" prop="orderType" v-if ='orderType.length > 0'>
+            <Form-item label="流程条件" prop="orderType" v-if ='orderType.length > 0'>
                  <Checkbox-group  v-model="formValidate.orderType" class='fl'>
                      <Checkbox :label="i" v-for='i in orderType' :key='new Date()'></Checkbox>
                  </Checkbox-group>
@@ -67,7 +67,7 @@ export default {
     data() {
         const validateName = (rule, value, callback) => {
             if (value.trim() === '') {
-                callback(new Error('请填写单据名称'));
+                callback(new Error('请填写流程名称'));
             }
             else if (value.trim().length > 50){
                 callback(new Error('长度不能超过50个字'));
@@ -139,7 +139,12 @@ export default {
             this.titleTxt = '创建审批链';
         }
         // 初始化下拉
-        this.$http.get('/isp-process-server/userGroup/getList').then((res) => {
+        this.$http.get('/isp-process-server/userGroup/getList', {
+            params: {
+                pageIndex: 1,
+                pageSize: 9999
+            }
+        }).then((res) => {
             if (res.data.errorCode == 0) {
                 let data = res.data.result.resultList;
                 this.selectList = data.map(item => {
@@ -162,11 +167,13 @@ export default {
             console.log(err)
         })
 
-
-
-
         // 初始化流程名称
-        this.$http.get('/isp-process-server/formType/all').then((res) => {
+        this.$http.get('/isp-process-server/formType/all', {
+            params: {
+                pageIndex: 1,
+                pageSize: 9999
+            }
+        }).then((res) => {
             if (res.data.errorCode == 0) {
                 this.dataList = Object.assign([], res.data.result);
                 for (let i = 0; i < this.dataList.length; i++) {
@@ -191,9 +198,31 @@ export default {
                                     break;
                                 }
                             }
+                            //this.orderNameList
+                            //this.orderType
+                            let chainType = data.subFormType.split(',');
+                            let orderType = data.formVariable.split(',');
 
-                            this.formValidate.chainType = data.subFormType.split(',');
-                            this.formValidate.orderType = data.formVariable.split(',');
+                            setTimeout(() => {
+
+
+
+                                for (let i = 0; i < chainType.length; i++) {
+                                    if (this.orderNameList.indexOf(chainType[i]) > -1) {
+                                        this.formValidate.chainType.push(chainType[i]);
+                                    }
+                                }
+
+                                for (let i = 0; i < orderType.length; i++) {
+                                    if (this.orderType.indexOf(orderType[i]) > -1) {
+                                        this.formValidate.orderType.push(orderType[i]);
+                                    }
+                                }
+                            })
+
+                            // this.formValidate.chainType = data.subFormType.split(',');
+                            // this.formValidate.orderType = data.formVariable.split(',');
+
                             let groupList = [];
                             this.data = data.listUserGroup;
                             setTimeout(() => {
@@ -330,7 +359,7 @@ export default {
                                 title: '提示',
                                 content: res.data.errorMsg,
                                 onOk: () => {
-                                    this.formValidate.name = '';
+
                                 }
                             });
                         }
@@ -359,6 +388,7 @@ export default {
             });
         },
         checkProcess(data) {
+            console.log(1);
             let datas = {};
             for (let i = 0; i < this.dataList.length; i++) {
                 if (this.dataList[i].formTypeName == data.value) {
@@ -438,7 +468,7 @@ export default {
     }
 
     .ivu-checkbox-wrapper {
-        font-size: 14px;
+        font-size: 12px;
     }
 
     .ivu-select-placeholder {
