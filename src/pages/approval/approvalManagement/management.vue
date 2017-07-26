@@ -1,50 +1,74 @@
-<template lang="html">
+流程<template lang="html">
     <div id="approvalManagement">
-        <Form :label-width="80">
-            <div class="formTop clear">
-                <div class="item fl">
-                    <Form-item label="审批链名称:" prop="name">
-                        <Input v-model="searchInfo.chainName" placeholder="请输入审批链名称"></Input>
-                    </Form-item>
-                </div>
-                <!-- <div class="item fl">
-                    <Form-item label="用户组名称:" prop="name">
-                        <Input v-model="searchInfo.groupName" placeholder="请输入用户组名称"></Input>
-                    </Form-item>
-                </div> -->
-                <div class="item fl">
-                    <Form-item label="单据名称:" prop="name">
-                        <Select v-model="searchInfo.formType" style="width:268px">
-                            <Option v-for="item in selectData" :value="item" :key="item.value">{{item}}</Option>
-                        </Select>
-                    </Form-item>
-                </div>
-            </div>
-            <!-- <div class="formBot clear">
-                <div class="item fl">
-                    <Form-item label="创建时间:">
-                        <Date-picker type="date" placeholder="选择日期" v-model="formValidate.date" class='dateItem fl'></Date-picker>
-                        <span class='fl line'></span>
-                        <Date-picker type="date" placeholder="选择日期" v-model="formValidate.date" class='dateItem fl'></Date-picker>
-                    </Form-item>
-                </div>
+        <div class="searchBox">
+            <Form :label-width="100">
+                <div class="formTop clear">
+                    <div class="item fl">
+                        <Form-item label="审批链名称:" prop="name">
+                            <Input v-model="searchInfo.chainName" placeholder="请输入审批链名称" style="width:268px"></Input>
+                        </Form-item>
+                    </div>
+                    <div class="item fl">
+                        <Form-item label="用户组名称:" prop="name">
+                            <!-- <Select v-model="searchInfo.groupId" filterable :clearable="true"  @on-query-change='selGroup'  style="width:268px">
+                                <Option v-for="item in groupList" :value="item.groupId" :key="item.groupId">{{item.groupName}}</Option>
+                            </Select> -->
 
-            </div> -->
+                            <Select
+                                v-model="searchInfo.groupId"
+                                filterable
+                                remote
+                                :remote-method="remoteMethod"
+                                :loading="loading"
+                                style="width:268px">
+                                <Option v-for="item in groupList" :value="item.groupId" :key="item.groupId">{{item.groupName}}</Option>
+                            </Select>
+                        </Form-item>
 
-            <Form-item class='submitBtn'>
-                <Button type="primary" @click="search" class="search fr">查询</Button>
-            </Form-item>
-        </Form>
+                    </div>
+                    <!-- <div class="item fl">
+                        <Form-item label="流程名称:" prop="name">
+                            <Select v-model="searchInfo.formType" style="width:268px">
+                                <Option v-for="item in selectData" :value="item" :key="item.value">{{item}}</Option>
+                            </Select>
+                        </Form-item>
+                    </div> -->
+                </div>
+                <div class="formBot clear">
+                    <!-- <div class="item fl">
+                        <Form-item label="创建时间:">
+                            <Date-picker type="date" placeholder="选择日期" v-model="formValidate.date" class='dateItem fl'></Date-picker>
+                            <span class='fl line'></span>
+                            <Date-picker type="date" placeholder="选择日期" v-model="formValidate.date" class='dateItem fl'></Date-picker>
+                        </Form-item>
+                    </div> -->
+
+                    <div class="item fl">
+                        <Form-item label="流程名称:" prop="name">
+                            <Select v-model="searchInfo.formType" :clearable="true"  style="width:268px">
+                                <Option v-for="item in selectData" :value="item.id" :key="new Date()">{{item.name}}</Option>
+                            </Select>
+                        </Form-item>
+                    </div>
+
+                    <div class="item fr">
+                        <Form-item class='submitBtn'>
+                            <Button type="primary" @click="search" class="search">查询</Button>
+                        </Form-item>
+                    </div>
+                </div>
+            </Form>
+        </div>
 
         <div class="insert">
             <Button type="success" @click='jump' class='insertButton'>新增审批链</Button>
-            <p class='noRes' v-if='searchInfo.totalCount == 0'>查询无结果</p>
-            <table v-if='searchInfo.totalCount != 0' cellspacing="1" cellpadding="0" class="user">
+            <p class='noRes' v-if='totalCount == 0'>查询无结果</p>
+            <table v-if='totalCount != 0' cellspacing="1" cellpadding="0" class="user">
                 <thead>
                     <tr>
                         <td>审批链名称</td>
                         <td>审批链</td>
-                        <td>单据名称</td>
+                        <td>流程名称</td>
                         <td>创建时间</td>
                         <td width='128px;'>操作</td>
                     </tr>
@@ -53,7 +77,7 @@
                     <tr v-for='i in tableList'>
                         <td width='20%'>{{i.chainName}}</td>
                         <td>{{joinStr(i.userGroupStr)}}</td>
-                        <td>{{i.formType}}</td>
+                        <td>{{i.formTypeName}}</td>
                         <td>{{i.updateTimeStr}}</td>
                         <td  class="clear">
                             <a href="javascrip:void(0);" class="fl" @click='edit(i, index)'>编辑</a>
@@ -62,8 +86,8 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="paging" v-if='searchInfo.totalCount != 0'>
-                <Page :total="searchInfo.totalCount" size="small" show-elevator show-sizer
+            <div class="paging" v-if='totalCount != 0'>
+                <Page :total="totalCount" size="small" show-elevator show-sizer
                     @on-change='changePage'
                     @on-page-size-change='changePageSize'
                 ></Page>
@@ -76,27 +100,58 @@
 export default {
     data() {
         return {
+            loading: false,
             formValidate: {
                 name: ''
             },
             tableList: [],
+            groupList: [],
+            selectData: [],
+            groupListAll: [],
+            selectDataAll: [],
             searchInfo: {
                 chainName: '',
-                groupName: '',
+                groupId: '',
                 formType: 0,
                 pageIndex: 1,
                 pageSize: 10,
-                totalCount: 0
             },
-            selectData: []
+            totalCount: 0,
         }
     },
     mounted() {
         this.initTable();
-        this.$http.get('/isp-process-server/formType/all').then((res) => {
+        this.$http.get('/isp-process-server/userGroup/getList', {
+            params: {
+                pageIndex: 1,
+                pageSize: 9999
+            }
+        }).then((res) => {
+            if (res.data.errorCode == 0) {
+                this.groupListAll = Object.assign([], res.data.result.resultList);
+                this.groupList = this.groupListAll.slice(0, 10);
+            }
+            else {
+
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+
+        this.$http.get('/isp-process-server/formType/all', {
+            params: {
+                pageIndex: 1,
+                pageSize: 9999
+            }
+        }).then((res) => {
             if (res.data.errorCode == 0) {
                 let data = res.data.result;
-                this.selectData = data.map(item => item.formTypeName);
+                this.selectData = data.map(item => {
+                    return {
+                        id: item.id,
+                        name: item.formTypeName
+                    }
+                });
             }
             else {
 
@@ -108,16 +163,19 @@ export default {
     methods: {
         initTable() {
             // params: this.searchInfo
-            if (!this.searchInfo.formType) {
-                this.searchInfo.formType = 0;
+            let submitData = Object.assign({}, this.searchInfo);
+
+            if (!submitData.formType) {
+                submitData.formType = 0;
             }
+            submitData.chainName = this.searchInfo.chainName.trim();
             this.$http.get('/isp-process-server/auditChain/getList', {
-                params: this.searchInfo
+                params: submitData
             }).then((res) => {
                 if (res.data.errorCode == 0) {
                     let data = Object.assign({}, res.data.result);
                     this.tableList = Object.assign([], data.resultList);
-                    this.searchInfo.totalCount = data.totalCount;
+                    this.totalCount = data.totalCount;
                 }
                 else {
 
@@ -125,6 +183,32 @@ export default {
             }).catch((err) => {
                 console.log(err);
             })
+        },
+        remoteMethod (query) {
+            if (query !== '') {
+                this.loading = true;
+                this.$http.get('/isp-process-server/userGroup/getList', {
+                    params: {
+                        groupName: query,
+                        pageIndex: 1,
+                        pageSize: 10
+                    }
+                }).then((res) => {
+                    this.loading = false;
+                    if (res.data.errorCode == 0) {
+                        this.groupList = Object.assign([], res.data.result.resultList).slice(0, 10);
+                    }
+                    else {
+                        this.groupList = this.groupListAll.slice(0, 10);
+                    }
+                }).catch((err) => {
+                    this.loading = false;
+                    console.log(err);
+                })
+            } else {
+                this.loading = false;
+                this.groupList = this.groupListAll.slice(0, 10);
+            }
         },
         search() {
             this.initTable();
@@ -177,10 +261,12 @@ export default {
                             this.initTable();
                         }
                         else {
-                            this.$Modal.info({
-                                title: '提示',
-                                content: res.data.errorMsg
-                            });
+                            setTimeout(()=> {
+                                this.$Modal.info({
+                                    title: '提示',
+                                    content: res.data.errorMsg
+                                });
+                            }, 500)
                         }
                     }).catch((err) => {
                         console.log(err);
@@ -198,7 +284,18 @@ export default {
 
 <style lang="scss" scoped>
 #approvalManagement {
-    padding: 0 30px 0 30px;
+
+    .searchBox {
+        background: #F9FAFC;
+        padding: 50px 30px 50px;
+
+        .ivu-form-item-label {
+            font-size: 14px !important;
+            color: #7B8497 !important;
+        }
+    }
+
+    // padding: 0 30px 0 30px;
 
     .noRes {
         text-align: center;
@@ -215,17 +312,16 @@ export default {
     }
 
     .formTop {
-        margin-top: 50px;
-
         .item {
             width: 348px;
-             margin-right: 30px;
+            margin-right: 30px;
         }
     }
 
     .formBot {
         .item {
-            width: 800px;
+            width: 348px;
+            margin-right: 30px;
         }
 
         .line {
@@ -241,6 +337,10 @@ export default {
 
     .submitBtn {
         width: 1104px;
+    }
+
+    .insert {
+        padding: 30px;
     }
 
     .insertButton {

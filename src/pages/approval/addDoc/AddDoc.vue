@@ -2,33 +2,33 @@
     <div id="addDoc">
         <p class="title">{{pageName}}</p>
         <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
-            <Form-item label="单据名称" prop="formTypeName">
-                <Input v-model="formValidate.formTypeName" placeholder="请输入单据名称" class='text fl'></Input>
+            <Form-item label="流程名称" prop="formTypeName">
+                <Input v-model="formValidate.formTypeName" placeholder="请输入流程名称" class='text fl'></Input>
             </Form-item>
-            <Form-item label="单据分类">
-                <Input v-model="formValidate.subFormType" placeholder="请输入单据分类" class='text fl'></Input>
+            <Form-item label="流程分类">
+                <Input v-model="formValidate.subFormType" placeholder="请输入流程分类" class='text fl'></Input>
             </Form-item>
             <Form-item
                 v-for="(item, index) in formValidate.docs"
                 :key="item"
                 :prop="'docs.' + index + '.value'"
                 :rules="{max: 50, message: '长度不能超过50个字', trigger: 'blur'}">
-                    <Input type="text" v-model="item.value" placeholder="请输入单据分类" class='text fl'></Input>
+                    <Input type="text" v-model="item.value" placeholder="请输入流程分类" class='text fl'></Input>
                     <Button type="ghost" @click="handleRemove(index, 1)" class='del fl'>删除</Button>
             </Form-item>
             <Form-item>
                 <Button type="button" long @click="handleAdd(1)" icon="plus-round" class='text add'>继续添加</Button>
             </Row>
             </Form-item>
-            <Form-item label="单据条件">
-                <Input v-model="formValidate.formVariable" placeholder="请输入单据条件" class='text fl'></Input>
+            <Form-item label="流程条件">
+                <Input v-model="formValidate.formVariable" placeholder="请输入流程条件" class='text fl'></Input>
             </Form-item>
             <Form-item
                 v-for="(item, index) in formValidate.condition"
                 :key="item"
                 :prop="'condition.' + index + '.value'"
                 :rules="{max: 50, message: '长度不能超过50个字', trigger: 'blur'}">
-                    <Input type="text" v-model="item.value" placeholder="请输入单据条件" class='text fl'></Input>
+                    <Input type="text" v-model="item.value" placeholder="请输入流程条件" class='text fl'></Input>
                     <Button type="ghost" @click="handleRemove(index, 2)" class='del fl'>删除</Button>
             </Form-item>
             <Form-item>
@@ -49,7 +49,7 @@ export default {
     data() {
         const validateName = (rule, value, callback) => {
             if (value.trim() === '') {
-                callback(new Error('请填写单据名称'));
+                callback(new Error('请填写流程名称'));
             }
             else if (value.trim().length > 50){
                 callback(new Error('长度不能超过50个字'));
@@ -59,10 +59,10 @@ export default {
         };
         return {
             id: '',
-            pageName: '新增单据',
+            pageName: '新增流程',
             pageNames: [
-                '新增单据',
-                '编辑单据'
+                '新增流程',
+                '编辑流程'
             ],
             formValidate: {
                 formTypeName: '',
@@ -74,7 +74,7 @@ export default {
             },
             ruleValidate: {
                 formTypeName: [
-                     {required: true, message: '请填写单据名称', trigger: 'blur'},
+                     {required: true, message: '请填写流程名称', trigger: 'blur'},
                      {validator: validateName, trigger: 'blur'}
                 ]
             },
@@ -172,14 +172,14 @@ export default {
                                     this.$router.push('addDoc');
                                     this.$refs[name].resetFields();
                                     this.submitData = {};
+
                                     this.formValidate = {
                                         formTypeName: '',
                                         subFormType: '',
-                                        formVariable: ''
-
-                                    };
-                                    this.formDynamic.docs = [];
-                                    this.formDynamic.condition = [];
+                                        formVariable: '',
+                                        docs: [],
+                                        condition: []
+                                    }
                                 }, 1000)
 
                             }

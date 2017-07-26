@@ -48,6 +48,9 @@ const chainManagement = (resolve) => require(['../pages/approval/chainManagement
 const chainConfig = (resolve) => require(['../pages/approval/chainConfig/chainConfig'], resolve);
 const ApprovalManagement = (resolve) => require(['../pages/approval/approvalManagement/management'], resolve);
 const AuditList = (resolve) => require(['../pages/approval/auditList/AuditList'], resolve);
+
+const ViewPercenter = (resolve) =>  require(['../pages/personalCenter/view/View'], resolve);
+const EditPercenter = (resolve) =>  require(['../pages/personalCenter/editInfo/EditInfo'], resolve);
 // const createChain = (resolve) => require('[../pages/approval/createUser/createUser]', resolve);
 
 
@@ -205,6 +208,16 @@ const routes = [
                 path: 'auditList',
                 name: 'AuditList',
                 component: AuditList
+            },
+            {
+                path: 'viewPercenter',
+                name: 'ViewPercenter',
+                component: ViewPercenter
+            },
+            {
+                path: 'editPercenter',
+                name: 'EditPercenter',
+                component: EditPercenter
             }
         ]
     },

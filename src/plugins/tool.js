@@ -6,10 +6,17 @@
 /**
  * 获取指定年份 指定月的天数
  */
- export function getDaysInOneMonth(year, month){
+export  function getDaysInOneMonth(year, month){
   month = parseInt(month, 10);
   let d = new Date(year, month, 0);
   return d.getDate();
+}
+
+
+export  function initTitle(txt) {
+    setTimeout(() => {
+        document.title = txt;
+    })
 }
 
 /**
