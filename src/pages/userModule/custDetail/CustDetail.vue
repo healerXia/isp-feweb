@@ -1,11 +1,14 @@
 <template lang="html">
   <div class="custDetail">
       <div class="menu">
-        <span class="menu_item" :class="{active:show.showBaseMess}" @click="tabCheck">
+        <span class="menu_item active">
           基本信息
         </span>
-        <span class="menu_item" :class="{active:show.competMess}" @click="tabCheck">
-          竞品信息
+        <span class="menu_item">
+          <router-link
+            :to="{path:'competitorList',query:{id:$router.currentRoute.query.id}}" >
+              竞品信息
+          </router-link>
         </span>
       </div>
       <div class="content pT30">
@@ -634,9 +637,7 @@
             imgPath:""
           },
           show:{
-            showLicence:false,
-            showBaseMess:true,
-            competMess:false,           
+            showLicence:false,          
           },
           custInfo:{//都有            
             custName:"",//客户名称+ 
@@ -960,15 +961,6 @@
                 litterMap.panTo(new_point); 
               },10)
               
-          }
-        },
-        tabCheck(){
-          if(this.show.showBaseMess==true){
-            this.show.showBaseMess=false
-            this.show.competMess=true
-          }else if(this.show.showBaseMess==false){
-            this.show.showBaseMess=true
-            this.show.competMess=false
           }
         },
         showHistory(index){

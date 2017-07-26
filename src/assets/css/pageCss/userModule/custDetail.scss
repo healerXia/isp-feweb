@@ -1,5 +1,4 @@
 .custDetail{
-	// padding-left:30px;
   	.menu{
       padding:30px;
 	    width: 100%;
@@ -9,6 +8,7 @@
 	      float: left;
 	      height: 50px;
 	      width: 150px;
+        span,a{color: #666 !important}
 	      line-height: 50px;
 	      text-align: center;
 	      cursor: pointer;
