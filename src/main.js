@@ -13,7 +13,7 @@ import './assets/css/base.scss';
 import Axios from 'axios';
 import Vuex from 'vuex'
 
-import 'babel-polyfill';
+// import 'babel-polyfill';
 
 Vue.use(iView);
 Vue.use(Vuex);
@@ -21,7 +21,7 @@ Vue.use(Vuex);
 Vue.config.productionTip = false
 
 let CONFIG = {
-  apiDomain: '', // http://192.168.56.62:8080 http://dev-api-dsp.com:8081
+  apiDomain: 'api', // http://192.168.56.62:8080 http://dev-api-dsp.com:8081
   token: 'Bearer ' + localStorage['token'] || ''
 }
 Vue.prototype.$http = Axios.create({

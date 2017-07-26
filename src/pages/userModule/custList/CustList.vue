@@ -73,7 +73,7 @@
           添加客户
         </router-link>
       </span>
-      <!-- stripe 可以用来单双数北京 -->
+      <!-- stripe 可以用来单双数背景 -->
       <Table :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
 
        <Page :total="pageObj.total" class="MT30" size="small"
