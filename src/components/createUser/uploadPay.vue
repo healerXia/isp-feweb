@@ -2,36 +2,36 @@
     <div class="pay">
         <Button type="primary" class="btn bg4373F3" @click="open">上传</Button>
         <div class="mess_show" v-show="showMessBox">
-          <div class="mess_title">纳税资质</div>
+          <!-- <div class="mess_title">纳税资质</div> -->
           <div class="mess_con">
             <ul>
-              <li>
+              <li class="liHeight">
                 <span>纳税人识别号：</span>
                 <span>
                 {{storeEditDate.taxCode!=""?storeEditDate.taxCode:""}}
                 </span>
               </li>
-              <li>
+              <li class="liHeight">
                 <span>有效期：</span><span>
                 {{storeEditDate.taxCode!=""?storeEditDate.validTime:""}}
                 </span>
               </li>
-              <li>
+              <li class="liHeight">
                 <span>资质状态：</span>
                 <span>
-                {{storeEditDate.taxCode!=""?storeEditDate.status:""}}
+                {{storeEditDate.taxCode!=""?storeEditDate.status:"待审核"}}
                 </span>
               </li>
               <li v-for="(item,index) in storeEditDate.custBankAccountList" v-if="item.bank">
                 <ul>
-                  <li><span>开户银行({{index+1}})：</span><span>{{item.bank}}</span></li>
-                  <li><span>开户账号({{index+1}})：</span><span>{{item.bankAccount}}</span></li>
-                  <li><span>电话({{index+1}})：</span><span>{{item.phone}}</span></li>
-                  <li><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
+                  <li class="liHeight"><span>开户银行({{index+1}})：</span><span>{{item.bank}}</span></li>
+                  <li class="liHeight"><span>开户账号({{index+1}})：</span><span>{{item.bankAccount}}</span></li>
+                  <li class="liHeight"><span>电话({{index+1}})：</span><span>{{item.phone}}</span></li>
+                  <li class="liHeight"><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
                 </ul>
               </li>
                <li>
-                <span>附件：</span><span>1111</span>
+                <span>附件：</span><span class="salve" @click="showPic">1111</span>
               </li>
             </ul>
           </div>
@@ -168,6 +168,9 @@ export default {
       }
     },
     methods: {
+      showPic(){
+        this.$emit('showPic',"pic1")
+      },
       getCustBankAccountList(){
         let arr=[]
         for(let i=0;i<this.accMessArr.length;i++){
@@ -402,24 +405,7 @@ export default {
                 this.getCustBankAccountList();
                 this.uploadPay.custId=this.$router.currentRoute.query.id;    
                 this.$emit('uploadpay',this.uploadPay)   
-                this.$http.post('/isp-kongming-cust/cust/adCustBankAccount',
-                    this.uploadPay,
-                    ).then((res) => {
-                    if(res.data.errorCode===0){                       
-                        this.$Modal.success({
-                          title: "提示",
-                          content: "添加成功",
-                        })
-                        this.modal1=false
-                      }
-                    else {
-                      this.$Modal.info({
-                          title: '提示',
-                          content: res.data.errorMsg
-                      });
-                      this.modal1=false
-                    }
-                }).catch((err) => {})
+                this.modal1=false
               }
              
           } else {
@@ -454,10 +440,9 @@ export default {
   .mess_show{
         margin-top: 20px;
         width:400px;
-        height: 300px;
-        overflow: auto;
-        border:1px solid #ccc;
-        border-radius: 10px;
+        background: #F9FAFC;
+        overflow: hidden;
+        border-radius: 2px;
         .mess_title{
           width: 100%;
           height: 40px;
@@ -465,10 +450,11 @@ export default {
           border-bottom:1px solid #ccc;
           text-align:center;
         }
+        .salve{font-size:12px;color:blue;cursor:pointer}
         .mess_con{
           width: 100%;
+          overflow: hidden;
           padding: 10px 20px;
-          height: 100px;
           ul{
             width:100%;
             li{
@@ -480,6 +466,7 @@ export default {
                 float:left;
               }
             }
+            .liHeight{height:23px}
           }
         }
   }

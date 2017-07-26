@@ -2,7 +2,7 @@
   <div class="brand">
     <Button type="primary" class="btn bg4373F3" @click="openDialog">上传</Button>
     <div class="mess_show" v-show="showMessBox">
-      <div class="mess_title">品牌授权书</div>
+     <!--  <div class="mess_title">品牌授权书</div> -->
       <div class="mess_con">
         <table>
           <thead>
@@ -11,7 +11,7 @@
           <tbody>
             <tr v-for="item in storeEditDate">
               <td v-for="key in tableKey">{{item[key]}}</td>
-              <td>查看</td>
+              <td><span @click="showPic" class="salve">查看</span></td>
             </tr>
           </tbody>
         </table>
@@ -92,7 +92,7 @@ export default {
           validTime: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
         },
         storeEditDate:[],
-        tableKey:["brandName","createTime","validTime"],
+        tableKey:["brandName","validTime","validTime"],
         brandOption:[],
         brandLoad:true
     }
@@ -121,6 +121,9 @@ export default {
     }
   },
   methods: {
+    showPic(){
+      this.$emit('showPic',"pic")
+    },
     brandChange(value){
       this.uploadBrand.brandName=value.label;
     },
@@ -146,24 +149,7 @@ export default {
           if (valid) {
               this.uploadBrand.custId=this.$router.currentRoute.query.id;
               this.$emit('uploadbrand',this.uploadBrand)
-              let uploadMess=this.getUploadMess()
-              this.$http.post('/isp-kongming-cust/cust/adCustBrandLicense',
-                    uploadMess,
-                    ).then((res) => {
-                      if(res.data.errorCode===0){
-                        this.$Modal.success({
-                          title: "提示",
-                          content: "提交成功",
-                        })
-                        this.modal1=false
-                      }
-                    else {
-                      this.$Modal.info({
-                          title: '提示',
-                          content: res.data.errorMsg
-                      });
-                    }
-                }).catch((err) => {})
+              this.modal1=false
           } else {
             this.$Modal.error({
                 title: '提示',
@@ -171,14 +157,6 @@ export default {
             })
           }
       })
-    },
-    getUploadMess(){
-      let obj={}
-      for(let item in this.uploadBrand){
-        obj[item]=this.uploadBrand[item]
-      }
-      obj.validTime=this.formatDate(this.uploadBrand.validTime)
-      return obj
     },
     cancel (name) {
       this.$refs[name].resetFields();
@@ -211,6 +189,7 @@ export default {
     editData:{
       handler:function(){
         this.storeEditDate=this.editData;
+        console.log(1111111)
         if(this.storeEditDate.length>=1){
           this.showMessBox=true
         }
@@ -255,13 +234,13 @@ export default {
   .footer{text-align:center;}
 }
 .brand{ 
+   overflow: hidden;
   .mess_show{
+      background: #F9FAFC;
       margin-top: 20px;
       width:400px;
-      height: 300px;
-      overflow: auto;
-      border:1px solid #ccc;
-      border-radius: 10px;
+      overflow: hidden;
+      border-radius: 2px;
       .mess_title{
         width: 100%;
         height: 40px;
@@ -269,10 +248,10 @@ export default {
         border-bottom:1px solid #ccc;
         text-align:center;
       }
+      .salve{font-size:12px;color:blue;cursor:pointer}
       .mess_con{
         width: 100%;
         padding: 10px 20px;
-        height: 100px;
         ul{
           width:100%;
           li{
@@ -286,7 +265,20 @@ export default {
           }
         }
         table{
-          td{min-width:90px}
+          thead{
+            border:1px solid rgba(222,225,229,0.1);
+            td{
+              text-align: center
+            }
+          }
+          tbody{
+            td{
+              min-width:90px;
+              border-bottom:1px solid #DEE1E5;
+              text-align: center
+            }
+          }
+          
         }
       }
   }
