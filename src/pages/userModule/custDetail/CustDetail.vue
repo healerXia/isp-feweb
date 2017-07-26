@@ -637,7 +637,13 @@
             imgPath:""
           },
           show:{
+<<<<<<< HEAD
             showLicence:false,          
+=======
+            showLicence:false,
+            showBaseMess:true,
+            competMess:false,           
+>>>>>>> feature/userinfoBX
           },
           custInfo:{//都有            
             custName:"",//客户名称+ 
@@ -961,6 +967,18 @@
                 litterMap.panTo(new_point); 
               },10)
               
+<<<<<<< HEAD
+=======
+          }
+        },
+        tabCheck(){
+          if(this.show.showBaseMess==true){
+            this.show.showBaseMess=false
+            this.show.competMess=true
+          }else if(this.show.showBaseMess==false){
+            this.show.showBaseMess=true
+            this.show.competMess=false
+>>>>>>> feature/userinfoBX
           }
         },
         showHistory(index){

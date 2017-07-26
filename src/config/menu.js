@@ -51,12 +51,25 @@ const menu =  [
                 index: '4-1',
                 icon: '',
                 path: 'createUser'
+<<<<<<< HEAD
             },
             {
                 name: '客户管理',
                 index: '4-2',
                 icon: '',
                 path: 'wait'
+            },
+            {
+                name: '代理商管理',
+                index: '4-3',
+=======
+            },
+            {
+                name: '客户管理',
+                index: '4-2',
+>>>>>>> feature/userinfoBX
+                icon: '',
+                path: 'custList'
             },
             {
                 name: '代理商管理',
