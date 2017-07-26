@@ -256,7 +256,7 @@
       })
 
       this.$http.post(config.urlList.getCustList,
-        {pageIndex:1,pageSize:10},
+        {pageIndex:1,pageSize:20},
         {emulateJSON:true}
         ).then((res)=>{//获取列表
           if(res.data.errorCode===0){

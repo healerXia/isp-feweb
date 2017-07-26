@@ -21,12 +21,10 @@ const DemoZhoufeng = (resolve) => require(['../pages/demos/DemoZhoufeng.vue'], r
 //客户模块
 const CreateUser  = (resolve) => require(['../pages/userModule/createUser/CreateUser'], resolve);
 const CustDetail  = (resolve) => require(['../pages/userModule/custDetail/CustDetail'], resolve);
-<<<<<<< HEAD
 const CompetitorList  = (resolve) => require(['../pages/userModule/competitorList/CompetitorList'], resolve);
-=======
 const CustList = (resolve) => require(['../pages/userModule/custList/CustList'], resolve);
 
->>>>>>> feature/userinfoBX
+
 
 
 
