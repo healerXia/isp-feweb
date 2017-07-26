@@ -3,13 +3,17 @@
     <Form ref="formItem" :model="formItem" label-position="right">
       <Form-item label="客户名称">
         <!-- <Checkbox v-model="formItem.single" style="width:18px">Checkbox</Checkbox> -->
-        <input class="descripive" v-model="formItem.custName" placeholder="请输入客户名称"></input>
+        <input class="descripive" v-model="formItem.custName" filterable placeholder="请输入客户名称"></input>
       </Form-item>
       <Form-item label="客户编号" prop="custId">
         <input class="descripive" v-model="formItem.custId" placeholder="请输入客户编号"></input>
       </Form-item>
       <Form-item label="主营品牌" prop="serviceList">    
-        <Select v-model="formItem.serviceList" multiple>
+        <Select v-model="formItem.serviceList" filterable multiple
+          :loading="loading"
+          remote
+          :remote-method="searchBrand"
+        >
           <Option v-for="item in selectedBrand" :value="item.value" :key="item.value">{{ item.name }}</Option>
         </Select>
       </Form-item>
@@ -41,7 +45,7 @@
         </Select>
       </Form-item>
       <Form-item label="客户类别">
-        <Select v-model="formItem.typeId" placeholder="请选择客户类别">
+        <Select v-model="formItem.typeId" placeholder="请选择客户类别" clearable>
           <Option v-for="item in typeOption" :value="item.value" :key="new Date()">{{ item.name }}</Option>
         </Select>
       </Form-item>
@@ -51,7 +55,7 @@
         </Select>
       </Form-item> -->
       <Form-item label="审核状态">
-        <Select v-model="formItem.status" placeholder="请选择审核状态">
+        <Select v-model="formItem.status" placeholder="请选择审核状态" clearable>
           <Option v-for="item in statusStatus" :value="item.value" :key="new Date()">{{ item.status }}</Option>
         </Select>
       </Form-item>
@@ -63,59 +67,25 @@
         <Button type="ghost" @click="reset('formItem')">重置</Button>
       </Form-item>
     </Form>
-    <div class="listTable MT30">
-      <span class="addProBtn ML15">
+    <div class="listTable MT20 ">
+      <span class="addProBtn MB20">
         <router-link :to="{path:'createUser'}">
           添加客户
         </router-link>
       </span>
-      <table>
-        <thead>
-          <tr>
-            <td>
-              <Checkbox
-            :indeterminate="indeterminate"
-            :value="checkAll"
-            @click.prevent.native="handleCheckAll">  </Checkbox>
-            </td>
-            <td v-for="item in tableData.thead">{{item}}</td>
-          </tr>
-        </thead>
-        <tbody>
-           <tr v-for="tbodyData in tableData.tbodyArr">
-            <td>
-              <Checkbox :value="check" v-model="checkAllGroup" @on-change="checkAllGroupChange" style="width:18px" label="">  </Checkbox>
-            </td>
-            <td v-for="key in tableData.theadKey">
-              <span v-if="key=='custName'">
-                <router-link
-                :to="{path:'custDetail',query: {id:tbodyData.custId}}">
-                  {{tbodyData[key]}}
-                </router-link>
-              </span>
-              <span v-else>{{tbodyData[key]}}</span>
-            </td>
-            <td>
-              <span class="btnSelect" :model="formItem.operation">
-                <router-link
-                  :to="{path:'custDetail',query: {id:tbodyData.custId}}">
-                    查看
-                  </router-link>
-              </span>
-            </td>
-          </tr> 
-        </tbody>
-        </table>
-         <Page :total="pageObj.total" class="MT30" size="small"
-          :current="pageObj.pageNo"
-          :page-size-opts="pageSizeOpts"
-          :page-size="20"
-          show-elevator
-          show-sizer
-          @on-change="pageChange"
-          @on-page-size-change="pageSizeChange">
-        </Page>
-        </div>
+      <!-- stripe 可以用来单双数北京 -->
+      <Table :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
+
+       <Page :total="pageObj.total" class="MT30" size="small"
+        :current="pageObj.pageNo"
+        :page-size-opts="pageSizeOpts"
+        :page-size="20"
+        show-elevator
+        show-sizer
+        @on-change="pageChange"
+        @on-page-size-change="pageSizeChange">
+      </Page>
+    </div>
     </div>
   </div>
 </template>
@@ -127,6 +97,7 @@
   export default {
     data () {
       return {
+        loading:true,
         pageObj:{
           tatal:0,
           pageSize:1
@@ -220,12 +191,54 @@
             value:6
           }
         ],
-        tableData:{
+        /*tableData:{
           theadKey:['custName','typeName','brandName','Rstatus'],
           thead:[
           "客户名称","客户类别","主营品牌","审核状态","操作"],
-          tbodyArr:[]
-        },
+          tableData:[]
+        },*/
+        columns:[
+          {
+            type: 'selection',
+            width: 70,
+            align: 'center'
+          },
+          {
+            title:'客户名称',
+            key:'custName',
+            render:(h,params)=>{
+              return h('a', {
+                attrs: {
+                  href: '#/index/custDetail?id='+params.row.custId
+                }
+              },params.row.custName);
+            }
+          },
+          {
+            title: '客户类别',
+            key: 'typeName'
+          },
+          {
+            title: '主营品牌',
+            key: 'brandName'
+          },
+          {
+            title: '审核状态',
+            key: 'Rstatus'
+          },
+          {
+            title: '操作',
+
+            render: (h, params) => {
+              return h('a', {
+                attrs: {
+                  href: '#/index/custDetail?id='+params.row.custId
+                }
+              },'查看');
+            }
+          }
+        ],
+        tableData:[]
       }
     },
     created(){
@@ -249,7 +262,7 @@
           if(res.data.errorCode===0){
             this.pageObj.total=res.data.result.totalCount
             this.pageObj.pageNo=res.data.result.pageNo
-            this.tableData.tbodyArr=res.data.result.resultList;
+            this.tableData=res.data.result.resultList;
             this.dealMess();
           }
           else {
@@ -264,6 +277,7 @@
       this.$http.get(config.urlList.getBrand+'?pageSize=10').then((res) => {//投放品牌
         if(res.data.errorCode===0){
           this.selectedBrand = res.data.result;
+          this.loading=false
         }
         else {
           this.$Modal.info({
@@ -277,67 +291,52 @@
     beforeMount(){      
     },
     methods:{
-      //submit (name) {
-      handleCheckAll () {
-        if (this.indeterminate) {
-          this.checkAll = false;
-        } else {
-          this.checkAll = !this.checkAll;
-          this.check = !this.check; 
-        }
-        // this.indeterminate = false;
-
-        if (this.checkAll) {
-          this.checkAllGroup = ['', '', '','','','',''];
-        } else {
-          this.checkAllGroup = [];
-        }
-      },
-      checkAllGroupChange (data) {
-        let tbodyArr=[];
-        tbodyArr=this.tableData.tbodyArr;
-        if (data.length === tbodyArr.length) {
-          this.indeterminate = false;
-          this.checkAll = true;
-        } else if (data.length > 0) {
-          this.indeterminate = true;
-          this.checkAll = false;
-        } else {
-          this.indeterminate = false;
-          this.checkAll = false;
-        }
+      searchBrand(query){
+        this.loading=true
+        this.$http.get(config.urlList.getBrand+'?pageSize=10&name='+query).then((res) => {//投放品牌
+          if(res.data.errorCode===0){
+            this.selectedBrand = res.data.result;
+            this.loading=false
+          }
+          else {
+            this.$Modal.info({
+                title: '提示',
+                content: res.data.errorMsg
+            });
+          }
+        }).catch((err) => {})
       },
       dealMess(){
-        let tbodyArr=[];
-        tbodyArr=this.tableData.tbodyArr;
-        for(let i=0;i<tbodyArr.length;i++){
-          if(tbodyArr[i].typeId==1){
-            tbodyArr[i]['typeName']="厂商"
-          }else if(tbodyArr[i].typeId==2){
-            tbodyArr[i]['typeName']="厂商大区"
-          }else if(tbodyArr[i].typeId==3){
-            tbodyArr[i]['typeName']="集团"
-          }else if(tbodyArr[i].typeId==4){
-            tbodyArr[i]['typeName']="经销商"
-          }else if(tbodyArr[i].typeId==5){
-            tbodyArr[i]['typeName']="门店"
-          }else if(tbodyArr[i].typeId==6){
-            tbodyArr[i]['typeName']="汽车服务商"
+        let tableData=[];
+        tableData=this.tableData;
+        for(let i=0;i<tableData.length;i++){
+          if(tableData[i].typeId==1){
+            tableData[i]['typeName']="厂商"
+          }else if(tableData[i].typeId==2){
+            tableData[i]['typeName']="厂商大区"
+          }else if(tableData[i].typeId==3){
+            tableData[i]['typeName']="集团"
+          }else if(tableData[i].typeId==4){
+            tableData[i]['typeName']="经销商"
+          }else if(tableData[i].typeId==5){
+            tableData[i]['typeName']="门店"
+          }else if(tableData[i].typeId==6){
+            tableData[i]['typeName']="汽车服务商"
           }
         }
-        for(let i=0;i<tbodyArr.length;i++){
-          if(tbodyArr[i].status==0){
-            tbodyArr[i]['Rstatus']="待审批"
-          }else if(tbodyArr[i].status==2){
-            tbodyArr[i]['Rstatus']="待完善"
-          }else if(tbodyArr[i].status==3){
-            tbodyArr[i]['Rstatus']="审核通过"
-          }else if(tbodyArr[i].status==4){
-            tbodyArr[i]['Rstatus']="已停用"
-          }else if(tbodyArr[i].status==5){
-            tbodyArr[i]['Rstatus']="待审核"
-          }else if(tbodyArr[i].status==6){
-            tbodyArr[i]['Rstatus']="审核驳回"
+        for(let i=0;i<tableData.length;i++){
+          if(tableData[i].status==1){
+            tableData[i]['Rstatus']="待审批"
+          }else if(tableData[i].status==2){
+            tableData[i]['Rstatus']="待完善"
+          }else if(tableData[i].status==3){
+            tableData[i]['Rstatus']="审核通过"
+          }else if(tableData[i].status==4){
+            tableData[i]['Rstatus']="已停用"
+          }else if(tableData[i].status==5){
+            tableData[i]['Rstatus']="待审核"
+          }else if(tableData[i].status==6){
+            tableData[i]['Rstatus']="审核驳回"
           }
         }
       },
@@ -351,7 +350,7 @@
           if(res.data.errorCode===0){
             this.pageObj.total=res.data.result.totalCount
             this.pageObj.pageNo=res.data.result.pageNo
-            this.tableData.tbodyArr=res.data.result.resultList;
+            this.tableData=res.data.result.resultList;
             this.dealMess();
           }
           else {
@@ -414,7 +413,7 @@
               this.pageObj.total=res.data.result.totalCount
               this.pageObj.pageNo=res.data.result.pageNo
               this.totalPages=res.data.result.totalCount;
-              this.tableData.tbodyArr=res.data.result.resultList;
+              this.tableData=res.data.result.resultList;
               this.dealMess()
             }
             else {
@@ -492,7 +491,7 @@
         this.$http.get(config.urlList.getCustList+"?pId="+value+"&pageSize=100"). then((res)=>{
             if(res.data.errorCode===0){
               // console.log(res.data.result);
-              this.tbodyArr = res.data.result ;            
+              this.tableData = res.data.result ;            
             }
             else {
               this.$Modal.info({
