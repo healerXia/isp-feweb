@@ -13,8 +13,15 @@
                 <Input v-model="formValidate.mobile" placeholder="请输入移动电话" class='text fl'></Input>
             </Form-item>
             <Form-item label="所属部门" prop="deptName">
-                <Select v-model="formValidate.deptName" @on-change='selDept' @on-query-change='flterDept' filterable class='text fl'>
-                    <Option v-for="item in deptList" :value="item.id" :key="item.value">{{item.name}}</Option>
+                <Select
+                    v-model="formValidate.deptId"
+                    filterable
+                    remote
+                    :remote-method="remoteMethod"
+                    :loading="loading"
+                    @on-change='selDept'
+                    class='text fl'>
+                    <Option v-for="item in deptList" :value="item.id" :key="item.id">{{item.name}}</Option>
                 </Select>
                 <span v-if='deptName' class='fl ML10 info'>[{{deptName}}]</span>
             </Form-item>
@@ -27,23 +34,24 @@
                     <thead>
                         <td>代理审批人</td>
                         <td>有效时间</td>
-                        <td>单据类型</td>
+                        <td>流程名称</td>
                     </thead>
                     <tbody>
                         <tr class="tableInput" v-for='(i, index) in tableList'>
                             <td>
-                                <!-- <Select v-model="i.agentEmployeeId" multiple filterable>
-                                    <Option v-for="item in employeeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
-                                </Select> -->
+                                <select :id="'employee' + index" name="sample" style="width:80%;height:38px;" class="js-example-basic-multiple">
+                                    <option value=""></option>
+                                    <option v-for='i in employeeListAll' :value="i.id" :id="i.id">{{i.name}}</option>
+                                </select>
                             </td>
-                            <td>
-                                <Date-picker type="date" placeholder="选择日期" options="date1" v-model="i.startDate"></Date-picker>
+                            <td @click='clickTd(index)'>
+                                <Date-picker type="date" placeholder="选择日期" :options="date1" v-model="i.startDate"></Date-picker>
                                 <span>-</span>
-                                <Date-picker type="date" placeholder="选择日期" options="date2" v-model="i.endDate"></Date-picker>
+                                <Date-picker type="date" placeholder="选择日期" :options="date2" v-model="i.endDate"></Date-picker>
                             </td>
                             <td>
-                                <Select v-model="i.formTypeId" filterable>
-                                    <Option v-for="item in formTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <Select v-model="i.formTypeId"  style="width:260px" clearable="true">
+                                    <Option v-for="item in formTypeList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                 </Select>
                             </td>
                         </tr>
@@ -63,22 +71,38 @@
 </template>
 
 <script>
+import 'select2';
+import 'select2/dist/js/i18n/zh-CN.js';
+import 'select2/dist/css/select2.css';
+import 'select2-bootstrap-theme/dist/select2-bootstrap.css';
 export default {
     data() {
+        const validateMobile = (rule, value, callback) => {
+            if (value.trim() === '') {
+                callback(new Error('请填写移动电话'));
+            }
+            else if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(value))){
+                callback(new Error('移动电话格式不正确'));
+            }else {
+                callback();
+            }
+        };
         return  {
+            tdIndex: 0,
             submitStatus: false,
+            loading: false,
             formValidate: {
                 userName: '',
                 phone: '',
                 mobile: '',
-                deptName: ''
+                deptId: ''
             },
-            // date1: {
-            //     disabledDate: this.disStart
-            // },
-            // date2: {
-            //     disabledDate: this.disEnd
-            // },
+            date1: {
+                disabledDate: this.disStart
+            },
+            date2: {
+                disabledDate: this.disEnd
+            },
             deptListAll: [],
             deptList: [],
             employeeList: [],
@@ -89,7 +113,7 @@ export default {
             tableList: [
                 {
                     // 代理人工号
-                    agentEmployeeId: [],
+                    agentEmployeeId: '',
                     // 开始时间
                     startDate: '',
                     // 结束时间
@@ -97,14 +121,97 @@ export default {
                     // 流程类型id
                     formTypeId: ''
                 }
-            ]
+            ],
+            ruleValidate: {
+                mobile: [
+                     {required: true, message: '请填写移动电话', trigger: 'change'},
+                     {validator: validateMobile, trigger: 'change'}
+                ],
+                deptId: [
+                    { required: true, message: '请选择所属部门', trigger: 'change' }
+                ],
+                phone: [
+                    {required: true, message: '请输入联系电话', trigger: 'change'}
+                ]
+            },
         }
     },
     mounted() {
+        this.$http.get('/isp-process-server/employee/getModel').then((res) => {
+            if (res.data.errorCode == 0) {
+                
+            }
+            else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg,
+                    onOk: ()=> {
+
+                    }
+                });
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+
+
+
+
         this.initDept();
         this.initEmoloyee();
+        this.initProcess();
+
+        for (let i = 0; i < this.tableList.length; i++) {
+            $(`#employee${i}`).select2({
+                allowClear:true,
+                placeholder: "请选择",
+                theme: "bootstrap",
+                language: 'zh-CN',
+            });
+        }
     },
     methods: {
+        clickTd(index) {
+            this.tdIndex = index;
+        },
+        initTime(date) {
+            let time = new Date(date);
+            let year = time.getFullYear();
+            let month = time.getMonth() + 1;
+            let day = time.getDate();
+
+            return `${year}-${month}-${day}`;
+        },
+        initProcess() {
+            this.$http.get('/isp-process-server/formType/all', {
+                params: {
+                    pageIndex: 1,
+                    pageSize: 9999
+                }
+            }).then((res) => {
+                if (res.data.errorCode == 0) {
+                    let data = res.data.result;
+
+                    this.formTypeList = data.map(item => {
+                        return  {
+                            id: item.id,
+                            name: item.formTypeName
+                        }
+                    })
+                }
+                else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.errorMsg,
+                        onOk: ()=> {
+
+                        }
+                    });
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        },
         initDept() {
             this.$http.get('/isp-process-server/depart/getList', {
                 params: {
@@ -116,7 +223,7 @@ export default {
                     let data = Object.assign([], res.data.result.resultList);
                     this.deptListAll = data.map(item => {
                         return {
-                            id: item.id,
+                            id: `${item.id}`,
                             name: item.fullPath,
                             deptName: item.deptName
                         }
@@ -147,11 +254,119 @@ export default {
                 console.log(err);
             })
         },
+        remoteMethod (query) {
+                if (query !== '') {
+                    this.loading = true;
+                    this.$http.get('/isp-process-server/depart/getList', {
+                        params: {
+                            deptName: query,
+                            pageIndex: 1,
+                            pageSize: 10
+                        }
+                    }).then((res) => {
+                        this.loading = false;
+                        if (res.data.errorCode == 0) {
+                            let data = Object.assign([], res.data.result.resultList);
+                            this.deptList = data.map(item => {
+                                return {
+                                    id: `${item.id}`,
+                                    name: item.fullPath,
+                                    deptName: item.deptName
+                                }
+                            })
+                        }
+                        else {
+
+                        }
+                    }).catch((err) => {
+                        this.loading = false;
+                        this.deptList = [];
+                        console.log(err);
+                    })
+                } else {
+                    this.loading = false;
+                    this.deptList = [];
+                }
+            },
         handleSubmit (name, status) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                    if (this.submitStatus) {
+                        return false;
+                    }
+
+                    this.submitStatus = true;
+
+                    for (let i = 0; i < this.tableList.length; i++) {
+                        let data = $(`#employee${i}`).select2('data')[0];
+                        if (!data.text) {
+                            this.submitStatus = false;
+                            this.$Modal.info({
+                                title: '提示',
+                                content: '请填写代理审批人',
+                                onOk: ()=> {
+
+                                }
+                            });
+                            return false;
+                        }
+                        else {
+                            this.tableList[i].agentEmployeeId = data.id;
+                        }
+                    }
+
+
+                    // 验证通过
+
+                    // 代理审批人
+                    let emList = this.tableList.map(item => {
+                        return {
+                            employeeId: "1",
+                            // 代理人工号
+                            agentEmployeeId: item.agentEmployeeId,
+                            // 开始时间
+                            startDate: this.initTime(item.startDate),
+                            // 结束时间
+                            endDate: this.initTime(item.endDate),
+                            // 流程类型id
+                            formTypeId: item.formTypeId
+                        }
+                    })
+
+                    let submitData = {
+                        "username": 'huox',
+                        "phone": this.formValidate.phone,
+                        "mobile": this.formValidate.mobile,
+                        "deptId": this.formValidate.deptId,
+                        "delAgent":false,
+                        "agentBeanList": emList
+                    };
+
+                    this.$http.post('/isp-process-server/employee/save', submitData).then((res) => {
+                        this.submitStatus = false;
+                        if (res.data.errorCode == 0) {
+                            this.$Message.success('保存成功');
+                            setTimeout(() => {
+                                this.$router.push('viewPercenter');
+                            }, 1000)
+                        }
+                        else {
+                            this.$Modal.info({
+                                title: '提示',
+                                content: res.data.errorMsg,
+                                onOk: ()=> {
+
+                                }
+                            });
+                        }
+                    }).catch((err) => {
+                        this.submitStatus = false;
+                        console.log(err);
+                    })
+
 
                 } else {
+                    this.submitStatus = false;
                     this.$Message.error('表单验证失败!');
                 }
             })
@@ -167,25 +382,42 @@ export default {
             });
         },
         handleAdd() {
+            this.tableList.push({
+                // 代理人工号
+                agentEmployeeId: '',
+                // 开始时间
+                startDate: '',
+                // 结束时间
+                endDate: '',
+                // 流程类型id
+                formTypeId: ''
+            });
+            let i = this.tableList.length - 1;
 
+            setTimeout(() => {
+                $(`#employee${i}`).select2({
+                    allowClear:true,
+                    placeholder: "请选择",
+                    theme: "bootstrap",
+                    language: 'zh-CN',
+                }).val('').trigger('change');
+            })
         },
         selDept(data) {
-
             for (let i = 0; i < this.deptList.length; i++) {
                 if (data == this.deptList[i].id) {
-                    console.log(data);
                     this.deptName = this.deptList[i].deptName;
                     return false;
                 }
             }
         },
         // 日期判断
-        // disBegin(date){
-        //     return date && date.valueOf() >new Date(this.tableList[index].endDate);
-        // },
-        // disEnd(date){
-        //     return date && date.valueOf()< new Date(this.tableList[index].startDate)-86400000;
-        // },
+        disStart(date){
+            return date && date.valueOf() >new Date(this.tableList[this.tdIndex].endDate);
+        },
+        disEnd(date){
+            return date && date.valueOf()< new Date(this.tableList[this.tdIndex].startDate);
+        }
     }
 }
 </script>

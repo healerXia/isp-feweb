@@ -3,19 +3,28 @@
       <Form :label-width="80" class='searchBox'>
           <div class="formTop clear">
               <div class="item fl">
-                  <Form-item label="单据名称:" prop="name">
-                      <Input v-model="searchInfo.chainName" placeholder="请输入审批链名称" class='txt'></Input>
+                  <Form-item label="流程类型:" prop="name">
+                      <Select v-model="searchInfo.chainName" class='txt'>
+                          <Option v-for="item in chainList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                      </Select>
                   </Form-item>
               </div>
               <div class="item fl">
-                  <Form-item label="单据编号:" prop="name">
+                  <Form-item label="流程编号:" prop="name">
                       <Input v-model="searchInfo.groupName" placeholder="请输入用户组名称" class='txt'></Input>
                   </Form-item>
               </div>
               <div class="item fl">
                   <Form-item label="申请部门:" prop="name">
-                      <Select v-model="searchInfo.formType"  class='fl txt'>
-                          <Option v-for="item in selectData" :value="item" :key="item.value">{{item}}</Option>
+                      <Select
+                          v-model="searchInfo.deptId"
+                          filterable
+                          remote
+                          :remote-method="remoteMethod"
+                          :loading="loading"
+                          @on-change='selDept'
+                          class='txt fl'>
+                          <Option v-for="item in deptList" :value="item.id" :key="item.id">{{item.name}}</Option>
                       </Select>
                       <Checkbox v-model="single" class='fl childDept'>包含子部门</Checkbox>
                   </Form-item>
@@ -24,14 +33,21 @@
           <div class="formBot clear">
               <div class="item fl">
                   <Form-item label="创建时间:">
-                      <Date-picker type="date" placeholder="选择日期" v-model="searchInfo.date" class='dateItem fl'></Date-picker>
+                      <Date-picker type="date" placeholder="选择日期" :options="date1" v-model="searchInfo.startDate" class='dateItem fl'></Date-picker>
                       <span class='fl line'></span>
-                      <Date-picker type="date" placeholder="选择日期" v-model="searchInfo.date" class='dateItem fl'></Date-picker>
+                      
+                      <Date-picker type="date" placeholder="选择日期" :options="date2" v-model="searchInfo.endDate" class='dateItem fl'></Date-picker>
+                  </Form-item>
+              </div>
+
+              <div class="item fl">
+                  <Form-item label="流程编号:" prop="name">
+                      <Input v-model="searchInfo.groupName" placeholder="请输入用户组名称" class='txt'></Input>
                   </Form-item>
               </div>
 
               <Form-item class='submitBtn'>
-                  <Button type="primary" @click="search" class="search fl">查询</Button>
+                  <Button type="primary" @click="search" class="search fr">查询</Button>
               </Form-item>
           </div>
       </Form>
@@ -54,13 +70,13 @@
                <table v-if='searchInfo.totalCount != 0' cellspacing="1" cellpadding="0" class="user">
                    <thead>
                        <tr>
-                           <td>单据名称</td>
-                           <td>单据编号</td>
+                           <td>流程名称</td>
+                           <td>流程编号</td>
                            <td>申请部门</td>
                            <td>申请人</td>
                            <td>申请日期</td>
                            <td>状态</td>
-                           <td width='128px;'>操作</td>
+                           <td width='100px;'>操作</td>
                        </tr>
                    </thead>
                    <tbody>
@@ -99,9 +115,95 @@ export default {
                 groupName: '',
                 date: '',
                 formType: '',
-                totalCount: '12'
+                totalCount: '12',
+                deptId: '',
+                startDate: '',
+                endDate: ''
             },
-            tableList: []
+            tableList: [],
+            chainList:[],
+            deptList: [],
+            date1: {
+                disabledDate: this.disStart
+            },
+            date2: {
+                disabledDate: this.disEnd
+            }
+        }
+    },
+    mounted() {
+        this.render();
+    },
+    methods: {
+        render() {
+            this.$http.get('/isp-process-server/formType/all').then((res) => {
+                if (res.data.errorCode == 0) {
+                    let data = res.data.result;
+
+                    this.chainList = data.map(item => {
+                        return {
+                            id: item.id,
+                            name: item.formTypeName
+                        }
+                    })
+                }
+                else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.errorMsg,
+                        onOk: ()=> {
+
+                        }
+                    });
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        },
+        initTable() {
+
+        },
+        remoteMethod (query) {
+            if (query !== '') {
+                this.loading = true;
+                this.$http.get('/isp-process-server/depart/getList', {
+                    params: {
+                        deptName: query,
+                        pageIndex: 1,
+                        pageSize: 10
+                    }
+                }).then((res) => {
+                    this.loading = false;
+                    if (res.data.errorCode == 0) {
+                        let data = Object.assign([], res.data.result.resultList);
+                        this.deptList = data.map(item => {
+                            return {
+                                id: `${item.id}`,
+                                name: item.fullPath,
+                                deptName: item.deptName
+                            }
+                        })
+                    }
+                    else {
+
+                    }
+                }).catch((err) => {
+                    this.loading = false;
+                    this.deptList = [];
+                    console.log(err);
+                })
+            } else {
+                this.loading = false;
+                this.deptList = [];
+            }
+        },
+        // 日期判断
+        disStart(date){
+            console.log(date);
+            return date && date.valueOf() >new Date(this.searchInfo.endDate);
+        },
+        disEnd(date){
+            return date && date.valueOf()< new Date(this.searchInfo.startDate);
         }
     }
 }
@@ -110,7 +212,7 @@ export default {
 <style lang="scss" scoped>
 #auditList {
     .searchBox {
-        padding: 50px 30px;
+        padding: 50px 30px 24px;
         background: #F9FAFC;
     }
 
@@ -140,8 +242,8 @@ export default {
         }
 
         .childDept {
-            margin-left: 40px;
-            font-size: 14px;
+            margin-left: 20px;
+            font-size: 12px;
         }
     }
 
@@ -149,9 +251,12 @@ export default {
         padding: 30px;
     }
 
+
     .formBot {
+        width: 894px;
+
         .item {
-            width: 800px;
+            margin-right: 30px;
         }
 
         .line {
@@ -161,7 +266,7 @@ export default {
         }
 
         .dateItem {
-            width: 268px;
+            width: 115px;
         }
     }
 

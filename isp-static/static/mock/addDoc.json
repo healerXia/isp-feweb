@@ -1,9 +1,0 @@
-{
-    "errorCode": 0,
-    "result": {
-        "id": 11,
-        "formTypeName": "订单",
-        "subFormType": "合同订单,广告订单",
-        "formVariable": "单独销售,集采自签,集采统签"
-    }
-}

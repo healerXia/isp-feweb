@@ -1154,6 +1154,11 @@
         },
         cancle (name) {
           this.$refs[name].resetFields();
+          if(this.$router.currentRoute.query.id){
+            this.$router.push({path:"custDetail",query:{id:this.$router.currentRoute.query.id}})
+          }else{
+            this.$router.push({path:"custList"})
+          }
         },
         //提交数据的时候，值得处理
         operSubmitData(){

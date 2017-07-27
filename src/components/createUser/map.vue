@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="map">
-    <Button type="primary" class="btn bg4373F3" @click="open">标记</Button>
+    <span  class="upBtn" @click="open">标记</span>
     <div id="litter_map" v-show="litter_map_show">
     </div>
     <Modal class="mapDialog"
@@ -162,6 +162,19 @@ export default {
       cursor:pointer;
     }
   }
+}
+.upBtn{
+  text-align: center; 
+  display: inline-block;
+  width: 120px !important;
+  height: 38px !important;
+  background-color:white !important;
+  border: 1px solid #4373F3;
+  line-height: 38px !important;
+  border-radius:2px;
+  font-size: 14px;
+  color: #4373F3;
+  cursor: pointer
 }
 .map{
   #litter_map{width:300px;height:200px;border:1px solid #ccc;margin-top:20px}
