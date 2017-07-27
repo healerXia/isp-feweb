@@ -4,10 +4,10 @@
             <div class="conBox">
                 <div class='hasNoOrder'>
                     <div class="title MB20 MT15">
-                      <h1 class="MR15">订单信息</h1>
+                      <span class="MR15">我的个人信息</span>
                       <router-link
                         :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
-                          新增订单
+                          编辑
                       </router-link>
                     </div>
                 </div>
@@ -18,34 +18,184 @@
                 <ul class="info-list clear">
                     <li class="fl">
                         <label for="" class="fl">域账号：</label>
-                        <span class="fl">zhaobin</span>
+                        <span class="fl">{{info.username}}</span>
                     </li>
                     <li class="fl">
                         <label for="" class="fl">员工编号：</label>
+                        <span class="fl">{{info.employeeId}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">员工姓名：</label>
+                        <span class="fl">{{info.displayName}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">员工上级：</label>
+                        <span class="fl">{{info.managerName}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">所属部门：</label>
+                        <span class="fl">{{info.deptName}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">员工状态：</label>
+                        <span class="fl">{{info.status}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">职位：</label>
+                        <span class="fl">{{info.position}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">员工分类：</label>
+                        <span class="fl">{{info.employeeType}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">业务线：</label>
+                        <span class="fl">{{info.businessLine}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">性别：</label>
+                        <span class="fl">5951</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">联系电话：</label>
+                        <span class="fl">{{info.phone}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">移动电话：</label>
+                        <span class="fl">{{info.mobile}}</span>
+                    </li>
+                    <li class="fl">
+                        <label for="" class="fl">代理审批人：</label>
                         <span class="fl">5951</span>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div class="table">
+        <div class="tableList">
+            <p class='title'>管辖员工信息</p>
+            <table cellspacing="1" cellpadding="0" class="user">
+                <thead>
+                    <td v-for='i in theadData'>{{i}}</td>
+                </thead>
+                <tbody>
+                    <tr v-for='list in tableData'>
+                        <td>{{list.userName}}</td>
+                        <td>{{list.employeeId}}</td>
+                        <td>{{list.displayName}}</td>
+                        <td>{{list.deptName}}</td>
+                        <td>{{list.position}}</td>
+                        <td>{{list.employeeType}}</td>
+                        <td>{{list.mobile}}</td>
+                        <td>{{list.status}}</td>
+                    </tr>
+                </tbody>
+            </table>
 
+            <div class="paging" v-if='totalCount != 0'>
+                <Page :total="totalCount" size="small" show-elevator show-sizer
+                    @on-change='changePage'
+                    @on-page-size-change='changePageSize'
+                ></Page>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 export default {
+    data() {
+        return {
+            info: {},
+            theadData: ['域账号', '员工编号', '员工姓名', '所属部门', '职位', '员工分类',  '移动电话', '员工状态'],
+            paging: {
+                pageIndex: 1,
+                pageSize: 10
+            },
+            totalCount: 0,
+            tableData: []
+        }
+    },
+    mounted() {
+        this.render();
+        this.initTable();
+    },
+    methods: {
+        render() {
+            this.$http.get('/isp-process-server/employee/getModel', {
+                params: {
+                    employeeId: 10001
+                }
+            }).then((res) => {
+                if (res.data.errorCode == 0) {
+                    this.info = Object.assign({}, res.data.result);
+                }
+                else {
+
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
+        },
+        initTable() {
+            this.$http.get('/isp-process-server/employee/getPageList', {
+                params: {
+                    managerId: 10001,
+                    pageIndex: this.paging.pageIndex,
+                    pageSize: this.paging.pageSize
+                }
+            }).then((res) => {
+                if (res.data.errorCode == 0) {
+                    this.tableData = Object.assign([], res.data.result.resultList);
+                    this.totalCount = res.data.result.totalCount;
+                }
+                else {
+
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        },
+        changePage(n) {
+            this.paging.pageIndex = n;
+            this.initTable();
+        },
+        changePageSize(n) {
+            this.paging.pageSize = n;
+            this.initTable();
+        }
+
+    }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" soped>
 #viewPersonalcenter {
+
+    .conBox {
+        .title {
+            font-size: 14px;
+            color: #354052;
+            line-height: 14px;
+        }
+    }
+
+    .info {
+        .title {
+            font-size: 12px;
+            color: #333333;
+        }
+    }
+
     .personal-Info {
         padding: 50px 30px;
         background: #F9FAFC;
 
         .info-list {
+            font-size: 12px;
+            color: #7B8497;
+            line-height: 16px;
+
             li {
                 width: 500px;
 
@@ -59,6 +209,81 @@ export default {
                 }
             }
         }
+    }
+
+    .tableList {
+        padding: 20px 30px;
+
+        .title {
+            padding-bottom: 15px;
+        }
+    }
+
+    .user {
+        width: 100%;
+        min-width: 1104px;
+
+        thead {
+            text-align: left;
+            background: #F9FAFC;
+            border-radius: 2px 2px 0 0;
+
+            td {
+                font-size: 14px;
+                color: #7B8497;
+                letter-spacing: 0.52px;
+            
+                &:nth-child(1) {
+                    padding: 0 30px 0 30px;
+                }
+            }
+        }
+
+        td {
+            height: 56px;
+            font-size: 14px;
+            color: #333333;
+            letter-spacing: 0.52px;
+            // text-indent: 30px;
+            //width: 25%;
+            text-align: left;
+        }
+
+        .name {
+            padding-right: 30px;
+        }
+
+        tbody {
+            tr {
+                box-shadow: 0 1px 0 0 #DEE1E5;
+
+                &:hover {
+                    background: #ebf7ff;
+                }
+
+                td{
+                    &:nth-child(1) {
+                        padding: 0 30px 0 30px;
+                    }
+
+                    &:nth-child(2) {
+                        padding-right: 30px;
+                    }
+                }
+            }
+
+            td {
+                text-indent: 0;
+            }
+
+            a {
+                text-align: left;
+            }
+        }
+    }
+
+    .paging {
+        margin-top: 30px;
     }
 }
 </style>

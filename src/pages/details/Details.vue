@@ -27,13 +27,13 @@
       <div class="conBox MT20 pL30 pR30" v-show="!noOrder">
         <div class="title MB20">
           <h1 class="MR15">订单信息</h1>
-        <!-- <router-link v-show="editOrder" 
-            :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}"> 
-             编辑排期                
+        <!-- <router-link v-show="editOrder"
+            :to="{path:'chooseTime',query: {id:$router.currentRoute.query.id}}">
+             编辑排期
           </router-link>
           <router-link v-show="editOrder"
-            :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}"> 
-             编辑价格                
+            :to="{path:'buildPrice',query: {id:$router.currentRoute.query.id}}">
+             编辑价格
           </router-link> -->
          <!--  <router-link
             :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
@@ -96,7 +96,7 @@
                   元
                 </span>
                 <span>配送比率：{{priceArr.rate}}</span>
-              </div>   
+              </div>
             </Panel>
           </Collapse>
         </div>
@@ -114,7 +114,7 @@
                       <td v-for="th in dataTable.thead">{{th}}</td>
                     </tr>
                   </thead>
-                  <tbody>                  
+                  <tbody>
                       <td v-for="item in dataTable.theadKey">{{dataTable.tbodyData[item]}}</td>
                   </tbody>
                 </table>
@@ -193,6 +193,24 @@
                 </div>
              </Panel>
           </Collapse>
+        </div>
+
+        <div class="operation">
+            <div class="operation-title">
+                操作
+            </div>
+            <div class="clear">
+                <Button type="primary" @click.stop="handleSubmit('formValidate', 1)" class="saveNext fl" :disabled='submitStatus'>保存并继续</Button>
+                <Button type="ghost" @click.stop="handleReset('formValidate')"  class="cancel fl">取消</Button>
+            </div>
+            <div class="">
+                <textarea name="name" rows="8" cols="80"></textarea>
+            </div>
+            <div class="submitList">
+                <Button type="primary" @click.stop="handleSubmit('formValidate', 1)" class="saveNext fl" :disabled='submitStatus'>保存并继续</Button>
+                <Button type="primary" @click.stop="handleSubmit('formValidate', 2)" class="save fl" :disabled='submitStatus'>保存</Button>
+                <Button type="ghost" @click.stop="handleReset('formValidate')"  class="cancel fl">取消</Button>
+            </div>
         </div>
       </div>
   </div>
@@ -386,7 +404,7 @@ export default {
                 }else{
                   this.dataTable.tbodyData.clickRate=(res.data.result.uvSum/res.data.result.pvSum).toFixed(2)
                 }
-                
+
               }
               else {
                 this.$Modal.info({
@@ -395,12 +413,12 @@ export default {
                 });
               }
               }).catch((err) => {
-            })  
+            })
           }
         }).catch((err) => {
           console.log(err);
-      })   
-    },    
+      })
+    },
     methods: {
 
       createCharts(xAxisArr,pvArr,uvArr)
@@ -481,8 +499,8 @@ export default {
                   normal:{
                     color: '#E36776'
                   }
-                },              
-                symbol:'circle',               
+                },
+                symbol:'circle',
                 symbolSize:6,
                 data: pvArr,
                 showAllSymbol:true
@@ -494,7 +512,7 @@ export default {
                     normal: {
                         color: '#3D70FB'
                     }
-                },                 
+                },
                 symbol:'circle',
                 itemStyle:{
                   normal:{
@@ -513,7 +531,7 @@ export default {
             this.myChart=dom
           }
           this.myChart.setOption(polar);
-        },0)  
+        },0)
       },
       edit(){
         let id=this.$router.currentRoute.query.id

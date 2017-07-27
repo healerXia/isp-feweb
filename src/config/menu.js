@@ -47,26 +47,32 @@ const menu =  [
         icon: 'icon-customer',
         subNav: [
             {
-                name: '客户管理',
+                name: '新建客户',
                 index: '4-1',
                 icon: '',
-                path: 'wait'
+                path: 'createUser'
             },
             {
-                name: '代理商管理',
+                name: '客户管理',
                 index: '4-2',
                 icon: '',
                 path: 'wait'
             },
             {
-                name: '联系人管理',
+                name: '代理商管理',
                 index: '4-3',
                 icon: '',
                 path: 'wait'
             },
             {
-                name: '访问记录',
+                name: '联系人管理',
                 index: '4-4',
+                icon: '',
+                path: 'wait'
+            },
+            {
+                name: '访问记录',
+                index: '4-5',
                 icon: '',
                 path: 'wait'
             }

@@ -67,7 +67,7 @@ export default {
     data() {
         const validateName = (rule, value, callback) => {
             if (value.trim() === '') {
-                callback(new Error('请填写流程名称'));
+                callback(new Error('请输入审批链名称'));
             }
             else if (value.trim().length > 50){
                 callback(new Error('长度不能超过50个字'));
@@ -112,7 +112,7 @@ export default {
             selectData: [],
             ruleValidate: {
                 name: [
-                     {required: true, message: '请填写单据名称', trigger: 'change'},
+                     {required: true, message: '请输入审批链名称', trigger: 'change'},
                      {validator: validateName, trigger: 'change'}
                 ],
                 processName: [
