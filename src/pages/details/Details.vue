@@ -203,7 +203,7 @@
                 <Button type="primary" @click.stop="handleSubmit('formValidate', 1)" class="saveNext fl" :disabled='submitStatus'>保存并继续</Button>
                 <Button type="ghost" @click.stop="handleReset('formValidate')"  class="cancel fl">取消</Button>
             </div>
-            <div class="">
+            <div class="edit">
                 <textarea name="name" rows="8" cols="80"></textarea>
             </div>
             <div class="submitList">

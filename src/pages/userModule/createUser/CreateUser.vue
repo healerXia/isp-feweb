@@ -852,8 +852,8 @@
               this.mapLocation.store_agency.lng=data.longitude
               this.mapLocation.store_agency.lat=data.latitude
             }else if(this.formValidate.subclassId==3){
-              this.mapLocation.store_agency.lng=data.longitude
-              this.mapLocation.store_agency.lat=data.latitude
+              this.mapLocation.store_colligate.lng=data.longitude
+              this.mapLocation.store_colligate.lat=data.latitude
             }
           }else if(this.formValidate.typeId==6||this.formValidate.typeId==7){
             this.formValidate.industryId=data.industryId//客户行业

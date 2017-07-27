@@ -13,7 +13,7 @@ import './assets/css/base.scss';
 import Axios from 'axios';
 import Vuex from 'vuex'
 
-import 'babel-polyfill';
+// import 'babel-polyfill';
 
 Vue.use(iView);
 Vue.use(Vuex);

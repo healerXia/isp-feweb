@@ -52,11 +52,12 @@ const menu =  [
                 icon: '',
                 path: 'createUser'
             },
+
             {
                 name: '客户管理',
                 index: '4-2',
                 icon: '',
-                path: 'wait'
+                path: 'custList'
             },
             {
                 name: '代理商管理',
