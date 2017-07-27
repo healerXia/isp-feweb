@@ -1,6 +1,6 @@
 <template>
   <div class="listPages">
-    <Form ref="formItem" :model="formItem" label-position="right">
+    <Form ref="formItem" :model="formItem" :rules="ruleValidate" label-position="right">
       <Form-item label="客户名称">
         <!-- <Checkbox v-model="formItem.single" style="width:18px">Checkbox</Checkbox> -->
         <input class="descripive" v-model="formItem.custName" filterable placeholder="请输入客户名称"></input>
@@ -97,6 +97,7 @@
   export default {
     data () {
       return {
+        ruleValidate:{},
         loading:true,
         pageObj:{
           tatal:0,
@@ -185,10 +186,6 @@
           {
             status:'待审核',
             value:5
-          },
-          {
-            status:'审核驳回',
-            value:6
           }
         ],
         /*tableData:{
@@ -335,8 +332,6 @@
             tableData[i]['Rstatus']="已停用"
           }else if(tableData[i].status==5){
             tableData[i]['Rstatus']="待审核"
-          }else if(tableData[i].status==6){
-            tableData[i]['Rstatus']="审核驳回"
           }
         }
       },

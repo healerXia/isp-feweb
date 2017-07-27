@@ -22,6 +22,10 @@
         letter-spacing: 0.44px;
         padding-left:8px;
       }
+      Cascader{
+        width:268px;
+        height:38px;
+      }
       .ivu-select{
         width:268px;
         height:38px;
@@ -97,6 +101,7 @@
       }
     }
     .ivu-table-wrapper{
+      overflow:hidden;
       border:none;
       thead{
         th{

@@ -73,19 +73,14 @@
           添加客户
         </router-link>
       </span>
-      <!-- <div class="layout" :class="{'layout-hide-text': spanLeft < 1}">
-        <i-col :span="spanLeft" class="layout-menu-left">
-          <div class="layout-logo-left packUp"></div>
-            我的分组
-          </div>
-        </i-col>
-      </div> -->
-      <div class="layout" :class="{'layout-hide-text': spanLeft < 1}">
+      <Button type="primary" @click="addGroup">加入分组</Button>
+      <Button @click="managementGroup">管理分组</Button>
+      <div class="layout" :class="{'layout-hide-text': sidebar.spanLeft < 1}">
         <Row type="flex">
-            <i-col :span="spanLeft" class="layout-menu-left">
-                <div v-show="group" @click="showUp">我的分组</div>
-                <Menu active-name="1" theme="dark" width="auto" v-show="groupInfo">
-                    <div class="layout-logo-left"></div>
+            <i-col :span="sidebar.spanLeft" class="layout-menu-left">
+                <div class="bar" v-show="sidebar.group"><span v-on:click="toggle()" style="cursor:pointer">我的分组</span></div>
+                <Menu class="packUp" active-name="1" theme="dark" width="auto" v-show="sidebar.groupInfo">
+                    <div class="layout-logo-left" @click="toggleClick" style="cursor:pointer">我的分组</div>
                     <Menu-item name="1">
                         <span class="layout-text">我的客户</span>
                     </Menu-item>
@@ -97,8 +92,8 @@
                     </Menu-item>
                 </Menu>
             </i-col>
-            <i-col :span="spanRight">
-                <div class="layout-header">
+            <i-col :span="sidebar.spanRight">
+                <div class="layout-header" v-show="sidebar.groupInfo">
                     <i-button type="text" @click="toggleClick">
                         <Icon type="navicon" size="15"></Icon>
                     </i-button>
@@ -108,7 +103,7 @@
                 </div>
             </i-col>
         </Row>
-    </div>
+      </div>
        <Page :total="pageObj.total" class="MT30" size="small"
         :current="pageObj.pageNo"
         :page-size-opts="pageSizeOpts"
@@ -119,11 +114,44 @@
         @on-page-size-change="pageSizeChange">
       </Page>
     </div>
-    </div>
+    <Modal 
+      v-model="addModal"
+      @on-ok="ok"
+      @on-cancel="cancel">
+      <span>自定义分类：</span>
+      <Select></Select>
+    </Modal>
+    <Modal 
+      v-model="managementModal"
+      @on-ok="ok"
+      @on-cancel="cancel">
+      <Form ref="modelForm" :model="modelForm">
+        <Form-item>
+          <Button type="primary" @click="createGroup">新建分组</Button>
+        </Form-item>
+        <Form-item class="showCreate" v-show="showCreate">
+          <Input v-model="modelForm.groupName"></Input>
+          <Button type="primary" @click="createName('')">确定</Button>
+          <Button>取消</Button>
+        </Form-item>
+        </Form-item>
+        <Form-item v-for="">
+          <p></p>
+          <Button>X</Button>
+          <Button>重命名</Button>
+        </Form-item>
+        <Form-item>
+          <p>{{modelForm.groupName.value}}</p>
+        </Form-item>
+      </Form>
+    </Modal>
   </div>
 </template>
 <style lang='scss'>
-  .listPages{
+.listPages{
+  .ivu-modal-footer{
+    display:none;
+  }
   .ivu-form{
     background: #F9FAFC;
     padding:50px 0 50px 24px;
@@ -220,6 +248,39 @@
         color: #fff
       }
     }
+    .layout{
+      position: relative;
+      .layout-menu-left{
+        .bar{
+          width:10px;
+          padding:0 15px;
+          span{
+            font-size:18px;
+          }
+        }
+        .packUp{
+          .layout-logo-left{
+            width: 90%;
+            height: 30px;
+            background: #5b6270;
+            border-radius: 3px;
+            margin: 15px auto;
+          }
+        }
+      }
+      .layout-header{
+        z-index:99;
+        position: absolute;
+        left:-10px;
+        top:-10px;
+        button{
+          width:20px;
+          height:20px;
+          padding:0;
+          background: #2d8cf0;;
+        }
+      }
+    }
     .ivu-page{
       .ivu-page-item{
         border:none;
@@ -255,10 +316,32 @@
   // import config from './config.js';
   export default {
     data () {
+      const validateGName = (rule,value,callback)=>{
+        if (value === '') {
+          callback(new Error('请输入内容'));
+        }else if(value.length > 10){
+          callback(new Error('不能超过十个数字'));
+        // }else if(){
+        //   callback(new Error('名字已存在'));
+        }else{
+          callback();
+        }
+      }
       return {
-        spanLeft: 1,
-        spanRight: 23,
         loading:true,
+        sidebar:{
+          spanLeft: 1,
+          spanRight: 23,
+          group:true,
+          groupInfo:false
+        },
+        modelForm:{
+          groupName:[]
+        },
+        
+        addModal:false,
+        managementModal:false,
+        showCreate:false,
         pageObj:{
           tatal:0,
           pageSize:1
@@ -352,12 +435,6 @@
             value:6
           }
         ],
-        /*tableData:{
-          theadKey:['custName','typeName','brandName','Rstatus'],
-          thead:[
-          "客户名称","客户类别","主营品牌","审核状态","操作"],
-          tableData:[]
-        },*/
         columns:[
           {
             type: 'selection',
@@ -403,74 +480,92 @@
       }
     },
     created(){
-      this.$http.get(config.urlList.getArea+"?pId=-1&pageSize=40").then((res)=>{//获取省级地区
-        if(res.data.errorCode===0){
-          this.provinceArr=res.data.result
-        }
-        else {
-          this.$Modal.info({
-              title: '提示',
-              content: res.data.errorMsg
-          });
-        }
-        }).catch((res)=>{
-      })
+      // this.$http.get(config.urlList.getArea+"?pId=-1&pageSize=40").then((res)=>{//获取省级地区
+      //   if(res.data.errorCode===0){
+      //     this.provinceArr=res.data.result
+      //   }
+      //   else {
+      //     this.$Modal.info({
+      //         title: '提示',
+      //         content: res.data.errorMsg
+      //     });
+      //   }
+      //   }).catch((res)=>{
+      // })
 
-      this.$http.post(config.urlList.getCustList,
-        {pageIndex:1,pageSize:10},
-        {emulateJSON:true}
-        ).then((res)=>{//获取列表
-          if(res.data.errorCode===0){
-            this.pageObj.total=res.data.result.totalCount
-            this.pageObj.pageNo=res.data.result.pageNo
-            this.tableData=res.data.result.resultList;
-            this.dealMess();
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((res)=>{
-      })
+      // this.$http.post(config.urlList.getCustList,
+      //   {pageIndex:1,pageSize:10},
+      //   {emulateJSON:true}
+      //   ).then((res)=>{//获取列表
+      //     if(res.data.errorCode===0){
+      //       this.pageObj.total=res.data.result.totalCount
+      //       this.pageObj.pageNo=res.data.result.pageNo
+      //       this.tableData=res.data.result.resultList;
+      //       this.dealMess();
+      //     }
+      //     else {
+      //       this.$Modal.info({
+      //           title: '提示',
+      //           content: res.data.errorMsg
+      //       });
+      //     }
+      //     }).catch((res)=>{
+      // })
       
-      this.$http.get(config.urlList.getBrand+'?pageSize=10').then((res) => {//投放品牌
-        if(res.data.errorCode===0){
-          this.selectedBrand = res.data.result;
-          this.loading=false
-        }
-        else {
-          this.$Modal.info({
-              title: '提示',
-              content: res.data.errorMsg
-          });
-        }
-        }).catch((err) => {
-      })
+      // this.$http.get(config.urlList.getBrand+'?pageSize=10').then((res) => {//投放品牌
+      //   if(res.data.errorCode===0){
+      //     this.selectedBrand = res.data.result;
+      //     this.loading=false
+      //   }
+      //   else {
+      //     this.$Modal.info({
+      //         title: '提示',
+      //         content: res.data.errorMsg
+      //     });
+      //   }
+      //   }).catch((err) => {
+      // })
     },
     beforeMount(){      
     },
-    computed: {
-      iconSize () {
-        return this.spanLeft === 1 ? 14 : 24;
-      }
-    },
+    // computed: {
+    //   iconSize () {
+    //     return this.sidebar.spanLeft === 1 ? 14 : 24;
+    //   }
+    // },
     methods:{
-      showUp(){
-        if(this.group == true){
-          this.groupInfo == false;
-        }else{
-          this.groupInfo == true;
-        }
+      addGroup(){
+        this.addModal = true;
+      },
+      managementGroup(){
+        this.managementModal = true;
+      },
+      createGroup(){
+        this.showCreate = true;
+      },
+      ok () {
+        this.$Message.info('点击了确定');
+      },
+      cancel () {
+        this.$Message.info('点击了取消');
+      },
+      toggle:function(){
+        this.sidebar.group = false;
+        this.sidebar.groupInfo = true;
+        this.sidebar.spanLeft = 3;
+        this.sidebar.spanRight = 21;
       },
       toggleClick () {
-        if (this.spanLeft === 1) {
-          this.spanLeft = 3;
-          this.spanRight = 21;
+        if (this.sidebar.spanLeft === 1) {
+          this.sidebar.spanLeft = 3;
+          this.sidebar.spanRight = 21;
+          this.sidebar.group = false;
+          this.sidebar.groupInfo = true;
         } else {
-           this.spanLeft = 1;
-          this.spanRight = 23;
+          this.sidebar.spanLeft = 1;
+          this.sidebar.spanRight = 23;
+          this.sidebar.group = true;
+          this.sidebar.groupInfo = false;
         }
       },
       searchBrand(query){
