@@ -506,7 +506,6 @@
           submitBusiObj:{},
           uploadBrandArr:[//上传品牌授权书
           ],
-          submitBrandObj:{},
           uploadPayObj:{//上传纳税资质
             taxCode:"",
             custBankAccountList:[],
@@ -519,6 +518,11 @@
             provinceId:"",
             cityId:"",
             countyId:""
+          },
+          isUpload:{
+            busi:"",
+            brand:"",
+            bank:""
           }
         }
       },
@@ -621,7 +625,8 @@
         getAgencyLoation(location){//组件 获取门店特许经销商的位置
           this.mapLocation.store_agency=location
         },
-        getUploadBusiness(data){//组件 获取上传营业执照
+        getUploadBusiness(data,key){//组件 获取上传营业执照
+          this.isUpload.busi=key
           let obj={}
           let obj1={}
           for(let i in data){
@@ -654,13 +659,13 @@
           this.submitBusiObj=obj1;
           this.uploadBusiObj=obj
         },
-        getUploadBrand(data){//组件 获取上传品牌授权书
+        getUploadBrand(data,key){//组件 获取上传品牌授权书
+          this.isUpload.brand=key
           if(data instanceof Array){
             this.uploadBrandArr=data
             return;
           }
           let obj={}
-          let obj1={}
           for(let i in data){
             if(i!="validTime"&&i!="createTime")
             obj[i]=data[i]
@@ -670,15 +675,10 @@
           }else{
             obj['validTime']=this.formatDate(data.validTime)
           }
-          
-          obj1['brandId']=obj.brandId;
-          obj1['brandName']=obj.brandName;
-          obj1['validTime']=obj.validTime;
-          obj1['salve']=obj.salve;
-          this.submitBrandObj=obj1
           this.uploadBrandArr.push(obj)        
         },
-        getUploadPay(data){//组件 获取上传纳税资质证明
+        getUploadPay(data,key){//组件 获取上传纳税资质证明
+          this.isUpload.bank=key
           let obj={}
           this.uploadPayObj.taxCode=data.taxCode
           this.uploadPayObj.custBankAccountList=data.custBankAccountList
@@ -866,8 +866,16 @@
               {custId:id,pageSize:10,pageIndex:1},
               {emulateJSON:true}
               ).then((res)=>{
-              if(res.data.errorCode===0){               
-                this.getUploadPay(res.data.result)
+              if(res.data.errorCode===0){     
+                let createTime=res.data.result.custBankAccountList[0].createTime       
+                let arr=[]
+                for(let i=0;i<res.data.result.custBankAccountList.length;i++){
+                  if(res.data.result.custBankAccountList[i].createTime==createTime){
+                    arr.push(res.data.result.custBankAccountList[i])
+                  }
+                }   
+                res.data.result.custBankAccountList=arr
+                this.getUploadPay(res.data.result,"")
               }
               else {
                 this.$Modal.info({
@@ -899,7 +907,7 @@
                     }                    
                   }
                   this.uploadBrandLength=arr.length
-                  this.getUploadBrand(arr)
+                  this.getUploadBrand(arr,"")
                 }
               }
               else {
@@ -916,7 +924,7 @@
               ).then((res)=>{
               if(res.data.errorCode===0){
                 if(res.data.result.resultList.length>=1){ 
-                  this.getUploadBusiness(res.data.result.resultList[0])
+                  this.getUploadBusiness(res.data.result.resultList[0],"")
                 }
               }
               else {
@@ -953,6 +961,7 @@
                               }
                             });
                             setTimeout(()=>{
+                              this.$Modal.remove()
                               this.$router.push({path:"custDetail",query:{id:res.data.result}})
                             },3000)
                           },0)
@@ -982,6 +991,7 @@
                                 }
                               });
                               setTimeout(()=>{
+                                this.$Modal.remove()
                                 this.$router.push({path:"custDetail",query:{id:this.$router.currentRoute.query.id}})
                               },3000)
                             },0)
@@ -1013,13 +1023,12 @@
         },
         uploadPaper(id){
           this.submitBusiObj['custId']=id
-          this.submitBrandObj['custId']=id
           this.submitPayObj['custId']=id
           for(let i=0;i<this.uploadBrandArr.length;i++){
             this.uploadBrandArr[i].custId=id
           }
-          if(this.submitBusiObj.licenseNumber&&this.submitBusiObj.licenseNumber!=""){
-            this.$http.post('/isp-kongming-cust/cust/adBusinessLicense',
+          if(this.submitBusiObj.licenseNumber&&this.submitBusiObj.licenseNumber!=""&&this.isUpload.busi=="upload"){
+            this.$http.post('/isp-kongming/cust/adBusinessLicense',
               this.submitBusiObj,
               ).then((res) => {
                 if(res.data.errorCode===0){
@@ -1028,7 +1037,7 @@
             }).catch((err) => {})
           }
         
-          if(this.uploadBrandArr.length>=1){
+          if(this.uploadBrandArr.length>=1&&this.isUpload.brand=="upload"){
             let arr=[];
             if(this.uploadBrandLength==0){
               arr=this.uploadBrandArr.slice(0)
@@ -1037,7 +1046,7 @@
             }else if(this.uploadBrandLength=this.uploadBrandArr.length){
               arr=[]
             }
-            this.$http.post('/isp-kongming-cust/cust/adCustBrandLicense',
+            this.$http.post('/isp-kongming/cust/adCustBrandLicense',
               {custBrandLicenseList:arr},
               ).then((res) => {
                 if(res.data.errorCode===0){
@@ -1046,8 +1055,8 @@
             }).catch((err) => {})
           }
           
-          if(this.submitPayObj.taxCode&&this.submitBusiObj.taxCode!=""){
-            this.$http.post('/isp-kongming-cust/cust/adCustBankAccount',
+          if(this.submitPayObj.taxCode&&this.submitPayObj.taxCode!=""&&this.isUpload.bank=="upload"){
+            this.$http.post('/isp-kongming/cust/adCustBankAccount',
               this.submitPayObj,
               ).then((res) => {
                 if(res.data.errorCode===0){                      
@@ -1368,7 +1377,7 @@
             this.formValidate.groupId=""
           }
           this.$http.post(config.urlList.custInfoson,
-            {typeId:1,custName:query},
+            {typeId:3,custName:query},
             {emulateJSON:true}
           ).then((res) => {//所属集团
             if(res.data.errorCode===0){

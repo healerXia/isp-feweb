@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="juristicArea">
-    <Button type="primary" class="btn bg4373F3" @click="openDialog">选择管辖区域</Button>
+    <span class="upBtn" @click="openDialog">选择管辖区域</span>
     <Modal class="areaDialog"
         v-model="modal1"
         title="选择管辖区域"
@@ -297,6 +297,19 @@
 
 <style lang="scss">
 .juristicArea{
+}
+.upBtn{
+    text-align: center; 
+    display: inline-block;
+    width: 120px !important;
+    height: 38px !important;
+    background-color:white !important;
+    border: 1px solid #4373F3;
+    line-height: 38px !important;
+    border-radius:2px;
+    font-size: 14px;
+    color: #4373F3;
+    cursor: pointer
 }
 .areaDialog{
     span.open_icon {

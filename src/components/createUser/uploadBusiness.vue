@@ -1,38 +1,36 @@
 <template lang="html">
     <div class="business">
-        <Button type="primary" class="btn bg4373F3" @click="openDialog">上传</Button>
+        <span class="upBtn" @click="openDialog">上传</span>
         <div class="mess_show" v-show="showMessBox">
           <!-- <div class="mess_title">营业执照</div> -->
           <div class="mess_con">
-            <ul>
-              <li>
+              <div class="item">
                 <span>统一社会信用码：</span><span>{{storeEditDate.licenseNumber}}</span>
-              </li>
-              <li>
+              </div>
+              <div class="item">
                 <span>注册资本：</span><span>{{storeEditDate.registeredCapital}}(万元)</span>
-              </li>
-              <li>
+              </div>
+              <div class="item">
                 <span>营业期限：</span><span>{{storeEditDate.time}}</span>
-              </li>
-              <li>
+              </div>
+              <div class="item">
                 <span>成立日期：</span><span>{{storeEditDate.createTime}}</span>
-              </li>
-              <li>
+              </div>
+              <div class="item">
                 <span>法定代表人：</span><span>{{storeEditDate.legalPerson}}</span>
-              </li>
-              <li>
+              </div>
+              <div class="item">
                 <span>经营住所：</span><span>{{storeEditDate.businessAddress}}</span>
-              </li>
-              <li>
+              </div>
+              <div class="itemHeight">
                 <span>组织机构代码：</span><span>{{storeEditDate.organizationCode}}</span>
-              </li>
-              <li>
+              </div>
+              <div class="item" v-if="storeEditDate.custName">
                 <span>客户名称：</span><span>{{storeEditDate.custName}}</span>
-              </li>
-              <li>
+              </div>
+              <div class="item itemLH">
                 <span>附件：</span><span class="salve" @click="showPic">111</span>
-              </li>
-            </ul>
+              </div>
           </div>
         </div>
         <Modal class="businessDialog"
@@ -46,6 +44,7 @@
               </Form-item>
               <Form-item label="注册资本:" prop="registeredCapital">
                 <Input v-model="uploadBusi.registeredCapital" placeholder="请填写注册资本" class='fl'></Input>
+                <span class="ML5">万元</span>
                 <span v-show="judgeErr.reg_cap_err_show" class="colorRed ML5">
                   {{errorCon.reg_cap_err}}
                 </span>
@@ -187,7 +186,6 @@ export default {
             this.uploadBusi.endTime=""
           }else if(this.storeEditDate.endTime!="永久"){
             this.uploadBusi.endTime=new Date(this.storeEditDate.endTime)
-            console.log(this.uploadBusi.endTime)
           }        
           this.uploadBusi.licenseNumber=this.storeEditDate.licenseNumber;
           this.uploadBusi.createTime=new Date(this.storeEditDate.createTime)
@@ -207,7 +205,7 @@ export default {
                     this.uploadBusi.endTime="永久"
 
                   }
-                  this.$emit('uploadbus',this.uploadBusi)
+                  this.$emit('uploadbus',this.uploadBusi,'upload')
                   this.modal1=false
                 }               
             } else {
@@ -327,22 +325,37 @@ export default {
         width: 100%;
         padding: 10px 20px;
         height: 100px;
-        ul{
-          width:100%;
-          li{
-            float: left;
-            width: 100%;
-            height: 23px;
-            span{
-              max-width: 250px;
-              display:block;
-              float:left;
-            }
-          }
+        .item{
+          width: 100%;
+          float: left;
+          height: 27px;
+          line-height: 27px;
+          span{line-height:27px}
+        }
+        .itemLH{line-height:10px;span{line-height:27px}}
+        .itemHeight{
+          width: 100%;
+          float: left;
+          overflow: hidden;
+          span:first-child{height:27px;display:inline-block;float:left;line-height:27px}
+          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px}
         }
       }
   }
 }
+ .upBtn{
+    text-align: center; 
+    display: inline-block;
+    width: 120px !important;
+    height: 38px !important;
+    background-color:white !important;
+    border: 1px solid #4373F3;
+    line-height: 38px !important;
+    border-radius:2px;
+    font-size: 14px;
+    color: #4373F3;
+    cursor: pointer
+  }
 .businessDialog {  
     display: inline-block; 
     .ivu-input-type,input{width:350px}
