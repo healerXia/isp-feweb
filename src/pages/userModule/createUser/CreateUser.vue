@@ -306,7 +306,7 @@
               </div>
               <Form-item>
                 <Button type="primary" class="btn bg4373F3" @click="submit('formValidate')" :disabled="judgeShow.submitClick">保存</Button >
-                <Button type="primary" class="btn bg4373F3 ML15">提交审核</Button>
+                <Button type="primary" class="btn bg4373F3 ML15" @click="submitAudit('formValidate')" :disabled="judgeShow.submitClick">提交审核</Button>
                 <Button type="primary" class="btn bgCancle ML15" @click="cancle('formValidate')">取消</Button>
               </Form-item>
               <div class="h100">
@@ -470,6 +470,7 @@
           },
           judgeShow:{//错误是否显示
             submitClick:false,//是否可以点击保存
+            submitAuditClick:false,
             custNameErrShow:false,//客户名称重复
             areaErrShow:false,//客户地区
             abbrName_err_show:false,//客户简称
@@ -1068,16 +1069,87 @@
           }         
         },
         submitAudit(name){//
+          this.judgeShow.submitAuditClick=true
           this.$refs[name].validate((valid) => {
-            if (valid) {
+              this.areaCheck()//这个是提交的时候检查地区的，显示错误提示
+              if (valid) {
                 let lastCheck=this.checkValue()
-                if (lastCheck) {
-                  this.$Message.success('提交成功!');
+                if (lastCheck&&this.formValidate.countyId) {
+                  let submitData=this.operSubmitData();
+                  if(!this.$router.currentRoute.query.id){
+                    this.$http.post(config.urlList.addCustInfo,//新增加
+                     submitData,
+                      {emulateJSON:true}
+                      ).then((res) => {
+                      if(res.data.errorCode===0){
+                        this.uploadPaper(res.data.result);   
+                        setTimeout(()=>{
+                          this.$Modal.info({
+                            title: '提示',
+                            content: '添加成功',
+                            onOk:()=>{
+                              this.$router.push({path:"custDetail",query:{id:res.data.result}})
+                            }
+                          });
+                          setTimeout(()=>{
+                            this.$Modal.remove()
+                            this.$router.push({path:"custDetail",query:{id:res.data.result}})
+                          },3000)
+                        },0)
+                      }
+                      else {
+                        this.judgeShow.submitAuditClick=false//可以点击
+                        this.$Modal.info({
+                            title: '提示',
+                            content: res.data.errorMsg
+                        });
+                      }
+                    }).catch((err) => {})
+                  }else if(this.$router.currentRoute.query.id){//编辑页面
+                    submitData.custId=this.$router.currentRoute.query.id
+                    this.$http.post(config.urlList.updateCustInfo,//提交数据
+                      submitData,
+                      {emulateJSON:true}
+                      ).then((res) => {
+                        if(res.data.errorCode===0){
+                          this.uploadPaper(this.$router.currentRoute.query.id);
+                          setTimeout(()=>{
+                            this.$Modal.info({
+                              title: '提示',
+                              content: '编辑成功',
+                              onOk:()=>{
+                                this.$router.push({path:"custDetail",query:{id:this.$router.currentRoute.query.id}})
+                              }
+                            });
+                            setTimeout(()=>{
+                              this.$Modal.remove()
+                              this.$router.push({path:"custDetail",query:{id:this.$router.currentRoute.query.id}})
+                            },3000)
+                          },0)
+                        }else {
+                          this.judgeShow.submitAuditClick=false//可以点击
+                          this.$Modal.info({
+                              title: '提示',
+                              content: res.data.errorMsg
+                          });
+                       }
+                    }).catch((err) => {})
+                  }
+                 this.judgeShow.submitAuditClick=false//可以点击
+                }else{
+                  this.judgeShow.submitAuditClick=false//可以点击
+                  this.$Modal.error({
+                      title: '提示',
+                      content: "表单验证失败！"
+                  })
                 }
-                
-            } else {
-                this.$Message.error('表单验证失败!');
-            }
+              }else {
+                this.judgeShow.submitAuditClick=false
+                this.$Modal.error({
+                    title: '提示',
+                    content: "表单验证失败！"
+                })
+              }
           })
         },
         cancle (name) {

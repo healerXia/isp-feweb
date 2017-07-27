@@ -200,7 +200,7 @@
                 <span>所属4S：</span>
                 <span class="liWid">{{custInfo.foursName}}</span>
               </li>
-              <li>
+              <li v-if="custInfo.subclassId!=3">
                 <span>所属厂商：</span>
                 <span class="liWid">{{custInfo.custPName}}</span>
               </li>
@@ -819,7 +819,6 @@
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
-                  console.log(res.data.result)
                   if(res.data.result!=null){
                     let createTime=res.data.result.custBankAccountList[0].createTime       
                     let arr=[]
