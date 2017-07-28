@@ -8,12 +8,17 @@
       margin-top:15px 0 0 0;
       display:inline-block;
       .ivu-form-item-label{
-        font-size:14px;
+        width: 63px;
+        height: 38px;
+        display: inline-block;
+        float: left;
+        text-align: right;
+        padding-right: 15px;
+        font-size: 12px;
         color: #7B8497;
-        letter-spacing: 0.52px;
       }
       input{
-        width:268px;
+        width:280px;
         height:38px;
         background: #FFFFFF;
         border: 1px solid #DEE1E5;
@@ -27,7 +32,7 @@
         height:38px;
       }
       .ivu-select{
-        width:268px;
+        width: 280px;
         height:38px;
         .ivu-select-input{
           width:234px;
@@ -36,7 +41,7 @@
         }
       }
       .smallSelect{
-        width:84px;
+        width:88px;
         height:38px;
       }
       .ML5{
@@ -103,9 +108,17 @@
     .ivu-table-wrapper{
       overflow:hidden;
       border:none;
-      thead{
-        th{
-          border:none;
+      .ivu-table{
+        thead{
+          th{
+            color: #7B8497;
+            font-size:14px;
+            border:none;
+          }
+        }
+        .ivu-table-tbody{
+          color: #333;
+          font-size:12px;
         }
       }
     }

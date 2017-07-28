@@ -84,8 +84,8 @@
                     <Menu-item name="1">
                         <span class="layout-text">我的客户</span>
                     </Menu-item>
-                    <Menu-item name="2">
-                        <span class="layout-text">选项 1</span>
+                    <Menu-item name="2" v-for="item in custGroup.name">
+                        <span class="layout-text">{{item}}</span>
                     </Menu-item>
                     <Menu-item name="3">
                         <span class="layout-text">选项 2</span>
@@ -125,18 +125,18 @@
       v-model="managementModal"
       @on-ok="ok"
       @on-cancel="cancel">
-      <Form ref="modelForm" :model="modelForm">
+      <Form ref="modelForm" :model="modelForm" :rules="ruleModel">
         <Form-item>
           <Button type="primary" @click="createGroup">新建分组</Button>
         </Form-item>
-        <Form-item class="showCreate" v-show="showCreate">
+        <Form-item class="showCreate w200" v-show="showCreate" prop="groupName">
           <Input v-model="modelForm.groupName"></Input>
-          <Button type="primary" @click="createName('')">确定</Button>
-          <Button>取消</Button>
+          <Button type="primary" @click="createName('modelForm.groupName')">确定</Button>
+          <Button @click="createCancel">取消</Button>
         </Form-item>
         </Form-item>
-        <Form-item v-for="">
-          <p></p>
+        <Form-item v-for="item in custGroup.name">
+          <p>{{item}}</p>
           <Button>X</Button>
           <Button>重命名</Button>
         </Form-item>
@@ -321,13 +321,24 @@
           callback(new Error('请输入内容'));
         }else if(value.length > 10){
           callback(new Error('不能超过十个数字'));
-        // }else if(){
-        //   callback(new Error('名字已存在'));
+        }else if(value == groupName.name){
+          callback(new Error('名字已存在'));
         }else{
           callback();
         }
       }
       return {
+        modelForm:{
+          groupName:''
+        },
+        ruleModel:{
+          groupName:[
+            {
+              validator:validateGName,
+              trigger: 'blur'
+            }
+          ]
+        },
         loading:true,
         sidebar:{
           spanLeft: 1,
@@ -338,7 +349,7 @@
         modelForm:{
           groupName:[]
         },
-        
+        custGroup:[],
         addModal:false,
         managementModal:false,
         showCreate:false,
@@ -542,6 +553,18 @@
       },
       createGroup(){
         this.showCreate = true;
+      },
+      createName(name){
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            this.$Message.success('提交成功!');
+          } else {
+            this.$Message.error('表单验证失败!');
+          }
+        })
+      },
+      createCancel(){
+        this.showCreate = false;
       },
       ok () {
         this.$Message.info('点击了确定');
