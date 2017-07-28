@@ -4,6 +4,8 @@ const urlList = {
   custBrandLicense :"/isp-kongming/cust/custBrandLicense ",//获取品牌授权书编辑
   businessLicense:"/isp-kongming/cust/businessLicense",//获取营业执照权书编辑
   custBankAccountHistory:"/isp-kongming/cust/custBankAccountHistory",//获取历史
+  custBrandLicenseHistory:"/isp-kongming/cust/custBrandLicenseHistory"//获取历史
+
 }
 
 

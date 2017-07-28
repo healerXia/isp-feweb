@@ -19,7 +19,7 @@
               <div class="item">
                 <span>法定代表人：</span><span>{{storeEditDate.legalPerson}}</span>
               </div>
-              <div class="item">
+              <div class="itemHeight">
                 <span>经营住所：</span><span>{{storeEditDate.businessAddress}}</span>
               </div>
               <div class="itemHeight">
@@ -58,9 +58,9 @@
                   <span class="space">-</span>
                   <Form-item prop="endTime">
                     <Date-picker type="date" placeholder="选择结束日期"  v-model="uploadBusi.endTime" 
-                    :editable="false"></Date-picker>
+                    :editable="false" @on-change="endDateChange"></Date-picker>
                   </Form-item>
-                  <Checkbox v-model="forever">
+                  <Checkbox v-model="forever" @on-change="foreverChange">
                     永久
                   </Checkbox>
                   <span class="colorRed">{{errorCon.dateErr}}</span>
@@ -173,6 +173,17 @@ export default {
     }
   },
   methods: {
+      endDateChange(data){//选了结束时间把永久去掉
+        if(data!=""&&this.forever){
+          this.forever=false
+        }
+      },
+      foreverChange(data){//选了永久吧结束时间去掉
+        console.log(data)
+        if(data&&this.uploadBusi.endTime!=""){
+          this.uploadBusi.endTime=""
+        }
+      },
       showPic(){
         this.$emit('showPic',"pic2")
       },

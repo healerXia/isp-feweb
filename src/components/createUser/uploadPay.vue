@@ -27,7 +27,7 @@
                   <li class="itemHeight"><span>开户银行({{index+1}})：</span><span>{{item.bank}}</span></li>
                   <li class="item"><span>开户账号({{index+1}})：</span><span>{{item.bankAccount}}</span></li>
                   <li class="item"><span>电话({{index+1}})：</span><span>{{item.phone}}</span></li>
-                  <li class="item"><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
+                  <li class="itemHeight"><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
                 </ul>
               </li>
                <li class="item">
