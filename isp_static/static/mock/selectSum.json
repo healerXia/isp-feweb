@@ -1,0 +1,25 @@
+{
+    "errorCode": 0,
+    "errorMsg": "OK",
+    "result": {
+        "displayAmount": 0,
+        "singleClick": 0,
+        "clickAmount": 0,
+        "beginTime": "2017-06-01",
+        "endTime": "2018-06-01",
+        "adPlaceId": 18,
+        "displayAmountMount": "0",
+        "clickAmountMount": "0",
+        "displayAmountDay": "0",
+        "clickAmountDay": "0",
+        "displayClickDay": "0.00%",
+        "displayClickMonth": "0.00%",
+        "clickRate": null,
+        "requestAmount": 0,
+        "fillRate": null,
+        "singleRate": null,
+        "rateTime": null,
+        "singleDisplay": 0,
+        "visibleDisplay": 0
+    }
+}

@@ -202,6 +202,20 @@ const menu =  [
                 path: 'projectList'
             }
         ]
+    },
+    {
+        name: '个人中心',
+        path: '',
+        index: '10',
+        icon: 'icon-customer',
+        subNav: [
+            {
+                name: '查看个人中心',
+                index: '10-1',
+                icon: '',
+                path: 'viewPercenter'
+            }
+        ]
     }
 ]
 

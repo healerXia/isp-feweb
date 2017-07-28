@@ -24,17 +24,6 @@ const CustDetail  = (resolve) => require(['../pages/userModule/custDetail/CustDe
 const CompetitorList  = (resolve) => require(['../pages/userModule/competitorList/CompetitorList'], resolve);
 const CustList = (resolve) => require(['../pages/userModule/custList/CustList'], resolve);
 
-
-
-
-
-
-//个人中心
-const edit = (resolve) => require(['../pages/personalCenter/editInfo/editInfo'],resolve);
-const test = (resolve) => require(['../pages/personalCenter/editInfo/demo'],resolve);
-
-
-
 // 审批链流程
 const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
 const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
@@ -172,16 +161,6 @@ const routes = [
                 component: department
             },
             {
-                path: 'edit',
-                name: 'edit',
-                component: edit
-            },
-            {
-                path: 'test',
-                name: 'test',
-                component: test
-            },
-            {
                 path: 'goodsInfo',
                 name: 'goodsInfo',
                 component: goodsInfo
@@ -245,11 +224,6 @@ const routes = [
                 component: DemoZhoufeng
             },
 
-            {
-                path: 'selectTab',
-                name: 'selectTab',
-                component: selectTab
-            },
             {
                 path: 'selectTab',
                 name: 'selectTab',
