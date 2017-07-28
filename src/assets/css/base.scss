@@ -6,8 +6,6 @@ body {
     display: block;
     height: 100%;
     width: 100%;
-    min-width: 1366px;
-    overflow: auto;
 }
 
 
@@ -192,6 +190,15 @@ body {
 }
 
 // 表单样式重置
+
+
+
+
+//表格样式重置
+
+.listPages .ivu-table:after {
+  width: 0;
+}
 
 
 // 重置下拉

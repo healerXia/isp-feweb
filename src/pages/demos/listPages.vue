@@ -84,8 +84,8 @@
                     <Menu-item name="1">
                         <span class="layout-text">我的客户</span>
                     </Menu-item>
-                    <Menu-item name="2" v-for="item in custGroup.name">
-                        <span class="layout-text">{{item}}</span>
+                    <Menu-item name="2" v-for="item in custGroup">
+                        <span class="layout-text">{{item.name}}</span>
                     </Menu-item>
                     <Menu-item name="3">
                         <span class="layout-text">选项 2</span>
@@ -135,8 +135,8 @@
           <Button @click="createCancel">取消</Button>
         </Form-item>
         </Form-item>
-        <Form-item v-for="item in custGroup.name">
-          <p>{{item}}</p>
+        <Form-item v-for="item in custGroup">
+          <p>{{item.name}}</p>
           <Button>X</Button>
           <Button>重命名</Button>
         </Form-item>
@@ -148,9 +148,18 @@
   </div>
 </template>
 <style lang='scss'>
+body{
 .listPages{
-  .ivu-modal-footer{
-    display:none;
+  .ivu-modal-wrap{
+    .ivu-model{
+      .showCreate{
+        width: 400px;
+        height: 56px;
+      }
+      .ivu-modal-footer{
+        display: none;
+      }
+    }
   }
   .ivu-form{
     background: #F9FAFC;
@@ -311,6 +320,7 @@
     
   }
 }
+}
 </style>
 <script>
   // import config from './config.js';
@@ -321,8 +331,8 @@
           callback(new Error('请输入内容'));
         }else if(value.length > 10){
           callback(new Error('不能超过十个数字'));
-        }else if(value == groupName.name){
-          callback(new Error('名字已存在'));
+        // }else if(value == custGroup.name){
+        //   callback(new Error('名字已存在'));
         }else{
           callback();
         }
@@ -346,10 +356,12 @@
           group:true,
           groupInfo:false
         },
-        modelForm:{
-          groupName:[]
-        },
-        custGroup:[],
+        custGroup:[
+          {
+            name:'动态选项',
+            value:1
+          }
+        ],
         addModal:false,
         managementModal:false,
         showCreate:false,
@@ -557,7 +569,8 @@
       createName(name){
         this.$refs[name].validate((valid) => {
           if (valid) {
-            this.$Message.success('提交成功!');
+            // this.$Message.success('提交成功!');
+            custGroup.push(name);
           } else {
             this.$Message.error('表单验证失败!');
           }
@@ -744,49 +757,49 @@
           operation:'',//操作
         };  
       },
-      provinceChange(value){//省列表change事件
-        this.formItem.countyId="";
-        this.formItem.cityId="";
-        this.countyArr=[];
-        this.cityArr=[];
-        if(value!=""){
-          this.$http.get(config.urlList.getArea+"?pId="+value+"&pageSize=100")
-          .then((res)=>{
-              if(res.data.errorCode===0){
-                this.formItem.countyId="";
-                this.formItem.cityId="";
-                this.countyArr=[];
-                this.cityArr=[];
-                this.cityArr=res.data.result
-              }
-              else {
-                this.$Modal.info({
-                    title: '提示',
-                    content: res.data.errorMsg
-                });
-              }
-          }).catch((res)=>{})
-        }
-      },
-      cityChange(value){//市列表change事件
-        this.formItem.countyId=""; 
-        this.countyArr=[];
-        if(value!=""){
-          this.$http.post(config.urlList.getArea+"?pId="+value+"&pageSize=100").
-          then((res)=>{
-            if(res.data.errorCode===0){
+      // provinceChange(value){//省列表change事件
+      //   this.formItem.countyId="";
+      //   this.formItem.cityId="";
+      //   this.countyArr=[];
+      //   this.cityArr=[];
+      //   if(value!=""){
+      //     this.$http.get(config.urlList.getArea+"?pId="+value+"&pageSize=100")
+      //     .then((res)=>{
+      //         if(res.data.errorCode===0){
+      //           this.formItem.countyId="";
+      //           this.formItem.cityId="";
+      //           this.countyArr=[];
+      //           this.cityArr=[];
+      //           this.cityArr=res.data.result
+      //         }
+      //         else {
+      //           this.$Modal.info({
+      //               title: '提示',
+      //               content: res.data.errorMsg
+      //           });
+      //         }
+      //     }).catch((res)=>{})
+      //   }
+      // },
+      // cityChange(value){//市列表change事件
+      //   this.formItem.countyId=""; 
+      //   this.countyArr=[];
+      //   if(value!=""){
+      //     this.$http.post(config.urlList.getArea+"?pId="+value+"&pageSize=100").
+      //     then((res)=>{
+      //       if(res.data.errorCode===0){
               
-              this.countyArr=res.data.result ;            
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
-          }).catch((res)=>{})
-        }
-      },
+      //         this.countyArr=res.data.result ;            
+      //       }
+      //       else {
+      //         this.$Modal.info({
+      //             title: '提示',
+      //             content: res.data.errorMsg
+      //         });
+      //       }
+      //     }).catch((res)=>{})
+      //   }
+      // },
       InfoList(value){
         this.$http.get(config.urlList.getCustList+"?pId="+value+"&pageSize=100"). then((res)=>{
             if(res.data.errorCode===0){

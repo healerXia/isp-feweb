@@ -1,13 +1,7 @@
 <template>
   <div class="listPages">
-<<<<<<< HEAD
-    <Form ref="formItem" :model="formItem" :rules="ruleValidate" label-position="right">
-      <Form-item label="客户名称">
-        <!-- <Checkbox v-model="formItem.single" style="width:18px">Checkbox</Checkbox> -->
-=======
     <Form ref="formItem" :model="formItem" label-position="right">
       <Form-item label="客户名称" prop="custName">
->>>>>>> feature/order
         <input class="descripive" v-model="formItem.custName" filterable placeholder="请输入客户名称"></input>
       </Form-item>
       <Form-item label="客户编号" prop="custId">
@@ -73,14 +67,13 @@
         <Button type="ghost" @click="reset('formItem')">重置</Button>
       </Form-item>
     </Form>
-    <div class="listTable MT20 ">
+    <div class="listTable">
       <span class="addProBtn MB20">
         <router-link :to="{path:'createUser'}">
           添加客户
         </router-link>
       </span>
-      <!-- stripe 可以用来单双数背景 -->
-      <Table :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
+      <Table stripe :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
       <Page :total="pageObj.total" class="MT30" size="small"
         :current="pageObj.pageNo"
         :page-size-opts="pageSizeOpts"
@@ -102,7 +95,6 @@
   export default {
     data () {
       return {
-        ruleValidate:{},
         loading:true,
         pageObj:{
           tatal:0,
@@ -195,6 +187,10 @@
           {
             status:'待审核',
             value:5
+          },
+          {
+            status:'审核驳回',
+            value:6
           }
         ],
         /*tableData:{
@@ -343,6 +339,8 @@
             tableData[i]['Rstatus']="已停用"
           }else if(tableData[i].status==5){
             tableData[i]['Rstatus']="待审核"
+          }else if(tableData[i].status==6){
+            tableData[i]['Rstatus']="审核驳回"
           }
         }
       },
