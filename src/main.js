@@ -13,7 +13,7 @@ import './assets/css/base.scss';
 import Axios from 'axios';
 import Vuex from 'vuex'
 
-//import 'babel-polyfill';
+// import 'babel-polyfill';
 
 Vue.use(iView);
 Vue.use(Vuex);
@@ -43,6 +43,13 @@ Vue.prototype.$http = Axios.create({
         let url = window.location.href;
             if (data.errorCode == 50000) {
                 window.location.href = `${data.loginUrl}?redirect=${url}`;
+            // Vue.prototype.$Modal.info({
+            //     title: '提示',
+            //     content: data.errorMsg,
+            //     onOk: () => {
+            //         window.location.href = `${data.loginUrl}?redirect=${url}`;
+            //     }
+            // });
         }
         return data;
     }]

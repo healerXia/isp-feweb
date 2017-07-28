@@ -120,13 +120,13 @@ export default {
         return {
             searchInfo: {
                 "processType": "",
-                "deptId":"",
-                "application":"",
-                "applyDateFrom":"",
-                "applyDatTo": "",
-                "orderId": "",
-                "pageNo":1,
-                "pageSize":10
+                "deptId":"",
+                "application":"",
+                "applyDateFrom":"",
+                "applyDatTo": "",
+                "orderId": "",
+                "pageNo":1,
+                "pageSize":10
             },
             menuIndex: 1,
             totalCount: 0,

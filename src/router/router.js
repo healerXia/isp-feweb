@@ -41,8 +41,6 @@ const ApprovalManagement = (resolve) => require(['../pages/approval/approvalMana
 const AuditList = (resolve) => require(['../pages/approval/auditList/AuditList'], resolve);
 
 const ViewPercenter = (resolve) =>  require(['../pages/personalCenter/view/View'], resolve);
-const EditPercenter = (resolve) =>  require(['../pages/personalCenter/editInfo/EditInfo'], resolve);
-// const createChain = (resolve) => require('[../pages/approval/createUser/createUser]', resolve);
 
 
 // demo
@@ -199,11 +197,6 @@ const routes = [
                 path: 'viewPercenter',
                 name: 'ViewPercenter',
                 component: ViewPercenter
-            },
-            {
-                path: 'editPercenter',
-                name: 'EditPercenter',
-                component: EditPercenter
             }
         ]
     },
