@@ -1,8 +1,13 @@
 <template>
   <div class="listPages">
+<<<<<<< HEAD
     <Form ref="formItem" :model="formItem" :rules="ruleValidate" label-position="right">
       <Form-item label="客户名称">
         <!-- <Checkbox v-model="formItem.single" style="width:18px">Checkbox</Checkbox> -->
+=======
+    <Form ref="formItem" :model="formItem" label-position="right">
+      <Form-item label="客户名称" prop="custName">
+>>>>>>> feature/order
         <input class="descripive" v-model="formItem.custName" filterable placeholder="请输入客户名称"></input>
       </Form-item>
       <Form-item label="客户编号" prop="custId">
@@ -10,6 +15,7 @@
       </Form-item>
       <Form-item label="主营品牌" prop="serviceList">    
         <Select v-model="formItem.serviceList" filterable multiple
+          placeholder="请选择主营品牌" 
           :loading="loading"
           remote
           :remote-method="searchBrand"
@@ -17,7 +23,7 @@
           <Option v-for="item in selectedBrand" :value="item.value" :key="item.value">{{ item.name }}</Option>
         </Select>
       </Form-item>
-      <Form-item label="客户地区"  v-model='formItem.area'>
+      <Form-item label="客户地区"  prop='provinceId'>
         <Select 
         v-model='formItem.provinceId' 
         class="smallSelect" placeholder="省/直辖市" 
@@ -44,7 +50,7 @@
           <Option v-for="item in countyArr" :value="item.value" :key="new Date()">{{item.name}}</Option>
         </Select>
       </Form-item>
-      <Form-item label="客户类别">
+      <Form-item label="客户类别" prop="typeId">
         <Select v-model="formItem.typeId" placeholder="请选择客户类别" clearable>
           <Option v-for="item in typeOption" :value="item.value" :key="new Date()">{{ item.name }}</Option>
         </Select>
@@ -54,7 +60,7 @@
           <Option v-for="item in labelOption" :value="item.value" :key="new Date()">{{ item.option }}</Option>
         </Select>
       </Form-item> -->
-      <Form-item label="审核状态">
+      <Form-item label="审核状态" prop="status">
         <Select v-model="formItem.status" placeholder="请选择审核状态" clearable>
           <Option v-for="item in statusStatus" :value="item.value" :key="new Date()">{{ item.status }}</Option>
         </Select>
@@ -75,8 +81,7 @@
       </span>
       <!-- stripe 可以用来单双数背景 -->
       <Table :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
-
-       <Page :total="pageObj.total" class="MT30" size="small"
+      <Page :total="pageObj.total" class="MT30" size="small"
         :current="pageObj.pageNo"
         :page-size-opts="pageSizeOpts"
         :page-size="20"
@@ -154,6 +159,10 @@
           {
             name:'汽车服务',
             value:6
+          },
+           {
+            name:'其他',
+            value:7
           }
         ],
         labelOption:[
@@ -253,7 +262,7 @@
       })
 
       this.$http.post(config.urlList.getCustList,
-        {pageIndex:1,pageSize:10},
+        {pageIndex:1,pageSize:20},
         {emulateJSON:true}
         ).then((res)=>{//获取列表
           if(res.data.errorCode===0){
@@ -319,6 +328,8 @@
             tableData[i]['typeName']="门店"
           }else if(tableData[i].typeId==6){
             tableData[i]['typeName']="汽车服务商"
+          }else if(tableData[i].typeId==7){
+            tableData[i]['typeName']="其他"
           }
         }
         for(let i=0;i<tableData.length;i++){
@@ -420,24 +431,24 @@
           });
       },
       reset (name) {
-        //this.$refs[name].resetFields();
-        this.formItem = {
-          single: false,
-          pageIndex:1,
-          pageSize:20,
-          custName:'',//客户名称
-          custId:'',//客户编号
-          brandName:'',//主营品牌
-          serviceList: [],//主营品牌list
-          area:'',//客户地区
-          cityId:"",
-          countyId:"",
-          typeId:'',//客户类别
-          clientLabel:'',//客户标签
-          status:"",//审核状态
-          staff:'',//负责员工
-          operation:'',//操作
-        };  
+        this.$refs[name].resetFields();
+        // this.formItem = {
+        //   single: false,
+        //   pageIndex:1,
+        //   pageSize:20,
+        //   custName:'',//客户名称
+        //   custId:'',//客户编号
+        //   brandName:'',//主营品牌
+        //   serviceList: [],//主营品牌list
+        //   area:'',//客户地区
+        //   cityId:"",
+        //   countyId:"",
+        //   typeId:'',//客户类别
+        //   clientLabel:'',//客户标签
+        //   status:"",//审核状态
+        //   staff:'',//负责员工
+        //   operation:'',//操作
+        // };  
       },
       provinceChange(value){//省列表change事件
         this.formItem.countyId="";
@@ -485,7 +496,6 @@
       InfoList(value){
         this.$http.get(config.urlList.getCustList+"?pId="+value+"&pageSize=100"). then((res)=>{
             if(res.data.errorCode===0){
-              // console.log(res.data.result);
               this.tableData = res.data.result ;            
             }
             else {

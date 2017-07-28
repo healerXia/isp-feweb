@@ -21,7 +21,9 @@ const DemoZhoufeng = (resolve) => require(['../pages/demos/DemoZhoufeng.vue'], r
 //客户模块
 const CreateUser  = (resolve) => require(['../pages/userModule/createUser/CreateUser'], resolve);
 const CustDetail  = (resolve) => require(['../pages/userModule/custDetail/CustDetail'], resolve);
+const CompetitorList  = (resolve) => require(['../pages/userModule/competitorList/CompetitorList'], resolve);
 const CustList = (resolve) => require(['../pages/userModule/custList/CustList'], resolve);
+
 
 
 
@@ -50,8 +52,6 @@ const ApprovalManagement = (resolve) => require(['../pages/approval/approvalMana
 const AuditList = (resolve) => require(['../pages/approval/auditList/AuditList'], resolve);
 
 const ViewPercenter = (resolve) =>  require(['../pages/personalCenter/view/View'], resolve);
-const EditPercenter = (resolve) =>  require(['../pages/personalCenter/editInfo/EditInfo'], resolve);
-// const createChain = (resolve) => require('[../pages/approval/createUser/createUser]', resolve);
 
 
 // demo
@@ -145,6 +145,11 @@ const routes = [
                 component: CustList
             },
             {
+                path: 'competitorList',
+                name: 'competitorList',
+                component: CompetitorList
+            },
+            {
                 path: 'setUpDepartment',
                 name: 'setUpDepartment',
                 component: setUp
@@ -213,11 +218,6 @@ const routes = [
                 path: 'viewPercenter',
                 name: 'ViewPercenter',
                 component: ViewPercenter
-            },
-            {
-                path: 'editPercenter',
-                name: 'EditPercenter',
-                component: EditPercenter
             }
         ]
     },

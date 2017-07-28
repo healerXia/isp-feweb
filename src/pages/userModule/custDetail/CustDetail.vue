@@ -1,14 +1,17 @@
 <template lang="html">
   <div class="custDetail">
       <div class="menu">
-        <span class="menu_item" :class="{active:show.showBaseMess}" @click="tabCheck">
+        <span class="menu_item active">
           基本信息
         </span>
-        <span class="menu_item" :class="{active:show.competMess}" @click="tabCheck">
-          竞品信息
+        <span class="menu_item">
+          <router-link
+            :to="{path:'competitorList',query:{id:$router.currentRoute.query.id}}" >
+              竞品信息
+          </router-link>
         </span>
       </div>
-      <div class="content pT30">
+      <div class="content">
         <div class="title pT30">
           <h1 class="MR15">客户信息</h1>
           <router-link
@@ -197,7 +200,7 @@
                 <span>所属4S：</span>
                 <span class="liWid">{{custInfo.foursName}}</span>
               </li>
-              <li>
+              <li v-if="custInfo.subclassId!=3">
                 <span>所属厂商：</span>
                 <span class="liWid">{{custInfo.custPName}}</span>
               </li>
@@ -582,13 +585,20 @@
               <tr v-for="(item,index) in bankTable.tableData">
                 <td>{{index+1}}</td>
                 <td v-for="key in bankTable.tableKey">
-                  <span v-if="key=='time'">{{item.beginTime}}-{{item.endTime}}</span>
+                  <span v-if="key=='createTime'">{{item.createTime.substring(0,11)}}</span>
                   <span v-else>{{item[key]}}</span>                  
                 </td>
               </tr>
             </tbody>
           </table>
-          <Page :total="100" class="MT20" size="small" @on-change="bankPageChange"></Page>
+          <Page 
+            class="MT20" 
+            :total="brandPage.totalPages"
+            :current="brandPage.current"
+            :page-size="5"
+            size="small"
+            @on-change="bankPageChange"
+           ></Page>
         </div>
         <div slot="footer" class="footer">             
         </div>
@@ -634,9 +644,7 @@
             imgPath:""
           },
           show:{
-            showLicence:false,
-            showBaseMess:true,
-            competMess:false,           
+            showLicence:false,          
           },
           custInfo:{//都有            
             custName:"",//客户名称+ 
@@ -807,11 +815,19 @@
           if(typeId!=5){//三个上传
             this.show.showLicence=true
             this.$http.post(config.urlList.custBankAccount,//获取纳税纳税资质证明
-              {custId:id,pageSize:10,pageIndex:1},
+              {custId:id,pageSize:5,pageIndex:1},
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
                   if(res.data.result!=null){
+                    let createTime=res.data.result.custBankAccountList[0].createTime       
+                    let arr=[]
+                    for(let i=0;i<res.data.result.custBankAccountList.length;i++){
+                      if(res.data.result.custBankAccountList[i].createTime==createTime){
+                        arr.push(res.data.result.custBankAccountList[i])
+                      }
+                    }   
+                    res.data.result.custBankAccountList=arr
                     this.bankAccount=res.data.result 
                   }                
               }
@@ -824,11 +840,17 @@
             }).catch((res)=>{})
 
             this.$http.post(config.urlList.custBankAccountHistory,//获取纳税纳税资质历史
-              {custId:id,pageSize:10,pageIndex:1},
+              {custId:id,pageSize:5,pageIndex:1},
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
-                  console.log(res.data.result)               
+                  this.bankTable.tableData= res.data.result.resultList 
+                  this.bankPage.current=1
+                  this.bankPage.totalPages=res.data.result.totalCount
+                  for(let i=0;i<this.bankTable.tableData.length;i++){
+                    this.bankTable.tableData[i].operating="lily"
+                    this.bankTable.tableData[i].notes="lily"
+                  }      
               }
               else {
                 this.$Modal.info({
@@ -844,7 +866,7 @@
               ).then((res)=>{
               if(res.data.errorCode===0){
                 if(res.data.result.resultList.length>=1){
-                  this.brandPage.pageIndex=res.data.result.pageNo
+                  this.brandPage.current=res.data.result.pageNo
                   this.brandPage.totalPages=res.data.result.totalCount
 
                   for(let i=0;i<res.data.result.resultList.length;i++){
@@ -878,7 +900,7 @@
               ).then((res)=>{
               if(res.data.errorCode===0){
                 if(res.data.result.resultList.length>=1){
-                  this.busiPage.pageIndex=res.data.result.pageNo
+                  this.busiPage.current=res.data.result.pageNo
                   this.busiPage.totalPages=res.data.result.totalCount
 
                   this.businessLicense=res.data.result.resultList[0]
@@ -962,15 +984,6 @@
               
           }
         },
-        tabCheck(){
-          if(this.show.showBaseMess==true){
-            this.show.showBaseMess=false
-            this.show.competMess=true
-          }else if(this.show.showBaseMess==false){
-            this.show.showBaseMess=true
-            this.show.competMess=false
-          }
-        },
         showHistory(index){
           if(index=='1'){
             this.modal.showModal=true;
@@ -1005,9 +1018,7 @@
                   for(let i=0;i<this.businessTable.tableData.length;i++){
                     if(this.businessTable.tableData[i].beginTime){
                       this.businessTable.tableData[i].beginTime=this.businessTable.tableData[i].beginTime.substring(0,11)
-                    }
-                    
-                                      
+                    }                                      
                     if(this.businessTable.tableData[i].endTime!="永久"&&this.businessTable.tableData[i].endTime){                    
                       this.businessTable.tableData[i].endTime=this.businessTable.tableData[i].endTime.substring(0,11)
                     }
@@ -1032,7 +1043,7 @@
             ).then((res)=>{
             if(res.data.errorCode===0){
               if(res.data.result.resultList.length>=1){
-                this.brandPage.pageIndex=res.data.result.pageNo
+                this.brandPage.current=res.data.result.pageNo
                 this.brandPage.totalPages=res.data.result.totalCount
 
                 for(let i=0;i<res.data.result.resultList.length;i++){
@@ -1053,7 +1064,26 @@
           }).catch((res)=>{})
         },
         bankPageChange(index){//纳税资质
-          console.log(index)
+          this.$http.post(config.urlList.custBankAccountHistory,//获取纳税纳税资质历史
+            {custId:id,pageSize:5,pageIndex:1},
+            {emulateJSON:true}
+            ).then((res)=>{
+            if(res.data.errorCode===0){
+                this.bankTable.tableData= res.data.result.resultList 
+                this.bankPage.current=1
+                this.bankPage.totalPages=res.data.result.totalCount
+                for(let i=0;i<this.bankTable.tableData.length;i++){
+                  this.bankTable.tableData[i].operating="lily"
+                  this.bankTable.tableData[i].notes="lily"
+                }      
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+          }).catch((res)=>{})
         },
         showSalveDialog(){
           this.modal.showModal=false

@@ -26,8 +26,8 @@
 				li{float: left;color: #7B8497;width: 500px;margin-bottom: 6px}
 			}
 		}
-		
-		
+
+
 		.totalPrice{
 			text-align: right;
 			width: 100%;
@@ -103,10 +103,53 @@
 		thead{
 			background-color: #F9FAFC ;
 		}
-		td{ 
+		td{
 			padding: 5px 30px;
 			border:#DEE1E5 solid 1px;
 		}
 	}
-	
+
+	.operation {
+		.operation-title {
+			height: 56px;
+			background: #F9FAFC;
+			height: 56px;
+		    line-height: 56px;
+		    font-size: 14px;
+		    color: #333;
+		    padding-left: 20px;
+		}
+
+
+		textarea {
+			resize:none;
+		}
+
+		.saveNext, .save {
+	        margin-right: 20px;
+	        width: 120px;
+	        height: 38px;
+	        background: #4373F3;
+	        border-radius: 2px;
+	        border-color: #4373F3;
+
+	        &:hover {
+	            opacity: 0.9;
+	        }
+	    }
+
+	    .cancel {
+	        width: 120px;
+	        height: 38px;
+	        background: #484E58;
+	        border-radius: 2px;
+	        color: #fff;
+	        border-color: #484E58;
+
+	        &:hover {
+	            opacity: 0.9;
+	        }
+	    }
+	}
+
 }

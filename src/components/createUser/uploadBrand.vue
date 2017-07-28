@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="brand">
-    <Button type="primary" class="btn bg4373F3" @click="openDialog">上传</Button>
+    <span class="upBtn" @click="openDialog">上传</span>
     <div class="mess_show" v-show="showMessBox">
      <!--  <div class="mess_title">品牌授权书</div> -->
       <div class="mess_con">
@@ -98,7 +98,7 @@ export default {
     }
   },
   created(){
-    this.$http.get('/isp-kongming-cust/basic/getBrand?pageSize=10&name='+this.uploadBrand.brandName).then((res) => {//主营品牌
+    this.$http.get('/isp-kongming/basic/getBrand?pageSize=10&name='+this.uploadBrand.brandName).then((res) => {//主营品牌
       if(res.data.errorCode===0){
         this.brandOption=res.data.result.splice(0,10);
         this.brandLoad=false
@@ -128,7 +128,7 @@ export default {
       this.uploadBrand.brandName=value.label;
     },
     brandChoose(query){
-      this.$http.get('/isp-kongming-cust/basic/getBrand?pageSize=10&name='+query).then((res) => {//主营品牌
+      this.$http.get('/isp-kongming/basic/getBrand?pageSize=10&name='+query).then((res) => {//主营品牌
         if(res.data.errorCode===0){
           this.brandOption=res.data.result.splice(0,10);
           this.brandLoad=false
@@ -148,7 +148,7 @@ export default {
       this.$refs[name].validate((valid) => {
           if (valid) {
               this.uploadBrand.custId=this.$router.currentRoute.query.id;
-              this.$emit('uploadbrand',this.uploadBrand)
+              this.$emit('uploadbrand',this.uploadBrand,'upload')
               this.modal1=false
           } else {
             this.$Modal.error({
@@ -189,7 +189,6 @@ export default {
     editData:{
       handler:function(){
         this.storeEditDate=this.editData;
-        console.log(1111111)
         if(this.storeEditDate.length>=1){
           this.showMessBox=true
         }
@@ -232,6 +231,19 @@ export default {
     .uperror{padding-left:130px;width:100%;display:block}
   }
   .footer{text-align:center;}
+}
+.upBtn{
+  text-align: center; 
+  display: inline-block;
+  width: 120px !important;
+  height: 38px !important;
+  background-color:white !important;
+  border: 1px solid #4373F3;
+  line-height: 38px !important;
+  border-radius:2px;
+  font-size: 14px;
+  color: #4373F3;
+  cursor: pointer
 }
 .brand{ 
    overflow: hidden;

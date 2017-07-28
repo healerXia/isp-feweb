@@ -1,22 +1,22 @@
 <template lang="html">
     <div class="pay">
-        <Button type="primary" class="btn bg4373F3" @click="open">上传</Button>
+        <span class="upBtn" @click="open">上传</span>
         <div class="mess_show" v-show="showMessBox">
           <!-- <div class="mess_title">纳税资质</div> -->
           <div class="mess_con">
             <ul>
-              <li class="liHeight">
+              <li class="item">
                 <span>纳税人识别号：</span>
                 <span>
                 {{storeEditDate.taxCode!=""?storeEditDate.taxCode:""}}
                 </span>
               </li>
-              <li class="liHeight">
+              <li class="item">
                 <span>有效期：</span><span>
                 {{storeEditDate.taxCode!=""?storeEditDate.validTime:""}}
                 </span>
               </li>
-              <li class="liHeight">
+              <li class="item">
                 <span>资质状态：</span>
                 <span>
                 {{storeEditDate.taxCode!=""?storeEditDate.status:"待审核"}}
@@ -24,13 +24,13 @@
               </li>
               <li v-for="(item,index) in storeEditDate.custBankAccountList" v-if="item.bank">
                 <ul>
-                  <li class="liHeight"><span>开户银行({{index+1}})：</span><span>{{item.bank}}</span></li>
-                  <li class="liHeight"><span>开户账号({{index+1}})：</span><span>{{item.bankAccount}}</span></li>
-                  <li class="liHeight"><span>电话({{index+1}})：</span><span>{{item.phone}}</span></li>
-                  <li class="liHeight"><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
+                  <li class="itemHeight"><span>开户银行({{index+1}})：</span><span>{{item.bank}}</span></li>
+                  <li class="item"><span>开户账号({{index+1}})：</span><span>{{item.bankAccount}}</span></li>
+                  <li class="item"><span>电话({{index+1}})：</span><span>{{item.phone}}</span></li>
+                  <li class="item"><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
                 </ul>
               </li>
-               <li>
+               <li class="item">
                 <span>附件：</span><span class="salve" @click="showPic">1111</span>
               </li>
             </ul>
@@ -40,7 +40,7 @@
             v-model="modal1"
             title="上传纳税资质"
             >
-            <Form ref="uploadPay" :model="uploadPay" :rules="checkValue" :label-width="120">
+            <Form ref="uploadPay" :model="uploadPay" :rules="checkValues" :label-width="120">
               <Form-item label="纳税人识别号:" prop="taxCode">
                 <Input v-model="uploadPay.taxCode" placeholder="请填写纳税人识别号" class='fl'></Input>
                 <span v-show="judgeErr.taxCode_err_show" class="colorRed ML5">
@@ -154,8 +154,11 @@ export default {
               }
             }
           ],
-          checkValue:{
-            taxCode:[{required:true,message:'请输入纳税人识别号',trigger:'blue',type:"string"}]
+          checkValues:{
+            taxCode:[
+              {required:true,message:'请输入纳税人识别号',trigger:'blue'},
+              {max:30,message:'不能超过30个字符',trigger:'blue'},
+            ]
           },
           storeEditDate:{},
         }
@@ -163,7 +166,6 @@ export default {
     created(){
       this.storeEditDate=this.editData
       if(this.storeEditDate.taxCode){
-        console.log(this.storeEditDate.taxCode)
         this.showMessBox=true
       }
     },
@@ -404,7 +406,7 @@ export default {
               if(check_account&&check_tax){
                 this.getCustBankAccountList();
                 this.uploadPay.custId=this.$router.currentRoute.query.id;    
-                this.$emit('uploadpay',this.uploadPay)   
+                this.$emit('uploadpay',this.uploadPay,"upload")   
                 this.modal1=false
               }
              
@@ -438,38 +440,67 @@ export default {
 <style lang="scss">
 .pay{
   .mess_show{
-        margin-top: 20px;
-        width:400px;
-        background: #F9FAFC;
+      margin-top: 20px;
+      width:400px;
+      background: #F9FAFC;
+      overflow: hidden;
+      border-radius: 2px;
+      .mess_title{
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        border-bottom:1px solid #ccc;
+        text-align:center;
+      }
+      .salve{font-size:12px;color:blue;cursor:pointer}
+      .mess_con{
+        width: 100%;
         overflow: hidden;
-        border-radius: 2px;
-        .mess_title{
-          width: 100%;
-          height: 40px;
-          line-height: 40px;
-          border-bottom:1px solid #ccc;
-          text-align:center;
+        padding: 10px 20px;
+        // ul{
+        //   width:100%;
+        //   li{
+        //     float: left;
+        //     width: 100%;
+        //     span{
+        //       max-width: 250px;
+        //       display:block;
+        //       float:left;
+        //     }
+        //   }
+        //   .liHeight{height:23px}
+        // }
+        .liHeight{height:23px}
+        .item{
+        width: 100%;
+        float: left;
+        height: 27px;
+        line-height: 27px;
+        span{line-height:27px}
         }
-        .salve{font-size:12px;color:blue;cursor:pointer}
-        .mess_con{
+        .itemLH{line-height:10px;span{line-height:27px}}
+        .itemHeight{
           width: 100%;
+          float: left;
           overflow: hidden;
-          padding: 10px 20px;
-          ul{
-            width:100%;
-            li{
-              float: left;
-              width: 100%;
-              span{
-                max-width: 250px;
-                display:block;
-                float:left;
-              }
-            }
-            .liHeight{height:23px}
-          }
+          span:first-child{height:27px;display:inline-block;float:left;line-height:27px}
+          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px}
         }
+      }
   }
+}
+.upBtn{
+  text-align: center; 
+  display: inline-block;
+  width: 120px !important;
+  height: 38px !important;
+  background-color:white !important;
+  border: 1px solid #4373F3;
+  line-height: 38px !important;
+  border-radius:2px;
+  font-size: 14px;
+  color: #4373F3;
+  cursor: pointer
 }
 .payDialog {
     .ivu-modal-content{
