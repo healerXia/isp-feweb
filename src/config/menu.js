@@ -116,6 +116,12 @@ const menu =  [
                 index: '6-1',
                 icon: '',
                 path: 'wait'
+            },
+            {
+                name: '审批列表',
+                index: '6-2',
+                icon: '',
+                path: 'auditList'
             }
         ]
     },
@@ -200,6 +206,20 @@ const menu =  [
                 index: '9-3',
                 icon: '',
                 path: 'projectList'
+            }
+        ]
+    },
+    {
+        name: '个人中心',
+        path: '',
+        index: '10',
+        icon: 'icon-customer',
+        subNav: [
+            {
+                name: '查看个人中心',
+                index: '10-1',
+                icon: '',
+                path: 'viewPercenter'
             }
         ]
     }

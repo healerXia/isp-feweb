@@ -5,10 +5,7 @@
                 <div class='hasNoOrder'>
                     <div class="title MB20 MT15">
                       <span class="MR15">我的个人信息</span>
-                      <router-link
-                        :to="{path:'resource',query:{id:$router.currentRoute.query.id}}" >
-                          编辑
-                      </router-link>
+                      <a href="javascript:;" @click='editJump'>编辑</a>
                     </div>
                 </div>
             </div>
@@ -34,11 +31,11 @@
                     </li>
                     <li class="fl">
                         <label for="" class="fl">所属部门：</label>
-                        <span class="fl">{{info.deptName}}</span>
+                        <span class="fl">{{info.fullPath}}</span>
                     </li>
                     <li class="fl">
                         <label for="" class="fl">员工状态：</label>
-                        <span class="fl">{{info.status}}</span>
+                        <span class="fl">{{info.statusStr}}</span>
                     </li>
                     <li class="fl">
                         <label for="" class="fl">职位：</label>
@@ -54,7 +51,7 @@
                     </li>
                     <li class="fl">
                         <label for="" class="fl">性别：</label>
-                        <span class="fl">5951</span>
+                        <span class="fl">{{info.sexStr}}</span>
                     </li>
                     <li class="fl">
                         <label for="" class="fl">联系电话：</label>
@@ -66,7 +63,7 @@
                     </li>
                     <li class="fl">
                         <label for="" class="fl">代理审批人：</label>
-                        <span class="fl">5951</span>
+                        <span class="fl">{{info.agentStr}}</span>
                     </li>
                 </ul>
             </div>
@@ -80,14 +77,14 @@
                 </thead>
                 <tbody>
                     <tr v-for='list in tableData'>
-                        <td>{{list.userName}}</td>
+                        <td>{{list.username}}</td>
                         <td>{{list.employeeId}}</td>
                         <td>{{list.displayName}}</td>
-                        <td>{{list.deptName}}</td>
+                        <td>{{list.fullPath.split(',').join('-')}}</td>
                         <td>{{list.position}}</td>
                         <td>{{list.employeeType}}</td>
                         <td>{{list.mobile}}</td>
-                        <td>{{list.status}}</td>
+                        <td>{{list.statusStr}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -113,22 +110,22 @@ export default {
                 pageSize: 10
             },
             totalCount: 0,
-            tableData: []
+            tableData: [],
+            employeeId: '',
+            managerId: ''
         }
     },
     mounted() {
         this.render();
-        this.initTable();
     },
     methods: {
         render() {
-            this.$http.get('/isp-process-server/employee/getModel', {
-                params: {
-                    employeeId: 10001
-                }
-            }).then((res) => {
+            this.$http.get('/isp-process-server/employee/getModel').then((res) => {
                 if (res.data.errorCode == 0) {
                     this.info = Object.assign({}, res.data.result);
+                    this.employeeId = this.info.employeeId;
+                    this.managerId = this.info.managerId;
+                    this.initTable();
                 }
                 else {
 
@@ -140,7 +137,7 @@ export default {
         initTable() {
             this.$http.get('/isp-process-server/employee/getPageList', {
                 params: {
-                    managerId: 10001,
+                    managerId: this.employeeId,
                     pageIndex: this.paging.pageIndex,
                     pageSize: this.paging.pageSize
                 }
@@ -163,6 +160,9 @@ export default {
         changePageSize(n) {
             this.paging.pageSize = n;
             this.initTable();
+        },
+        editJump() {
+            this.$router.push({path: 'editPercenter', query: {id: this.employeeId}})
         }
 
     }
@@ -194,7 +194,7 @@ export default {
         .info-list {
             font-size: 12px;
             color: #7B8497;
-            line-height: 16px;
+            line-height: 20px;
 
             li {
                 width: 500px;
@@ -232,7 +232,7 @@ export default {
                 font-size: 14px;
                 color: #7B8497;
                 letter-spacing: 0.52px;
-            
+
                 &:nth-child(1) {
                     padding: 0 30px 0 30px;
                 }

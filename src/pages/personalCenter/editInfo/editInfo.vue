@@ -1,10 +1,9 @@
 <template lang="html">
   <div id="edit">
        <p class="title">基本信息</p>
-
        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
            <Form-item label="员工姓名" prop="userName">
-               <span>{{formValidate.userName}}</span>
+               <span>{{formValidate.displayName}}</span>
            </Form-item>
             <Form-item label="联系电话" prop="phone">
                 <Input v-model="formValidate.phone" placeholder="请输入联系电话" class='text fl'></Input>
@@ -12,18 +11,15 @@
             <Form-item label="移动电话" prop="mobile">
                 <Input v-model="formValidate.mobile" placeholder="请输入移动电话" class='text fl'></Input>
             </Form-item>
-            <Form-item label="所属部门" prop="deptName">
-                <Select
-                    v-model="formValidate.deptId"
-                    filterable
-                    remote
-                    :remote-method="remoteMethod"
-                    :loading="loading"
-                    @on-change='selDept'
-                    class='text fl'>
-                    <Option v-for="item in deptList" :value="item.id" :key="item.id">{{item.name}}</Option>
-                </Select>
-                <span v-if='deptName' class='fl ML10 info'>[{{deptName}}]</span>
+            <Form-item label="所属部门" prop='dept'>
+                <div id='deptName'>
+                    <select name="sample"  class="js-example-basic-multiple text fl deptName" style="float: left">
+                        <option value=""></option>
+                        <option v-for="item in deptListAll" :value="item.id" :key="item.id">{{item.name}}</option>
+                    </select>
+                    <span v-if='deptName' class='fl ML10 info'>[{{deptName}}]</span>
+                    <span class='error fl' v-show='dept'>所属部门不能为空</span>
+                </div>
             </Form-item>
        </Form>
 
@@ -71,6 +67,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import 'select2';
 import 'select2/dist/js/i18n/zh-CN.js';
 import 'select2/dist/css/select2.css';
@@ -88,20 +85,28 @@ export default {
             }
         };
         return  {
+            employeeId: '',
             tdIndex: 0,
             submitStatus: false,
             loading: false,
             formValidate: {
+                displayName: '',
                 userName: '',
                 phone: '',
                 mobile: '',
-                deptId: ''
+                deptId: '',
+                dept: '11'
             },
             date1: {
                 disabledDate: this.disStart
             },
             date2: {
                 disabledDate: this.disEnd
+            },
+            initList: {
+                employeeId: '',
+                agentEmployeeId: '',
+                formTypeId: ''
             },
             deptListAll: [],
             deptList: [],
@@ -110,6 +115,7 @@ export default {
             formTypeList: [],
             formTypeListAll: [],
             deptName: '',
+            fullName: '',
             tableList: [
                 {
                     // 代理人工号
@@ -127,7 +133,7 @@ export default {
                      {required: true, message: '请填写移动电话', trigger: 'change'},
                      {validator: validateMobile, trigger: 'change'}
                 ],
-                deptId: [
+                dept: [
                     { required: true, message: '请选择所属部门', trigger: 'change' }
                 ],
                 phone: [
@@ -137,9 +143,64 @@ export default {
         }
     },
     mounted() {
-        this.$http.get('/isp-process-server/employee/getModel').then((res) => {
+        this.employeeId = this.$router.currentRoute.query.id;
+
+        this.$http.get('/isp-process-server/employee/getModel', {
+            employeeId: this.employeeId
+        }).then((res) => {
             if (res.data.errorCode == 0) {
-                
+                let data = res.data.result;
+                this.formValidate.displayName = data.displayName;
+                this.formValidate.username = data.username;
+                this.formValidate.phone = data.phone;
+                this.formValidate.mobile = data.mobile;
+                this.formValidate.deptId = data.deptId;
+
+                // 初始化所属部门
+                // if (this.deptListAll.length > 0) {
+                //     for (let i = 0; i < this.deptListAll.length; i++) {
+                //         if (this.formValidate.deptId == this.deptListAll[i].id) {
+                //             this.deptList.push(this.deptListAll[i]);
+                //             this.fullName = this.deptListAll[i].name;
+                //             this.deptName = this.deptListAll[i].deptName;
+                //             document.querySelector('.deptName .ivu-select-input').value = this.deptListAll[i].deptName;
+                //             break;
+                //         }
+                //     }
+                //
+                //     setTimeout(() => {
+                //         document.querySelector('.deptName .ivu-select-input').value = this.deptName;
+                //     }, 100)
+                // }
+
+                // 初始化代理审批人
+                let agentList = data.agentBeanList;
+                this.tableList = [];
+                for (let i = 0; i < agentList.length; i++) {
+                    this.tableList.push({
+                        // 代理人工号
+                        agentEmployeeId: agentList[i].agentEmployeeId,
+                        // 开始时间
+                        startDate: agentList[i].startDateStr,
+                        // 结束时间
+                        endDate: agentList[i].endDateStr,
+                        // 流程类型id
+                        formTypeId: agentList[i].formTypeId
+                    })
+                }
+
+                setTimeout(() => {
+                    for (let i = 0; i < agentList.length; i++) {
+                        $(`#employee${i}`).select2({
+                            allowClear:true,
+                            placeholder: "请选择",
+                            theme: "bootstrap",
+                            language: 'zh-CN',
+                        }).val(`${agentList[i].agentEmployeeId}`).trigger("change");
+                    }
+                })
+
+
             }
             else {
                 this.$Modal.info({
@@ -160,15 +221,6 @@ export default {
         this.initDept();
         this.initEmoloyee();
         this.initProcess();
-
-        for (let i = 0; i < this.tableList.length; i++) {
-            $(`#employee${i}`).select2({
-                allowClear:true,
-                placeholder: "请选择",
-                theme: "bootstrap",
-                language: 'zh-CN',
-            });
-        }
     },
     methods: {
         clickTd(index) {
@@ -227,7 +279,40 @@ export default {
                             name: item.fullPath,
                             deptName: item.deptName
                         }
-                    })
+                    });
+
+                    if (this.formValidate.deptId) {
+
+                        for (let i = 0; i < this.deptListAll.length; i++) {
+                            if (this.formValidate.deptId == this.deptListAll[i].id) {
+                                this.deptList.push(this.deptListAll[i]);
+                                this.deptName = this.deptListAll[i].deptName;
+                                this.fullName = this.deptListAll[i].name;
+
+                                break;
+                            }
+                        }
+
+                        setTimeout(() => {
+                            $(`.deptName`).select2({
+                                allowClear:true,
+                                placeholder: "请选择",
+                                theme: "bootstrap",
+                                language: 'zh-CN',
+                            }).val(this.formValidate.deptId).trigger("change");
+
+                            $(`.deptName`).on('change', () => {
+                                let id = $('.deptName').select2('data')[0].id;
+                                this.selDept(id);
+                                if (!id) {
+                                    this.deptName = '';
+
+                                }
+                            })
+
+                            document.querySelector('#deptName .select2').style.float = 'left';
+                        }, 100)
+                    }
                 }
 
             }).catch((err) => {
@@ -247,6 +332,17 @@ export default {
                         return {
                             id: item.employeeId,
                             name: item.displayName
+                        }
+                    })
+
+                    setTimeout(() => {
+                        for (let i = 0; i < this.tableList.length; i++) {
+                            $(`#employee${i}`).select2({
+                                allowClear:true,
+                                placeholder: "请选择",
+                                theme: "bootstrap",
+                                language: 'zh-CN',
+                            }).val(`${this.tableList[i].agentEmployeeId}`).trigger("change");
                         }
                     })
                 }
@@ -289,8 +385,16 @@ export default {
                 }
             },
         handleSubmit (name, status) {
+
             this.$refs[name].validate((valid) => {
                 if (valid) {
+
+                    this.formValidate.deptId = $('.deptName').select2('data')[0].id;
+                    if (!this.formValidate.deptId) {
+                        document.querySelector('#deptName .error').style.display = 'block';
+                        return false;
+                    }
+
                     if (this.submitStatus) {
                         return false;
                     }
@@ -321,7 +425,7 @@ export default {
                     // 代理审批人
                     let emList = this.tableList.map(item => {
                         return {
-                            employeeId: "1",
+                            employeeId: this.employeeId,
                             // 代理人工号
                             agentEmployeeId: item.agentEmployeeId,
                             // 开始时间
@@ -334,7 +438,7 @@ export default {
                     })
 
                     let submitData = {
-                        "username": 'huox',
+                        "username": this.formValidate.username,
                         "phone": this.formValidate.phone,
                         "mobile": this.formValidate.mobile,
                         "deptId": this.formValidate.deptId,
@@ -367,7 +471,10 @@ export default {
 
                 } else {
                     this.submitStatus = false;
-                    this.$Message.error('表单验证失败!');
+                    this.formValidate.deptId = $('.deptName').select2('data')[0].id;
+                    if (!this.formValidate.deptId) {
+                        document.querySelector('#deptName .error').style.display = 'block';
+                    }
                 }
             })
         },
@@ -377,7 +484,7 @@ export default {
                 content: '是否取消当前操作并跳转至列表页？',
                 cancel: '取消',
                 onOk: () => {
-                    this.$router.push('chainManagement');
+                    this.$router.push('viewPercenter');
                 }
             });
         },
@@ -404,9 +511,10 @@ export default {
             })
         },
         selDept(data) {
-            for (let i = 0; i < this.deptList.length; i++) {
-                if (data == this.deptList[i].id) {
-                    this.deptName = this.deptList[i].deptName;
+            console.log(data);
+            for (let i = 0; i < this.deptListAll.length; i++) {
+                if (data == this.deptListAll[i].id) {
+                    this.deptName = this.deptListAll[i].deptName;
                     return false;
                 }
             }
@@ -425,6 +533,7 @@ export default {
 <style lang="scss" scoped>
 #edit {
     padding: 50px 30px;
+    min-width: 1200px;
 
     .title {
         font-size: 14px;
@@ -515,6 +624,18 @@ export default {
 
         &:hover {
             opacity: 0.9;
+        }
+    }
+
+    #deptName {
+        .error {
+            margin-left: 10px;
+            color: #EF6464;
+            display: none;
+
+            &.active {
+                display: block;
+            }
         }
     }
 }
