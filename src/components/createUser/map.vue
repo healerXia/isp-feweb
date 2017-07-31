@@ -155,8 +155,8 @@ export default {
       float: left;
       width: 50px;
       height: 38px;
-      line-height: 40px;
-      background: blue;
+      line-height: 38px;
+      background: #3C6FFB !important;
       color: white;
       text-align: center;
       cursor:pointer;

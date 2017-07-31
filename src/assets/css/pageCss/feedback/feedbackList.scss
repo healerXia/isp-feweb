@@ -1,0 +1,160 @@
+.feedback{
+	$height: 38px;
+	$formWidth:280px;
+    .searchOrder{
+		background-color: #F9FAFC;
+		padding: 50px 0 50px 30px;
+		overflow: hidden;
+		ul{
+			width: 100%;
+			li{
+				width: 100%;
+				float: left;
+				div.inputBox{
+					float: left;
+					height: $height;
+					.formLabel{
+						height: $height;line-height: 32px;
+						display: inline-block;
+						float: left;text-align: right;
+						padding-right: 15px;
+						font-size: 12px;
+						color: #7B8497;
+						width: 63px;
+					}
+					.space{
+					    width: 40px;
+					    display: inline-block;
+					    text-align: center;
+					    line-height:$height;
+					    height: $height;
+					    float: left;
+					    font-size: 12px;
+					}
+					input{height: $height;}
+					.btns{
+						display: block;
+						width: 120px !important;
+						height: $height !important;
+						color: #fff;
+						background: #3C6FFB ;
+						border-radius: 2px;
+						border:none;
+						line-height: 38px;
+						text-align: center;
+						cursor: pointer;
+					}
+				}
+			}
+		}
+		.ivu-input-wrapper{//改变input
+			display: inline-block;
+			width: $formWidth;
+			float: left;
+		}
+		.ivu-checkbox-group{//改变checkBox
+			line-height: $height
+		}
+		.ivu-select{width: $formWidth;}
+		.ivu-select-selection{//改变select
+			display: inline-block;
+			width: $formWidth;
+			float: left;
+		}
+		.ivu-date-picker{float: left}
+		.ivu-date-picker-editor,.ivu-date-picker-editor input{
+			width: 221px
+		}
+	}
+	.feedbackTable{
+		padding:30px;
+		width: 100%;
+		.addBtn{
+			margin-top: 30px;
+			display: inline-block;
+			width: 120px;
+			height: 32px;
+			text-align: center;
+			line-height: 32px;
+			background-color: #38BC6E;
+			border-radius: 2px;
+			color: #fff;
+			cursor: pointer;
+		}
+		table{
+			margin-top: 30px;
+			width: 100%;
+			border-collapse:collapse;
+			thead{
+				background: #F9FAFC;
+				tr{
+					td{
+						color: #7B8497;
+						min-width: 100px;
+						font-size: 14px;
+						font-weight: normal;
+					}
+					td:last-child{min-width: 80px !important}
+				}
+			}
+			tbody{
+				tr{
+					td{color: #333;height: 56px;padding: 10px 10px}
+					td:last-child{min-width: 80px !important}
+					.href{
+		                font-size:12px;
+		                color:#3D70FB !important;
+		                cursor:pointer;
+		                a{color:#3D70FB !important;}
+		            }
+		            p{	
+		            	overflow: hidden;
+		            	text-overflow: ellipsis;
+					 	display: -webkit-box;
+					 	-webkit-line-clamp: 3;
+					 	-webkit-box-orient: vertical;
+		            }
+				}
+				tr:nth-of-type(even){
+					background-color: #F9FAFC;
+					box-shadow: 0 1px 0 0 #DEE1E5;
+					border-top:1px solid #DEE1E5;
+				}
+			}
+			td{
+				font-size: 12px;
+				min-width: 100px;
+				height: 56px;
+				max-height:70px; 
+				text-overflow:ellipsis;
+				word-wrap: break-word;
+				max-width: 200px;
+				padding: 0 10px
+			}
+		}
+	}
+}
+.add_feed_dialog{
+	.upload{
+      width: 100%;
+      padding-bottom: 20px;
+      .label{
+        display:inline-block;
+        width:120px;
+        height: 38px;
+        line-height: 38px;
+        text-align:right;
+        padding: 10px 12px 10px 0;
+      }
+      .ivu-upload{
+        display:inline-block;
+        .ivu-upload-list{
+        	display: none
+        }
+      }
+      .uperror{padding-left:130px;width:100%;display:block}
+    }
+    .ivu-checkbox-group{float:left}
+    .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px} 
+    .ivu-select,.ivu-input-wrapper{width: 360px !important;float:left}
+}

@@ -26,9 +26,18 @@
         font-size: 12px;
         letter-spacing: 0.44px;
         padding-left:8px;
-        ::-ms-input-placeholder{color:red}
-        ::-webkit-input-placeholder{color:red}
-        ::-moz-placeholder{color:red}
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+          color: #7B8497 ; opacity:1; 
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+          color: #7B8497 ;opacity:1;
+        }
+        input:-ms-input-placeholder{
+          color: #7B8497 ;opacity:1;
+        }
+        input::-webkit-input-placeholder{
+          color: #7B8497 ;opacity:1;
+        }
       }
       Cascader{
         width:268px;

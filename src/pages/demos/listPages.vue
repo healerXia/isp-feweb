@@ -45,7 +45,7 @@
         </Select>
       </Form-item>
       <Form-item label="客户类别">
-        <Select v-model="formItem.typeId" placeholder="请选择客户类别" clearable>
+        <Select v-model="formItem.typeList" placeholder="请选择客户类别" clearable>
           <Option v-for="item in typeOption" :value="item.value" :key="new Date()">{{ item.name }}</Option>
         </Select>
       </Form-item>
@@ -384,7 +384,9 @@ body{
           area:'',//客户地区
           cityId:"",
           countyId:"",
-          typeId:'',//客户类别
+          typeList:"",//客户类别
+          typeId:'',
+          subclassId:'',
           clientLabel:'',//客户标签
           status:"",//审核状态
           staff:'',//负责员工
@@ -692,8 +694,8 @@ body{
         this.formItem.pageSize=20
         let str=this.toParam(this.formItem);
         let obj ={}
-        if(this.formItem.typeId!=""){
-          obj.typeId=this.formItem.typeId
+        if(this.formItem.typeList!=""){
+          obj.typeId=this.formItem.typeList
         }
         if(this.formItem.custName!=""){
           obj.custName=this.formItem.custName
@@ -750,6 +752,7 @@ body{
           area:'',//客户地区
           cityId:"",
           countyId:"",
+          typeList:"",
           typeId:'',//客户类别
           clientLabel:'',//客户标签
           status:"",//审核状态

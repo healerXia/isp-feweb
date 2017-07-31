@@ -177,20 +177,16 @@
             value:2
           },
           {
+            status:'待审核',
+            value:5
+          },
+          {
             status:'审核通过',
             value:3
           },
           {
             status:'已停用',
             value:4
-          },
-          {
-            status:'待审核',
-            value:5
-          },
-          {
-            status:'审核驳回',
-            value:6
           }
         ],
         /*tableData:{
@@ -339,8 +335,6 @@
             tableData[i]['Rstatus']="已停用"
           }else if(tableData[i].status==5){
             tableData[i]['Rstatus']="待审核"
-          }else if(tableData[i].status==6){
-            tableData[i]['Rstatus']="审核驳回"
           }
         }
       },
@@ -348,7 +342,7 @@
       },
       pageChange(num){
         this.$http.post(config.urlList.getCustList,
-        {pageIndex:num,pageSize:10},
+        {pageIndex:num,pageSize:20},
         {emulateJSON:true}
         ).then((res)=>{//获取列表
           if(res.data.errorCode===0){

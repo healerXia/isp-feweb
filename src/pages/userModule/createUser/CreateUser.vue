@@ -891,14 +891,9 @@
               {emulateJSON:true}
               ).then((res)=>{
               if(res.data.errorCode===0){
-                if(res.data.result.resultList.length>=1){
-                  let create_time=res.data.result.resultList[0].createTime;            
+                if(res.data.result.resultList.length>=1){        
                   let arr=[]
-                  for(let i=0;i<res.data.result.resultList.length;i++){
-                    if(res.data.result.resultList[i].createTime==create_time){
-                      arr.push(res.data.result.resultList[i])
-                    }
-                  } 
+                  arr=res.data.result.resultList
                   for(let i=0;i<arr.length;i++){
                     if(arr[i].validTime){
                       arr[i].validTime=arr[i].validTime.substring(0,10);
@@ -1596,7 +1591,7 @@
 
             this.ruleValidate.custName=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
-                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+                {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ]; this.showNeed.custName_show="hasneed";
             this.ruleValidate.typeId=[
                 {required: true, message:'请选择客户类别',trigger:'change',type:"number"}
@@ -1640,7 +1635,7 @@
 
             this.ruleValidate.custName=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
-                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+                {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ]; this.showNeed.custName_show="hasneed"; 
 
             this.ruleValidate.abbrName=[
@@ -1671,7 +1666,7 @@
 
             this.ruleValidate.custName=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
-                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+                {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ];  this.showNeed.custName_show="hasneed"; 
 
             this.ruleValidate.abbrName=[
@@ -1705,7 +1700,7 @@
             ]; this.showNeed.subclassId_show="hasneed"
             this.ruleValidate.custName=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
-                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+                {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ]; this.showNeed.custName_show="hasneed";  
             this.ruleValidate.abbrName=[
                 {required: true, message:'请填写客户简称',trigger:'blur'},
@@ -1744,7 +1739,7 @@
 
             this.ruleValidate.custName=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
-                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+                {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ]; this.showNeed.custName_show="hasneed"; 
 
             this.ruleValidate.abbrName=[
@@ -1779,7 +1774,7 @@
             ]; this.showNeed.subclassId_show="hasneed";
             this.ruleValidate.custName=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
-                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+                {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ]; this.showNeed.custName_show="hasneed";  
             this.ruleValidate.abbrName=[
                 {required: true, message:'请填写客户简称',trigger:'blur'},
@@ -1813,7 +1808,7 @@
 
             this.ruleValidate.custName=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
-                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+                {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ]; this.showNeed.custName_show="hasneed"; 
 
             this.ruleValidate.abbrName=[
@@ -1854,7 +1849,7 @@
 
             this.ruleValidate.custName=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
-                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+                {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ]; this.showNeed.custName_show="hasneed"; 
 
             this.ruleValidate.abbrName=[
@@ -1883,7 +1878,7 @@
             ]; this.showNeed.address_show="hasneed";
             this.ruleValidate.custName=[
                 {required: true, message:'请填写客户名称',trigger:'blur'},
-                {max:25, message:'不能超过25个汉字',trigger:'blur'}
+                {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ];  this.showNeed.custName_show="hasneed";
 
             this.ruleValidate.abbrName=[

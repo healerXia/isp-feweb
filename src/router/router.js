@@ -25,39 +25,49 @@ const CompetitorList  = (resolve) => require(['../pages/userModule/competitorLis
 const CustList = (resolve) => require(['../pages/userModule/custList/CustList'], resolve);
 
 
-
+//意见反馈模块
+const FeedbackList = (resolve) => require(['../pages/feedbackModule/feedbackList/FeedbackList'], resolve);
+const FeedbackHistory = (resolve) => require(['../pages/feedbackModule/feedbackHistory/FeedbackHistory'], resolve);
+const CreateFeedback = (resolve) => require(['../pages/feedbackModule/createFeedback/CreateFeedback'], resolve);
 
 
 
 //个人中心
 const edit = (resolve) => require(['../pages/personalCenter/editInfo/editInfo'],resolve);
-const test = (resolve) => require(['../pages/personalCenter/editInfo/demo'],resolve);
+const staffmanage = (resolve) => require(['../pages/personalCenter/staffmanage/staffmanage'],resolve);
+const staffEdit = (resolve) => require(['../pages/personalCenter/staffEdit/staffEdit'],resolve);
 
 
 
 // 审批链流程
 const setUp = (resolve) => require(['../pages/approval/setUp/SetUp'], resolve);
 const docManagemengt = (resolve) => require(['../pages/approval/docManagement/DocManagement'], resolve);
-const addDoc = (resolve) => require(['../pages/approval/addDoc/AddDoc.vue'], resolve);
+const addDoc = (resolve) => require(['../pages/approval/addDoc/AddDoc'], resolve);
 const department = (resolve) => require(['../pages/approval/department/Department'], resolve);
+const createChain = (resolve) => require(['../pages/approval/createUser/CreateUser'], resolve);
+const chainManagement = (resolve) => require(['../pages/approval/chainManagement/ChainManagement'], resolve);
+const chainConfig = (resolve) => require(['../pages/approval/chainConfig/ChainConfig'], resolve);
+const ApprovalManagement = (resolve) => require(['../pages/approval/approvalManagement/Management'], resolve);
+const AuditList = (resolve) => require(['../pages/approval/auditList/AuditList'], resolve);
+
+
+
 
 //购物车小栗子
 const goodsInfo = (resolve) => require(['../pages/shoppingCart/goodsInfo'], resolve);
 const shoppingCart = (resolve) => require(['../pages/shoppingCart/shoppingCart'], resolve);
 
-const createChain = (resolve) => require(['../pages/approval/createUser/createUser'], resolve);
-const chainManagement = (resolve) => require(['../pages/approval/chainManagement/chainManagement'], resolve);
-const chainConfig = (resolve) => require(['../pages/approval/chainConfig/chainConfig'], resolve);
-const ApprovalManagement = (resolve) => require(['../pages/approval/approvalManagement/management'], resolve);
-const AuditList = (resolve) => require(['../pages/approval/auditList/AuditList'], resolve);
+
 
 const ViewPercenter = (resolve) =>  require(['../pages/personalCenter/view/View'], resolve);
+const EditPercenter = (resolve) =>  require(['../pages/personalCenter/editInfo/editInfo'], resolve);
 
 
 // demo
 const ListPages  = (resolve) => require(['../pages/demos/listPages'], resolve);
 const selectTab = (resolve) => require(['../pages/demos/selectTab'], resolve);
 const fromVal = (resolve) => require(['../pages/demos/formValidate'], resolve);
+const CommoDemo = (resolve) => require(['../pages/demos/common/Common'], resolve);
 
 
 
@@ -170,16 +180,6 @@ const routes = [
                 component: department
             },
             {
-                path: 'edit',
-                name: 'edit',
-                component: edit
-            },
-            {
-                path: 'test',
-                name: 'test',
-                component: test
-            },
-            {
                 path: 'goodsInfo',
                 name: 'goodsInfo',
                 component: goodsInfo
@@ -218,6 +218,36 @@ const routes = [
                 path: 'viewPercenter',
                 name: 'ViewPercenter',
                 component: ViewPercenter
+            },
+            {
+                path: 'editPercenter',
+                name: 'EditPercenter',
+                component: EditPercenter
+            },
+            {
+                path: 'staffmanage',
+                name: 'staffmanage',
+                component: staffmanage
+            },
+            {
+                path: 'staffEdit',
+                name: 'staffEdit',
+                component: staffEdit
+            },
+            {
+                path: 'feedbackList',
+                name: 'feedbackList',
+                component: FeedbackList
+            },
+            {
+                path: 'feedbackHistory',
+                name: 'feedbackHistory',
+                component: FeedbackHistory
+            },
+            {
+                path: 'createFeedback',
+                name: 'createFeedback',
+                component: CreateFeedback
             }
         ]
     },
@@ -226,6 +256,11 @@ const routes = [
         name: 'demo',
         component: Demo,
         children: [
+            {
+                path: 'common',
+                name: 'CommoDemo',
+                component: CommoDemo
+            },
             {
                 path: 'form',
                 name: 'form',
@@ -238,11 +273,6 @@ const routes = [
                 component: DemoZhoufeng
             },
 
-            {
-                path: 'selectTab',
-                name: 'selectTab',
-                component: selectTab
-            },
             {
                 path: 'selectTab',
                 name: 'selectTab',

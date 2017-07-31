@@ -127,7 +127,7 @@
             </Panel>
           </Collapse>
         </div>
-        <div>
+        <!-- <div>
           <Collapse v-model="showMes.value3" @on-change="showCollapse3">
              <Panel name="1">
                 <span>特批信息</span>
@@ -167,8 +167,8 @@
                 </div>
              </Panel>
           </Collapse>
-        </div>
-        <div>
+        </div> -->
+        <div v-if='taskId'>
           <Collapse v-model="showMes.value4" @on-change="showCollapse4">
              <Panel name="1">
                 <span>审批信息</span>
@@ -183,10 +183,14 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(tbody,index) in approvalRecord.tbodyData">
+                      <tr v-for="(i,index) in reviewData">
                         <td v-if="index<9">0{{index+1}}</td>
-                        <td v-else-if="index>=9">{{index+1}}</td>
-                        <td v-for="item in approvalRecord.theadKey">{{tbody[item]}}</td>
+                        <td>{{i.application}}</td>
+                        <td>{{i.status == 1 ? '审批通过' : '审核驳回'}}</td>
+                        <td>{{i.auditTime.split(' ')[0]}}</td>
+                        <td>{{i.comment}}</td>
+                        <!-- <td v-else-if="index>=9">{{index+1}}</td>
+                        <td v-for="item in approvalRecord.theadKey">{{tbody[item]}}</td> -->
                       </tr>
                     </tbody>
                   </table>
@@ -195,21 +199,21 @@
           </Collapse>
         </div>
 
-        <div class="operation">
+        <div v-if='taskId' class="operation">
             <div class="operation-title">
                 操作
             </div>
             <div class="clear">
-                <Button type="primary" @click.stop="handleSubmit('formValidate', 1)" class="saveNext fl" :disabled='submitStatus'>保存并继续</Button>
-                <Button type="ghost" @click.stop="handleReset('formValidate')"  class="cancel fl">取消</Button>
+                <Button type="primary" @click.stop="selCommit('1')" class="saveNext fl">审批通过</Button>
+                <Button type="ghost" @click.stop="selCommit('0')"  class="cancel fl">审核驳回</Button>
             </div>
             <div class="edit">
-                <textarea name="name" rows="8" cols="80"></textarea>
+                <textarea name="name" rows="8" cols="80" v-model='comment'></textarea>
             </div>
             <div class="submitList">
-                <Button type="primary" @click.stop="handleSubmit('formValidate', 1)" class="saveNext fl" :disabled='submitStatus'>保存并继续</Button>
-                <Button type="primary" @click.stop="handleSubmit('formValidate', 2)" class="save fl" :disabled='submitStatus'>保存</Button>
-                <Button type="ghost" @click.stop="handleReset('formValidate')"  class="cancel fl">取消</Button>
+                <Button type="primary" @click.stop="handleSubmit(1)" class="saveNext fl" :disabled='submitStatus'>提交并继续</Button>
+                <Button type="primary" @click.stop="handleSubmit(2)" class="save fl" :disabled='submitStatus'>保存</Button>
+                <Button type="ghost" @click.stop="handleReset()"  class="cancel fl">取消</Button>
             </div>
         </div>
       </div>
@@ -231,6 +235,10 @@ export default {
     },
     data() {
       return {
+        taskId: '',
+        reviewData: [],
+        commitStatus: '',
+        comment: '',
         myChart:null,
         editOrder:true,
         noOrder:false,
@@ -335,8 +343,16 @@ export default {
     created() {
       let customerTime = Date.parse(new Date());
       let id = this.$router.currentRoute.query.id
+      let adOrderCode = this.$router.currentRoute.query.adOrderCode;
+      if (!adOrderCode) {
+          adOrderCode = '';
+      }
+
+      if (!id) {
+          id = '';
+      }
       //获取项目信息
-      this.$http.get(config.urlList.getInfo+"?id="+id).then((res) => {
+      this.$http.get(`${config.urlList.getInfo}?id=${id}&adOrderCode=${adOrderCode}`).then((res) => {
         if(res.data.errorCode === 0) {
           this.projectData=res.data.result;
           window.localStorage.setItem('projectData', JSON.stringify(this.projectData));//小阳哥写的
@@ -351,7 +367,7 @@ export default {
       })
 
       //获取订单中广告信息
-      this.$http.get(config.urlList.getOrder+"?projectId="+id).then((res)=>{
+      this.$http.get(`${config.urlList.getOrder}?projectId=${id}`).then((res)=>{
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
@@ -418,6 +434,21 @@ export default {
         }).catch((err) => {
           console.log(err);
       })
+    },
+    mounted() {
+        let adOrderCode = this.$router.currentRoute.query.adOrderCode;
+        let taskId = this.$router.currentRoute.query.taskId;
+        this.taskId = taskId;
+
+        if (adOrderCode) {
+            this.$http.get(`/isp-kongming-audit/audit/his/orderId/${adOrderCode}`).then((res) => {
+                if (res.data.errorCode == 0) {
+                    this.reviewData = res.data.result;
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
     },
     methods: {
 
@@ -548,7 +579,54 @@ export default {
       },
       showCollapse4(){
         this.showMes.collapse4=!this.showMes.collapse4
+      },
+      initReview() {
+          let orderId = this.$router.currentRoute.query.orderId;
+          let taskId = this.$router.currentRoute.query.taskId;
+          this.$http.get('audit/his/orderId/${orderId}').then((res) => {
+              if (res.data.errorCode == 0) {
+                  this.reviewData = res.data.result;
+                  console.log(res.data.result);
+                  console.log(this.reviewData);
+              }
+          }).catch((err) => {
+              console.log(err);
+          })
+      },
+      selCommit(n) {
+          this.commitStatus = n;
+      },
+      handleSubmit(n) {
+          if (!this.commitStatus) {
+              this.$Modal.info({
+                 title: '提示',
+                 content: '请操作后提交'
+               });
+               return false;
+          }
+          let taskId = this.$router.currentRoute.query.taskId;
+          this.$http.post('/isp-kongming-audit/audit/audit', {
+              taskId: taskId,
+              status: this.commitStatus,
+              comment: this.comment
+          }).then((res) => {
+              if (res.data.errorCode == 0) {
+                  if (n  == 1) {
+                      this.$router.push('auditList');
+                  }
+                  else {
+                      this.$router.push('auditList');
+                  }
+              }
+          }).catch((err) => {
+              console.log(err);
+          })
+      },
+      handleReset() {
+           this.$router.push('auditList');
       }
+
+
     }
 }
 

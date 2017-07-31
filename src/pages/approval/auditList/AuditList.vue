@@ -4,14 +4,14 @@
           <div class="formTop clear">
               <div class="item fl">
                   <Form-item label="流程类型:" prop="name">
-                      <Select v-model="searchInfo.chainName" class='txt'>
+                      <Select v-model="searchInfo.processType" class='txt'>
                           <Option v-for="item in chainList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                       </Select>
                   </Form-item>
               </div>
               <div class="item fl">
                   <Form-item label="流程编号:" prop="name">
-                      <Input v-model="searchInfo.groupName" placeholder="请输入用户组名称" class='txt'></Input>
+                      <Input v-model="searchInfo.orderId" placeholder="请输入流程编号" class='txt'></Input>
                   </Form-item>
               </div>
               <div class="item fl">
@@ -33,16 +33,24 @@
           <div class="formBot clear">
               <div class="item fl">
                   <Form-item label="创建时间:">
-                      <Date-picker type="date" placeholder="选择日期" :options="date1" v-model="searchInfo.startDate" class='dateItem fl'></Date-picker>
+                      <Date-picker type="date" placeholder="选择日期" :options="date1" v-model="searchInfo.applyDateFrom" class='dateItem fl'></Date-picker>
                       <span class='fl line'></span>
-                      
-                      <Date-picker type="date" placeholder="选择日期" :options="date2" v-model="searchInfo.endDate" class='dateItem fl'></Date-picker>
+
+                      <Date-picker type="date" placeholder="选择日期" :options="date2" v-model="searchInfo.applyDatTo" class='dateItem fl'></Date-picker>
                   </Form-item>
               </div>
 
               <div class="item fl">
-                  <Form-item label="流程编号:" prop="name">
-                      <Input v-model="searchInfo.groupName" placeholder="请输入用户组名称" class='txt'></Input>
+                  <Form-item label="申请人:" prop="name">
+                      <Select
+                          v-model="searchInfo.application"
+                          filterable
+                          remote
+                          :remote-method="remoteMethod1"
+                          :loading="loading"
+                          class='txt fl'>
+                          <Option v-for="item in applicationList" :value="item.username" :key="item.id">{{item.name}}</Option>
+                      </Select>
                   </Form-item>
               </div>
 
@@ -52,9 +60,9 @@
           </div>
       </Form>
 
-
-      <div class="tableList">
-           <Menu mode="horizontal" :theme="theme1" active-name="1">
+      <p v-if='totalCount == 0' class='noRes'>无查询结果！</p>
+      <div class="tableList" v-if='totalCount != 0'>
+           <Menu mode="horizontal" :theme="theme1" active-name="1" @on-select = 'menuSel'>
                <Menu-item name="1">
                    待处理
                </Menu-item>
@@ -80,13 +88,13 @@
                        </tr>
                    </thead>
                    <tbody>
-                       <tr>
-                           <td>订单</td>
-                           <td>AO2017080781213</td>
-                           <td>经销商智能营销事业部-销售中心-东北区-哈尔滨区-佳木斯</td>
-                           <td>仁珊珊</td>
-                           <td>2017-06-08</td>
-                           <td>待处理</td>
+                       <tr v-for='i in tableList'>
+                           <td>{{i.processTypeName}}</td>
+                           <td>{{i.orderId}}</td>
+                           <td>{{i.deptName}}</td>
+                           <td>{{i.application}}</td>
+                           <td>{{initDate(i.applyDate)}}</td>
+                           <td>{{statusTxt}}</td>
                            <td  class="clear">
                                <a href="javascrip:void(0);" class="fl" @click='edit(i, index)'>处理</a>
                            </td>
@@ -94,8 +102,8 @@
                    </tbody>
                </table>
 
-               <div class="paging" v-if='searchInfo.totalCount != 0'>
-                   <Page :total="searchInfo.totalCount" size="small" show-elevator show-sizer
+               <div class="paging" v-if='totalCount != 0'>
+                   <Page :total="totalCount" size="small" show-elevator show-sizer
                        @on-change='changePage'
                        @on-page-size-change='changePageSize'
                    ></Page>
@@ -111,18 +119,22 @@ export default {
     data() {
         return {
             searchInfo: {
-                chainName: '',
-                groupName: '',
-                date: '',
-                formType: '',
-                totalCount: '12',
-                deptId: '',
-                startDate: '',
-                endDate: ''
+                "processType": "",
+                "deptId":"",
+                "application":"",
+                "applyDateFrom":"",
+                "applyDatTo": "",
+                "orderId": "",
+                "pageNo":1,
+                "pageSize":10
             },
+            menuIndex: 1,
+            totalCount: 0,
+            statusTxt: '待处理',
             tableList: [],
             chainList:[],
             deptList: [],
+            applicationList: [],
             date1: {
                 disabledDate: this.disStart
             },
@@ -133,6 +145,7 @@ export default {
     },
     mounted() {
         this.render();
+        this.initTable();
     },
     methods: {
         render() {
@@ -160,8 +173,88 @@ export default {
                 console.log(err);
             })
         },
-        initTable() {
+        search() {
+            this.initTable();
+        },
+        edit(data) {
+            this.$router.push({path: 'details', query:{taskId: data.taskId, adOrderCode: data.orderId}});
+        },
+        menuSel(name) {
+            //通过1 驳回0
 
+            if (this.searchInfo.applyDateFrom) {
+                this.searchInfo.applyDateFrom = this.initTime(this.searchInfo.applyDateFrom);
+            }
+            if (this.searchInfo.applyDatTo) {
+                this.searchInfo.applyDatTo = this.initTime(this.searchInfo.applyDatTo);
+            }
+
+            if (name == 1) {
+                this.statusTxt = '待处理';
+            }
+
+            if (name == 2) {
+                this.searchInfo.status = 0;
+                this.statusTxt = '审核驳回';
+            }
+
+            if (name == 3) {
+                this.searchInfo.status = 1;
+                this.statusTxt = '审批通过';
+            }
+
+            this.$http.post('/isp-kongming-audit/audit/his/assignee', this.searchInfo).then((res) => {
+                if (res.data.errorCode == 0) {
+                    this.tableList = res.data.result.resultList;
+                    this.totalCount = res.data.result.totalCount;
+                }
+                else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.errorMsg,
+                        onOk: ()=> {
+
+                        }
+                    });
+                }
+            })
+        },
+        initTable() {
+            if (this.searchInfo.applyDateFrom) {
+                this.searchInfo.applyDateFrom = this.initTime(this.searchInfo.applyDateFrom);
+            }
+            if (this.searchInfo.applyDatTo) {
+                this.searchInfo.applyDatTo = this.initTime(this.searchInfo.applyDatTo);
+            }
+            this.$http.post('/isp-kongming-audit/audit/tasks', this.searchInfo).then((res) => {
+                if (res.data.errorCode == 0) {
+                    this.tableList = res.data.result.resultList;
+                    this.totalCount = res.data.result.totalCount;
+                }
+                else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.errorMsg,
+                        onOk: ()=> {
+
+                        }
+                    });
+                }
+            })
+        },
+        changePage(n) {
+            this.searchInfo.pageNo = n;
+            this.initTable();
+        },
+        changePageSize(n) {
+            this.searchInfo.pageSize = n;
+            this.initTable();
+        },
+        initDate(date) {
+            if (date) {
+                return date.split(' ')[0];
+            }
+            return ''
         },
         remoteMethod (query) {
             if (query !== '') {
@@ -197,9 +290,50 @@ export default {
                 this.deptList = [];
             }
         },
+        remoteMethod1(query) {
+            if (query !== '') {
+                this.loading = true;
+                this.$http.get('/isp-process-server/employee/getPageList', {
+                    params: {
+                        displayName: query,
+                        pageIndex: 1,
+                        pageSize: 10
+                    }
+                }).then((res) => {
+                    this.loading = false;
+                    if (res.data.errorCode == 0) {
+                        let data = Object.assign([], res.data.result.resultList);
+                        this.applicationList = data.map(item => {
+                            return {
+                                username: item.username,
+                                name: item.displayName,
+                                id: item.employeeId
+                            }
+                        })
+                    }
+                    else {
+
+                    }
+                }).catch((err) => {
+                    this.loading = false;
+                    this.applicationList = [];
+                    console.log(err);
+                })
+            } else {
+                this.loading = false;
+                this.applicationList = [];
+            }
+        },
+        initTime(date) {
+            let time = new Date(date);
+            let year = time.getFullYear();
+            let month = time.getMonth() + 1;
+            let day = time.getDate();
+
+            return `${year}-${month}-${day}`;
+        },
         // 日期判断
         disStart(date){
-            console.log(date);
             return date && date.valueOf() >new Date(this.searchInfo.endDate);
         },
         disEnd(date){
@@ -214,6 +348,11 @@ export default {
     .searchBox {
         padding: 50px 30px 24px;
         background: #F9FAFC;
+    }
+
+    .noRes {
+        padding-top: 30px;
+        text-align: center;
     }
 
     .txt {
