@@ -137,11 +137,11 @@
         </Form-item>
         <Form-item v-for="item in custGroup">
           <p>{{item.name}}</p>
-          <Button>X</Button>
-          <Button>重命名</Button>
+          <!-- <Button>X</Button>
+          <Button>重命名</Button> -->
         </Form-item>
         <Form-item>
-          <p>{{modelForm.groupName.value}}</p>
+          <p>{{modelForm.groupName}}</p>
         </Form-item>
       </Form>
     </Modal>
@@ -569,7 +569,7 @@ body{
       createName(name){
         this.$refs[name].validate((valid) => {
           if (valid) {
-            // this.$Message.success('提交成功!');
+            this.$Message.success('提交成功!');
             custGroup.push(name);
           } else {
             this.$Message.error('表单验证失败!');
