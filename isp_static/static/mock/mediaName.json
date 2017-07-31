@@ -1,0 +1,48 @@
+{
+    "errorCode": 0,
+    "errorMsg": "OK",
+    "result": [
+        {
+            "mediaId": 180,
+            "mediaName": "易车网",
+            "pageIndex": null,
+            "totalPages": null
+        },
+        {
+            "mediaId": 181,
+            "mediaName": "易车网单一论坛",
+            "pageIndex": null,
+            "totalPages": null
+        },
+        {
+            "mediaId": 185,
+            "mediaName": "易车软性资源（销售前需确认）",
+            "pageIndex": null,
+            "totalPages": null
+        },
+        {
+            "mediaId": 186,
+            "mediaName": "易车网专题投放",
+            "pageIndex": null,
+            "totalPages": null
+        },
+        {
+            "mediaId": 190,
+            "mediaName": "易车二手车",
+            "pageIndex": null,
+            "totalPages": null
+        },
+        {
+            "mediaId": 192,
+            "mediaName": "易车网车展专题页投放",
+            "pageIndex": null,
+            "totalPages": null
+        },
+        {
+            "mediaId": 203,
+            "mediaName": "易车商城",
+            "pageIndex": null,
+            "totalPages": null
+        }
+    ]
+}

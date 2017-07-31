@@ -441,7 +441,7 @@ export default {
         this.taskId = taskId;
 
         if (adOrderCode) {
-            this.$http.get(`/isp-kongming-audit/audit/his/orderId/${adOrderCode}`).then((res) => {
+            this.$http.get(`/isp-kongming/audit/his/orderId/${adOrderCode}`).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.reviewData = res.data.result;
                 }
@@ -605,7 +605,7 @@ export default {
                return false;
           }
           let taskId = this.$router.currentRoute.query.taskId;
-          this.$http.post('/isp-kongming-audit/audit/audit', {
+          this.$http.post('/isp-kongming/audit/audit', {
               taskId: taskId,
               status: this.commitStatus,
               comment: this.comment

@@ -195,6 +195,7 @@ export default {
             font-size: 12px;
             color: #7B8497;
             line-height: 20px;
+            width: 1100px;
 
             li {
                 width: 500px;

@@ -203,7 +203,7 @@ export default {
                 this.statusTxt = '审批通过';
             }
 
-            this.$http.post('/isp-kongming-audit/audit/his/assignee', this.searchInfo).then((res) => {
+            this.$http.post('/isp-kongming/audit/his/assignee', this.searchInfo).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.tableList = res.data.result.resultList;
                     this.totalCount = res.data.result.totalCount;
@@ -226,7 +226,7 @@ export default {
             if (this.searchInfo.applyDatTo) {
                 this.searchInfo.applyDatTo = this.initTime(this.searchInfo.applyDatTo);
             }
-            this.$http.post('/isp-kongming-audit/audit/tasks', this.searchInfo).then((res) => {
+            this.$http.post('/isp-kongming/audit/tasks', this.searchInfo).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.tableList = res.data.result.resultList;
                     this.totalCount = res.data.result.totalCount;

@@ -31,6 +31,7 @@
     }
     .layout-content-right {
         flex: 1;
+        min-width: 1156px;
     }
     .layout-copy{
         text-align: center;
@@ -38,7 +39,8 @@
         color: #9ea7b4;
     }
     .layout-menu-left{
-        width: 200px;
+        min-width: 200px;
+        width: 200px !important;
         background: #464c5b;
     }
     .layout-header{
@@ -281,7 +283,9 @@ export default {
     mounted() {
         this.$http.get('/isp-kongming/ad/login').then((res) => {
             if (res.data.errorCode == 0) {
-                this.username = res.data.result;
+                //this.username = res.data.result;
+                this.username = res.data.result.username;
+                window.sessionStorage.setItem('login', JSON.stringify(res.data.result));
             }
         })
 
@@ -290,6 +294,7 @@ export default {
                 this.status = true;
             }
             else if (res.data.errorCode == 41000) {
+                this.initDept();
                 this.status = false;
                 this.displayName = res.data.result.displayName;
                 this.formValidate.username = res.data.result.username;
@@ -308,30 +313,6 @@ export default {
         }).catch((err) => {
             console.log(err);
         })
-
-
-        this.$http.get('/isp-process-server/depart/getList', {
-            params: {
-                pageIndex: 1,
-                pageSize: 9999
-            }
-        }).then((res) => {
-            if (res.data.errorCode == 0) {
-                let data = Object.assign([], res.data.result.resultList);
-                this.deptListAll = data.map(item => {
-                    return {
-                        id: `${item.id}`,
-                        name: item.fullPath,
-                        deptName: item.deptName
-                    }
-                })
-
-                this.deptList = this.deptListAll.slice(0, 10);
-            }
-
-        }).catch((err) => {
-            console.log(err);
-        })
     },
     methods: {
         signOut() {
@@ -340,6 +321,30 @@ export default {
                     this.$router.push('/');
                     window.location.reload();
                 }
+            }).catch((err) => {
+                console.log(err);
+            })
+        },
+        initDept() {
+            this.$http.get('/isp-process-server/depart/getList', {
+                params: {
+                    pageIndex: 1,
+                    pageSize: 9999
+                }
+            }).then((res) => {
+                if (res.data.errorCode == 0) {
+                    let data = Object.assign([], res.data.result.resultList);
+                    this.deptListAll = data.map(item => {
+                        return {
+                            id: `${item.id}`,
+                            name: item.fullPath,
+                            deptName: item.deptName
+                        }
+                    })
+
+                    this.deptList = this.deptListAll.slice(0, 10);
+                }
+
             }).catch((err) => {
                 console.log(err);
             })
