@@ -394,10 +394,3 @@
 <style lang='scss'>
   @import '../../../assets/css/pageCss/userModule/competitorList.scss';
 </style>
-[
-{
-name:"北京"
-id:"2",
-status:true
-}
-]

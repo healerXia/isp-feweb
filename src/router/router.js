@@ -24,8 +24,10 @@ const CustDetail  = (resolve) => require(['../pages/userModule/custDetail/CustDe
 const CompetitorList  = (resolve) => require(['../pages/userModule/competitorList/CompetitorList'], resolve);
 const CustList = (resolve) => require(['../pages/userModule/custList/CustList'], resolve);
 
-
-
+//意见反馈模块
+const FeedbackList = (resolve) => require(['../pages/feedbackModule/feedbackList/FeedbackList'], resolve);
+const FeedbackHistory = (resolve) => require(['../pages/feedbackModule/feedbackHistory/FeedbackHistory'], resolve);
+const CreateFeedback = (resolve) => require(['../pages/feedbackModule/createFeedback/CreateFeedback'], resolve);
 
 
 
@@ -218,6 +220,21 @@ const routes = [
                 path: 'viewPercenter',
                 name: 'ViewPercenter',
                 component: ViewPercenter
+            },
+            {
+                path: 'feedbackList',
+                name: 'feedbackList',
+                component: FeedbackList
+            },
+            {
+                path: 'feedbackHistory',
+                name: 'feedbackHistory',
+                component: FeedbackHistory
+            },
+            {
+                path: 'createFeedback',
+                name: 'createFeedback',
+                component: CreateFeedback
             }
         ]
     },
