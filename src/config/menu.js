@@ -116,6 +116,12 @@ const menu =  [
                 index: '6-1',
                 icon: '',
                 path: 'wait'
+            },
+            {
+                name: '审批列表',
+                index: '6-2',
+                icon: '',
+                path: 'auditList'
             }
         ]
     },

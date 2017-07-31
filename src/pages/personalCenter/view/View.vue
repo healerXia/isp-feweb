@@ -63,7 +63,7 @@
                     </li>
                     <li class="fl">
                         <label for="" class="fl">代理审批人：</label>
-                        <span class="fl">5951</span>
+                        <span class="fl">{{info.agentStr}}</span>
                     </li>
                 </ul>
             </div>
@@ -137,7 +137,7 @@ export default {
         initTable() {
             this.$http.get('/isp-process-server/employee/getPageList', {
                 params: {
-                    managerId: this.managerId,
+                    managerId: this.employeeId,
                     pageIndex: this.paging.pageIndex,
                     pageSize: this.paging.pageSize
                 }
@@ -194,7 +194,7 @@ export default {
         .info-list {
             font-size: 12px;
             color: #7B8497;
-            line-height: 16px;
+            line-height: 20px;
 
             li {
                 width: 500px;

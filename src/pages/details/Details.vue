@@ -127,7 +127,7 @@
             </Panel>
           </Collapse>
         </div>
-        <div>
+        <!-- <div>
           <Collapse v-model="showMes.value3" @on-change="showCollapse3">
              <Panel name="1">
                 <span>特批信息</span>
@@ -167,8 +167,8 @@
                 </div>
              </Panel>
           </Collapse>
-        </div>
-        <div>
+        </div> -->
+        <div v-if='taskId'>
           <Collapse v-model="showMes.value4" @on-change="showCollapse4">
              <Panel name="1">
                 <span>审批信息</span>
@@ -199,7 +199,7 @@
           </Collapse>
         </div>
 
-        <div class="operation">
+        <div v-if='taskId' class="operation">
             <div class="operation-title">
                 操作
             </div>
@@ -235,6 +235,7 @@ export default {
     },
     data() {
       return {
+        taskId: '',
         reviewData: [],
         commitStatus: '',
         comment: '',
@@ -342,8 +343,16 @@ export default {
     created() {
       let customerTime = Date.parse(new Date());
       let id = this.$router.currentRoute.query.id
+      let adOrderCode = this.$router.currentRoute.query.adOrderCode;
+      if (!adOrderCode) {
+          adOrderCode = '';
+      }
+
+      if (!id) {
+          id = '';
+      }
       //获取项目信息
-      this.$http.get(config.urlList.getInfo+"?id="+id).then((res) => {
+      this.$http.get(`${config.urlList.getInfo}?id=${id}&adOrderCode=${adOrderCode}`).then((res) => {
         if(res.data.errorCode === 0) {
           this.projectData=res.data.result;
           window.localStorage.setItem('projectData', JSON.stringify(this.projectData));//小阳哥写的
@@ -358,7 +367,7 @@ export default {
       })
 
       //获取订单中广告信息
-      this.$http.get(config.urlList.getOrder+"?projectId="+id).then((res)=>{
+      this.$http.get(`${config.urlList.getOrder}?projectId=${id}`).then((res)=>{
           if(res.data.result.resultList.length==0){
             this.noOrder=true
           }else{
@@ -427,11 +436,12 @@ export default {
       })
     },
     mounted() {
-        let orderId = this.$router.currentRoute.query.orderId;
+        let adOrderCode = this.$router.currentRoute.query.adOrderCode;
         let taskId = this.$router.currentRoute.query.taskId;
+        this.taskId = taskId;
 
-        if (orderId) {
-            this.$http.get(`/isp-kongming-audit/audit/his/orderId/AO20170707448646`).then((res) => {
+        if (adOrderCode) {
+            this.$http.get(`/isp-kongming-audit/audit/his/orderId/${adOrderCode}`).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.reviewData = res.data.result;
                 }

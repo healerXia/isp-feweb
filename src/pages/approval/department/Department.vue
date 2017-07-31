@@ -51,14 +51,6 @@ export default {
                         this.treeData[0].push(data[i]);
                     }
                 }
-
-                let id2 = this.treeData[0][0].id;
-                for (let i = 0; i < data.length; i++) {
-                    if (data[i].pid == id2) {
-                        console.log(data[i]);
-                        this.treeData[1].push(data[i]);
-                    }
-                }
             }
             else {
 
@@ -82,19 +74,12 @@ export default {
     padding: 50px 30px;
 
     .listBox {
-        max-height: 1200px;
         padding: 20px 0 20px;
         background: #F9FAFC;
         border-radius: 2px 2px 0 0;
         max-height: 1000px;
 
-        .lists {
-            max-height: 640px;
-            overflow: auto;
-        }
-
         .listItem {
-            overflow: auto;
             padding: 0 11px 0 11px;
             width: 222px;
             border-right: 1px solid #ccc;

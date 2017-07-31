@@ -177,7 +177,7 @@ export default {
             this.initTable();
         },
         edit(data) {
-            this.$router.push({path: 'details', query:{taskId: data.taskId, orderId: data.orderId}});
+            this.$router.push({path: 'details', query:{taskId: data.taskId, adOrderCode: data.orderId}});
         },
         menuSel(name) {
             //通过1 驳回0

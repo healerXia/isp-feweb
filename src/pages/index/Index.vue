@@ -222,7 +222,7 @@
                                  <span v-if='deptName' class='fl ML10 info'>[{{deptName}}]</span>
                              </Form-item>
                              <Form-item class='submitBtn'>
-                                 <Button type="primary" @click="handleSubmit('formValidate')" class="save fl" :disabled='submitStatus'>保存</Button>
+                                 <Button type="primary" @click="handleSubmit('formValidate')" class="save fl" :disabled='btnStatus'>保存</Button>
                              </Form-item>
                         </Form>
                     </div>
@@ -249,6 +249,7 @@ export default {
         };
         return {
             username: '',
+            btnStatus: false,
             displayName: '',
             status: true,
             formValidate: {
@@ -259,6 +260,7 @@ export default {
             },
             deptName: '',
             deptList: [],
+            deptListAll: [],
             ruleValidate: {
                 mobile: [
                      {required: true, message: '请填写移动电话', trigger: 'change'},
@@ -296,7 +298,7 @@ export default {
                 }
 
                 if (res.data.result.phone) {
-                    this.formValidate.mobile = res.data.result.phone;
+                    this.formValidate.phone = res.data.result.phone;
                 }
             }
             else {
@@ -323,6 +325,8 @@ export default {
                         deptName: item.deptName
                     }
                 })
+
+                this.deptList = this.deptListAll.slice(0, 10);
             }
 
         }).catch((err) => {
@@ -343,13 +347,13 @@ export default {
         handleSubmit (name, status) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    if (this.submitStatus) {
+                    if (this.btnStatus) {
                         return false;
                     }
 
-                    this.submitStatus = true;
+                    this.btnStatus = true;
                     this.$http.post('/isp-process-server/employee/save', this.formValidate).then((res) => {
-                        this.submitStatus = false;
+                        this.btnStatus = false;
                         if (res.data.errorCode == 0) {
                             this.$Message.success('保存成功');
                             this.status = true;
@@ -364,13 +368,13 @@ export default {
                             });
                         }
                     }).catch((err) => {
-                        this.submitStatus = false;
+                        this.btnStatus = false;
                         console.log(err);
                     })
 
 
                 } else {
-                    this.submitStatus = false;
+                    this.btnStatus = false;
                     this.$Message.error('表单验证失败!');
                 }
             })
