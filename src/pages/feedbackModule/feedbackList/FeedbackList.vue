@@ -6,7 +6,7 @@
         <li>
           <div class="inputBox">
             <span class="formLabel">反馈人</span>
-            <Input v-model="feedbackSearch.feedbackName" placeholder="请输入反馈人"></Input>
+            <Input v-model="feedbackSearch.createName" placeholder="请输入反馈人"></Input>
           </div>
           <div class="inputBox ML30">
             <span class="formLabel">创建时间</span>
@@ -20,7 +20,7 @@
         <li class='MT20'>
           <div class="inputBox">
             <span class="formLabel">反馈分类</span>
-            <Select v-model="feedbackSearch.classifly"
+            <Select v-model="feedbackSearch.problemType"
               :clearable="true"
               placeholder="请选择反馈分类" 
             >
@@ -97,36 +97,32 @@
               {name:"订单",value:3},
               {name:"合同",value:4},
               {name:"发票",value:5},
-              {name:"App",value:6},
+              {name:"APP功能",value:6},
               {name:"其他",value:7},
             ]
           },
           feedbackSearch:{
-            feedbackName:"",//反馈意见名称
+            createName:"",//反馈意见名称
             beginTime:"",//开始时间
             endTime:"",//结束时间
-            classifly:"",//反馈分类
+            problemType:"",//反馈分类
           },
           feedbackMess:{
-            tableHead:['反馈人','反馈分类','反馈渠道','反馈内容','最后回复时间','操作'],
-            tableKey:['name','classiflyName','methodName','content','time'],
+            tableHead:['反馈人','反馈分类','反馈渠道','反馈内容','反馈时间','操作'],
+            tableKey:['createName','problemName','channelName','feedback','createTime'],
             tableArr:[{
-              name:'周凤',
-              classifly:1,
-              method:1,
-              salve:"asds",
-              content:"喔喔喔喔即喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔喔即喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟",
-              beginTime:"2017:01:11",
-              endTime:"2017:01:11"
+              createName:'周凤',
+              problemType:1,
+              feedBackChannel:1,
+              feedback:"nice",
+              createTime:"2017:01:11",
             },
             {
-              name:'周凤',
-              classifly:1,
-              method:1,
-              salve:"asds",
-              content:"nice",
-              beginTime:"2017:01:11",
-              endTime:"2017:01:11"
+              createName:'周凤',
+              problemType:1,
+              feedBackChannel:1,
+              feedback:"nice",
+              createTime:"2017:01:11",
             }
             ]
           }
@@ -137,33 +133,33 @@
       },
       methods:{
         reset(){
-          this.feedbackSearch.feedbackName="";
+          this.feedbackSearch.createName="";
           this.feedbackSearch.beginTime="";
           this.feedbackSearch.endTime="";
-          this,feedbackSearch.classifly=""
+          this,feedbackSearch.problemType=""
         },
         dealTableData(){//处理表格数据
           let tableArr=this.feedbackMess.tableArr
           for(let i=0;i<tableArr.length;i++){
-            if(tableArr[i].classifly==1){
-              tableArr[i].classiflyName='优化建议'
-            }else if(tableArr[i].classifly==2){
-              tableArr[i].classiflyName='客户'
-            }else if(tableArr[i].classifly==3){
-              tableArr[i].classiflyName='订单'
-            }else if(tableArr[i].classifly==4){
-              tableArr[i].classiflyName='合同'
-            }else if(tableArr[i].classifly==5){
-              tableArr[i].classiflyName='发票'
-            }else if(tableArr[i].classifly==6){
-              tableArr[i].classiflyName='APP'
-            }else if(tableArr[i].classifly==7){
-              tableArr[i].classiflyName='其他'
+            if(tableArr[i].problemType==1){
+              tableArr[i].problemName='优化建议'
+            }else if(tableArr[i].problemType==2){
+              tableArr[i].problemName='客户'
+            }else if(tableArr[i].problemType==3){
+              tableArr[i].problemName='订单'
+            }else if(tableArr[i].problemType==4){
+              tableArr[i].problemName='合同'
+            }else if(tableArr[i].problemType==5){
+              tableArr[i].problemName='发票'
+            }else if(tableArr[i].problemType==6){
+              tableArr[i].problemName='APP'
+            }else if(tableArr[i].problemType==7){
+              tableArr[i].problemName='其他'
             }
-            if(tableArr[i].method==1){
-              tableArr[i].methodName='PC'
-            }else if(tableArr[i].method==2){
-              tableArr[i].methodName='APP'
+            if(tableArr[i].feedBackChannel==1){
+              tableArr[i].channelName='PC'
+            }else if(tableArr[i].feedBackChannel==2){
+              tableArr[i].channelName='APP'
             }
           }
           this.feedbackMess.tableArr=tableArr

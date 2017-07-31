@@ -142,6 +142,7 @@
                 <Form-item label="主营品牌:" prop="brandId"
                   v-if="formValidate.typeId!=2||formValidate.typeId==''">
                     <Select
+                    ref="brand"
                     multiple
                     :clearable="true"
                     placeholder="请选择主营品牌"
@@ -320,7 +321,7 @@
       v-model="showSalve"
       title="附件显示"
       >
-      <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="showSalve" style="width: 100%">
+      <img :src="'http://d1.test.yiche.com/uploadscdd7ed9ba6e713fa7c880f234fb2c9a0.jpg'" v-if="showSalve" style="width: 100%">
       <div slot="footer" class="footer">             
       </div>
     </Modal>
@@ -436,6 +437,8 @@
             provinceId:"",//省+
             cityId:"",//市+
             countyId:"",//区+
+            createUser:"",
+            logName:""
           },
           ruleValidate: {//验证
             custName: [
@@ -837,6 +840,7 @@
           //所属集团,所属厂商,所属4S,所属经销商,主营品牌  下拉做特殊处理，不需要自己回填
           let submitData={};
           //公共都有的
+          this.formValidate.createUser=data.createUser
           this.formValidate.typeId=parseInt(data.typeId);//客户类别
           this.formValidate.custName=data.custName//客户名称
           this.formValidate.abbrName=data.abbrName//客户简称
@@ -963,6 +967,8 @@
                   if (lastCheck&&this.formValidate.countyId) {
                     let submitData=this.operSubmitData();
                     submitData.sign=0;
+                    submitData.createUser=this.loginName;
+                    submitData.logName=this.loginName;
                     if(!this.$router.currentRoute.query.id){
                       this.$http.post(config.urlList.addCustInfo,//新增加
                        submitData,
@@ -1094,6 +1100,8 @@
                 if (lastCheck&&this.formValidate.countyId) {
                   let submitData=this.operSubmitData();
                   submitData.sign=1
+                  submitData.createUser=this.formValidate.createUser;
+                  submitData.logName=this.loginName;
                   if(!this.$router.currentRoute.query.id){
                     this.$http.post(config.urlList.addCustInfo,//新增加
                      submitData,
@@ -1401,6 +1409,7 @@
                 this.formValidate.address=res.data.result.address
                 let brandnameArr=[];
                 let brandidArr=[];
+                this.$refs.brand.selectedMultiple=[]
                 for(let i=0;i<res.data.result.custBrandMapList.length;i++){
                   brandnameArr.push(res.data.result.custBrandMapList[i].brandName)
                   brandidArr.push(res.data.result.custBrandMapList[i].brandId)

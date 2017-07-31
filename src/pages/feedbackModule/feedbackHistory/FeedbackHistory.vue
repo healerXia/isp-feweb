@@ -41,7 +41,7 @@
     <div class="content">
       <Form ref="callbackMess" :model="callbackMess" :rules="checkValue" :label-width="50">
           <Form-item label="渠道:" prop="classifly">
-            <Checkbox-group v-model="callbackMess.method">
+            <Checkbox-group v-model="callbackMess.channel">
                 <Checkbox label="1" class="MR10">
                 系统消息
                 </Checkbox>
@@ -53,8 +53,8 @@
                 </Checkbox>
             </Checkbox-group>
           </Form-item>  
-          <Form-item label="内容:" prop="content">
-              <Input v-model="callbackMess.content" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请输入内容" ></Input>
+          <Form-item label="内容:" prop="reply">
+              <Input v-model="callbackMess.reply" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请输入内容" ></Input>
           </Form-item> 
           <Form-item>
             <Button type="primary" class="btn bg4373F3" @click="submitCallback('callbackMess')" >保存</Button >
@@ -73,14 +73,16 @@
         return{
           path:"",
           callbackMess:{
-            method:[],
-            content:""
+            channel:[],
+            reply:"",
+            name:"",//回复人姓名
+            feedbackId:""//该条回复对应的反馈id
           },
           checkValue:{
-            classifly:[
+            channel:[
               {required:true,message:"请选择反馈渠道",trigger:"change",type:"array"}
             ],
-            content:[
+            reply:[
               {required:true,message:"请填写反馈内容",trigger:'blur'},
               {max:500,message:"不能超过500字",trigger:"blur"}
             ]
@@ -94,6 +96,17 @@
         }else if(from==0){
           this.path="myFeedbackList"
         }
+        this.$http.get(config.urlList.login).then((res)=>{//获取回复人姓名
+            if(res.data.errorCode===0){
+              this.callbackMess.name=res.data.result.username;
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+        }).catch((res)=>{})  
       },
       methods:{
         submitCallback(name){//新建回复提交

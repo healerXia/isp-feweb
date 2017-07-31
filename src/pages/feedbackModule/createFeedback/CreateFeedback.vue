@@ -2,16 +2,16 @@
   <div class="createFeedback">
     <div class="title MT20 MB20">意见反馈</div>
     <Form ref="feedbackAdd" :model="feedbackAdd" :rules="checkValue" :label-width="100">
-          <Form-item label="反馈分类:" prop="classifly">
-              <Select v-model="feedbackAdd.classifly"
+          <Form-item label="反馈分类:" prop="problemType">
+              <Select v-model="feedbackAdd.problemType"
               :clearable="true"
               placeholder="请选择反馈分类" 
             >
               <Option v-for="item in options.classiflyOption" :value="item.value" :key="item.value">{{item.name }}</Option>
             </Select>
           </Form-item>  
-          <Form-item label="反馈内容:" prop="content">
-              <Input v-model="feedbackAdd.content" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请输入反馈内容" ></Input>
+          <Form-item label="反馈内容:" prop="feedback">
+              <Input v-model="feedbackAdd.feedback" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="请输入反馈内容" ></Input>
           </Form-item> 
           <div class="upload">
             <span class="label">附件:</span>
@@ -58,11 +58,14 @@
             ]
           },
           feedbackAdd:{
-            classifly:"",
-            content:"",
+            problemType:"",//意见类型
+            createName:"",//创建人名字
+            createId:"",//创建人id
+            feedback:"",//反馈内容
+            feedBackChannel:"",//渠道
           },
           checkValue:{
-            classifly:[
+            problemType:[
               {required:true,message:"请选择反馈分类",trigger:"change",type:"number"}
             ],
             content:[
@@ -73,6 +76,18 @@
         }
       },
       created() {//页面数据初始化   
+        this.$http.get(config.urlList.login).then((res)=>{//获取登录人即操作人
+          if(res.data.errorCode===0){
+            this.feedbackAdd.createName=res.data.result.username;
+            this.feedbackAdd.createId=res.data.result.uid;
+          }
+          else {
+            this.$Modal.info({
+                title: '提示',
+                content: res.data.errorMsg
+            });
+          }
+        }).catch((res)=>{})
       },
       methods:{
         submitFeedback(name){//新建意见反馈提交

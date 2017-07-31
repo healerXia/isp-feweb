@@ -4,7 +4,16 @@
     <div class="searchOrder">
       <ul>
         <li>
-           <div class="inputBox">
+          <div class="inputBox ML30">
+            <span class="formLabel">反馈分类</span>
+            <Select v-model="feedbackSearch.problemType"
+              :clearable="true"
+              placeholder="请选择反馈分类" 
+            >
+              <Option v-for="item in options.classiflyOption" :value="item.value" :key="item.value">{{item.name }}</Option>
+            </Select>
+          </div>
+          <div class="inputBox">
             <span class="formLabel">创建时间</span>
             <Date-picker type="date"  placeholder="选择日期"  class="fLest" v-model="feedbackSearch.beginTime" 
              :editable="false" :options="disB" @on-change="bDateChange"></Date-picker>
@@ -12,17 +21,6 @@
             <Date-picker type="date" placeholder="选择日期"  class="fLest" v-model="feedbackSearch.endTime" 
             :editable="false" :options="disE" @on-change="eDateChange"></Date-picker>
           </div>
-          
-          <div class="inputBox ML30">
-            <span class="formLabel">反馈分类</span>
-            <Select v-model="feedbackSearch.classifly"
-              :clearable="true"
-              placeholder="请选择反馈分类" 
-            >
-              <Option v-for="item in options.classiflyOption" :value="item.value" :key="item.value">{{item.name }}</Option>
-            </Select>
-          </div>
-
         </li>
         <li class='MT20'>
           <div class="inputBox">
@@ -50,8 +48,7 @@
         <tbody>
           <tr v-for="data in feedbackMess.tableArr">
             <td v-for="key in feedbackMess.tableKey">
-              <span v-if="key=='time'">{{data.beginTime.substring(0,10)}}至{{data.endTime.substring(0,10)}}</span>
-              <p v-else-if="key=='content'" :title="data[key]">{{data[key]}}</p>
+              <p v-if="key=='content'" :title="data[key]">{{data[key]}}</p>
               <span v-else>{{data[key]}}</span>
             </td>
             <td>
@@ -101,42 +98,50 @@
               {name:"订单",value:3},
               {name:"合同",value:4},
               {name:"发票",value:5},
-              {name:"App",value:6},
+              {name:"APP功能",value:6},
               {name:"其他",value:7},
             ]
           },
           feedbackSearch:{
             beginTime:"",//开始时间
             endTime:"",//结束时间
-            classifly:"",//反馈分类
+            problemType:"",//反馈分类
+            createId:"",//登录人id
           },
           feedbackMess:{
             tableHead:['反馈人','反馈分类','反馈渠道','反馈内容','反馈时间','操作'],
-            tableKey:['name','classiflyName','methodName','content','time'],
+            tableKey:['createName','problemName','channelName','feedback','createTime'],
             tableArr:[{
-              name:'周凤',
-              classifly:1,
-              method:1,
-              salve:"asds",
-              content:"喔喔喔喔即喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔喔即喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发日而发喔喔即日而发喔喔即日而发喔喔即日而发喔喔即日而发嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟嘟",
-              beginTime:"2017:01:11",
-              endTime:"2017:01:11"
+              createName:'周凤',
+              problemType:1,
+              feedBackChannel:1,
+              feedback:"nice",
+              createTime:"2017:01:11",
             },
             {
-              name:'周凤',
-              classifly:1,
-              method:1,
-              salve:"asds",
-              content:"nice",
-              beginTime:"2017:01:11",
-              endTime:"2017:01:11"
+              createName:'周凤',
+              problemType:1,
+              feedBackChannel:1,
+              feedback:"nice",
+              createTime:"2017:01:11",
             }
             ]
           },
         }
       },
-      created() {//页面数据初始化             
-          this.dealTableData()
+      created() {//页面数据初始化
+        this.$http.get(config.urlList.login).then((res)=>{//获取登录人即操作人
+            if(res.data.errorCode===0){
+              this.feedbackSearch.createId=res.data.result.uid;
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+        }).catch((res)=>{})             
+        this.dealTableData()
       },
       methods:{
         searchMess(){
@@ -144,30 +149,30 @@
         reset(){
           this.feedbackSearch.beginTime="";
           this.feedbackSearch.endTime="";
-          this.feedbackSearch.classifly=""
+          this.feedbackSearch.problemType=""
         },
         dealTableData(){//处理表格数据
           let tableArr=this.feedbackMess.tableArr
           for(let i=0;i<tableArr.length;i++){
-            if(tableArr[i].classifly==1){
-              tableArr[i].classiflyName='优化建议'
-            }else if(tableArr[i].classifly==2){
-              tableArr[i].classiflyName='客户'
-            }else if(tableArr[i].classifly==3){
-              tableArr[i].classiflyName='订单'
-            }else if(tableArr[i].classifly==4){
-              tableArr[i].classiflyName='合同'
-            }else if(tableArr[i].classifly==5){
-              tableArr[i].classiflyName='发票'
-            }else if(tableArr[i].classifly==6){
-              tableArr[i].classiflyName='APP'
-            }else if(tableArr[i].classifly==7){
-              tableArr[i].classiflyName='其他'
+            if(tableArr[i].problemType==1){
+              tableArr[i].problemName='优化建议'
+            }else if(tableArr[i].problemType==2){
+              tableArr[i].problemName='客户'
+            }else if(tableArr[i].problemType==3){
+              tableArr[i].problemName='订单'
+            }else if(tableArr[i].problemType==4){
+              tableArr[i].problemName='合同'
+            }else if(tableArr[i].problemType==5){
+              tableArr[i].problemName='发票'
+            }else if(tableArr[i].problemType==6){
+              tableArr[i].problemName='APP'
+            }else if(tableArr[i].problemType==7){
+              tableArr[i].problemName='其他'
             }
-            if(tableArr[i].method==1){
-              tableArr[i].methodName='PC'
-            }else if(tableArr[i].method==2){
-              tableArr[i].methodName='APP'
+            if(tableArr[i].feedBackChannel==1){
+              tableArr[i].channelName='PC'
+            }else if(tableArr[i].feedBackChannel==2){
+              tableArr[i].channelName='APP'
             }
           }
           this.feedbackMess.tableArr=tableArr

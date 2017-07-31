@@ -49,7 +49,7 @@
               </Form-item>
               <div class="accountOpenInfo">
                 <div class="header">
-                  <span class="colorRed">*</span><span> 开户信息</span>
+                  <span> 开户信息</span>
                   <span @click="addGroup" class="add"> 添加一组</span>
                 </div>
                 <Form ref="formValidate" :model="formDynamic" :rules="checkValue" :label-width="80">
@@ -90,16 +90,21 @@
               <div class="upload">
                 <span class="label">附件:</span>
                 <Upload 
-                   action="//jsonplaceholder.typicode.com/posts/"
+                  action="/api/isp-kongming/cust/imgUpdate"
                   :format="['jpg','jpeg','png']"
                   :max-size="10240"
                   :on-format-error="handleFormatError"
                   :on-exceeded-size="handleMaxSize"
                   :on-success="fileUploadSuccess"
                   >
-                  <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+                  <Button type="ghost" class="btn bg4373F3">上传文件</Button>
                   <span  class="ML15">请上传1M以内的文件</span> 
                 </Upload>
+                <div class="uperror" v-show="uploadImg.show">
+                  <div v-for="(item,index) in uploadImg.name" class="underLine">
+                    <span>{{item}}</span><span class="del" @click="removeImg(index)">删除</span>
+                  </div>
+                </div>    
                 <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
               </div> 
               <Form-item>
@@ -161,6 +166,10 @@ export default {
             ]
           },
           storeEditDate:{},
+          uploadImg:{
+            name:[1,2,3],
+            show:true
+          }
         }
     },
     created(){
@@ -170,6 +179,12 @@ export default {
       }
     },
     methods: {
+      removeImg(index){
+        this.uploadImg.name.splice(index,1);
+        if(this.uploadImg.name.length==0){
+          this.uploadImg.show=false
+        }
+      },
       showPic(){
         this.$emit('showPic',"pic1")
       },
@@ -457,19 +472,6 @@ export default {
         width: 100%;
         overflow: hidden;
         padding: 10px 20px;
-        // ul{
-        //   width:100%;
-        //   li{
-        //     float: left;
-        //     width: 100%;
-        //     span{
-        //       max-width: 250px;
-        //       display:block;
-        //       float:left;
-        //     }
-        //   }
-        //   .liHeight{height:23px}
-        // }
         .liHeight{height:23px}
         .item{
         width: 100%;
@@ -512,7 +514,19 @@ export default {
     input,.ivu-input-wrapper{width:350px}
     .accountOpenInfo{
       .header{
+        span:first-child{
+          &::before {
+            content: '*';
+            display: inline-block;
+            line-height: 1;
+            font-family: SimSun;
+            font-size: 12px;
+            color: #ed3f14;
+          }
+        }
         .add{
+          color:#4373F3;
+          margin-left: 200px;
           cursor: pointer
         }
       }
@@ -543,7 +557,7 @@ export default {
       padding-bottom: 20px;
       .label{
         display:inline-block;
-        width:130px;
+        width:116px;
         height: 38px;
         line-height: 38px;
         text-align:right;
@@ -561,7 +575,17 @@ export default {
       .ivu-upload{
         display:inline-block;
       }
-      .uperror{padding-left:130px;width:100%;display:block}
+      .underLine{
+        width: 360px;
+        padding:12px 0 12px 20px;
+        border-bottom:1px solid #DEE1E5
+      }
+      .uperror{
+        span{color:#7B8497}
+        width: 360px;
+        padding-left:119px;display:block;margin-top:10px;
+        .del{color:#4373F3;margin-left:200px;cursor:pointer}
+      }
     }
 }
 </style>
