@@ -37,6 +37,7 @@ export default {
       modal1:false,
       keyWord:'',//输入的关键字
       mapObj:null,//保存地图对象，用于后期搜索等功能
+      map:null,
       mapStatus: false,//判断地图是否存在，存在就不初始化了
       signLocation:{//标记的位置
         lng:null,
@@ -57,6 +58,7 @@ export default {
         document.getElementById('allmap').style.height="400px"
         setTimeout(()=>{
             var map = new BMap.Map("allmap");    // 创建Map实例
+            this.map=map;
             map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
             map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
             map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
@@ -84,6 +86,10 @@ export default {
       }
     },
     showInfo(e){
+      var new_point = new BMap.Point(e.point.lng,e.point.lat);
+      var marker = new BMap.Marker(new_point);  // 创建标注
+      this.map.addOverlay(marker);              // 将标注添加到地图中
+      this.map.panTo(new_point); 
       this.signLocation.lng=e.point.lng;
       this.signLocation.lat=e.point.lat;
     },
@@ -140,7 +146,7 @@ export default {
 
 <style lang="scss">
 .mapDialog{
-  .ivu-modal{width:700px !important; height:500px;} 
+  .ivu-modal{width:700px !important; height:500px;top:20px} 
   #allmap{width:600px;height:400px;margin-bottom:10px}
   .search{
     width: 100%;

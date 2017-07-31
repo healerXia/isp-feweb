@@ -1,14 +1,10 @@
 <template lang="html">
   <div class="feedback">
-    <div class="title MT20 MB20">反馈建议管理</div>
+    <div class="title MT20 MB20">我的反馈</div>
     <div class="searchOrder">
       <ul>
         <li>
-          <div class="inputBox">
-            <span class="formLabel">反馈人</span>
-            <Input v-model="feedbackSearch.feedbackName" placeholder="请输入反馈人"></Input>
-          </div>
-          <div class="inputBox ML30">
+           <div class="inputBox">
             <span class="formLabel">创建时间</span>
             <Date-picker type="date"  placeholder="选择日期"  class="fLest" v-model="feedbackSearch.beginTime" 
              :editable="false" :options="disB" @on-change="bDateChange"></Date-picker>
@@ -16,9 +12,8 @@
             <Date-picker type="date" placeholder="选择日期"  class="fLest" v-model="feedbackSearch.endTime" 
             :editable="false" :options="disE" @on-change="eDateChange"></Date-picker>
           </div>
-        </li>
-        <li class='MT20'>
-          <div class="inputBox">
+          
+          <div class="inputBox ML30">
             <span class="formLabel">反馈分类</span>
             <Select v-model="feedbackSearch.classifly"
               :clearable="true"
@@ -27,16 +22,25 @@
               <Option v-for="item in options.classiflyOption" :value="item.value" :key="item.value">{{item.name }}</Option>
             </Select>
           </div>
-          <div class="inputBox ML30">
+
+        </li>
+        <li class='MT20'>
+          <div class="inputBox">
             <span class="btns" @click="searchMess">查询</span>
           </div>
-          <div class="inputBox ML53 ">
+          <div class="inputBox ML30">
             <span class="btns bgCancle" @click="reset">重置</span>
           </div>
         </li>
       </ul>
     </div>
     <div class="feedbackTable">
+      <span class="addBtn" @click="addFeedback">
+          <router-link
+            :to="{path:'createFeedback'}">
+               添加意见
+          </router-link>             
+      </span>
       <table>
         <thead>
             <tr>
@@ -53,8 +57,8 @@
             <td>
               <span class='href'>
                   <router-link
-                    :to="{path:'feedbackHistory',query: {id:1,from:1}}">
-                      详情与回复
+                    :to="{path:'feedbackHistory',query: {id:1,from:0}}">
+                     详情
                   </router-link>                
               </span>
             </td>
@@ -102,13 +106,12 @@
             ]
           },
           feedbackSearch:{
-            feedbackName:"",//反馈意见名称
             beginTime:"",//开始时间
             endTime:"",//结束时间
             classifly:"",//反馈分类
           },
           feedbackMess:{
-            tableHead:['反馈人','反馈分类','反馈渠道','反馈内容','最后回复时间','操作'],
+            tableHead:['反馈人','反馈分类','反馈渠道','反馈内容','反馈时间','操作'],
             tableKey:['name','classiflyName','methodName','content','time'],
             tableArr:[{
               name:'周凤',
@@ -129,18 +132,19 @@
               endTime:"2017:01:11"
             }
             ]
-          }
+          },
         }
       },
       created() {//页面数据初始化             
           this.dealTableData()
       },
       methods:{
+        searchMess(){
+        },
         reset(){
-          this.feedbackSearch.feedbackName="";
           this.feedbackSearch.beginTime="";
           this.feedbackSearch.endTime="";
-          this,feedbackSearch.classifly=""
+          this.feedbackSearch.classifly=""
         },
         dealTableData(){//处理表格数据
           let tableArr=this.feedbackMess.tableArr

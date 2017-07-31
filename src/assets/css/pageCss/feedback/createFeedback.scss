@@ -1,0 +1,27 @@
+.createFeedback{
+  	.title{
+    	font-size: 14px;
+    	color: #333;
+    	padding-left:30px;
+  	}
+	.upload{
+      width: 100%;
+      padding-bottom: 20px;
+      .label{
+        display:inline-block;
+        width:120px;
+        height: 38px;
+        line-height: 38px;
+        text-align:right;
+        padding: 10px 12px 10px 0;
+      }
+      .ivu-upload{
+        display:inline-block;
+        .ivu-upload-list{
+        	display: none
+        }
+      }
+      .uperror{padding-left:130px;width:100%;display:block}
+    }
+    .ivu-select,.ivu-input-wrapper{width: 360px !important;float:left}
+}

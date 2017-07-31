@@ -10,7 +10,10 @@
           </thead>
           <tbody>
             <tr v-for="item in storeEditDate">
-              <td v-for="key in tableKey">{{item[key]}}</td>
+              <td v-for="key in tableKey">
+              <span v-if="key=='createTime'">{{formatDate(new Date())}}</span>
+              <span v-else>{{item[key]}}</span>              
+              </td>
               <td><span @click="showPic" class="salve">查看</span></td>
             </tr>
           </tbody>
@@ -43,7 +46,7 @@
           <div class="upload">
             <span class="label">附件:</span>
             <Upload 
-               action="//jsonplaceholder.typicode.com/posts/"
+               action="http://dev-isp.yiche.com/isp-kongming/cust/imgUpdate"
               :format="['jpg','jpeg','png']"
               :max-size="10240"
               :on-format-error="handleFormatError"
@@ -92,7 +95,7 @@ export default {
           validTime: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
         },
         storeEditDate:[],
-        tableKey:["brandName","validTime","validTime"],
+        tableKey:["brandName","validTime","createTime"],
         brandOption:[],
         brandLoad:true
     }

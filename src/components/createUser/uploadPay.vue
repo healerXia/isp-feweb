@@ -31,7 +31,7 @@
                 </ul>
               </li>
                <li class="item">
-                <span>附件：</span><span class="salve" @click="showPic">1111</span>
+                <span>附件：</span><span class="salve" @click="showPic"></span>
               </li>
             </ul>
           </div>

@@ -26,6 +26,8 @@ const CustList = (resolve) => require(['../pages/userModule/custList/CustList'],
 
 //意见反馈模块
 const FeedbackList = (resolve) => require(['../pages/feedbackModule/feedbackList/FeedbackList'], resolve);
+const MyFeedbackList = (resolve) => require(['../pages/feedbackModule/myFeedbackList/MyFeedbackList'], resolve);
+
 const FeedbackHistory = (resolve) => require(['../pages/feedbackModule/feedbackHistory/FeedbackHistory'], resolve);
 const CreateFeedback = (resolve) => require(['../pages/feedbackModule/createFeedback/CreateFeedback'], resolve);
 
@@ -225,6 +227,11 @@ const routes = [
                 path: 'feedbackList',
                 name: 'feedbackList',
                 component: FeedbackList
+            },
+             {
+                path: 'myfeedbackList',
+                name: 'myfeedbackList',
+                component: MyFeedbackList
             },
             {
                 path: 'feedbackHistory',

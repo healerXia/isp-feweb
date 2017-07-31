@@ -8,7 +8,7 @@
                 <span>统一社会信用码：</span><span>{{storeEditDate.licenseNumber}}</span>
               </div>
               <div class="item">
-                <span>注册资本：</span><span>{{storeEditDate.registeredCapital}}(万元)</span>
+                <span>注册资本：</span><span>{{storeEditDate.registeredCapital}}万元</span>
               </div>
               <div class="item">
                 <span>营业期限：</span><span>{{storeEditDate.time}}</span>
@@ -29,7 +29,7 @@
                 <span>客户名称：</span><span>{{storeEditDate.custName}}</span>
               </div>
               <div class="item itemLH">
-                <span>附件：</span><span class="salve" @click="showPic">111</span>
+                <span>附件：</span><span class="salve" @click="showPic"></span>
               </div>
           </div>
         </div>
@@ -44,7 +44,7 @@
               </Form-item>
               <Form-item label="注册资本:" prop="registeredCapital">
                 <Input v-model="uploadBusi.registeredCapital" placeholder="请填写注册资本" class='fl'></Input>
-                <span class="ML5">万元</span>
+                <span class="ML5 fl">万元</span>
                 <span v-show="judgeErr.reg_cap_err_show" class="colorRed ML5">
                   {{errorCon.reg_cap_err}}
                 </span>

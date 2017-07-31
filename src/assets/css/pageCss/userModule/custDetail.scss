@@ -53,7 +53,7 @@
               background:#F9FAFC;
               padding:0 20px;
               width: 300px;
-              height: 330px;
+              height: 360px;
               overflow-y: auto;
               overflow-x:hidden;
               float: left;
@@ -83,17 +83,21 @@
                   padding:0 10px;
                 }
               }
-              ul{
-                li{
-                  margin-top: 10px;
-                  float: left;
-                  width: 100%;
-                  span{
-                    max-width: 250px;
-                    display:block;
-                    float:left;
-                  }
-                }
+              .item{
+                width: 100%;
+                float: left;
+                height: 27px;
+                line-height: 27px;
+                span{line-height:27px}
+              }
+              .itemLH{line-height:10px;span{line-height:27px}}
+              .itemHeight{
+                width: 100%;
+                float: left;
+                overflow: hidden;
+                span:first-child{height:27px;display:inline-block;float:left;line-height:27px}
+                span:last-child{display:inline-block;float:left;width:160px;line-height:20px;margin-top:3px}
+                span.lastWid{width:180px}
               }
             }
           }
