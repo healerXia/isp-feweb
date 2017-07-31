@@ -22,6 +22,21 @@
         letter-spacing: 0.44px;
         padding-left:8px;
       }
+      :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: #7B8497 ; opacity:1; 
+      }
+
+      ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: #7B8497 ;opacity:1;
+      }
+
+      input:-ms-input-placeholder{
+        color: #7B8497 ;opacity:1;
+      }
+
+      input::-webkit-input-placeholder{
+         color: #7B8497 ;opacity:1;
+      }
       .ivu-select{
         width:268px;
         height:38px;
@@ -30,6 +45,7 @@
           border:0;
           padding-left:4px;
         }
+        .ivu-select-placeholder{color: #7B8497}
       }
       .smallSelect{
         width:84px;

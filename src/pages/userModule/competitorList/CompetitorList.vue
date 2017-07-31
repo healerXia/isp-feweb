@@ -42,16 +42,6 @@
               </tr>
             </tbody>
           </table>
-          <Page :total="page.totalPages" class="MT30"
-            :current="page.current"
-            size="small"
-            :page-size-opts="pageSizeOpts"
-            :page-size="20"
-            show-elevator
-            show-sizer
-            @on-change="pageChange"
-            @on-page-size-change="pageSizeChange">
-          </Page>
       </div>
       <Modal class="addComMess"
           v-model="showDialog"
@@ -138,6 +128,7 @@
       },
       data () {
         return {
+          competitorId:"",
           id:"",
           showDialog:false,
           addComMess:{
@@ -162,10 +153,6 @@
             typeName:[{type: 'string', max: 20, message: '不能超过20个汉字', trigger: 'blur'}],
             notes:[{type: 'string', max: 200, message: '不能超过200个汉字', trigger: 'blur'}]
           },
-          page:{
-            current:1,
-            totalPages:0,
-          },
           tableObj:{
             tableHead:["竞媒名称","签约版本","签约周期","版本价格","实付价格","折扣","合作类型","签约方式","备注","操作"],
             tableKey:['name','signName','time','price','realPrice','discount','typeName','patternName','notes'],
@@ -187,16 +174,17 @@
       },
       created() {//页面数据初始化             
         this.getTableData()
+        
       },
       methods:{
         getTableData(){
           this.$http.post(config.urlList.selCompetitorLog,
-            {pageSize:20,pageIndex:1}
+            {pageSize:1,pageIndex:1}
             ).then((res)=>{
               if(res.data.errorCode===0){
                 this.tableObj.tableData=res.data.result.resultList
+                this.competitorId=this.tableObj.tableData[0].competitorId
                 this.dealTableDate()
-                this.page.totalPages=res.data.result.totalCount
               }
               else {
                 this.$Modal.info({
@@ -227,7 +215,7 @@
         },
         edit(id){
           this.$http.post(config.urlList.selCompetitorLog,
-            {pageSize:20,pageIndex:1,id:id}
+            {pageSize:1,pageIndex:1,id:id}
             ).then((res)=>{
               if(res.data.errorCode===0){
                 this.id=res.data.result.resultList[0].id;
@@ -388,23 +376,6 @@
             this.tableObj.tableData[i]['patternName']=patternName
           }
         },
-        pageChange(value){
-          this.$http.post(config.urlList.selCompetitorLog,
-            {pageSize:10,pageIndex:value}
-            ).then((res)=>{
-              if(res.data.errorCode===0){
-                this.tableObj.tableData=res.data.result.resultList
-                this.dealTableDate()
-                this.page.current=value
-              }
-              else {
-                this.$Modal.info({
-                    title: '提示',
-                    content: res.data.errorMsg
-                });
-              }
-          }).catch((res)=>{})
-        },
         formatTen(num) { 
           return num > 9 ? (num + "") : ("0" + num); 
         },
@@ -423,10 +394,3 @@
 <style lang='scss'>
   @import '../../../assets/css/pageCss/userModule/competitorList.scss';
 </style>
-[
-{
-name:"北京"
-id:"2",
-status:true
-}
-]

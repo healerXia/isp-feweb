@@ -351,7 +351,7 @@
                 <span>{{custInfo.custName}}</span>
               </li>
               <li>
-                <span>客户简称</span>
+                <span>客户简称：</span>
                 <span class="liWid">{{custInfo.abbrName}}</span>
               </li>
               <li>
@@ -394,7 +394,7 @@
                 <span>{{custInfo.custName}}</span>
               </li>
               <li>
-                <span>客户简称</span>
+                <span>客户简称：</span>
                 <span class="liWid">{{custInfo.abbrName}}</span>
               </li>
               <li>
@@ -717,25 +717,12 @@
             tableKey:["brandName","validTime","createTime"],
             tableHead:["授权品牌","有效期","上传日期","附件"],
             brandLicenseArr:[
-              // {brandName:"品牌品牌名臣品牌名臣名臣",createTime:"2012-11-11",validTime:"2013-11-11",salve:"11"},
-              // {brandName:"品牌名臣",uploadTime:"2012-11-11",validTime:"2013-11-11",salve:"11"},
-              // {brandName:"品牌名臣",uploadTime:"2012-11-11",validTime:"2013-11-11",salve:"11"}
             ]
           },
           brandTable:{
             tableHead:['上传品牌','有效期','上传时间'],
             tableKey:['brandName','validTime','createTime'],
             tableData:[
-              // {
-              //   brandName:"品牌品牌名臣品牌名臣名臣",
-              //   createTime:"2012-11-11",
-              //   validTime:"2013-11-11"
-              // },
-              // {
-              //   brandName:"品牌品牌名臣品牌名臣名臣",
-              //   createTime:"2012-11-11",
-              //   validTime:"2013-11-11"
-              // }
               ]
           },
           bankAccount:{
@@ -762,20 +749,6 @@
             tableHead:['序号','操作人','有效期','操作时间','审核状态','备注'],
             tableKey:['operating','validTime','createTime','status','notes'],
             tableData:[
-            // {
-            //   operating: "12356789",//操作人
-            //   validTime: "1000000",//
-            //   createTime:"2016-12-29",//操作时间
-            //   status: "审核通过",//审核审核状态
-            //   notes:"嗯嗯可以",//备注
-            // },
-            // {
-            //   operating: "12356789",//操作人
-            //   validTime: "1000000",//
-            //   createTime:"2016-12-29",//操作时间
-            //   status: "审核通过",//审核审核状态
-            //   notes:"嗯嗯可以",//备注
-            // }
             ]
           },
         }
@@ -860,7 +833,31 @@
               }
             }).catch((res)=>{})
 
-            this.$http.post(config.urlList.custBrandLicense,//获取品牌授权书编辑
+            this.$http.post(config.urlList.custBrandLicense,//获取品牌授权书
+              {custId:id,pageSize:100,pageIndex:1},
+              {emulateJSON:true}
+              ).then((res)=>{
+              if(res.data.errorCode===0){
+                if(res.data.result.resultList.length>=1){
+                  this.brandPage.current=res.data.result.pageNo
+                  this.brandPage.totalPages=res.data.result.totalCount
+                  for(let i=0;i<res.data.result.resultList.length;i++){
+                    if(res.data.result.resultList[i].validTime){
+                      res.data.result.resultList[i].validTime=res.data.result.resultList[i].validTime.substring(0,10);
+                    }                 
+                  }
+                  this.brandLicense.brandLicenseArr=res.data.result.resultList.slice(0)
+                }
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((res)=>{})
+
+            this.$http.post(config.urlList.custBrandLicenseHistory,//获取品牌授权书历史
               {custId:id,pageSize:5,pageIndex:1},
               {emulateJSON:true}
               ).then((res)=>{
@@ -874,16 +871,7 @@
                       res.data.result.resultList[i].validTime=res.data.result.resultList[i].validTime.substring(0,10);
                     }                 
                   }
-                  this.brandLicense.brandLicenseArr=[];
                   this.brandTable.tableData=res.data.result.resultList.slice(0)
-                  let create_time=res.data.result.resultList[0].createTime;            
-                  let arr=[]
-                  for(let i=0;i<res.data.result.resultList.length;i++){
-                    if(res.data.result.resultList[i].createTime==create_time){
-                      arr.push(res.data.result.resultList[i])
-                    }
-                  } 
-                  this.brandLicense.brandLicenseArr=arr.splice(0)
                 }
               }
               else {
@@ -1037,7 +1025,7 @@
             }).catch((res)=>{})
         },
         brandPageChange(index){//品牌授权书
-          this.$http.post(config.urlList.custBrandLicense,//获取品牌授权书编辑
+          this.$http.post(config.urlList.custBrandLicenseHistory,//获取品牌授权书
             {custId:this.$router.currentRoute.query.id,pageSize:5,pageIndex:index},
             {emulateJSON:true}
             ).then((res)=>{
@@ -1051,7 +1039,6 @@
                     res.data.result.resultList[i].validTime=res.data.result.resultList[i].validTime.substring(0,10);
                   }                 
                 }
-                this.brandLicense.brandLicenseArr=[];
                 this.brandTable.tableData=res.data.result.resultList.slice(0)
               }
             }
