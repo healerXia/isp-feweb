@@ -8,7 +8,7 @@
                 <span>统一社会信用码：</span><span>{{storeEditDate.licenseNumber}}</span>
               </div>
               <div class="item">
-                <span>注册资本：</span><span>{{storeEditDate.registeredCapital}}(万元)</span>
+                <span>注册资本：</span><span>{{storeEditDate.registeredCapital}}万元</span>
               </div>
               <div class="item">
                 <span>营业期限：</span><span>{{storeEditDate.time}}</span>
@@ -29,7 +29,7 @@
                 <span>客户名称：</span><span>{{storeEditDate.custName}}</span>
               </div>
               <div class="item itemLH">
-                <span>附件：</span><span class="salve" @click="showPic">111</span>
+                <span>附件：</span><span class="salve" @click="showPic"></span>
               </div>
           </div>
         </div>
@@ -44,7 +44,7 @@
               </Form-item>
               <Form-item label="注册资本:" prop="registeredCapital">
                 <Input v-model="uploadBusi.registeredCapital" placeholder="请填写注册资本" class='fl'></Input>
-                <span class="ML5">万元</span>
+                <span class="ML5 fl">万元</span>
                 <span v-show="judgeErr.reg_cap_err_show" class="colorRed ML5">
                   {{errorCon.reg_cap_err}}
                 </span>
@@ -81,16 +81,19 @@
               <div class="upload">
                 <span class="label">附件:</span>
                 <Upload 
-                  action="http://dev-isp.yiche.com:8081/cust/fileUpload2"
+                  action="/api/isp-kongming/cust/imgUpdate"
                   :format="['jpg','jpeg','png']"
                   :max-size="10240"
                   :on-format-error="handleFormatError"
                   :on-exceeded-size="handleMaxSize"
                   :on-success="fileUploadSuccess"
                   >
-                  <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+                  <Button type="ghost" class="btn bg4373F3">上传文件</Button>
                   <span  class="ML15">请上传1M以内的文件</span> 
                 </Upload>
+                <div class="uperror" v-show="uploadImg.show">
+                  <span>{{uploadImg.name}}</span><span class="del" @click="removeImg">删除</span>
+                </div>   
                 <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
               </div> 
               <Form-item>
@@ -164,6 +167,10 @@ export default {
         custName: "",//客户名称
         salve: ""//营业执照附件
       },
+      uploadImg:{
+        name:"111",
+        show:false
+      }
     }
   },
   created(){
@@ -173,6 +180,10 @@ export default {
     }
   },
   methods: {
+      removeImg(){
+        this.uploadImg.name="";
+        this.uploadImg.show=false
+      },
       endDateChange(data){//选了结束时间把永久去掉
         if(data!=""&&this.forever){
           this.forever=false
@@ -286,6 +297,9 @@ export default {
         this.judgeErr.uploadErrShow=true
       },
       fileUploadSuccess(response, file, fileList){
+        this.uploadImg.name="";
+        this.uploadImg.show=true;
+        this.uploadBrand.salve=""
       },
       formatTen(num) { 
         return num > 9 ? (num + "") : ("0" + num); 
@@ -354,20 +368,21 @@ export default {
       }
   }
 }
- .upBtn{
-    text-align: center; 
-    display: inline-block;
-    width: 120px !important;
-    height: 38px !important;
-    background-color:white !important;
-    border: 1px solid #4373F3;
-    line-height: 38px !important;
-    border-radius:2px;
-    font-size: 14px;
-    color: #4373F3;
-    cursor: pointer
-  }
+.upBtn{
+  text-align: center; 
+  display: inline-block;
+  width: 120px !important;
+  height: 38px !important;
+  background-color:white !important;
+  border: 1px solid #4373F3;
+  line-height: 38px !important;
+  border-radius:2px;
+  font-size: 14px;
+  color: #4373F3;
+  cursor: pointer
+}
 .businessDialog {  
+   .ivu-upload-list{display:none}
     display: inline-block; 
     .ivu-input-type,input{width:350px}
     .dateInput {
@@ -381,7 +396,7 @@ export default {
       padding-bottom: 20px;
       .label{
         display:inline-block;
-        width:130px;
+        width:116px;
         height: 38px;
         line-height: 38px;
         text-align:right;
@@ -399,7 +414,10 @@ export default {
       .ivu-upload{
         display:inline-block;
       }
-      .uperror{padding-left:130px;width:100%;display:block}
+      .uperror{ 
+        padding-left:117px;width:100%;display:block;margin-top:10px;
+        .del{color:#4373F3;margin-left:200px;cursor:pointer}
+      }
     }
     .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px} 
     .footer{text-align:center;}

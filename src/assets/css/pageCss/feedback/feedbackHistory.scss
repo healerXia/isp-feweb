@@ -1,0 +1,21 @@
+.feedbackHistory{
+	padding-left:30px;
+	.title{
+    	font-size: 14px;
+    	color: #333;
+    	a{
+    		font-size: 12px
+    	}
+  	}
+  	.messBox{
+  		width: 70%;
+  		.head{
+  			span{font-size:12px;}
+  		}
+  		.message{
+
+  		}
+  	}
+  	.ivu-checkbox-group{float:left}
+  	.ivu-select,.ivu-input-wrapper{width: 500px !important;float:left}
+}

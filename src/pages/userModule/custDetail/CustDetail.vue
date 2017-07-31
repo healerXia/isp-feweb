@@ -14,7 +14,7 @@
       <div class="content">
         <div class="title pT30">
           <h1 class="MR15">客户信息</h1>
-          <router-link
+          <router-link v-show="editOrNot"
             :to="{path:'createUser',query:{id:$router.currentRoute.query.id}}" >
               编辑
           </router-link>
@@ -308,11 +308,6 @@
                 <span class="liWid">{{custInfo.address}}</span>
               </li>
               <li>
-                <span>地图：</span>
-                <div class="maps" id="map">                  
-                </div>
-              </li>
-              <li>
                 <span>审核状态：</span>
                 <span v-if="custInfo.status==0">无</span>
                 <span v-if="custInfo.status==1">待确认</span>
@@ -322,13 +317,18 @@
                 <span v-if="custInfo.status==5">待审核</span>
                 <span v-if="custInfo.status==6">审核驳回</span>
               </li>
-              <li v-if="custInfo.subclassId==2">
+              <li>
                 <span>创建人：</span>
                 <span>{{custInfo.createUser}}</span>
               </li>
-              <li v-if="custInfo.subclassId==2">
+              <li>
                 <span>最后修改人：</span>
                 <span class="liWid">{{custInfo.logName}}</span>
+              </li>
+              <li>
+                <span>地图：</span>
+                <div class="maps" id="map">                  
+                </div>
               </li>
             </ul>
           </div>
@@ -373,6 +373,14 @@
                 <span>客户地址：</span>
                 <span class="liWid">{{custInfo.address}}</span>
               </li>
+              <li>
+                <span>创建人：</span>
+                <span>{{custInfo.createUser}}</span>
+              </li>
+              <li>
+                <span>最后修改人：</span>
+                <span class="liWid">{{custInfo.logName}}</span>
+              </li>
             </ul>
           </div>
           <div v-show="custInfo.typeId==7">
@@ -416,6 +424,14 @@
                 <span>客户地址：</span>
                 <span class="liWid">{{custInfo.address}}</span>
               </li>
+              <li>
+                <span>创建人：</span>
+                <span>{{custInfo.createUser}}</span>
+              </li>
+              <li>
+                <span>最后修改人：</span>
+                <span class="liWid">{{custInfo.logName}}</span>
+              </li>
             </ul>
           </div>
           <div class="title MB20 MT30 bgNone" v-show="show.showLicence">
@@ -424,45 +440,43 @@
           <div class="licence" v-show="show.showLicence">
               <div class="licenceBox">
                 <div class="licenceTitle">
-                营业执照
-                <span @click="showHistory('1')">历史</span>
+                  营业执照
+                  <span @click="showHistory('1')">历史</span>
                 </div>
-                <ul>
-                  <li>
-                    <span>统一社会信用码：</span><span>{{businessLicense.licenseNumber}}</span>
-                  </li>
-                  <li>
-                    <span>注册资本：</span><span>{{businessLicense.registeredCapital}}(万元)</span>
-                  </li>
-                  <li>
-                    <span>营业期限：</span><span>{{businessLicense.time}}</span>
-                  </li>
-                  <li>
-                    <span>成立日期：</span><span>{{businessLicense.createTime}}</span>
-                  </li>
-                  <li>
-                    <span>法定代表人：</span><span>{{businessLicense.legalPerson}}</span>
-                  </li>
-                  <li>
-                    <span>经营住所：</span><span>{{businessLicense.businessAddress}}</span>
-                  </li>
-                  <li>
-                    <span>组织机构代码：</span><span>{{businessLicense.organizationCode}}</span>
-                  </li>
-                  <li>
-                    <span>客户名称：</span><span>{{businessLicense.custName}}</span>
-                  </li>
-                  <li>
-                    <span>附件：</span><span @click="showSalveDialog" class="salve">查看</span>
-                  </li>
-                </ul>
+                <div class="item MT20">
+                  <span>统一社会信用码：</span><span>{{businessLicense.licenseNumber}}</span>
+                </div>
+                <div class="item">
+                  <span>注册资本：</span><span>{{businessLicense.registeredCapital}}(万元)</span>
+                </div>
+                <div class="item">
+                  <span>营业期限：</span><span>{{businessLicense.time}}</span>
+                </div>
+                <div class="item">
+                  <span>成立日期：</span><span>{{businessLicense.createTime}}</span>
+                </div>
+                <div class="item">
+                  <span>法定代表人：</span><span>{{businessLicense.legalPerson}}</span>
+                </div>
+                <div class="itemHeight">
+                  <span>经营住所：</span><span class="lastWid">{{businessLicense.businessAddress}}</span>
+                </div>
+                <div class="itemHeight">
+                  <span>组织机构代码：</span><span>{{businessLicense.organizationCode}}</span>
+                </div>
+                <div class="itemHeight">
+                  <span>客户名称：</span><span class="lastWid">{{businessLicense.custName}}</span>
+                </div>
+                <div class="item">
+                  <span>附件：</span><span @click="showSalveDialog" class="salve">查看</span>
+                </div>
               </div>
               <div class="licenceBox width400 ML20">
                 <div class="licenceTitle">
                   品牌授权书
                   <span @click="showHistory('2')">历史</span>
                 </div>
-                <table class="MT10">
+                <table class="MT20">
                   <thead>
                     <tr>
                       <td v-for="head in brandLicense.tableHead">
@@ -486,33 +500,33 @@
                   纳税资质
                   <span @click="showHistory('3')">历史</span>
                 </div>
-                <ul>
-                  <li>
+                <ul class="MT20">
+                  <li class="item">
                     <span>纳税人识别号：</span>
                     <span>
                     {{bankAccount.taxCode!=""?bankAccount.taxCode:""}}
                     </span>
                   </li>
-                  <li>
+                  <li class="item">
                     <span>有效期：</span><span>
                     {{bankAccount.taxCode!=""?bankAccount.validTime:""}}
                     </span>
                   </li>
-                  <li>
+                  <li class="item">
                     <span>资质状态：</span>
                     <span>
                     {{bankAccount.status?bankAccount.status:"待确认"}}
                     </span>
                   </li>
-                  <li v-for="(item,index) in bankAccount.custBankAccountList" v-if="item.bank">
+                  <li v-for="(item,index) in bankAccount.custBankAccountList" v-if="item.bank" >
                     <ul>
-                      <li><span>开户银行({{index+1}})：</span><span>{{item.bank}}</span></li>
-                      <li><span>开户账号({{index+1}})：</span><span>{{item.bankAccount}}</span></li>
-                      <li><span>电话({{index+1}})：</span><span>{{item.phone}}</span></li>
-                      <li><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
+                      <li class="itemHeight"><span>开户银行({{index+1}})：</span><span>{{item.bank}}</span></li>
+                      <li class="item"><span>开户账号({{index+1}})：</span><span>{{item.bankAccount}}</span></li>
+                      <li class="item"><span>电话({{index+1}})：</span><span>{{item.phone}}</span></li>
+                      <li class="itemHeight"><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
                     </ul>
                   </li>
-                   <li>
+                   <li class="item">
                     <span>附件：</span><span @click="showSalveDialog" class="salve">1111</span>
                   </li>
                 </ul>
@@ -586,6 +600,7 @@
                 <td>{{index+1}}</td>
                 <td v-for="key in bankTable.tableKey">
                   <span v-if="key=='createTime'">{{item.createTime.substring(0,11)}}</span>
+                  <span v-else-if="key=='operating'">{{operating}}</span>        
                   <span v-else>{{item[key]}}</span>                  
                 </td>
               </tr>
@@ -622,6 +637,8 @@
       },
       data () {
         return {
+          editOrNot:true,
+          operating:"",
           busiPage:{
             current:1,
             totalPages:0,
@@ -679,39 +696,12 @@
           governArealist:[],
           custBrandMapList:[],
           businessLicense:{//上传营业执照
-            // licenseNumber: "12356789",//统一社会信用代码
-            // registeredCapital: "1000000",//注册资本
-            // time: " 2016-12-29至永久",//营业期限
-            // beginTime:"2016-12-29",
-            // endTime:"2017-01-10",
-            // createTime: "2016-12-29",//年检年份
-            // legalPerson: "张三",//法定代表人
-            // businessAddress: "北京市昌平区",//经营住所
-            // organizationCode: "AE86110",//组织机构代码
-            // custName: "易车网",//客户名称
-            // salve: ""//营业执照附件
+
           },
           businessTable:{
             tableHead:['统一社会信用代码','注册资本(万元)','营业期限','有效期','上传时间'],
             tableKey:['licenseNumber','registeredCapital','time','endTime','createTime'],
-            tableData:[
-              // {
-              //   licenseNumber: "12356789",//统一社会信用代码
-              //   registeredCapital: "1000000",//注册资本
-              //   beginTime:"2016-12-29",
-              //   endTime:"2017-01-10",
-              //   validTime: "2016-12-29",//年检年份
-              //   createTime:"2016-12-29",//年检年份
-              // },
-              // {
-              //   licenseNumber: "12356789",//统一社会信用代码
-              //   registeredCapital: "1000000",//注册资本
-              //   beginTime:"2016-12-29",
-              //   endTime:"2017-01-10",
-              //   validTime: "2016-12-29",//年检年份
-              //   createTime:"2016-12-29",//年检年份
-              // }
-            ]
+            tableData:[]
           },
           brandLicense:{
             tableKey:["brandName","validTime","createTime"],
@@ -728,18 +718,6 @@
           bankAccount:{
             taxCode:"",
             custBankAccountList:[
-              // {
-              //   bank:"中国银行",
-              //   bankAccount:"6500111122220000",
-              //   phone:"18602351793",
-              //   address:"北京市昌平区"
-              // },
-              // {
-              //   bank:"中国银行",
-              //   bankAccount:"6500111122220000",
-              //   phone:"18602351793",
-              //   address:"北京市昌平区"
-              // } 
             ],
             salve:"",
             validTime:"",
@@ -748,8 +726,7 @@
           bankTable:{
             tableHead:['序号','操作人','有效期','操作时间','审核状态','备注'],
             tableKey:['operating','validTime','createTime','status','notes'],
-            tableData:[
-            ]
+            tableData:[]
           },
         }
       },
@@ -762,7 +739,14 @@
               for(let item in res.data.result[0]){
                 if(item!="governArealist"&&item!="custBrandMapList"){
                   this.custInfo[item]=res.data.result[0][item]
-                }                  
+                } 
+                if(item=="status"){
+                  if(res.data.result[0][item]==5){
+                    this.editOrNot=false
+                  }else{
+                    this.editOrNot=true
+                  }
+                }                 
               }
               for(var i=0;i<res.data.result[0].governArealist.length;i++){
                 let obj={}
@@ -819,11 +803,7 @@
               if(res.data.errorCode===0){
                   this.bankTable.tableData= res.data.result.resultList 
                   this.bankPage.current=1
-                  this.bankPage.totalPages=res.data.result.totalCount
-                  for(let i=0;i<this.bankTable.tableData.length;i++){
-                    this.bankTable.tableData[i].operating="lily"
-                    this.bankTable.tableData[i].notes="lily"
-                  }      
+                  this.bankPage.totalPages=res.data.result.totalCount     
               }
               else {
                 this.$Modal.info({
@@ -915,6 +895,18 @@
                     }
                   }
                 }
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+            }).catch((res)=>{})
+
+            this.$http.get(config.urlList.login).then((res)=>{//获取登录人即操作人
+              if(res.data.errorCode===0){
+                this.operating=res.data.result.username;
               }
               else {
                 this.$Modal.info({
@@ -1058,11 +1050,7 @@
             if(res.data.errorCode===0){
                 this.bankTable.tableData= res.data.result.resultList 
                 this.bankPage.current=1
-                this.bankPage.totalPages=res.data.result.totalCount
-                for(let i=0;i<this.bankTable.tableData.length;i++){
-                  this.bankTable.tableData[i].operating="lily"
-                  this.bankTable.tableData[i].notes="lily"
-                }      
+                this.bankPage.totalPages=res.data.result.totalCount   
             }
             else {
               this.$Modal.info({

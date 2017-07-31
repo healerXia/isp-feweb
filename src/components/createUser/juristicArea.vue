@@ -315,7 +315,7 @@
     span.open_icon {
         cursor: pointer
     }
-    .ivu-modal{width:700px !important; height:600px;overflow:auto} 
+    .ivu-modal{width:700px !important; height:600px;overflow:auto;} 
     .ivu-form-item-content{margin-left: 0px;}
     .area{
         width:100%;

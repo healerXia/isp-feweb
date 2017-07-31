@@ -1,14 +1,19 @@
 <template lang="html">
   <div class="feedback">
-    <div class="title MT20 MB20">反馈建议管理</div>
+    <div class="title MT20 MB20">我的反馈</div>
     <div class="searchOrder">
       <ul>
         <li>
-          <div class="inputBox">
-            <span class="formLabel">反馈人</span>
-            <Input v-model="feedbackSearch.createName" placeholder="请输入反馈人"></Input>
-          </div>
           <div class="inputBox ML30">
+            <span class="formLabel">反馈分类</span>
+            <Select v-model="feedbackSearch.problemType"
+              :clearable="true"
+              placeholder="请选择反馈分类" 
+            >
+              <Option v-for="item in options.classiflyOption" :value="item.value" :key="item.value">{{item.name }}</Option>
+            </Select>
+          </div>
+          <div class="inputBox">
             <span class="formLabel">创建时间</span>
             <Date-picker type="date"  placeholder="选择日期"  class="fLest" v-model="feedbackSearch.beginTime" 
              :editable="false" :options="disB" @on-change="bDateChange"></Date-picker>
@@ -19,24 +24,21 @@
         </li>
         <li class='MT20'>
           <div class="inputBox">
-            <span class="formLabel">反馈分类</span>
-            <Select v-model="feedbackSearch.problemType"
-              :clearable="true"
-              placeholder="请选择反馈分类" 
-            >
-              <Option v-for="item in options.classiflyOption" :value="item.value" :key="item.value">{{item.name }}</Option>
-            </Select>
-          </div>
-          <div class="inputBox ML30">
             <span class="btns" @click="searchMess">查询</span>
           </div>
-          <div class="inputBox ML53 ">
+          <div class="inputBox ML30">
             <span class="btns bgCancle" @click="reset">重置</span>
           </div>
         </li>
       </ul>
     </div>
     <div class="feedbackTable">
+      <span class="addBtn" @click="addFeedback">
+          <router-link
+            :to="{path:'createFeedback'}">
+               添加意见
+          </router-link>             
+      </span>
       <table>
         <thead>
             <tr>
@@ -46,15 +48,14 @@
         <tbody>
           <tr v-for="data in feedbackMess.tableArr">
             <td v-for="key in feedbackMess.tableKey">
-              <span v-if="key=='time'">{{data.beginTime.substring(0,10)}}至{{data.endTime.substring(0,10)}}</span>
-              <p v-else-if="key=='content'" :title="data[key]">{{data[key]}}</p>
+              <p v-if="key=='content'" :title="data[key]">{{data[key]}}</p>
               <span v-else>{{data[key]}}</span>
             </td>
             <td>
               <span class='href'>
                   <router-link
-                    :to="{path:'feedbackHistory',query: {id:1,from:1}}">
-                      详情与回复
+                    :to="{path:'feedbackHistory',query: {id:1,from:0}}">
+                     详情
                   </router-link>                
               </span>
             </td>
@@ -102,10 +103,10 @@
             ]
           },
           feedbackSearch:{
-            createName:"",//反馈意见名称
             beginTime:"",//开始时间
             endTime:"",//结束时间
             problemType:"",//反馈分类
+            createId:"",//登录人id
           },
           feedbackMess:{
             tableHead:['反馈人','反馈分类','反馈渠道','反馈内容','反馈时间','操作'],
@@ -125,18 +126,30 @@
               createTime:"2017:01:11",
             }
             ]
-          }
+          },
         }
       },
-      created() {//页面数据初始化             
-          this.dealTableData()
+      created() {//页面数据初始化
+        this.$http.get(config.urlList.login).then((res)=>{//获取登录人即操作人
+            if(res.data.errorCode===0){
+              this.feedbackSearch.createId=res.data.result.uid;
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+        }).catch((res)=>{})             
+        this.dealTableData()
       },
       methods:{
+        searchMess(){
+        },
         reset(){
-          this.feedbackSearch.createName="";
           this.feedbackSearch.beginTime="";
           this.feedbackSearch.endTime="";
-          this,feedbackSearch.problemType=""
+          this.feedbackSearch.problemType=""
         },
         dealTableData(){//处理表格数据
           let tableArr=this.feedbackMess.tableArr

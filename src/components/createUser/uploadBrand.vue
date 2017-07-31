@@ -10,7 +10,10 @@
           </thead>
           <tbody>
             <tr v-for="item in storeEditDate">
-              <td v-for="key in tableKey">{{item[key]}}</td>
+              <td v-for="key in tableKey">
+              <span v-if="key=='createTime'">{{formatDate(new Date())}}</span>
+              <span v-else>{{item[key]}}</span>              
+              </td>
               <td><span @click="showPic" class="salve">查看</span></td>
             </tr>
           </tbody>
@@ -43,16 +46,19 @@
           <div class="upload">
             <span class="label">附件:</span>
             <Upload 
-               action="//jsonplaceholder.typicode.com/posts/"
+               action="/api/isp-kongming/cust/imgUpdate"
               :format="['jpg','jpeg','png']"
               :max-size="10240"
               :on-format-error="handleFormatError"
               :on-exceeded-size="handleMaxSize"
               :on-success="fileUploadSuccess"
               >
-              <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+              <Button type="ghost" class="btn bg4373F3">上传文件</Button>
               <span  class="ML15">请上传1M以内的文件</span> 
             </Upload>
+            <div class="uperror" v-show="uploadImg.show">
+              <span>{{uploadImg.name}}</span><span class="del" @click="removeImg">删除</span>
+            </div>            
             <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
           </div> 
           <Form-item>
@@ -83,7 +89,7 @@ export default {
           uploadErrShow:false
         },
         errorCon:{
-          uploadErr:""
+          uploadErr:"111111"
         },
         checkValue:{
           brandId:[
@@ -92,9 +98,13 @@ export default {
           validTime: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
         },
         storeEditDate:[],
-        tableKey:["brandName","validTime","validTime"],
+        tableKey:["brandName","validTime","createTime"],
         brandOption:[],
-        brandLoad:true
+        brandLoad:true,
+        uploadImg:{
+          name:"111",
+          show:false
+        }
     }
   },
   created(){
@@ -121,8 +131,12 @@ export default {
     }
   },
   methods: {
+    removeImg(){
+      this.uploadImg.name="";
+      this.uploadImg.show=false
+    },
     showPic(){
-      this.$emit('showPic',"pic")
+      this.$emit('showPic',"http://d1.test.yiche.com/uploadscdd7ed9ba6e713fa7c880f234fb2c9a0.jpg")
     },
     brandChange(value){
       this.uploadBrand.brandName=value.label;
@@ -171,6 +185,10 @@ export default {
       this.judgeErr.uploadErrShow=true
     },
     fileUploadSuccess(response, file, fileList){       
+      console.log(response)
+      this.uploadImg.name="";
+      this.uploadImg.show=true;
+      this.uploadBrand.salve=""
     },
     formatTen(num) { 
       return num > 9 ? (num + "") : ("0" + num); 
@@ -202,6 +220,7 @@ export default {
 <style lang="scss">
 .brandDialog {
   .ivu-select{width:350px;}
+  .ivu-upload-list{display:none}
   .ivu-modal{width:700px !important; height:500px;} 
    display: inline-block;
    input{width:350px}
@@ -210,7 +229,7 @@ export default {
     padding-bottom: 20px;
     .label{
       display:inline-block;
-      width:130px;
+      width:116px;
       height: 38px;
       line-height: 38px;
       text-align:right;
@@ -228,7 +247,10 @@ export default {
     .ivu-upload{
       display:inline-block;
     }
-    .uperror{padding-left:130px;width:100%;display:block}
+    .uperror{
+      padding-left:119px;width:100%;display:block;margin-top:10px;
+      .del{color:#4373F3;margin-left:200px;cursor:pointer}
+    }
   }
   .footer{text-align:center;}
 }
