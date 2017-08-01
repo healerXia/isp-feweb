@@ -44,17 +44,19 @@
 	        </Radio-group>
 	      </Form-item>
 	      <Form-item label="职位" prop="position">
-	        <Select clearable v-model="formValidate.position" placeholder="请选择职位">
-	        	<Option v-for="item in selectedPosition" :value="item.value">{{ item.name }}</Option>
+	        <Select clearable v-model="formValidate.position" 
+	        	placeholder="请选择职位"
+	        	clearable 
+	        	>
+	        	<Option v-for="item in selectedPosition" :value='item.id'>{{ item.name }}</Option>
 	        </Select>
 	    	</Form-item>
 	    	<Form-item label="员工分类" prop="classify">
-	        <Select clearable v-model="formValidate.classify" placeholder="请选择员工分类">
-	            <Option value="">销售</Option>
-	            <Option value="">客服</Option>
-	            <Option value="">编辑</Option>
-	            <Option value="">支持</Option>
-	            <Option value="">其他</Option>
+	        <Select v-model="formValidate.classify" 
+	        placeholder="请选择员工分类"
+	        clearable 
+	        >
+						<Option v-for="item in selectedType" :value='item.id'>{{ item.name }}</Option>
 	        </Select>
 	     	</Form-item>
 			</Form>
@@ -137,76 +139,8 @@ import config from './config.js';
 					position:"",//职位
 					classify:""//员工分类
 				},
-				selectedPosition:[
-					{
-						name:'总经理',
-						value:''
-					},
-					{
-						name:'副总经理',
-						value:''
-					},
-					{
-						name:'总监',
-						value:''
-					},
-					{
-						name:'助理总监',
-						value:''
-					},
-					{
-						name:'经理',
-						value:''
-					},
-					{
-						name:'支持人员',
-						value:''
-					},
-					{
-						name:'运营客服',
-						value:''
-					},
-					{
-						name:'市场人员',
-						value:''
-					},
-					{
-						name:'运营编辑',
-						value:''
-					},
-					{
-						name:'运营专员',
-						value:''
-					},
-					{
-						name:'高级营销经理',
-						value:''
-					},
-					{
-						name:'营销经理',
-						value:''
-					},
-					{
-						name:'营销顾问',
-						value:''
-					},
-					{
-						name:'高级营销顾问',
-						value:''
-					},
-					{
-						name:'主编',
-						value:''
-					},
-					{
-						name:'区域经理',
-						value:''
-					},
-					{
-						name:'城市群负责人',
-						value:''
-					}
-				],
+				selectedType: [],
+				selectedPosition:[],
 				ruleValidate:{
 					account: [
             { required: true, message: '域账号不能为空', trigger: 'blur' }
@@ -221,7 +155,7 @@ import config from './config.js';
             { required: true, message: '请输入员工上级', trigger: 'change' }
           ],
           department: [
-            { required: true, message: '请选择所属部门', trigger: 'change' }
+            { required: true, message: '请选择所属部门', trigger: 'change',type:"number"}
           ],
           status: [
             { required: true, message: '请选择状态', trigger: 'change' }
@@ -243,11 +177,95 @@ import config from './config.js';
 			}
 		},
 		created(query){
-			this.getStaffInfo();
-			this.getStaffList("");
-			this.getDepartList("")
+			let id = this.$router.currentRoute.query.id;
+			if (id) {
+				this.getStaffInfo();
+			}
+			else {
+				this.getStaffList("");
+				this.getDepartList("");
+				this.getPosition();
+				this.getEmpType();
+			}
+
 		},
 		methods:{
+			//分类
+			getEmpType() {
+				this.$http.get(config.urlList.getEmpType).then((res) => {
+					if (res.data.errorCode === 0) {
+						let data = res.data.result;
+						for (let attr in data) {
+								this.selectedType.push({
+									id: attr,
+									name: data[attr]
+								})
+						}
+					}
+				})
+			},
+			initManageList(id) {
+				this.$http.get('/isp-process-server/employee/getPageList', {
+					params: {
+						pageIndex: 1,
+						pageSize: 9999
+					}
+				}).then((res) => {
+					if (res.data.errorCode == 0) {
+							let data = res.data.result.resultList;
+							for (let i = 0; i < data.length; i++) {
+
+								if (id == data[i].employeeId) {
+									console.log(id);
+									this.staffList = [];
+									this.leaderLoading = false;
+									this.staffList.push({
+										employeeId: data[i].employeeId,
+										displayName: data[i].displayName
+									})
+
+									setTimeout(() => {
+										this.formValidate.leader = `${id}`;
+									}, 1000)
+									return ;
+								}
+							}
+					}
+					else {
+						this.$Modal.info({
+                title: title,
+                content: res.data.errorMsg
+            });
+					}
+				}).catch((err) => {
+					console.log(err);
+				})
+			},
+
+			//职位
+			getPosition(name){
+				this.$http.get(config.urlList.getEmpPosition).then((res)=>{
+					if(res.data.errorCode===0){
+						let data = res.data.result;
+						for (let attr in data) {
+								if (name) {
+
+									 if (name == data[attr]) {
+											this.formValidate.position = attr;
+									 }
+								}
+
+								this.selectedPosition.push({
+									id: attr,
+									name: data[attr]
+								})
+						}
+						// this.selectedPosition = res.data.result.resultList;
+
+					}
+				})
+			},
+			//员工列表
 			getStaffList(query){
 				this.leaderLoading=true
 				this.$http.get(config.urlList.getStaffList,{
@@ -259,8 +277,16 @@ import config from './config.js';
 						this.staffList=res.data.result.resultList;
 						this.leaderLoading=false
 					}
-				})
+				 else {
+	          this.$Modal.info({
+	              title: '提示',
+	              content: res.data.errorMsg
+	          });
+	        }
+	        }).catch((res)=>{
+	      })
 			},
+			//部门列表
 			getDepartList(query){
 				this.departLoading=true
 				this.$http.get(config.urlList.getDepartList,{
@@ -270,26 +296,42 @@ import config from './config.js';
 				}).then((res)=>{
 					if(res.data.errorCode===0){
 						this.departList=res.data.result.resultList;
+						// console.log(this.departList)
 						this.departLoading=false
 					}
-
-				})
+ 					else {
+	          this.$Modal.info({
+	              title: '提示',
+	              content: res.data.errorMsg
+	          });
+	        }
+	        }).catch((res)=>{
+	      })
 			},
 			getStaffInfo(){
-				this.$http.get(config.urlList.getStaffList,{
+				this.$http.get('/isp-process-server/employee/getModel',{
 					params:{
 						employeeId:this.$route.query.id
 					}
-				}).then((res)=>{//获取列表
-	        if(res.data.errorCode===0){
-	         this.formValidate.account = res.data.result.resultList[0].username;
-	         this.formValidate.staffId = res.data.result.resultList[0].employeeId;
-	         this.formValidate.staffName = res.data.result.resultList[0].displayName;
-	         //this.departList.item.name = res.data.result.resultList[0].deptName;
-	         // this.formValidate.status = res.data.result.resultList[0].status;
-	         // this.formValidate.position = res.data.result.resultList[0].position;
-	         // this.formValidate.classify = res.data.result.resultList[0].employeeType;
-	         	// this.formValidate = res.data.result.resultList;
+				}).then((res) => {//获取列表
+	        if (res.data.errorCode === 0) {
+	        	let data = res.data.result;
+
+	        	this.formValidate = {
+	        		account: data.username,
+	        		staffId: data.employeeId,
+	        		staffName: data.displayName
+	        	}
+
+	        	this.getPosition(data.position);
+	        	// this.initManageList(data.managerId);
+	        	this.initManageList(14263);
+
+
+	         // this.formValidate.account = res.data.result.resultList[0].username;
+	         // this.formValidate.staffId = res.data.result.resultList[0].employeeId;
+	         // this.formValidate.staffName = res.data.result.resultList[0].displayName;
+	         
 	        }
 	        else {
 	          this.$Modal.info({

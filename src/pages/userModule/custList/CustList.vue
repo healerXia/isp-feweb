@@ -154,7 +154,7 @@
             value:5
           },
           {
-            name:'汽车服务',
+            name:'汽车服务商',
             value:6
           },
            {
@@ -219,7 +219,8 @@
           },
           {
             title: '客户类别',
-            key: 'typeName'
+            key: 'typeName',
+            width:140
           },
           {
             title: '主营品牌',
@@ -234,11 +235,28 @@
             title: '操作',
             width:120,
             render: (h, params) => {
-              return h('a', {
-                attrs: {
-                  href: '#/index/custDetail?id='+params.row.custId
-                }
-              },'查看');
+              if (params.row.status == 5) {
+                 return h('a', {
+                    attrs: {
+                      href: '#/index/custDetail?id='+params.row.custId
+                    }
+                  },'查看');
+              }
+
+              return h('span',[
+                  h('a', {
+                    attrs: {
+                      href: '#/index/custDetail?id='+params.row.custId,
+                      class: "viewBtn"
+                    }
+                  },'查看'),
+                  h('a', {
+                  attrs: {
+                    class:"editBtn",
+                    href: '#/index/createUser?id='+params.row.custId
+                  }
+                },'编辑')
+              ])
             }
           }
         ],
