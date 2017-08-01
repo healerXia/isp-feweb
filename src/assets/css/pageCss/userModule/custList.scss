@@ -1,19 +1,24 @@
 .listPages{
   .ivu-form{
     background: #F9FAFC;
-    padding:50px 0 50px 24px;
+    padding:50px 0 26px 24px;
     .ivu-form-item{
       width:362px;
       height:38px;
       margin-top:15px 0 0 0;
       display:inline-block;
       .ivu-form-item-label{
-        font-size:14px;
+        width: 63px;
+        height: 38px;
+        display: inline-block;
+        float: left;
+        text-align: right;
+        padding-right: 15px;
+        font-size: 12px;
         color: #7B8497;
-        letter-spacing: 0.52px;
       }
       input{
-        width:268px;
+        width:280px;
         height:38px;
         background: #FFFFFF;
         border: 1px solid #DEE1E5;
@@ -21,34 +26,30 @@
         font-size: 12px;
         letter-spacing: 0.44px;
         padding-left:8px;
-      }
-      :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-        color: #7B8497 ; opacity:1; 
-      }
-
-      ::-moz-placeholder { /* Mozilla Firefox 19+ */
-        color: #7B8497 ;opacity:1;
-      }
-
-      input:-ms-input-placeholder{
-        color: #7B8497 ;opacity:1;
-      }
-
-      input::-webkit-input-placeholder{
-         color: #7B8497 ;opacity:1;
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+          color: #7B8497 ; opacity:1; 
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+          color: #7B8497 ;opacity:1;
+        }
+        input:-ms-input-placeholder{
+          color: #7B8497 ;opacity:1;
+        }
+        input::-webkit-input-placeholder{
+          color: #7B8497 ;opacity:1;
+        }
       }
       .ivu-select{
-        width:268px;
+        width: 280px;
         height:38px;
         .ivu-select-input{
           width:234px;
           border:0;
           padding-left:4px;
         }
-        .ivu-select-placeholder{color: #7B8497}
       }
       .smallSelect{
-        width:84px;
+        width:88px;
         height:38px;
       }
       .ML5{
@@ -99,7 +100,7 @@
     }
     .addProBtn{
       display: inline-block;
-      width: 154px;
+      width: 120px;
       height: 38px;
       text-align: center;
       line-height: 38px;
@@ -113,10 +114,32 @@
       }
     }
     .ivu-table-wrapper{
+      overflow:hidden;
       border:none;
-      thead{
-        th{
-          border:none;
+      .ivu-table{
+        th,td{
+          max-width:200px;
+          min-width:100px;
+        }
+        thead{
+          tr{
+            height:56px;
+            th{
+              border:none;
+              span{
+                color: #7B8497;
+                font-size:14px;
+                font-weight:normal;
+              }
+            }
+          }
+        }
+        .ivu-table-tbody{
+          color: #333;
+          font-size:12px;
+          tr{
+            height:56px;
+          }
         }
       }
     }
@@ -146,8 +169,9 @@
         height:28px;
         .ivu-select-placeholder,.ivu-select-selected-value{line-height:28px !important}
       }
-    }
-    
+    }    
+  }
+  .editBtn {
+    margin-left: 10px;
   }
 }
-

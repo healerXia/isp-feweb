@@ -4,12 +4,12 @@
         <span class="menu_item active">
           基本信息
         </span>
-        <span class="menu_item">
+        <!-- <span class="menu_item">
           <router-link
             :to="{path:'competitorList',query:{id:$router.currentRoute.query.id}}" >
               竞品信息
           </router-link>
-        </span>
+        </span> -->
       </div>
       <div class="content">
         <div class="title pT30">
@@ -374,6 +374,16 @@
                 <span class="liWid">{{custInfo.address}}</span>
               </li>
               <li>
+                <span>审核状态：</span>
+                <span v-if="custInfo.status==0">无</span>
+                <span v-if="custInfo.status==1">待确认</span>
+                <span v-if="custInfo.status==2">待完善</span>
+                <span v-if="custInfo.status==3">审核通过</span>
+                <span v-if="custInfo.status==4">已停用</span>
+                <span v-if="custInfo.status==5">待审核</span>
+                <span v-if="custInfo.status==6">审核驳回</span>
+              </li>
+              <li>
                 <span>创建人：</span>
                 <span>{{custInfo.createUser}}</span>
               </li>
@@ -425,6 +435,16 @@
                 <span class="liWid">{{custInfo.address}}</span>
               </li>
               <li>
+                <span>审核状态：</span>
+                <span v-if="custInfo.status==0">无</span>
+                <span v-if="custInfo.status==1">待确认</span>
+                <span v-if="custInfo.status==2">待完善</span>
+                <span v-if="custInfo.status==3">审核通过</span>
+                <span v-if="custInfo.status==4">已停用</span>
+                <span v-if="custInfo.status==5">待审核</span>
+                <span v-if="custInfo.status==6">审核驳回</span>
+              </li>
+              <li>
                 <span>创建人：</span>
                 <span>{{custInfo.createUser}}</span>
               </li>
@@ -467,8 +487,9 @@
                 <div class="itemHeight">
                   <span>客户名称：</span><span class="lastWid">{{businessLicense.custName}}</span>
                 </div>
-                <div class="item">
-                  <span>附件：</span><span @click="showSalveDialog" class="salve">查看</span>
+                <div class="item" >
+                  <span>附件：</span>
+                  <span @click="showSalveDialog(businessLicense.salve)" class="salve" v-if="businessLicense.salve">查看</span>
                 </div>
               </div>
               <div class="licenceBox width400 ML20">
@@ -490,7 +511,7 @@
                         <span v-if="key!='createTime'&& key!='validTime'">{{item[key]}}</span>
                         <span v-else>{{item[key].substring(0,10)}}</span>
                       </td>
-                      <td><span @click="showSalveDialog" class="salve">查看</span></td>
+                      <td><span @click="showSalveDialog(item.salve)" class="salve">查看</span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -526,8 +547,15 @@
                       <li class="itemHeight"><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
                     </ul>
                   </li>
-                   <li class="item">
-                    <span>附件：</span><span @click="showSalveDialog" class="salve">1111</span>
+                  <li v-if="bankAccount.salve">
+                    <ul>
+                      <li class="itemHeight" v-for="(item,index) in bankAccount.salve">
+                        <span>附件({{index+1}})：</span>
+                        <span class="salve" @click="showSalveDialog(item)">
+                          {{item?item.replace('http://d1.test.yiche.com/',""):""}}
+                        </span>
+                      </li>
+                    </ul>
                   </li>
                 </ul>
               </div>
@@ -622,7 +650,7 @@
         v-model="modal.showSalve"
         title="附件显示"
         >
-        <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="modal.showSalve" style="width: 100%">
+        <img :src="imgPath" v-if="modal.showSalve" style="width: 100%">
         <div slot="footer" class="footer">             
         </div>
       </Modal>
@@ -637,6 +665,7 @@
       },
       data () {
         return {
+          imgPath:"",
           editOrNot:true,
           operating:"",
           busiPage:{
@@ -719,7 +748,7 @@
             taxCode:"",
             custBankAccountList:[
             ],
-            salve:"",
+            salve:[],
             validTime:"",
             status:""
           },
@@ -784,6 +813,7 @@
                         arr.push(res.data.result.custBankAccountList[i])
                       }
                     }   
+                    res.data.result.salve=res.data.result.salve.split(',')
                     res.data.result.custBankAccountList=arr
                     this.bankAccount=res.data.result 
                   }                
@@ -1060,7 +1090,8 @@
             }
           }).catch((res)=>{})
         },
-        showSalveDialog(){
+        showSalveDialog(data){
+          this.imgPath=data
           this.modal.showModal=false
           this.modal.showSalve=true
         }

@@ -14,7 +14,7 @@
               <span v-if="key=='createTime'">{{formatDate(new Date())}}</span>
               <span v-else>{{item[key]}}</span>              
               </td>
-              <td><span @click="showPic" class="salve">查看</span></td>
+              <td><span @click="showPic(item.salve)" class="salve">查看</span></td>
             </tr>
           </tbody>
         </table>
@@ -26,7 +26,7 @@
        >
         <Form ref="uploadBrand" :model="uploadBrand" :rules="checkValue" :label-width="120">
           <Form-item label="授权品牌:" prop="brandId">
-              <Select class="fl"
+              <Select class="fl posi"
               :clearable="true"
               placeholder="请选择授权品牌"
               :label-in-value="true"              
@@ -89,7 +89,7 @@ export default {
           uploadErrShow:false
         },
         errorCon:{
-          uploadErr:"111111"
+          uploadErr:""
         },
         checkValue:{
           brandId:[
@@ -132,11 +132,12 @@ export default {
   },
   methods: {
     removeImg(){
+      this.uploadBrand.salve=""
       this.uploadImg.name="";
       this.uploadImg.show=false
     },
-    showPic(){
-      this.$emit('showPic',"http://d1.test.yiche.com/uploadscdd7ed9ba6e713fa7c880f234fb2c9a0.jpg")
+    showPic(data){
+      this.$emit('showPic',data)
     },
     brandChange(value){
       this.uploadBrand.brandName=value.label;
@@ -156,14 +157,21 @@ export default {
       }).catch((err) => {})
     },
     openDialog(){
-      this.modal1=true   
+      this.modal1=true
     },
     submit (name) {
       this.$refs[name].validate((valid) => {
           if (valid) {
-              this.uploadBrand.custId=this.$router.currentRoute.query.id;
-              this.$emit('uploadbrand',this.uploadBrand,'upload')
-              this.modal1=false
+              let salve_check=this.salveCheck();//附件
+              if(salve_check){
+                this.uploadBrand.custId=this.$router.currentRoute.query.id;
+                this.$emit('uploadbrand',this.uploadBrand,'upload');
+                setTimeout(()=>{
+                  this.cancel(name)
+                },0)
+                
+              }
+              
           } else {
             this.$Modal.error({
                 title: '提示',
@@ -173,8 +181,23 @@ export default {
       })
     },
     cancel (name) {
+      this.uploadBrand.salve=""
+      this.uploadImg.name="";
+      this.uploadImg.show=false
       this.$refs[name].resetFields();
       this.modal1=false
+    },
+    salveCheck(){
+      if(this.uploadBrand.salve==""){
+        this.errorCon.uploadErr='请上传附件'
+        this.judgeErr.uploadErrShow=true
+        this.$Modal.error({
+          title: '提示',
+          content: "表单验证失败！"
+        })
+        return false
+      }
+      return true;
     },
     handleFormatError(file){
        this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
@@ -185,10 +208,11 @@ export default {
       this.judgeErr.uploadErrShow=true
     },
     fileUploadSuccess(response, file, fileList){       
-      console.log(response)
-      this.uploadImg.name="";
-      this.uploadImg.show=true;
-      this.uploadBrand.salve=""
+        let reg=/(\.com\/)([\w.]+)/;
+        var arr=response.result.match(reg)
+        this.uploadImg.name=arr[2];
+        this.uploadImg.show=true;
+        this.uploadBrand.salve=response.result;
     },
     formatTen(num) { 
       return num > 9 ? (num + "") : ("0" + num); 
@@ -249,7 +273,7 @@ export default {
     }
     .uperror{
       padding-left:119px;width:100%;display:block;margin-top:10px;
-      .del{color:#4373F3;margin-left:200px;cursor:pointer}
+      .del{color:#4373F3;margin-left:100px;cursor:pointer}
     }
   }
   .footer{text-align:center;}
@@ -282,7 +306,7 @@ export default {
         border-bottom:1px solid #ccc;
         text-align:center;
       }
-      .salve{font-size:12px;color:blue;cursor:pointer}
+      .salve{font-size:12px;color:#4373F3;cursor:pointer}
       .mess_con{
         width: 100%;
         padding: 10px 20px;
@@ -315,6 +339,14 @@ export default {
           
         }
       }
+  }
+}
+.posi{
+  position:relative;
+  .ivu-select-dropdown{
+    position:absolute !important;
+    top: 38px !important;
+    left:0 !important
   }
 }
 

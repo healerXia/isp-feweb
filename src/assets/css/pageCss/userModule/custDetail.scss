@@ -96,7 +96,14 @@
                 float: left;
                 overflow: hidden;
                 span:first-child{height:27px;display:inline-block;float:left;line-height:27px}
-                span:last-child{display:inline-block;float:left;width:160px;line-height:20px;margin-top:3px}
+                span:last-child{
+                  display:inline-block;
+                  float:left;
+                  width:160px;
+                  line-height:20px;
+                  margin-top:3px;
+                  word-wrap:break-word
+                }
                 span.lastWid{width:180px}
               }
             }

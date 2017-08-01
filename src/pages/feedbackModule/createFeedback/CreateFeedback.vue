@@ -37,6 +37,7 @@
 </template>
 
 <script>
+  import config from './config.js';
   export default {
       data () {
         return{
@@ -62,13 +63,13 @@
             createName:"",//创建人名字
             createId:"",//创建人id
             feedback:"",//反馈内容
-            feedBackChannel:"",//渠道
+            feedBackChannel:"PC",//渠道
           },
           checkValue:{
             problemType:[
               {required:true,message:"请选择反馈分类",trigger:"change",type:"number"}
             ],
-            content:[
+            feedback:[
               {required:true,message:"请填写反馈内容",trigger:'blur'},
               {max:500,message:"不能超过500字",trigger:"blur"}
             ]
@@ -93,7 +94,26 @@
         submitFeedback(name){//新建意见反馈提交
           this.$refs[name].validate((valid) => {
               if (valid) {
-                this.modal.showModal=false
+                this.$http.post(config.urlList.insertUserFeedback,
+                  this.feedbackAdd,
+                  {emulateJSON:true}
+                  ).then((res)=>{//获取登录人即操作人
+                    if(res.data.errorCode===0){
+                      this.$Modal.success({
+                          title: '提示',
+                          content: "提交意见反馈成功",
+                          onOk:()=>{
+                            this.$router.push({path:"myFeedbackList"})
+                          }
+                      });
+                    }
+                    else {
+                      this.$Modal.info({
+                          title: '提示',
+                          content: res.data.errorMsg
+                      });
+                    }
+                  }).catch((res)=>{})  
               }else{
                 this.$Modal.error({
                     title: '提示',
@@ -103,7 +123,6 @@
            })
         },
         cancleFeedback(name){//新建意见反馈取消
-          this.modal.showModal=false
           this.$refs[name].resetFields();
         },
          handleFormatError(file){

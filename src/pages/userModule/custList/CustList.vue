@@ -8,9 +8,14 @@
         <input class="descripive" v-model="formItem.custId" placeholder="请输入客户编号"></input>
       </Form-item>
       <Form-item label="主营品牌" prop="serviceList">    
-        <Select v-model="formItem.serviceList" filterable multiple
+        <Select 
+          ref="brand"
+          v-model="formItem.serviceList" 
+          filterable 
+          multiple
           placeholder="请选择主营品牌" 
           :loading="loading"
+          :label-in-value="true"
           remote
           :remote-method="searchBrand"
         >
@@ -67,14 +72,13 @@
         <Button type="ghost" @click="reset('formItem')">重置</Button>
       </Form-item>
     </Form>
-    <div class="listTable MT20 ">
+    <div class="listTable">
       <span class="addProBtn MB20">
         <router-link :to="{path:'createUser'}">
           添加客户
         </router-link>
       </span>
-      <!-- stripe 可以用来单双数背景 -->
-      <Table :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
+      <Table stripe disabled-hover :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
       <Page :total="pageObj.total" class="MT30" size="small"
         :current="pageObj.pageNo"
         :page-size-opts="pageSizeOpts"
@@ -150,7 +154,7 @@
             value:5
           },
           {
-            name:'汽车服务',
+            name:'汽车服务商',
             value:6
           },
            {
@@ -178,20 +182,16 @@
             value:2
           },
           {
+            status:'待审核',
+            value:5
+          },
+          {
             status:'审核通过',
             value:3
           },
           {
             status:'已停用',
             value:4
-          },
-          {
-            status:'待审核',
-            value:5
-          },
-          {
-            status:'审核驳回',
-            value:6
           }
         ],
         /*tableData:{
@@ -219,7 +219,8 @@
           },
           {
             title: '客户类别',
-            key: 'typeName'
+            key: 'typeName',
+            width:140
           },
           {
             title: '主营品牌',
@@ -227,17 +228,35 @@
           },
           {
             title: '审核状态',
+            width:120,
             key: 'Rstatus'
           },
           {
             title: '操作',
-
+            width:120,
             render: (h, params) => {
-              return h('a', {
-                attrs: {
-                  href: '#/index/custDetail?id='+params.row.custId
-                }
-              },'查看');
+              if (params.row.status == 5) {
+                 return h('a', {
+                    attrs: {
+                      href: '#/index/custDetail?id='+params.row.custId
+                    }
+                  },'查看');
+              }
+
+              return h('span',[
+                  h('a', {
+                    attrs: {
+                      href: '#/index/custDetail?id='+params.row.custId,
+                      class: "viewBtn"
+                    }
+                  },'查看'),
+                  h('a', {
+                  attrs: {
+                    class:"editBtn",
+                    href: '#/index/createUser?id='+params.row.custId
+                  }
+                },'编辑')
+              ])
             }
           }
         ],
@@ -319,8 +338,20 @@
             tableData[i]['typeName']="厂商大区"
           }else if(tableData[i].typeId==3){
             tableData[i]['typeName']="集团"
+          }else if(tableData[i].typeId==4&&tableData[i].subclassId==1){
+            tableData[i]['typeName']="经销商-4s"
+          }else if(tableData[i].typeId==4&&tableData[i].subclassId==2){
+            tableData[i]['typeName']="经销商-特许"
+          }else if(tableData[i].typeId==4&&tableData[i].subclassId==3){
+            tableData[i]['typeName']="经销商-综合店"
           }else if(tableData[i].typeId==4){
             tableData[i]['typeName']="经销商"
+          }else if(tableData[i].typeId==5&&tableData[i].subclassId==1){
+            tableData[i]['typeName']="门店-4s"
+          }else if(tableData[i].typeId==5&&tableData[i].subclassId==2){
+            tableData[i]['typeName']="门店-特许"
+          }else if(tableData[i].typeId==5&&tableData[i].subclassId==3){
+            tableData[i]['typeName']="门店-综合店"
           }else if(tableData[i].typeId==5){
             tableData[i]['typeName']="门店"
           }else if(tableData[i].typeId==6){
@@ -331,7 +362,7 @@
         }
         for(let i=0;i<tableData.length;i++){
           if(tableData[i].status==1){
-            tableData[i]['Rstatus']="待审批"
+            tableData[i]['Rstatus']="待确认"
           }else if(tableData[i].status==2){
             tableData[i]['Rstatus']="待完善"
           }else if(tableData[i].status==3){
@@ -340,8 +371,6 @@
             tableData[i]['Rstatus']="已停用"
           }else if(tableData[i].status==5){
             tableData[i]['Rstatus']="待审核"
-          }else if(tableData[i].status==6){
-            tableData[i]['Rstatus']="审核驳回"
           }
         }
       },
@@ -349,7 +378,7 @@
       },
       pageChange(num){
         this.$http.post(config.urlList.getCustList,
-        {pageIndex:num,pageSize:10},
+        {pageIndex:num,pageSize:20},
         {emulateJSON:true}
         ).then((res)=>{//获取列表
           if(res.data.errorCode===0){
@@ -399,9 +428,6 @@
         if(this.formItem.provinceId!=""){
           obj.provinceId=this.formItem.provinceId
         }
-        if(this.formItem.cityId!=""){
-          obj.cityId=this.formItem.cityId
-        }
         if(this.formItem.countyId!=""){
           obj.countyId=this.formItem.countyId
         }
@@ -429,25 +455,24 @@
             }
           });
       },
+      //重置
       reset (name) {
-        this.$refs[name].resetFields();
-        // this.formItem = {
-        //   single: false,
-        //   pageIndex:1,
-        //   pageSize:20,
-        //   custName:'',//客户名称
-        //   custId:'',//客户编号
-        //   brandName:'',//主营品牌
-        //   serviceList: [],//主营品牌list
-        //   area:'',//客户地区
-        //   cityId:"",
-        //   countyId:"",
-        //   typeId:'',//客户类别
-        //   clientLabel:'',//客户标签
-        //   status:"",//审核状态
-        //   staff:'',//负责员工
-        //   operation:'',//操作
-        // };  
+        this.$refs.brand.selectedMultiple=[];
+        this.formItem = {
+          single: false,
+          custName:'',//客户名称
+          custId:'',//客户编号
+          brandName:'',//主营品牌
+          serviceList: [],//主营品牌list
+          area:'',//客户地区
+          cityId:"",
+          countyId:"",
+          typeId:'',//客户类别
+          clientLabel:'',//客户标签
+          status:"",//审核状态
+          staff:'',//负责员工
+          operation:'',//操作
+        };  
       },
       provinceChange(value){//省列表change事件
         this.formItem.countyId="";

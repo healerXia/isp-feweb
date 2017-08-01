@@ -30,8 +30,15 @@
                   <li class="itemHeight"><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
                 </ul>
               </li>
-               <li class="item">
-                <span>附件：</span><span class="salve" @click="showPic"></span>
+               <li v-if="storeEditDate.salve">
+                <ul>
+                  <li class="itemHeight" v-for="(item,index) in storeEditDate.salve">
+                    <span>附件({{index+1}})：</span>
+                    <span class="salve" @click="showPic(index)">
+                      {{item?item.replace('http://d1.test.yiche.com/',""):""}}
+                    </span>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>
@@ -127,7 +134,7 @@ export default {
           modal1: false,
           uploadPay:{
             taxCode:"",//纳税人识别号
-            salve: "",//营业执照附件
+            salve: [],//营业执照附件
             custBankAccountList:[]//开户行
           },
           judgeErr:{
@@ -167,7 +174,7 @@ export default {
           },
           storeEditDate:{},
           uploadImg:{
-            name:[1,2,3],
+            name:[],
             show:true
           }
         }
@@ -185,8 +192,8 @@ export default {
           this.uploadImg.show=false
         }
       },
-      showPic(){
-        this.$emit('showPic',"pic1")
+      showPic(index){
+        this.$emit('showPic',this.storeEditDate.salve[index])
       },
       getCustBankAccountList(){
         let arr=[]
@@ -207,6 +214,7 @@ export default {
         //然后看开户信息， 有几条显示几条，没有的话就显示一行空的
         if(this.storeEditDate.taxCode){//进行回填数据
           this.uploadPay.taxCode=this.storeEditDate.taxCode
+          this.uploadPay.salve=this.storeEditDate.salve
           this.accMessArr=[];
           for(let i=0;i<this.storeEditDate.custBankAccountList.length;i++){
             let obj={}
@@ -228,6 +236,11 @@ export default {
               address_err:""
             }
             this.accMessArr.push(obj);
+            this.uploadImg.name=this.storeEditDate.salve.slice(0)
+            for(let i=0;i<this.uploadImg.name.length;i++){
+              this.uploadImg.name[i]=this.uploadImg.name[i].replace('http://d1.test.yiche.com/',"")
+            }
+            this.uploadImg.show=true
           }
         }
         setTimeout(()=>{
@@ -403,6 +416,18 @@ export default {
         }
         this.accMessArr.push(oneGroup)
       },
+      salveCheck(){
+        if(this.uploadPay.salve.length==0){
+          this.errorCon.uploadErr='请上传附件'
+          this.judgeErr.uploadErrShow=true
+          this.$Modal.error({
+            title: '提示',
+            content: "表单验证失败！"
+          })
+          return false
+        }
+        return true;
+      },
       handleFormatError(file){
          this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
          this.judgeErr.uploadErrShow=true
@@ -412,13 +437,19 @@ export default {
         this.judgeErr.uploadErrShow=true
       },
       fileUploadSuccess(response, file, fileList){
+        let reg=/(\.com\/)([\w.]+)/;
+        var arr=response.result.match(reg)
+        this.uploadImg.name.push(arr[2]);
+        this.uploadImg.show=true;
+        this.uploadPay.salve.push(response.result);
       },
       submit (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
               let check_account=this.accountMessCheck()
               let check_tax=this.taxCodeCheck()
-              if(check_account&&check_tax){
+              let salve_check=this.salveCheck();//附件
+              if(check_account&&check_tax&&salve_check){
                 this.getCustBankAccountList();
                 this.uploadPay.custId=this.$router.currentRoute.query.id;    
                 this.$emit('uploadpay',this.uploadPay,"upload")   
@@ -467,7 +498,7 @@ export default {
         border-bottom:1px solid #ccc;
         text-align:center;
       }
-      .salve{font-size:12px;color:blue;cursor:pointer}
+      .salve{font-size:12px;color:#4373F3;cursor:pointer}
       .mess_con{
         width: 100%;
         overflow: hidden;
@@ -486,7 +517,7 @@ export default {
           float: left;
           overflow: hidden;
           span:first-child{height:27px;display:inline-block;float:left;line-height:27px}
-          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px}
+          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px;word-wrap:break-word}
         }
       }
   }
@@ -505,6 +536,7 @@ export default {
   cursor: pointer
 }
 .payDialog {
+    .ivu-upload-list{display:none}
     .ivu-modal-content{
       position: relative;
       z-index: 1000;
@@ -576,6 +608,21 @@ export default {
         display:inline-block;
       }
       .underLine{
+        overflow: hidden;
+        span:first-child{
+          width:200px;
+          display: inline-block;
+          float: left;
+          word-wrap:break-word
+        }
+        span:last-child{
+          float: left;
+          text-align: right;
+          width:100px;
+          display: inline-block;
+          float: left;
+          word-wrap:break-word
+        }
         width: 360px;
         padding:12px 0 12px 20px;
         border-bottom:1px solid #DEE1E5
@@ -584,7 +631,7 @@ export default {
         span{color:#7B8497}
         width: 360px;
         padding-left:119px;display:block;margin-top:10px;
-        .del{color:#4373F3;margin-left:200px;cursor:pointer}
+        .del{color:#4373F3;cursor:pointer}
       }
     }
 }

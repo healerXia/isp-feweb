@@ -28,8 +28,11 @@
               <div class="item" v-if="storeEditDate.custName">
                 <span>客户名称：</span><span>{{storeEditDate.custName}}</span>
               </div>
-              <div class="item itemLH">
-                <span>附件：</span><span class="salve" @click="showPic"></span>
+              <div class="itemHeight">
+                <span>附件：</span><span class="salve" @click="showPic(storeEditDate.salve)">
+                  查看
+                  <!-- {{storeEditDate.salve?storeEditDate.salve.replace('http://d1.test.yiche.com/',""):""}} -->
+                </span>
               </div>
           </div>
         </div>
@@ -168,7 +171,7 @@ export default {
         salve: ""//营业执照附件
       },
       uploadImg:{
-        name:"111",
+        name:"",
         show:false
       }
     }
@@ -182,6 +185,7 @@ export default {
   methods: {
       removeImg(){
         this.uploadImg.name="";
+        this.uploadBusi.salve="";
         this.uploadImg.show=false
       },
       endDateChange(data){//选了结束时间把永久去掉
@@ -190,13 +194,12 @@ export default {
         }
       },
       foreverChange(data){//选了永久吧结束时间去掉
-        console.log(data)
         if(data&&this.uploadBusi.endTime!=""){
           this.uploadBusi.endTime=""
         }
       },
-      showPic(){
-        this.$emit('showPic',"pic2")
+      showPic(data){
+        this.$emit('showPic',data)
       },
       openDialog(){
         this.modal1=true      
@@ -214,6 +217,9 @@ export default {
           this.uploadBusi.legalPerson=this.storeEditDate.legalPerson
           this.uploadBusi.businessAddress=this.storeEditDate.businessAddress
           this.uploadBusi.organizationCode=this.storeEditDate.organizationCode
+          this.uploadBusi.salve=this.storeEditDate.salve
+          this.uploadImg.name= this.uploadBusi.salve.replace('http://d1.test.yiche.com/',"");
+          this.uploadImg.show=true
         }
       },
       submit (name) {
@@ -221,7 +227,8 @@ export default {
             if (valid) {
                 let check_result=this.valueCheck()//注册资本为数字
                 let data_check=this.dateChange();//时间区间的错误提示
-                if(check_result&&data_check){
+                let salve_check=this.salveCheck();//附件 
+                if(check_result&&data_check&&salve_check){
                   this.uploadBusi.custId=this.$router.currentRoute.query.id;
                   if(this.uploadBusi.endTime==""){
                     this.uploadBusi.endTime="永久"
@@ -243,8 +250,19 @@ export default {
         if(this.storeEditDate.licenseNumber){
           this.$refs[name].resetFields();
         }
-        
         this.modal1=false
+      },
+      salveCheck(){
+        if(this.uploadBusi.salve==""){
+          this.errorCon.uploadErr='请上传附件'
+          this.judgeErr.uploadErrShow=true
+          this.$Modal.error({
+            title: '提示',
+            content: "表单验证失败！"
+          })
+          return false
+        }
+        return true;
       },
       valueCheck(){
         //验证注册资本
@@ -297,9 +315,11 @@ export default {
         this.judgeErr.uploadErrShow=true
       },
       fileUploadSuccess(response, file, fileList){
-        this.uploadImg.name="";
+        let reg=/(\.com\/)([\w.]+)/;
+        var arr=response.result.match(reg)
+        this.uploadImg.name=arr[2];
         this.uploadImg.show=true;
-        this.uploadBrand.salve=""
+        this.uploadBusi.salve=response.result;
       },
       formatTen(num) { 
         return num > 9 ? (num + "") : ("0" + num); 
@@ -335,7 +355,7 @@ export default {
       background: #F9FAFC;
       margin-top: 20px;
       width:400px;
-      height: 240px;
+      height: 250px;
       overflow: auto;
       border-radius: 2px;
       .mess_title{
@@ -345,7 +365,7 @@ export default {
         border-bottom:1px solid #ccc;
         text-align:center;
       }
-      .salve{font-size:12px;color:blue;cursor:pointer}
+      .salve{font-size:12px;color:#4373F3;cursor:pointer}
       .mess_con{
         width: 100%;
         padding: 10px 20px;
@@ -362,8 +382,8 @@ export default {
           width: 100%;
           float: left;
           overflow: hidden;
-          span:first-child{height:27px;display:inline-block;float:left;line-height:27px}
-          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px}
+          span:first-child{height:27px;display:inline-block;float:left;line-height:27px;}
+          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px;word-wrap:break-word}
         }
       }
   }
@@ -396,7 +416,7 @@ export default {
       padding-bottom: 20px;
       .label{
         display:inline-block;
-        width:116px;
+        width:125px;
         height: 38px;
         line-height: 38px;
         text-align:right;
@@ -416,7 +436,7 @@ export default {
       }
       .uperror{ 
         padding-left:117px;width:100%;display:block;margin-top:10px;
-        .del{color:#4373F3;margin-left:200px;cursor:pointer}
+        .del{color:#4373F3;margin-left:100px;cursor:pointer}
       }
     }
     .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px} 
