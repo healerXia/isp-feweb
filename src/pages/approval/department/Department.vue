@@ -4,7 +4,7 @@
         <div v-for='(list, index) in treeData' class="listItem fl">
             <p class='title'>{{titleList[index]}}级部门</p>
             <div class="lists">
-                <div :class="['item', {'active': i.active == 1}]" v-for='i in list' @click='chooseDept(i, index)'>
+                <div :class="['item', {'active': i.active == 1}]" v-for='(i,num) in list' @click='chooseDept(i, index)'>
                     <p class='item-title'>
                         <span>{{i.deptName}}</span>
                         <span v-if='i.num' class='num fr'>{{i.num}}</span>
@@ -15,11 +15,11 @@
                     </p>
                     <p>
                         <span>创建时间：</span>
-                        <span>{{i.updateTimeStr}}</span>
+                        <span>{{i.updateTimeStr.split(' ')[0]}}</span>
                     </p>
                     <p class='clear iconBtn'>
                         <a href="javascript:;" class='edit fl' @click = 'edit(i)'></a>
-                        <a href="javascript:;" class='delte fl' @click= 'del(i)'></a>
+                        <a href="javascript:;" class='delte fl' @click= 'del(i, index, num)'></a>
                     </p>
                 </div>
             </div>
@@ -98,30 +98,47 @@ export default {
                 }
             }
         },
-        edit() {
-
+        edit(data) {
+            this.$router.push({path: 'setUpDepartment', query: {id:data.id}});
         },
-        del(data) {
-            this.$http.get('/isp-process-server/depart/del', {
-                params: {
-                    id: data.id
-                }
-            }).then((res) => {
-                if (res.data.errorCode == 0) {
-
-                }
-                else {
-                    this.$Modal.info({
-                        title: '提示',
-                        content: res.data.errorMsg,
-                        onOk: ()=> {
+        del(data, index, num) {
+            console.log(index, num)
+            this.$Modal.confirm({
+                title: '提示',
+                content: '<p>是否删除</p>',
+                onOk: () => {
+                    this.$http.get('/isp-process-server/depart/del', {
+                        params: {
+                            id: data.id
+                        }
+                    }).then((res) => {
+                        if (res.data.errorCode == 0) {
+                            this.$Message.success('删除成功!');
+                            this.treeData[index].splice(num, 1);
+                            if (this.treeData[index].length == 0) {
+                                this.treeData.splice(index, 1);
+                            }
 
                         }
-                    });
+                        else {
+                            setTimeout(() => {
+                                this.$Modal.info({
+                                    title: '提示',
+                                    content: res.data.errorMsg,
+                                    onOk: ()=> {
+
+                                    }
+                                });
+                            }, 1000);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                },
+                onCancel: () => {
+                    this.$Message.info('点击了取消');
                 }
-            }).catch((err) => {
-                console.log(err);
-            })
+            });
         },
         chooseDept(data, index) {
             // 切换一级

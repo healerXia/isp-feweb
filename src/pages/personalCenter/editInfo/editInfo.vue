@@ -283,6 +283,16 @@ export default {
                 console.log(err);
             })
         },
+        initDeptName(data) {
+            console.log(data);
+            if (data) {
+                let arr = data.split(',');
+                if (arr.length > 0) {
+                    return arr.join('-');
+                }
+                return data;
+            }
+        },
         initDept() {
             this.$http.get('/isp-process-server/depart/getList', {
                 params: {
@@ -295,7 +305,7 @@ export default {
                     this.deptListAll = data.map(item => {
                         return {
                             id: `${item.id}`,
-                            name: item.fullPath,
+                            name: this.initDeptName(item.fullPath),
                             deptName: item.deptName
                         }
                     });
@@ -441,10 +451,6 @@ export default {
 
                     }
 
-
-
-
-
                     if (this.submitStatus) {
                         return false;
                     }
@@ -551,7 +557,6 @@ export default {
             })
         },
         selDept(data) {
-            console.log(data);
             for (let i = 0; i < this.deptListAll.length; i++) {
                 if (data == this.deptListAll[i].id) {
                     this.deptName = this.deptListAll[i].deptName;
@@ -560,11 +565,12 @@ export default {
             }
         },
         // 日期判断
-        disStart(date){
-            return date && date.valueOf() >new Date(this.tableList[this.tdIndex].endDate);
+        disStart(date) {
+            return date && date.valueOf() > new Date(this.tableList[this.tdIndex].endDate);
         },
-        disEnd(date){
-            return date && date.valueOf()< new Date(this.tableList[this.tdIndex].startDate);
+        disEnd(date) {
+            let n = this.initTime(this.tableList[this.tdIndex].startDate);
+            return date && new Date(this.initTime(date)) < new Date(n);
         }
     }
 }

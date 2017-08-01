@@ -3,7 +3,7 @@
         border: 1px solid #d7dde4;
         background: #f5f7f9;
         position: relative;
-        min-width: 1356px;
+        min-width: 1345px;
     }
     .back {
         float: left !important;

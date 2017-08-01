@@ -180,6 +180,12 @@ const menu =  [
                 index: '8-3',
                 icon: '',
                 path: 'wait'
+            },
+            {
+                name: '部门管理',
+                index: '8-4',
+                icon: '',
+                path: 'department'
             }
         ]
     },
