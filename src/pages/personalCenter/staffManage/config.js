@@ -1,6 +1,6 @@
 const urlList = {
   getStaffList:'/isp-process-server/employee/getPageList',
-  get:'/isp-process-server/employee/saveEmpStatus'
+  getStatus:'/isp-process-server/employee/saveEmpStatus'
 }	
 export default {
   urlList

@@ -10,38 +10,46 @@
 	        <span>{{formValidate.account}}</span>
 	    	</Form-item>
 	    	<Form-item label="员工编号" prop="staffId">
-	        <span v-model="formValidate.staffId">
-	        	<router-link
-            	:to="{path:'staffManage'}">
-          	</router-link>
-	        </span>
+	        <span>{{formValidate.staffId}}</span>
 	    	</Form-item>
 	    	<Form-item label="员工姓名" prop="staffName">
-	        <span v-model="formValidate.staffName"></span>
+	        <span>{{formValidate.staffName}}</span>
 	    	</Form-item>
 				<Form-item label="员工上级" prop="leader">
-	        <Input v-model="formValidate.leader" placeholder="请输入员工上级"></Input>
+	        <Select v-model="formValidate.leader" 	
+	          placeholder="请输入员工上级" 
+	          clearable
+						filterable
+          	remote
+						:loading="leaderLoading"
+          	:remote-method="getStaffList">
+	          <Option v-for="item in staffList" :value="item.employeeId">{{item.displayName}}</Option>
+	          </Select>
 	    	</Form-item>
 	    	<Form-item label="所属部门" prop="department">
-	        <Select v-model="formValidate.department" placeholder="请选择所属部门">
-	          <Option value="beijing">北京市</Option>
-	          <Option value="shanghai">上海市</Option>
-	          <Option value="shenzhen">深圳市</Option>
+	        <Select v-model="formValidate.department" 	
+	          placeholder="请选择所属部门" 
+	          clearable
+						filterable
+          	remote
+						:loading="departLoading"
+          	:remote-method="getDepartList">
+	          <Option v-for="item in departList" :value="item.id">{{item.fullPath}}</Option>
 	        </Select>
 	      </Form-item>
 				<Form-item label="员工状态" prop="status">
 	        <Radio-group v-model="formValidate.status">
-	            <Radio label="start">启用</Radio>
-	            <Radio label="stop">停用</Radio>
+	            <Radio value=0>启用</Radio>
+	            <Radio value=-1>停用</Radio>
 	        </Radio-group>
 	      </Form-item>
 	      <Form-item label="职位" prop="position">
-	        <Select v-model="formValidate.position" placeholder="请选择职位">
-	        	<Option v-for="item in selectedPosition" :value="item.value" :key="item.value">{{ item.name }}</Option>
+	        <Select clearable v-model="formValidate.position" placeholder="请选择职位">
+	        	<Option v-for="item in selectedPosition" :value="item.value">{{ item.name }}</Option>
 	        </Select>
 	    	</Form-item>
 	    	<Form-item label="员工分类" prop="classify">
-	        <Select v-model="formValidate.classify" placeholder="请选择员工分类">
+	        <Select clearable v-model="formValidate.classify" placeholder="请选择员工分类">
 	            <Option value="">销售</Option>
 	            <Option value="">客服</Option>
 	            <Option value="">编辑</Option>
@@ -117,15 +125,17 @@ import config from './config.js';
 
 		data(){
 			return{
+				leaderLoading:true,
+				departLoading:true,
 				formValidate:{
 					account:"",//域账号
 					staffId:"",//员工编号
 					staffName:"",//员工姓名
 					leader:"",//员工上级
-					department:[],//所属部门
+					department:"",//所属部门
 					status:"",//员工状态
-					position:[],//职位
-					classify:[]//员工分类
+					position:"",//职位
+					classify:""//员工分类
 				},
 				selectedPosition:[
 					{
@@ -223,6 +233,8 @@ import config from './config.js';
             { required: true, message: '请选择员工分类', trigger: 'change' }
           ]
 				},
+				departList: null,
+				staffList:null,
 				formItem:{
 					sex:"",
 					telephone:"",
@@ -231,9 +243,38 @@ import config from './config.js';
 			}
 		},
 		created(query){
-			this.getStaffInfo()
+			this.getStaffInfo();
+			this.getStaffList("");
+			this.getDepartList("")
 		},
 		methods:{
+			getStaffList(query){
+				this.leaderLoading=true
+				this.$http.get(config.urlList.getStaffList,{
+					params:{
+						displayName:query
+					}
+				}).then((res)=>{
+					if(res.data.errorCode===0){
+						this.staffList=res.data.result.resultList;
+						this.leaderLoading=false
+					}
+				})
+			},
+			getDepartList(query){
+				this.departLoading=true
+				this.$http.get(config.urlList.getDepartList,{
+				params:{
+					deptName:query
+			}	
+				}).then((res)=>{
+					if(res.data.errorCode===0){
+						this.departList=res.data.result.resultList;
+						this.departLoading=false
+					}
+
+				})
+			},
 			getStaffInfo(){
 				this.$http.get(config.urlList.getStaffList,{
 					params:{
@@ -241,12 +282,13 @@ import config from './config.js';
 					}
 				}).then((res)=>{//获取列表
 	        if(res.data.errorCode===0){
-	        	// this.pageObj.total=res.data.result.totalCount
-	         //  this.pageObj.pageNo=res.data.result.pageNo
-	         //  this.tableData = res.data.result.resultList;
-	         //  this.dealMess();
-	         console.log(res.data.result.resultList);
-	         this.formValidate.account = res.data.result.resultList[0].username
+	         this.formValidate.account = res.data.result.resultList[0].username;
+	         this.formValidate.staffId = res.data.result.resultList[0].employeeId;
+	         this.formValidate.staffName = res.data.result.resultList[0].displayName;
+	         //this.departList.item.name = res.data.result.resultList[0].deptName;
+	         // this.formValidate.status = res.data.result.resultList[0].status;
+	         // this.formValidate.position = res.data.result.resultList[0].position;
+	         // this.formValidate.classify = res.data.result.resultList[0].employeeType;
 	         	// this.formValidate = res.data.result.resultList;
 	        }
 	        else {

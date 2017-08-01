@@ -15,7 +15,7 @@
 			</Form-item>
 		</Form>
 		<div class="listTable">
-      <Table stripe :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
+      <Table stripe disabled-hover :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
       <Button type="primary" @click="stop">停用</Button>
       <Button type="primary" @click="start">启用</Button>
       <Page :total="pageObj.total" class="MT30" size="small"
@@ -225,7 +225,7 @@
           obj.displayName=this.formItem.staffName
         }
         if(this.formItem.department!=""){
-          obj.fullPath=this.formItem.department
+          obj.deptName=this.formItem.department
         }
 
         // obj.pageSize=20;
@@ -249,6 +249,7 @@
             }
           });
 			},
+			//勾选框
 			selectChange(data){
 				let idStr = ""
 				let arr = data.map(item => item.employeeId);
@@ -259,6 +260,7 @@
 					// return idStr;
 				}
 			},
+			//停用函数
 			stop(){
 				this.$http.post(config.urlList.getStatus,
 	        {
@@ -268,28 +270,41 @@
 	        {emulateJSON:true}
         ).then((res)=>{//获取列表
           if(res.data.errorCode===0){
-            // this.pageObj.total=res.data.result.totalCount
-            // this.pageObj.pageNo=res.data.result.pageNo
-            // this.tableData=res.data.result.resultList;
-            // this.dealMess();
             this.getTableData();
           }
           else {
             this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
+              title: '提示',
+              content: res.data.errorMsg
             });
           }
         }).catch((res)=>{}
       )},
-
-      pageChange(page){
+      //启用函数
+			start(){
+				this.$http.post(config.urlList.getStatus,
+	        {
+	        	employeeIdList:this.formParam.employeeId,
+	        	status:0
+	        },
+	        {emulateJSON:true}
+        ).then((res)=>{//获取列表
+          if(res.data.errorCode===0){
+            this.getTableData();
+          }
+          else {
+            this.$Modal.info({
+              title: '提示',
+              content: res.data.errorMsg
+            });
+          }
+        }).catch((res)=>{})
+			},
+			//页码
+			pageChange(page){
       	this.pageObj.pageIndex = page;
       	this.getTableData();
       },
-			start(){
-
-			},
 			InfoList(value){
         this.$http.get(config.urlList.getStaffList). then((res)=>{
           if(res.data.errorCode===0){
