@@ -1,0 +1,47 @@
+{
+    "errorCode": 0,
+    "errorMsg": "OK",
+    "result": [
+        {
+            "id": 1,
+            "deptCode": "",
+            "deptName": "部门名称1",
+            "managerId": "1",
+            "updateTime": 1499927348000,
+            "pid": 0,
+            "children": [
+                {
+                    "id": 13,
+                    "deptCode": "",
+                    "deptName": "部门名称0",
+                    "managerId": "1",
+                    "updateTime": 1499927291000,
+                    "pid": 1,
+                    "children": [],
+                    "updateTimeStr": "2017-07-13 14:28:11"
+                },
+                {
+                    "id": 14,
+                    "deptCode": "",
+                    "deptName": "部门名称0",
+                    "managerId": "1",
+                    "updateTime": 1499927292000,
+                    "pid": 1,
+                    "children": [],
+                    "updateTimeStr": "2017-07-13 14:28:12"
+                }
+            ],
+            "updateTimeStr": "2017-07-13 14:29:08"
+        },
+        {
+            "id": 2,
+            "deptCode": "",
+            "deptName": "部门名称2",
+            "managerId": "1",
+            "updateTime": 1499927372000,
+            "pid": 0,
+            "children": [],
+            "updateTimeStr": "2017-07-13 14:29:32"
+        }
+    ]
+}

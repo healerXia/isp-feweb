@@ -114,9 +114,11 @@ export default {
     mounted() {
         let id = this.$router.currentRoute.query.id;
         if (id) {
+            let timestamp = Date.parse(new Date());
+            timestamp = timestamp / 1000;
             this.titleTxt = '配置用户组';
             this.id = id;
-            this.$http.get('/isp-process-server/userGroup/getModel', {
+            this.$http.get(`/isp-process-server/userGroup/getModel?${timestamp}`, {
                 params: {
                     groupId: id
                 }
@@ -146,12 +148,12 @@ export default {
                     this.initEmp('/isp-process-server/employee/getList','#employee', list);
 
 
-                    for (let i = 0; i < list.length; i++) {
-                        // 初始化成员列表
-                        let groupList = JSON.parse(list[i].responsibleDept);
-                        let employeeList = JSON.parse(list[i].responsibleUser);
-
-                    }
+                    // for (let i = 0; i < list.length; i++) {
+                    //     // 初始化成员列表
+                    //     let groupList = JSON.parse(list[i].responsibleDept);
+                    //     let employeeList = JSON.parse(list[i].responsibleUser);
+                    //
+                    // }
 
 
                 }
@@ -225,11 +227,12 @@ export default {
                     }
                     for (let i = 0; i < this.tableList.length; i++) {
                         if (this.tableList[i].userName) {
-                            submitData.list[i] = {};
-                            submitData.list[i].userId = this.tableList[i].userId;
-                            submitData.list[i].userName = this.tableList[i].userName;
-                            submitData.list[i].responsibleDept = this.tableList[i].responsibleDept;
-                            submitData.list[i].responsibleUser = this.tableList[i].responsibleUser;
+                            submitData.list.push({
+                                userId: this.tableList[i].userId,
+                                userName: this.tableList[i].userName,
+                                responsibleDept: this.tableList[i].responsibleDept,
+                                responsibleUser: this.tableList[i].responsibleUser
+                            })
                         }
                     }
 
@@ -317,7 +320,12 @@ export default {
             })
         },
         initMember(url, id, lists) {
-            this.$http.get(url).then((res) => {
+            this.$http.get(url,  {
+                params: {
+                    pageIndex: 1,
+                    pageSize: 9999
+                }
+            }).then((res) => {
                 if (res.data.errorCode == 0) {
                     let data = res.data.result;
                     this.names = data.map(item => {
@@ -354,7 +362,12 @@ export default {
             })
         },
         initDep(url, id, lists) {
-            this.$http.get(url).then((res) => {
+            this.$http.get(url, {
+                params: {
+                    pageIndex: 1,
+                    pageSize: 9999
+                }
+            }).then((res) => {
                 if (res.data.errorCode == 0) {
                     let data = res.data.result.resultList;
                     this.groups = data.map(item => {
@@ -378,14 +391,17 @@ export default {
                     if (lists) {
                         setTimeout(() => {
                             for (let i = 0; i < lists.length; i++) {
-                                let depart = JSON.parse(lists[i].responsibleDept);
-                                let arr = depart.map(item => item.code);
-                                $(`${id}${i}`).select2({
-                                    allowClear:true,
-                                    placeholder: "请选择",
-                                    theme: "bootstrap",
-                                    language: 'zh-CN',
-                                }).val(arr).trigger("change");
+                                let depart = lists[i].responsibleDept;
+                                if (depart) {
+                                    let n = JSON.parse(lists[i].responsibleDept);
+                                    let arr = n.map(item => item.code);
+                                    $(`${id}${i}`).select2({
+                                        allowClear:true,
+                                        placeholder: "请选择",
+                                        theme: "bootstrap",
+                                        language: 'zh-CN',
+                                    }).val(arr).trigger("change");
+                                }
                             }
                         })
                     }
@@ -395,7 +411,12 @@ export default {
             })
         },
         initEmp(url, id, lists) {
-            this.$http.get(url).then((res) => {
+            this.$http.get(url, {
+                params: {
+                    pageIndex: 1,
+                    pageSize: 9999
+                }
+            }).then((res) => {
                 if (res.data.errorCode == 0) {
                     let data = res.data.result;
                     this.employees = data.map(item => {
@@ -418,14 +439,17 @@ export default {
                     if (lists) {
                         setTimeout(() => {
                             for (let i = 0; i < lists.length; i++) {
-                                let user = JSON.parse(lists[i].responsibleUser);
-                                let arr = user.map(item => item.code);
-                                $(`${id}${i}`).select2({
-                                    allowClear:true,
-                                    placeholder: "请选择",
-                                    theme: "bootstrap",
-                                    language: 'zh-CN',
-                                }).val(arr).trigger("change");
+                                let user = lists[i].responsibleUser;
+                                if (user) {
+                                    let n = JSON.parse(user);
+                                    let arr = n.map(item => item.code);
+                                    $(`${id}${i}`).select2({
+                                        allowClear:true,
+                                        placeholder: "请选择",
+                                        theme: "bootstrap",
+                                        language: 'zh-CN',
+                                    }).val(arr).trigger("change");
+                                }
                             }
                         })
                     }

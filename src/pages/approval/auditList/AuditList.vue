@@ -3,15 +3,15 @@
       <Form :label-width="80" class='searchBox'>
           <div class="formTop clear">
               <div class="item fl">
-                  <Form-item label="流程类型:" prop="name">
+                  <Form-item label="单据名称:" prop="name">
                       <Select v-model="searchInfo.processType" class='txt'>
                           <Option v-for="item in chainList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                       </Select>
                   </Form-item>
               </div>
               <div class="item fl">
-                  <Form-item label="流程编号:" prop="name">
-                      <Input v-model="searchInfo.orderId" placeholder="请输入流程编号" class='txt'></Input>
+                  <Form-item label="单据编号:" prop="name">
+                      <Input v-model="searchInfo.orderId" placeholder="请输入单据编号" class='txt'></Input>
                   </Form-item>
               </div>
               <div class="item fl">
@@ -60,8 +60,7 @@
           </div>
       </Form>
 
-      <p v-if='totalCount == 0' class='noRes'>无查询结果！</p>
-      <div class="tableList" v-if='totalCount != 0'>
+      <div class="tableList">
            <Menu mode="horizontal" :theme="theme1" active-name="1" @on-select = 'menuSel'>
                <Menu-item name="1">
                    待处理
@@ -73,13 +72,14 @@
                    审批通过
                </Menu-item>
            </Menu>
-
-           <div class="tableBox">
+           
+           <p v-if='totalCount == 0' class='noRes'>无查询结果！</p>
+           <div class="tableBox"  v-if='totalCount != 0'>
                <table v-if='searchInfo.totalCount != 0' cellspacing="1" cellpadding="0" class="user">
                    <thead>
                        <tr>
-                           <td>流程名称</td>
-                           <td>流程编号</td>
+                           <td>单据名称</td>
+                           <td>单据编号</td>
                            <td>申请部门</td>
                            <td>申请人</td>
                            <td>申请日期</td>
@@ -191,6 +191,24 @@ export default {
 
             if (name == 1) {
                 this.statusTxt = '待处理';
+
+                this.$http.post('/isp-kongming/audit/tasks', this.searchInfo).then((res) => {
+                    if (res.data.errorCode == 0) {
+                        this.tableList = res.data.result.resultList;
+                        this.totalCount = res.data.result.totalCount;
+                    }
+                    else {
+                        this.$Modal.info({
+                            title: '提示',
+                            content: res.data.errorMsg,
+                            onOk: ()=> {
+
+                            }
+                        });
+                    }
+                })
+
+                return false;
             }
 
             if (name == 2) {
@@ -203,7 +221,7 @@ export default {
                 this.statusTxt = '审批通过';
             }
 
-            this.$http.post('/isp-kongming-audit/audit/his/assignee', this.searchInfo).then((res) => {
+            this.$http.post('/isp-kongming/audit/his/assignee', this.searchInfo).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.tableList = res.data.result.resultList;
                     this.totalCount = res.data.result.totalCount;
@@ -226,7 +244,7 @@ export default {
             if (this.searchInfo.applyDatTo) {
                 this.searchInfo.applyDatTo = this.initTime(this.searchInfo.applyDatTo);
             }
-            this.$http.post('/isp-kongming-audit/audit/tasks', this.searchInfo).then((res) => {
+            this.$http.post('/isp-kongming/audit/tasks', this.searchInfo).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.tableList = res.data.result.resultList;
                     this.totalCount = res.data.result.totalCount;
