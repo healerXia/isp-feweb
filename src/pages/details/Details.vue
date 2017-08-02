@@ -360,35 +360,91 @@ export default {
       this.$http.get(`${config.urlList.getInfo}?id=${id}&adOrderCode=${adOrderCode}`).then((res) => {
         if(res.data.errorCode == 0) {
           this.projectData = res.data.result;
-          this.sessionStorage.setItem('proMessId', this.projectData.id);
-          window.localStorage.setItem('projectData', JSON.stringify(this.projectData));//小阳哥写的
-          this.$http.get(`${config.urlList.getOrder}?projectId=${res.data.result.id}&adOrderCode=${adOrderCode}`).then((res)=>{
+          let proId = res.data.result.id;
+          this.$http.get(`/isp-kongming/adorder/getPageList?projectId=${proId}&adOrderCode=${adOrderCode}`).then((res)=>{
               if (res.data.errorCode == 0) {
+                //   alert(res.data.result.adOrderCode)
 
-              }
-
-              if(res.data.result.resultList.length==0){
-                this.noOrder=true;
-              }
-              else
-              {
-                this.createCharts([],[],[])
-                setTimeout(()=>{
-                  this.showMes.value2=""
-                },0)
-                var arr=['1002','1011','1004','1014']//可编辑的订单状态
-                this.adverMes=res.data.result.resultList[0]
-                if( Array.indexOf(arr, this.adverMes.status)!=-1){//如果是这这几种状态，就可以编辑
-                    this.editOrder=true
-                } else{
-                   this.editOrder=false
+                if(res.data.result.resultList.length==0){
+                  this.noOrder=true;
                 }
-                //获取排期信息
+                else
+                {
+                  this.createCharts([],[],[])
+                  setTimeout(()=>{
+                    this.showMes.value2=""
+                  },0)
+                  var arr=['1002','1011','1004','1014']//可编辑的订单状态
+                  this.adverMes = res.data.result.resultList[0]
+                  if( Array.indexOf(arr, this.adverMes.status)!=-1){//如果是这这几种状态，就可以编辑
+                      this.editOrder=true
+                  } else{
+                     this.editOrder=false
+                  }
+                  //获取排期信息
+                }
+
+                  this.adverMes.adOrderCode = res.data.result.resultList[0].adOrderCode;
+                //   this.$http.get(`/isp-kongming/audit/his/orderId/${this.dverMes.adOrderCode}`).then((res) => {
+                //       if (res.data.errorCode == 0) {
+                //           this.reviewData = res.data.result;
+                //       }
+                //   }).catch((err) => {
+                //       console.log(err);
+                //   })
+                  this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
+                    if(res.data.errorCode === 0) {
+                      this.tableDatas=res.data.result
+                      for(let i=0;i<this.tableDatas.length;i++){//处理总数据
+                        this.priceArr.totalBuy=this.tableDatas[i].monthPrice4001+this.priceArr.totalBuy
+                        this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
+                      }
+                      if(this.priceArr.totalBuy!=0&&this.priceArr.totalDelivery!=0){
+                        this.priceArr.rate="1："+(this.priceArr.totalBuy/this.priceArr.totalDelivery).toFixed(1)
+                      }else if(this.priceArr.totalDelivery==0){
+                        this.priceArr.rate="0：0"
+                      }else if(this.priceArr.totalDelivery!=0&&this.priceArr.totalBuy==0){
+                        this.priceArr.rate="1：0"
+                      }
+                    }
+                    else {
+                      this.$Modal.info({
+                          title: '提示',
+                          content: res.data.errorMsg
+                      });
+                    }
+                    }).catch((err) => {
+                      console.log(err);
+                  })
+                  this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.dverMes.adOrderCode).then((res) => {
+                    if(res.data.errorCode === 0) {
+                      //创建echars
+                      this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);
+                      //处理数据表里面的值
+                      this.dataTable.tbodyData.uvSum=(parseInt(res.data.result.uvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
+                      this.dataTable.tbodyData.pvSum=(parseInt(res.data.result.pvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
+                      if(this.dataTable.tbodyData.uvSum==0){
+                        this.dataTable.tbodyData.clickRate=0
+                      }else{
+                        this.dataTable.tbodyData.clickRate=(res.data.result.uvSum/res.data.result.pvSum).toFixed(2)
+                      }
+
+                    }
+                    else {
+                      this.$Modal.info({
+                          title: '提示',
+                          content: res.data.errorMsg
+                      });
+                    }
+                    }).catch((err) => {
+                  })
+
               }
             }).catch((err) => {
               console.log(err);
           })
-
+          this.sessionStorage.setItem('proMessId', this.projectData.id);
+          window.localStorage.setItem('projectData', JSON.stringify(this.projectData));//小阳哥写的
         }
         else {
           this.$Modal.info({
@@ -400,54 +456,6 @@ export default {
       })
 
       //获取订单中广告信息
-
-      this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
-        if(res.data.errorCode === 0) {
-          this.tableDatas=res.data.result
-          for(let i=0;i<this.tableDatas.length;i++){//处理总数据
-            this.priceArr.totalBuy=this.tableDatas[i].monthPrice4001+this.priceArr.totalBuy
-            this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
-          }
-          if(this.priceArr.totalBuy!=0&&this.priceArr.totalDelivery!=0){
-            this.priceArr.rate="1："+(this.priceArr.totalBuy/this.priceArr.totalDelivery).toFixed(1)
-          }else if(this.priceArr.totalDelivery==0){
-            this.priceArr.rate="0：0"
-          }else if(this.priceArr.totalDelivery!=0&&this.priceArr.totalBuy==0){
-            this.priceArr.rate="1：0"
-          }
-        }
-        else {
-          this.$Modal.info({
-              title: '提示',
-              content: res.data.errorMsg
-          });
-        }
-        }).catch((err) => {
-          console.log(err);
-      })
-
-      this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
-        if(res.data.errorCode === 0) {
-          //创建echars
-          this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);
-          //处理数据表里面的值
-          this.dataTable.tbodyData.uvSum=(parseInt(res.data.result.uvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
-          this.dataTable.tbodyData.pvSum=(parseInt(res.data.result.pvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
-          if(this.dataTable.tbodyData.uvSum==0){
-            this.dataTable.tbodyData.clickRate=0
-          }else{
-            this.dataTable.tbodyData.clickRate=(res.data.result.uvSum/res.data.result.pvSum).toFixed(2)
-          }
-
-        }
-        else {
-          this.$Modal.info({
-              title: '提示',
-              content: res.data.errorMsg
-          });
-        }
-        }).catch((err) => {
-      })
     },
     mounted() {
         let adOrderCode = this.$router.currentRoute.query.adOrderCode;
