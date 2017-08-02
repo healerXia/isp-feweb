@@ -383,16 +383,16 @@ export default {
                   }
                   //获取排期信息
                 }
-
                   this.adverMes.adOrderCode = res.data.result.resultList[0].adOrderCode;
-                //   this.$http.get(`/isp-kongming/audit/his/orderId/${this.dverMes.adOrderCode}`).then((res) => {
-                //       if (res.data.errorCode == 0) {
-                //           this.reviewData = res.data.result;
-                //       }
-                //   }).catch((err) => {
-                //       console.log(err);
-                //   })
-                  this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
+                  let adOrderCode =  this.adverMes.adOrderCode;
+                  this.$http.get(`/isp-kongming/audit/his/orderId/${adOrderCode}`).then((res) => {
+                      if (res.data.errorCode == 0) {
+                          this.reviewData = res.data.result;
+                      }
+                  }).catch((err) => {
+                      console.log(err);
+                  })
+                  this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+adOrderCode).then((res) => {
                     if(res.data.errorCode === 0) {
                       this.tableDatas=res.data.result
                       for(let i=0;i<this.tableDatas.length;i++){//处理总数据
@@ -416,7 +416,7 @@ export default {
                     }).catch((err) => {
                       console.log(err);
                   })
-                  this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.dverMes.adOrderCode).then((res) => {
+                  this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+adOrderCode).then((res) => {
                     if(res.data.errorCode === 0) {
                       //创建echars
                       this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);
@@ -438,7 +438,6 @@ export default {
                     }
                     }).catch((err) => {
                   })
-
               }
             }).catch((err) => {
               console.log(err);

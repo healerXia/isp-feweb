@@ -201,12 +201,12 @@ const menu =  [
                 icon: '',
                 path: 'department'
             },
-            {
-                name: '人员管理',
-                index: '9-3',
-                icon: '',
-                path: 'projectList'
-            },
+            // {
+            //     name: '人员管理',
+            //     index: '9-3',
+            //     icon: '',
+            //     path: 'projectList'
+            // },
             {
                 name: '反馈管理',
                 index: '9-4',
