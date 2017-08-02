@@ -27,7 +27,10 @@
               <span  class="ML15">请上传1M以内的文件</span> 
             </Upload>
             <div class="imgShow">
-              <img :src="path" style="width: 50px" v-for="path in imgPath" class="MR20">
+              <div class="singleImg" v-for="(path,index) in imgPath">
+                <img :src="path" style="width: 60px" >
+                <span @click="delePic(index)">111</span>
+              </div>
             </div>
             <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
           </div>  
@@ -68,6 +71,7 @@
             createId:"",//创建人id
             feedback:"",//反馈内容
             feedBackChannel:"PC",//渠道
+            salve:"",
           },
           checkValue:{
             problemType:[
@@ -95,9 +99,13 @@
         }).catch((res)=>{})
       },
       methods:{
+        delePic(index){
+          this.imgPath.splice(index,1)
+        },
         submitFeedback(name){//新建意见反馈提交
           this.$refs[name].validate((valid) => {
               if (valid) {
+                this.feedbackAdd.salve=this.imgPath.join(',s')
                 this.$http.post(config.urlList.insertUserFeedback,
                   this.feedbackAdd,
                   {emulateJSON:true}
