@@ -38,10 +38,6 @@
                         <span class="fl info-text">{{info.phone}}</span>
                     </div>
                     <div class="clear">
-                        <label for="" class="fl">联系电话：</label>
-                        <span class="fl info-text">{{info.phone}}</span>
-                    </div>
-                    <div class="clear">
                         <label for="" class="fl">代理审批人：</label>
                         <span class="fl info-text">{{info.agentStr}}</span>
                     </div>

@@ -198,9 +198,15 @@ export default {
         border-radius: 2px 2px 0 0;
 
         .listItem {
-            padding: 0 11px 0 11px;
+            padding: 0 9px 0 9px;
             width: 222px;
             border-right: 1px solid #ccc;
+
+            &:last-child {
+                padding-right: 0;
+                border: none;
+                width: 203px;
+            }
         }
 
         .title {
@@ -219,6 +225,7 @@ export default {
             margin-bottom: 20px;
             cursor: pointer;
             border-left: 4px solid #fff;
+            box-sizing: border-box;
 
             &.active {
                 border-left: 4px solid #3D70FB;

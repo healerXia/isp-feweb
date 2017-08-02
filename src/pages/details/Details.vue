@@ -203,16 +203,16 @@
             <div class="operation-title">
                 操作
             </div>
-            <div class="clear">
-                <Button type="primary" @click.stop="selCommit('1')" class="saveNext fl">审批通过</Button>
-                <Button type="ghost" @click.stop="selCommit('0')"  class="cancel fl">审核驳回</Button>
+            <div class="clear" style="margin-top: 20px;">
+                <Button type="primary" @click.stop="selCommit('1')" :class="['saveNext', 'fl', {'active': commitStatus == '0'}]">审批通过</Button>
+                <Button type="ghost" @click.stop="selCommit('0')"  class="cancel fl">审批驳回</Button>
             </div>
             <div class="edit">
-                <textarea name="name" rows="8" cols="80" v-model='comment'></textarea>
+                <textarea name="name" rows="8" cols="80" v-model='comment' :placeholder="placeholderTxt"></textarea>
             </div>
             <div class="submitList">
                 <Button type="primary" @click.stop="handleSubmit(1)" class="saveNext fl" :disabled='submitStatus'>提交并继续</Button>
-                <Button type="primary" @click.stop="handleSubmit(2)" class="save fl" :disabled='submitStatus'>保存</Button>
+                <Button type="primary" @click.stop="handleSubmit(2)" class="save fl" :disabled='submitStatus'>提交</Button>
                 <Button type="ghost" @click.stop="handleReset()"  class="cancel fl">取消</Button>
             </div>
         </div>
@@ -238,7 +238,8 @@ export default {
         taskId: '',
         reviewData: [],
         commitStatus: '',
-        comment: '',
+        comment: '同意',
+        placeholderTxt: '',
         myChart:null,
         editOrder:true,
         noOrder:false,
@@ -595,15 +596,19 @@ export default {
           })
       },
       selCommit(n) {
+          if (n == '0') {
+              this.comment = '请输入驳回原因';
+          }
           this.commitStatus = n;
       },
       handleSubmit(n) {
           if (!this.commitStatus) {
-              this.$Modal.info({
-                 title: '提示',
-                 content: '请操作后提交'
-               });
-               return false;
+            //   this.$Modal.info({
+            //      title: '提示',
+            //      content: '请操作后提交'
+            //    });
+            //    return false;
+            this.commitStatus = 1;
           }
           let taskId = this.$router.currentRoute.query.taskId;
           this.$http.post('/isp-kongming/audit/audit', {
@@ -613,9 +618,11 @@ export default {
           }).then((res) => {
               if (res.data.errorCode == 0) {
                   if (n  == 1) {
-                      this.$router.push('auditList');
+                      this.$Message.success('提交成功!');
+                      //this.$router.push('auditList');
                   }
                   else {
+                      this.$Message.success('提交成功!');
                       this.$router.push('auditList');
                   }
               }
