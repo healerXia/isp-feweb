@@ -34,7 +34,7 @@
                   <span class='href MR15'>
                     <!-- <router-link -->
                       <!-- :to="{path:'createUser',query:{id:$router.currentRoute.query.id}}" > -->
-                        查看全部
+                        <!-- 查看全部 -->
                     <!-- </router-link> -->
                   </span>
                   <span class='href' @click="edit(item.id)">编辑</span>
@@ -261,6 +261,7 @@
                   let obj={}
                   obj=this.getSubmitObj()
                   if(this.id==""){
+                    obj.custId=this.$router.currentRoute.query.id
                     obj.name="汽车之家"
                     this.$http.post(config.urlList.insertCompetitorLog,
                       obj,
