@@ -141,6 +141,11 @@
 	        &:hover {
 	            opacity: 0.9;
 	        }
+
+			&.active {
+				background: #ccc;
+				border: none;
+			}
 	    }
 
 	    .cancel {
