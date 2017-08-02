@@ -253,7 +253,7 @@
                   </span>
                 </Form-item>
               </div>
-              <div :class="showNeed.map_show">
+              <div class="hasneed">
                 <Form-item label="地图:" prop="map" 
                  v-if="formValidate.typeId==5&&formValidate.subclassId==3">
                   <DialogMap 
@@ -321,7 +321,7 @@
       v-model="showSalve"
       title="附件显示"
       >
-      <img :src="'http://d1.test.yiche.com/uploadscdd7ed9ba6e713fa7c880f234fb2c9a0.jpg'" v-if="showSalve" style="width: 100%">
+      <img :src="imgPath" v-if="showSalve" style="width: 100%">
       <div slot="footer" class="footer">             
       </div>
     </Modal>
@@ -605,6 +605,7 @@
       methods:{
         showPicDialog(data){
           this.showSalve=true
+          this.imgPath=data;
         },
         /*******组件的信息接收*******/
         getCheckArea(data){//组件 获取选择的地区
@@ -671,7 +672,6 @@
             }
           }
           obj.time=obj.forever?obj.beginTime+"至永久":obj.beginTime+"至"+obj.endTime
-
           obj1['licenseNumber']=data.licenseNumber
           obj1['registeredCapital']=data.registeredCapital
           obj1['createTime']=obj.createTime
@@ -683,6 +683,7 @@
           obj1['salve']=data.salve;
           this.submitBusiObj=obj1;
           this.uploadBusiObj=obj
+
         },
         getUploadBrand(data,key){//组件 获取上传品牌授权书
           this.isUpload.brand=key
@@ -714,7 +715,7 @@
           }
           obj.taxCode=data.taxCode;
           obj.custBankAccountList=data.custBankAccountList
-          obj.salve=data.salve
+          obj.salve=data.salve.join(',')
           this.submitPayObj=obj;
         },
         /*********编辑与新建的时候下拉的回填************/
@@ -901,6 +902,7 @@
                   }
                 }   
                 res.data.result.custBankAccountList=arr
+                res.data.result.salve=res.data.result.salve.split(',')
                 this.getUploadPay(res.data.result,"")
               }
               else {
@@ -1055,12 +1057,12 @@
             this.$http.post('/isp-kongming/cust/adBusinessLicense',
               this.submitBusiObj,
               ).then((res) => {
-                if(res.data.errorCode===0){
+                if(res.data.errorCode===0){ 
                 }else {
                 }
             }).catch((err) => {})
           }
-        
+          
           if(this.uploadBrandArr.length>=1&&this.isUpload.brand=="upload"){
             let arr=[];
             if(this.uploadBrandLength==0){
@@ -1078,7 +1080,6 @@
                 }
             }).catch((err) => {})
           }
-          
           if(this.submitPayObj.taxCode&&this.submitPayObj.taxCode!=""&&this.isUpload.bank=="upload"){
             this.$http.post('/isp-kongming/cust/adCustBankAccount',
               this.submitPayObj,
@@ -1100,7 +1101,7 @@
                 if (lastCheck&&this.formValidate.countyId) {
                   let submitData=this.operSubmitData();
                   submitData.sign=1
-                  submitData.createUser=this.formValidate.createUser;
+                  submitData.createUser=this.formValidate.createUser?this.formValidate.createUser:this.loginName;
                   submitData.logName=this.loginName;
                   if(!this.$router.currentRoute.query.id){
                     this.$http.post(config.urlList.addCustInfo,//新增加
@@ -1112,7 +1113,7 @@
                         setTimeout(()=>{
                           this.$Modal.info({
                             title: '提示',
-                            content: '添加成功',
+                            content: '提交成功',
                             onOk:()=>{
                               this.$router.push({path:"custDetail",query:{id:res.data.result}})
                             }
@@ -1142,7 +1143,7 @@
                           setTimeout(()=>{
                             this.$Modal.info({
                               title: '提示',
-                              content: '编辑成功',
+                              content: '提交成功',
                               onOk:()=>{
                                 this.$router.push({path:"custDetail",query:{id:this.$router.currentRoute.query.id}})
                               }

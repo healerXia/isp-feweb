@@ -4,7 +4,7 @@
     <div class="searchOrder">
       <ul>
         <li>
-          <div class="inputBox ML30">
+          <div class="inputBox">
             <span class="formLabel">反馈分类</span>
             <Select v-model="feedbackSearch.problemType"
               :clearable="true"
@@ -13,7 +13,7 @@
               <Option v-for="item in options.classiflyOption" :value="item.value" :key="item.value">{{item.name }}</Option>
             </Select>
           </div>
-          <div class="inputBox">
+          <div class="inputBox ML30">
             <span class="formLabel">创建时间</span>
             <Date-picker type="date"  placeholder="选择日期"  class="fLest" v-model="feedbackSearch.beginTime" 
              :editable="false" :options="disB" @on-change="bDateChange"></Date-picker>
@@ -75,11 +75,13 @@
 </template>
 
 <script>
+  import config from './config.js';
   export default {
       components:{
       },
       data () {
         return {
+          pageSize:0,
           pageObj:{
             total:200,
             pageNo:1,
@@ -107,24 +109,13 @@
             endTime:"",//结束时间
             problemType:"",//反馈分类
             createId:"",//登录人id
+            pageIndex:1,
+            pageSize:20
           },
           feedbackMess:{
             tableHead:['反馈人','反馈分类','反馈渠道','反馈内容','反馈时间','操作'],
-            tableKey:['createName','problemName','channelName','feedback','createTime'],
-            tableArr:[{
-              createName:'周凤',
-              problemType:1,
-              feedBackChannel:1,
-              feedback:"nice",
-              createTime:"2017:01:11",
-            },
-            {
-              createName:'周凤',
-              problemType:1,
-              feedBackChannel:1,
-              feedback:"nice",
-              createTime:"2017:01:11",
-            }
+            tableKey:['createName','problemName','feedBackChannel','feedback','createTime'],
+            tableArr:[
             ]
           },
         }
@@ -132,7 +123,24 @@
       created() {//页面数据初始化
         this.$http.get(config.urlList.login).then((res)=>{//获取登录人即操作人
             if(res.data.errorCode===0){
-              this.feedbackSearch.createId=res.data.result.uid;
+              this.feedbackSearch.createId=parseInt(res.data.result.uid);
+              this.$http.post(config.urlList.selectUserFeedback,
+                {createId:this.feedbackSearch.createId,pageSize:20,pageIndex:1},
+                {emulateJSON:true}
+              ).then((res)=>{//获取登录人即操作人
+                  if(res.data.errorCode===0){
+                    this.feedbackMess.tableArr=res.data.result.resultList
+                    this.pageObj.total=res.data.result.totalCount
+                    this.pageObj.pageNo=1
+                    this.dealTableData()
+                  }
+                  else {
+                    this.$Modal.info({
+                        title: '提示',
+                        content: res.data.errorMsg
+                    });
+                  }
+              }).catch((res)=>{})  
             }
             else {
               this.$Modal.info({
@@ -140,11 +148,35 @@
                   content: res.data.errorMsg
               });
             }
-        }).catch((res)=>{})             
-        this.dealTableData()
+        }).catch((res)=>{})     
       },
       methods:{
         searchMess(){
+          this.feedbackSearch.pageIndex=1;
+          this.feedbackSearch.pageSize=20;
+          let obj={}
+          for(let item in this.feedbackSearch){
+            if(this.feedbackSearch[item]){
+              obj[item]=this.feedbackSearch[item]
+            }
+          }
+          this.$http.post(config.urlList.selectUserFeedback,
+            obj,
+            {emulateJSON:true}
+          ).then((res)=>{//获取登录人即操作人
+              if(res.data.errorCode===0){
+                this.feedbackMess.tableArr=res.data.result.resultList
+                this.pageObj.total=res.data.result.totalCount
+                this.pageObj.pageNo=1
+                this.dealTableData()
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+          }).catch((res)=>{})  
         },
         reset(){
           this.feedbackSearch.beginTime="";
@@ -184,10 +216,43 @@
           return date && date.valueOf()< new Date(this.feedbackSearch.beginTime);
         },
         pageChange(index){//页数切换
-          console.log(index)
+          this.$http.post(config.urlList.selectUserFeedback,
+            {createId:this.feedbackSearch.createId,pageSize:this.pageSize?this.pageSize:20,pageIndex:index},
+            {emulateJSON:true}
+          ).then((res)=>{//获取登录人即操作人
+              if(res.data.errorCode===0){
+                this.feedbackMess.tableArr=res.data.result.resultList
+                this.pageObj.total=res.data.result.totalCount
+                this.pageObj.pageNo=1
+                this.dealTableData()
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+          }).catch((res)=>{})  
         },
         pageSizeChange(num){//条数切换
-          console.log(num)
+          this.pageSize=num
+          this.$http.post(config.urlList.selectUserFeedback,
+            {createId:this.feedbackSearch.createId,pageSize:num,pageIndex:1},
+            {emulateJSON:true}
+          ).then((res)=>{//获取登录人即操作人
+              if(res.data.errorCode===0){
+                this.feedbackMess.tableArr=res.data.result.resultList
+                this.pageObj.total=res.data.result.totalCount
+                this.pageObj.pageNo=1
+                this.dealTableData()
+              }
+              else {
+                this.$Modal.info({
+                    title: '提示',
+                    content: res.data.errorMsg
+                });
+              }
+          }).catch((res)=>{})  
         }
       }
   }
