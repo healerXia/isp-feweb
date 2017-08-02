@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="feedback">
-    <div class="title MT20 MB20">我的反馈</div>
     <div class="searchOrder">
       <ul>
         <li>

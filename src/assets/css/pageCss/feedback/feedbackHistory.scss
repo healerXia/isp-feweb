@@ -1,21 +1,81 @@
 .feedbackHistory{
-	padding-left:30px;
-	.title{
+  .PL30{padding-left:30px}
+    .hasBg{
+      background: #F9FAFC;
+    }
+	  .title{
     	font-size: 14px;
     	color: #333;
     	a{
     		font-size: 12px
     	}
   	}
+    .titleSpecial{
+      background: #F9FAFC;
+      padding-left:30px;
+      padding-top: 18px;
+      padding-bottom: 18px;
+      margin-top: 20px
+    }
   	.messBox{
+      margin-top: 15px;
   		width: 70%;
   		.head{
-  			span{font-size:12px;}
+  			span{font-size:12px;color:#7B8497;}
   		}
   		.message{
-
+        p{color:#7B8497;font-size:12px}
   		}
+      .imgShow{
+        .singleImg{
+          margin-right: 20px;
+          float: left;
+          width: 120px;
+          overflow: hidden;
+          img{
+            cursor: pointer;
+          }
+        }
+        width:100%;margin-top:20px; overflow:hidden
+      }
+      .colo333{color:#333 !important}
   	}
   	.ivu-checkbox-group{float:left}
   	.ivu-select,.ivu-input-wrapper{width: 500px !important;float:left}
+}
+.picDialog{
+  .ivu-modal{
+    width:1000px !important;
+    height:600px;
+    .ivu-modal-content{background-color:transparent}
+    .ivu-modal-close .ivu-icon-ios-close-empty{
+      font-weight: bold;
+      color: #000;
+      font-size: 40px
+    }
+    .ivu-modal-body{
+      .picBox{
+        height:500px;
+        text-align:center;
+        img{width:600px}
+        span.icon{
+          color: #000;
+          position:absolute;
+          display: inline-block;
+          height: 60px;
+          width: 50px;
+          line-height: 50px;
+          text-align: center;
+          cursor: pointer;
+          font-size: 40px;
+          font-weight: bold;
+          top:40%;
+        }
+        .spanLeft{left:40px}
+        .spanRigth{right:40px}
+      }
+      
+    }
+    .ivu-modal-footer{display:none}
+  }
 }

@@ -105,7 +105,7 @@
         submitFeedback(name){//新建意见反馈提交
           this.$refs[name].validate((valid) => {
               if (valid) {
-                this.feedbackAdd.salve=this.imgPath.join(',s')
+                this.feedbackAdd.salve=this.imgPath.join(',')
                 this.$http.post(config.urlList.insertUserFeedback,
                   this.feedbackAdd,
                   {emulateJSON:true}
