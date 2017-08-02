@@ -171,7 +171,7 @@ export default {
                 content: '是否取消当前操作并跳转至列表页？',
                 cancel: '取消',
                 onOk: () => {
-                    this.$router.push('docManagemengt');
+                    this.$router.push('department');
                 },
                 onCancel: () => {
                     //this.$Message.info('点击了取消');

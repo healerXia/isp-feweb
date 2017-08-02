@@ -66,9 +66,9 @@
                       <span v-show="item.errShow.bank_err_show" class="colorRed ML5">
                         {{item.errMess.bank_err}}
                       </span>
-                    </Form-item> 
+                    </Form-item>
                     <Form-item class="positions":label="'开户账号' + (index + 1)">
-                      <Input v-model="item.bankAccount" placeholder="请填写开户账号" class='fl' 
+                      <Input v-model="item.bankAccount" placeholder="请填写开户账号" class='fl'
                       @on-focus="showAccount(index)"
                       @on-blur="hideAccount(index)"
                       ></Input>
@@ -78,26 +78,26 @@
                       <span v-show="item.errShow.bankAccount_err_show" class="colorRed ML5">
                         {{item.errMess.bankAccount_err}}
                       </span>
-                    </Form-item> 
+                    </Form-item>
                     <Form-item :label="'电话' + (index + 1)">
                       <Input v-model="item.phone" placeholder="请填写电话" class='fl'></Input>
                       <span v-show="item.errShow.phone_err_show" class="colorRed ML5">
                         {{item.errMess.phone_err}}
                       </span>
-                    </Form-item> 
+                    </Form-item>
                     <Form-item :label="'地址' + (index + 1)">
                       <Input v-model="item.address" placeholder="请填写地址" class='fl'></Input>
                       <span v-show="item.errShow.address_err_show" class="colorRed ML5">
                         {{item.errMess.address_err}}
                       </span>
-                    </Form-item>                  
+                    </Form-item>
                   </div>
-                </Form>              
+                </Form>
               </div>
               <div class="upload">
                 <span class="label">附件:</span>
-                <Upload 
-                  action="/api/isp-kongming/cust/imgUpdate"
+                <Upload
+                  action="/isp-kongming/cust/imgUpdate"
                   :format="['jpg','jpeg','png']"
                   :max-size="10240"
                   :on-format-error="handleFormatError"
@@ -105,19 +105,19 @@
                   :on-success="fileUploadSuccess"
                   >
                   <Button type="ghost" class="btn bg4373F3">上传文件</Button>
-                  <span  class="ML15">请上传1M以内的文件</span> 
+                  <span  class="ML15">请上传1M以内的文件</span>
                 </Upload>
                 <div class="uperror" v-show="uploadImg.show">
                   <div v-for="(item,index) in uploadImg.name" class="underLine">
                     <span>{{item}}</span><span class="del" @click="removeImg(index)">删除</span>
                   </div>
-                </div>    
+                </div>
                 <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
-              </div> 
+              </div>
               <Form-item>
                 <Button type="primary" class="btn bg4373F3" @click="submit('uploadPay')">提交</Button >
                 <Button type="primary" class="btn bgCancle ML15" @click="cancel('uploadPay')">取消</Button>
-              </Form-item>   
+              </Form-item>
             </Form>
             <div slot="footer" class="footer">
             </div>
@@ -207,7 +207,7 @@ export default {
         }
         this.uploadPay.custBankAccountList=arr
       },
-      open(){//相当于弹出层初始化      
+      open(){//相当于弹出层初始化
         //如果是接口
         //进来，先判断纳税人识别号是不是空，如果是空，隐藏框子
         //如果不是打开框子
@@ -245,7 +245,7 @@ export default {
         }
         setTimeout(()=>{
           this.modal1=true
-        },0)        
+        },0)
       },
       resetValue(){//弹出层进来时重置
         this.modal1=false
@@ -386,20 +386,20 @@ export default {
             this.accMessArr[i].errMess.phone_err=""
             resultArr.push(true)
           }
-        } 
+        }
         for(let i=0;i<resultArr.length;i++){
           if(resultArr[i]==false){
             lastRetun=false
             return false
           }
         }
-       
+
         if(lastRetun){
           return true
-        }         
-      },     
+        }
+      },
       addGroup(){
-        let oneGroup={          
+        let oneGroup={
             bank:"",//开户银行
             bankAccount:"",//银行账号
             phone:"",//电话
@@ -412,7 +412,7 @@ export default {
             errMess:{
               bankAccount_err:"",
               phone_err:""
-            }              
+            }
         }
         this.accMessArr.push(oneGroup)
       },
@@ -432,7 +432,7 @@ export default {
          this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
          this.judgeErr.uploadErrShow=true
       },
-      handleMaxSize (file) {           
+      handleMaxSize (file) {
         this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
         this.judgeErr.uploadErrShow=true
       },
@@ -451,11 +451,11 @@ export default {
               let salve_check=this.salveCheck();//附件
               if(check_account&&check_tax&&salve_check){
                 this.getCustBankAccountList();
-                this.uploadPay.custId=this.$router.currentRoute.query.id;    
-                this.$emit('uploadpay',this.uploadPay,"upload")   
+                this.uploadPay.custId=this.$router.currentRoute.query.id;
+                this.$emit('uploadpay',this.uploadPay,"upload")
                 this.modal1=false
               }
-             
+
           } else {
             this.$Modal.error({
                 title: '提示',
@@ -523,7 +523,7 @@ export default {
   }
 }
 .upBtn{
-  text-align: center; 
+  text-align: center;
   display: inline-block;
   width: 120px !important;
   height: 38px !important;
@@ -540,8 +540,8 @@ export default {
     .ivu-modal-content{
       position: relative;
       z-index: 1000;
-    }  
-    .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px} 
+    }
+    .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px}
     display: inline-block;
     input,.ivu-input-wrapper{width:350px}
     .accountOpenInfo{
@@ -581,7 +581,7 @@ export default {
             left:1px;
             overflow: hidden;
           }
-        } 
+        }
       }
     }
     .upload{

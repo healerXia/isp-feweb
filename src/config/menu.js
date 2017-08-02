@@ -180,12 +180,6 @@ const menu =  [
                 index: '8-3',
                 icon: '',
                 path: 'wait'
-            },
-            {
-                name: '部门管理',
-                index: '8-4',
-                icon: '',
-                path: 'department'
             }
         ]
     },
@@ -205,7 +199,7 @@ const menu =  [
                 name: '部门管理',
                 index: '9-2',
                 icon: '',
-                path: 'setUpDepartment'
+                path: 'department'
             },
             {
                 name: '人员管理',

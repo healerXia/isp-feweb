@@ -129,6 +129,7 @@ export default {
     methods:{
         editPro(){
             if (this.jumpUrl == 1) {
+                alert(1);
                 this.$router.push({path: 'createPro', query:{id: window.sessionStorage.getItem('proMessId')}});
             }
             this.$emit('edits','edit')

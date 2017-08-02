@@ -168,7 +168,7 @@
              </Panel>
           </Collapse>
         </div> -->
-        <div v-if='taskId'>
+        <div>
           <Collapse v-model="showMes.value4" @on-change="showCollapse4">
              <Panel name="1">
                 <span>审批信息</span>
@@ -185,9 +185,9 @@
                     <tbody>
                       <tr v-for="(i,index) in reviewData">
                         <td v-if="index<9">0{{index+1}}</td>
-                        <td>{{i.application}}</td>
-                        <td>{{i.status == 1 ? '审批通过' : '审核驳回'}}</td>
-                        <td>{{i.auditTime.split(' ')[0]}}</td>
+                        <td>{{i.auditorName}}</td>
+                        <td>{{initStatus(i.status)}}</td>
+                        <td>{{i.applyDate ? i.applyDate.split(' ')[0]: ''}}</td>
                         <td>{{i.comment}}</td>
                         <!-- <td v-else-if="index>=9">{{index+1}}</td>
                         <td v-for="item in approvalRecord.theadKey">{{tbody[item]}}</td> -->
@@ -199,7 +199,7 @@
           </Collapse>
         </div>
 
-        <div v-if='taskId' class="operation">
+        <div v-if='!action' class="operation">
             <div class="operation-title">
                 操作
             </div>
@@ -236,6 +236,7 @@ export default {
     data() {
       return {
         taskId: '',
+        action: '',
         reviewData: [],
         commitStatus: '',
         comment: '同意',
@@ -356,6 +357,7 @@ export default {
       this.$http.get(`${config.urlList.getInfo}?id=${id}&adOrderCode=${adOrderCode}`).then((res) => {
         if(res.data.errorCode === 0) {
           this.projectData=res.data.result;
+          this.sessionStorage.setItem('proMessId', this.projectData.id);
           window.localStorage.setItem('projectData', JSON.stringify(this.projectData));//小阳哥写的
           this.$http.get(`${config.urlList.getOrder}?projectId=${res.data.result.id}&adOrderCode=${adOrderCode}`).then((res)=>{
               if(res.data.result.resultList.length==0){
@@ -440,7 +442,12 @@ export default {
     mounted() {
         let adOrderCode = this.$router.currentRoute.query.adOrderCode;
         let taskId = this.$router.currentRoute.query.taskId;
+        let action = this.$router.currentRoute.query.action;
         this.taskId = taskId;
+
+        if (action) {
+            this.action = action;
+        }
 
         if (adOrderCode) {
             this.$http.get(`/isp-kongming/audit/his/orderId/${adOrderCode}`).then((res) => {
@@ -567,7 +574,7 @@ export default {
         },0)
       },
       edit(){
-        let id=this.$router.currentRoute.query.id
+        let id = this.$router.currentRoute.query.id || this.projectData.id;
         this.$router.push({path:"createPro", query: {id: id}})
       },
       showCollapse1(){
@@ -594,6 +601,19 @@ export default {
           }).catch((err) => {
               console.log(err);
           })
+      },
+      initStatus(n) {
+          if (n == -1) {
+              return '待审核';
+          }
+
+          if (n == 0) {
+              return '审批驳回';
+          }
+
+          if (n == 1) {
+              return '审批通过';
+          }
       },
       selCommit(n) {
           if (n == '0') {
@@ -633,8 +653,6 @@ export default {
       handleReset() {
            this.$router.push('auditList');
       }
-
-
     }
 }
 
