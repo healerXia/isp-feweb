@@ -394,7 +394,6 @@
           return false
         },
         reset(name){
-          console.log(111)
           for(let i in this.errorShow){
             this.errorShow[i]=false
           }
