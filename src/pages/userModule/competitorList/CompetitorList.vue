@@ -78,16 +78,16 @@
             <Form-item label="版本价格:" prop="price">
               <Input  placeholder="请填写版本价格" class='fl' v-model="addComMess.price"></Input>
               <span class="ML5 fl">元</span>
-              <span class="colorRed" v-show="this.errorShow.priceErrShow">{{errorMess.priceErr}}</span>
+              <span class="colorRed ML15" v-show="this.errorShow.priceErrShow">{{errorMess.priceErr}}</span>
             </Form-item>
             <Form-item label="实付价格:" prop="realPrice">
               <Input  placeholder="请填写实付价格" class='fl' v-model="addComMess.realPrice"></Input>
-              <span class="colorRed" v-show="this.errorShow.realPriceErrShow">{{errorMess.realPriceErr}}</span>
+              <span class="colorRed ML15" v-show="this.errorShow.realPriceErrShow">{{errorMess.realPriceErr}}</span>
               <span class="ML5 fl">元</span>
             </Form-item>
             <Form-item label="折扣:" prop="discount">
               <Input  placeholder="请填写折扣" class='fl'  v-model="addComMess.discount"></Input>
-              <span class="colorRed" v-show="this.errorShow.discountErrShow">{{errorMess.discounErr}}</span>
+              <span class="colorRed ML15" v-show="this.errorShow.discountErrShow">{{errorMess.discountErr}}</span>
               <span class="ML5 fl">折</span>
             </Form-item>
             <Form-item label="合作类型:" prop="typeName">
@@ -103,6 +103,7 @@
                 <Option value="2">统签</Option>
                 <Option value="3">采集</Option>
               </Select>
+              <span class="colorRed ML15" v-show="this.errorShow.patternErrShow">{{errorMess.patternErr}}</span>
             </Form-item>  
             <Form-item label="备注:" prop="notes">
              <Input type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注" 
@@ -160,15 +161,17 @@
           },
           errorMess:{
             dateErr:"",
-            priceErr:"格式错误,请填写数字与小数点",
-            realPriceErr:"格式错误,请填写数字与小数点",
-            discountErr:"格式错误,请填写数字与小数点",
+            priceErr:"请填写数字与小数点",
+            realPriceErr:"请填写数字与小数点",
+            discountErr:"请填写数字与小数点",
+            patternErr:"自签与统签只能选择一个"
           },
           errorShow:{
             dateErrShow:false,
             priceErrShow:false,
             realPriceErrShow:false,
-            discountErrShow:false
+            discountErrShow:false,
+            patternErrShow:false
           }
         }
       },
@@ -179,7 +182,7 @@
       methods:{
         getTableData(){
           this.$http.post(config.urlList.selCompetitorLog,
-            {pageSize:1,pageIndex:1}
+            {pageSize:1,pageIndex:1,custId:this.$router.currentRoute.query.id}
             ).then((res)=>{
               if(res.data.errorCode===0){
                 this.tableObj.tableData=res.data.result.resultList
@@ -200,8 +203,10 @@
         getSubmitObj(){
           let obj={}
           for(let item in this.addComMess){
-            if(item!="beginTime"&&item!="endTime")
-            obj[item]=this.addComMess[item]
+            if(item!="beginTime"&&item!="endTime"){
+              obj[item]=this.addComMess[item]
+            }
+            
           }
           if(this.addComMess.beginTime!=""){
             obj.beginTime=this.formatDate(this.addComMess.beginTime)
@@ -220,7 +225,12 @@
               if(res.data.errorCode===0){
                 this.id=res.data.result.resultList[0].id;
                 for(let item in this.addComMess){
-                  this.addComMess[item]=res.data.result.resultList[0][item]+""
+                  if(res.data.result.resultList[0][item]==null){
+                    this.addComMess[item]=""
+                  }else{
+                    this.addComMess[item]=res.data.result.resultList[0][item]+""
+                  }
+                  
                 }
                 if(this.addComMess.beginTime!=""){
                   this.addComMess.beginTime=new Date(this.addComMess.beginTime.substring(0,10))
@@ -251,6 +261,7 @@
                   let obj={}
                   obj=this.getSubmitObj()
                   if(this.id==""){
+                    obj.name="汽车之家"
                     this.$http.post(config.urlList.insertCompetitorLog,
                       obj,
                       {emulateJSON:true}
@@ -272,7 +283,9 @@
                         }
                     }).catch((res)=>{})
                   }else{
+                    obj.custId=this.$router.currentRoute.query.id
                     obj.id=this.id
+                    obj.name="汽车之家"
                     this.$http.post(config.urlList.updateCompetitorLog,
                       obj,
                       {emulateJSON:true}
@@ -307,7 +320,7 @@
           })
         },
         lastCheck(){
-            let reg=/^(\d+)|(\d+)\.{0,1}(\d+)$/;
+            let reg=/^(\d+)\.{0,1}(\d+)$/g;
             //时间,开始不能大于结束
             if(this.addComMess.beginTime==""&&this.addComMess.endTime){
               this.errorMess.dateErr="请填写签约周期"
@@ -324,37 +337,65 @@
             }else{
                this.errorShow.dateErrShow=false
             }
-          
-          if(this.addComMess.price!=""){
-            let result=this.addComMess.price.match(reg)
-            if(result==null){
-              this.errorShow.priceErrShow=true
-              return false
+            
+            if(this.addComMess.price!=""){
+              let result=this.addComMess.price.match(reg)
+              if(result==null){
+                this.errorShow.priceErrShow=true
+                return false
+              }else{
+                this.errorShow.priceErrShow=false
+              }
             }else{
               this.errorShow.priceErrShow=false
             }
-          }
-          if(this.addComMess.realPrice!=""){
-            let result=this.addComMess.realPrice.match(reg)
-            if(result==null){
-              this.errorShow.realPriceErrShow=true
-              return false
+
+            if(this.addComMess.realPrice!=""){
+              let result=this.addComMess.realPrice.match(reg)
+              if(result==null){
+                this.errorShow.realPriceErrShow=true
+                return false
+              }else{
+                this.errorShow.realPriceErrShow=false
+              }
             }else{
-              this.errorShow.realPriceErrShow=false
+               this.errorShow.realPriceErrShow=false
             }
-          }
-          if(this.addComMess.discount!=""){
-            let result=this.addComMess.discount.match(reg)
-            if(result==null){
-              this.errorShow.discountErrShow=true
-              return false
+
+            if(this.addComMess.discount!=""){              
+              let result=this.addComMess.discount.match(reg)
+              if(result==null){
+                this.errorShow.discountErrShow=true
+                return false
+              }else{
+                this.errorShow.discountErrShow=false
+              }
             }else{
               this.errorShow.discountErrShow=false
             }
+            
+            let hasSelfSign=this.arrFind(this.addComMess.pattern,1)
+            let allSelfSign=this.arrFind(this.addComMess.pattern,2)
+            if(hasSelfSign&&allSelfSign){
+              this.errorShow.patternErrShow=true
+              return false
+            }else{
+              this.errorShow.patternErrShow=false
+            }
+            return true;
+        },
+        arrFind(arr,value){
+          for(let i=0;i<arr.length;i++){
+            if(arr[i]==value){
+              return true
+            }
           }
-          return true;
+          return false
         },
         reset(name){
+          for(let i in this.errorShow){
+            this.errorShow[i]=false
+          }
           this.id=""
           this.showDialog=false
           this.$refs[name].resetFields();

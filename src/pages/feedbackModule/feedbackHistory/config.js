@@ -1,5 +1,6 @@
 const urlList = {
-	selectUserFeedback:'isp-kongming/cust/selectUserFeedback',//查找
+	selectUserFeedback:'/isp-kongming/cust/selectUserFeedback',//查找
+	selectUserFeedbackReply:'isp-kongming/cust/selectUserFeedbackReply'//回复查询
 }
 
 

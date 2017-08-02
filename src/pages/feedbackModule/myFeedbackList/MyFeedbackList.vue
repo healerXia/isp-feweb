@@ -48,13 +48,13 @@
         <tbody>
           <tr v-for="data in feedbackMess.tableArr">
             <td v-for="key in feedbackMess.tableKey">
-              <p v-if="key=='content'" :title="data[key]">{{data[key]}}</p>
+              <p v-if="key=='feedback'" :title="data[key]">{{data[key]}}</p>
               <span v-else>{{data[key]}}</span>
             </td>
             <td>
               <span class='href'>
                   <router-link
-                    :to="{path:'feedbackHistory',query: {id:1,from:0}}">
+                    :to="{path:'feedbackHistory',query: {id:data.id,from:0}}">
                      详情
                   </router-link>                
               </span>
@@ -125,7 +125,7 @@
             if(res.data.errorCode===0){
               this.feedbackSearch.createId=parseInt(res.data.result.uid);
               this.$http.post(config.urlList.selectUserFeedback,
-                {createId:this.feedbackSearch.createId,pageSize:20,pageIndex:1},
+                this.getSearchMess(),
                 {emulateJSON:true}
               ).then((res)=>{//获取登录人即操作人
                   if(res.data.errorCode===0){
@@ -151,6 +151,15 @@
         }).catch((res)=>{})     
       },
       methods:{
+        getSearchMess(){
+          let obj={}
+          for(let item in this.feedbackSearch){
+            if(this.feedbackSearch[item]){
+              obj[item]=this.feedbackSearch[item]
+            }
+          }
+          return obj;
+        },
         searchMess(){
           this.feedbackSearch.pageIndex=1;
           this.feedbackSearch.pageSize=20;
@@ -216,8 +225,11 @@
           return date && date.valueOf()< new Date(this.feedbackSearch.beginTime);
         },
         pageChange(index){//页数切换
+          let obj=this.getSearchMess();
+          obj.pageSize=this.pageSize?this.pageSize:20;
+          obj.pageIndex=index;
           this.$http.post(config.urlList.selectUserFeedback,
-            {createId:this.feedbackSearch.createId,pageSize:this.pageSize?this.pageSize:20,pageIndex:index},
+            obj,
             {emulateJSON:true}
           ).then((res)=>{//获取登录人即操作人
               if(res.data.errorCode===0){
@@ -236,8 +248,11 @@
         },
         pageSizeChange(num){//条数切换
           this.pageSize=num
+          let obj=this.getSearchMess();
+          obj.pageSize=num;
+          obj.pageIndex=1;
           this.$http.post(config.urlList.selectUserFeedback,
-            {createId:this.feedbackSearch.createId,pageSize:num,pageIndex:1},
+            obj,
             {emulateJSON:true}
           ).then((res)=>{//获取登录人即操作人
               if(res.data.errorCode===0){

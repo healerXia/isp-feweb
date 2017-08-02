@@ -2,7 +2,7 @@
   <div class="feedbackHistory">
     <div class="content">
       <div class='title MT30'>
-        用户张三的反馈
+        用户 {{feedbackMess.createName}} 的反馈
         <router-link class="ML30"
           :to="{path:path}">
             返回
@@ -10,11 +10,11 @@
       </div>
       <div class="messBox">
         <div class="head">
-          <span>2017-07-09 12:30:22</span>
-          <span class="ML30">张三</span>
+          <span>{{feedbackMess.createTime}}</span>
+          <span class="ML30">{{feedbackMess.createName}}</span>
         </div>
         <div class="message">
-          <p>反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容</p>
+          <p>{{feedbackMess.feedback}}</p>
         </div>
         <div class="img">
           <img src="">
@@ -25,13 +25,14 @@
       <div class='title MT30'>
         管理员的反馈
       </div>
-      <div class="messBox">
+      <div class="messBox" v-for ="item in callbackArr">
         <div class="head">
-          <span>2017-07-09 12:30:22</span>
-          <span class="ML30">张三</span>
+          <span>{{item.endTime}}</span>
+          <span class="ML30">{{item.name}} 回复 {{feedbackMess.createName}}</span>
+          <span class="ML30">{{item.channel}}</span>
         </div>
         <div class="message">
-          <p>反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容反馈内容</p>
+          <p>{{item.reply}}</p>
         </div>
         <div class="img">
           <img src="">
@@ -66,12 +67,19 @@
 </template>
 
 <script>
+import config from './config.js';
   export default {
       components:{
       },
       data () {
         return{
           path:"",
+          feedbackMess:{
+            createName:"",
+            feedback:"",
+            createTime:""
+          },
+          callbackArr:[],
           callbackMess:{
             channel:[],
             reply:"",
@@ -96,9 +104,14 @@
         }else if(from==0){
           this.path="myFeedbackList"
         }
-        this.$http.get(config.urlList.login).then((res)=>{//获取回复人姓名
+        this.$http.post(config.urlList.selectUserFeedback,
+          {id:this.$router.currentRoute.query.id},
+          {emulateJSON:true}
+          ).then((res)=>{//获取登录人即操作人
             if(res.data.errorCode===0){
-              this.callbackMess.name=res.data.result.username;
+             for(let item in res.data.result.resultList[0]){
+              this.feedbackMess[item]=res.data.result.resultList[0][item]
+             }
             }
             else {
               this.$Modal.info({
@@ -107,6 +120,20 @@
               });
             }
         }).catch((res)=>{})  
+        this.$http.post(config.urlList.selectUserFeedbackReply,
+          {id:parseInt(this.$router.currentRoute.query.id)},
+          {emulateJSON:true}
+          ).then((res)=>{//获取登录人即操作人
+            if(res.data.errorCode===0){
+              this.callbackArr=res.data.result.slice(0)
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+        }).catch((res)=>{})
       },
       methods:{
         submitCallback(name){//新建回复提交

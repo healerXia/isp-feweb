@@ -4,12 +4,12 @@
         <span class="menu_item active">
           基本信息
         </span>
-        <!-- <span class="menu_item">
+        <span class="menu_item">
           <router-link
             :to="{path:'competitorList',query:{id:$router.currentRoute.query.id}}" >
               竞品信息
           </router-link>
-        </span> -->
+        </span>
       </div>
       <div class="content">
         <div class="title pT30">

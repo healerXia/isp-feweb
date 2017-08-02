@@ -84,7 +84,7 @@
               <div class="upload">
                 <span class="label">附件:</span>
                 <Upload 
-                  action="/api/isp-kongming/cust/imgUpdate"
+                  action="/isp-kongming/cust/imgUpdate"
                   :format="['jpg','jpeg','png']"
                   :max-size="10240"
                   :on-format-error="handleFormatError"
