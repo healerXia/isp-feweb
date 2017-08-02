@@ -206,6 +206,12 @@ const menu =  [
                 index: '9-3',
                 icon: '',
                 path: 'projectList'
+            },
+            {
+                name: '反馈管理',
+                index: '9-4',
+                icon: '',
+                path: 'feedbackList'
             }
         ]
     },
@@ -220,6 +226,26 @@ const menu =  [
                 index: '10-1',
                 icon: '',
                 path: 'viewPercenter'
+            }
+        ]
+    },
+    {
+        name: '我的反馈',
+        path: '',
+        index: '11',
+        icon: 'icon-customer',
+        subNav: [
+            {
+                name: '创建反馈',
+                index: '11-1',
+                icon: '',
+                path: 'createFeedback'
+            },
+            {
+                name: '我的反馈列表',
+                index: '11-2',
+                icon: '',
+                path: 'myFeedbackList'
             }
         ]
     }

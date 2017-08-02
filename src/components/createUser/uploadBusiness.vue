@@ -86,7 +86,7 @@
                 <Upload
                   action="/isp-kongming/cust/imgUpdate"
                   :format="['jpg','jpeg','png']"
-                  :max-size="10240"
+                  :max-size="1024"
                   :on-format-error="handleFormatError"
                   :on-exceeded-size="handleMaxSize"
                   :on-success="fileUploadSuccess"

@@ -53,7 +53,7 @@
               </li>
               <li class="MT15">
                 <div class="inputBox">
-                  <span class="formLabel">待处理</span>        
+                  <span class="formLabel">待处理</span>
                   <Select v-model="searchData.playStatus" multiple placeholder="请选择待处理" >
                       <Option v-for="item in selectData.toDoArr" :value="item.Value" :key="item">{{ item.Name}}</Option>
                   </Select>
@@ -88,7 +88,7 @@
                 <td v-for='key in tableData.theadKey'>
                   <span v-if="key!='adOrderCode'">{{tbodyData[key]}}</span>
                    <router-link
-                    :to="{path:'details',query: {id:tbodyData.projectId}}"
+                    :to="{path:'details',query: {id:tbodyData.projectId, action:1, adOrderCode: tbodyData.adOrderCode}}"
                     v-if="key=='adOrderCode'">
                       {{tbodyData[key]}}
                     </router-link>
@@ -147,7 +147,7 @@ import config from './config.js';
             {Name:"确认通过",Value:1003},
             {Name:"确认驳回",Value:1004},
             {Name:"终止",Value:1007},
-            {Name:"过期撤销",Value:1006},  
+            {Name:"过期撤销",Value:1006},
           ],
           projectTypeArr:[
            {Name:"广告",Value:1}

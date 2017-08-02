@@ -16,16 +16,19 @@
           <div class="upload">
             <span class="label">附件:</span>
             <Upload 
-              action="http://dev-isp.yiche.com:8081/cust/fileUpload2"
+              action="/api/isp-kongming/cust/imgUpdate"
               :format="['jpg','jpeg','png']"
               :max-size="10240"
               :on-format-error="handleFormatError"
               :on-exceeded-size="handleMaxSize"
               :on-success="fileUploadSuccess"
               >
-              <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+             <Button type="ghost" class="btn bg4373F3">上传文件</Button>
               <span  class="ML15">请上传1M以内的文件</span> 
             </Upload>
+            <div class="imgShow">
+              <img :src="path" style="width: 50px" v-for="path in imgPath" class="MR20">
+            </div>
             <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
           </div>  
           <Form-item>
@@ -41,6 +44,7 @@
   export default {
       data () {
         return{
+          imgPath:[],
           errorCon:{
             uploadErr:""
           },
@@ -125,15 +129,18 @@
         cancleFeedback(name){//新建意见反馈取消
           this.$refs[name].resetFields();
         },
-         handleFormatError(file){
+        handleFormatError(file){
           this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
-          this.judgeErr.uploadErrShow=true
+          this.judgeErr.uploadErrShow=tru
         },
         handleMaxSize (file) {           
           this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
           this.judgeErr.uploadErrShow=true
         },
         fileUploadSuccess(response, file, fileList){       
+          let reg=/(\.com\/)([\w.]+)/;
+          var arr=response.result.match(reg)
+          this.imgPath.push(response.result);
         },
       }
   }

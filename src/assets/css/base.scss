@@ -109,6 +109,12 @@ textarea.ivu-input{
 }
 
 
+//表格样式重置
+
+.listPages .ivu-table:after {
+  width: 0;
+}
+
 .fRight{float: right;}
 .cycle .ivu-form-item-error-tip{display: none !important;}
 .maxWid{max-width: 1166px}
