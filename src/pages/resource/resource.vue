@@ -640,7 +640,7 @@ export default {
                         ajax: {
                             transport: function(params, success, failure) {
                                 if (!params.data.term) {
-                                    axios.post('/api/isp-kongming/ad/channelSelect',{
+                                    axios.post('/isp-kongming/ad/channelSelect',{
                                         // 媒体名称id
                                         mediaId: postData.mediaId,
                                         // 页面类型

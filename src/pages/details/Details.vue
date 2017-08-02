@@ -168,7 +168,7 @@
              </Panel>
           </Collapse>
         </div> -->
-        <div v-if='taskId'>
+        <div>
           <Collapse v-model="showMes.value4" @on-change="showCollapse4">
              <Panel name="1">
                 <span>审批信息</span>
@@ -185,9 +185,9 @@
                     <tbody>
                       <tr v-for="(i,index) in reviewData">
                         <td v-if="index<9">0{{index+1}}</td>
-                        <td>{{i.application}}</td>
-                        <td>{{i.status == 1 ? '审批通过' : '审核驳回'}}</td>
-                        <td>{{i.auditTime.split(' ')[0]}}</td>
+                        <td>{{i.auditorName}}</td>
+                        <td>{{initStatus(i.status)}}</td>
+                        <td>{{i.applyDate ? i.applyDate.split(' ')[0]: ''}}</td>
                         <td>{{i.comment}}</td>
                         <!-- <td v-else-if="index>=9">{{index+1}}</td>
                         <td v-for="item in approvalRecord.theadKey">{{tbody[item]}}</td> -->
@@ -199,7 +199,7 @@
           </Collapse>
         </div>
 
-        <div v-if='taskId' class="operation">
+        <div v-if='!action' class="operation">
             <div class="operation-title">
                 操作
             </div>
@@ -236,6 +236,7 @@ export default {
     data() {
       return {
         taskId: '',
+        action: '',
         reviewData: [],
         commitStatus: '',
         comment: '同意',
@@ -348,19 +349,29 @@ export default {
       if (!adOrderCode) {
           adOrderCode = '';
       }
+      else {
+          this.adverMes.adOrderCode = adOrderCode;
+      }
 
       if (!id) {
           id = 0;
       }
       //获取项目信息
       this.$http.get(`${config.urlList.getInfo}?id=${id}&adOrderCode=${adOrderCode}`).then((res) => {
-        if(res.data.errorCode === 0) {
-          this.projectData=res.data.result;
+        if(res.data.errorCode == 0) {
+          this.projectData = res.data.result;
+          this.sessionStorage.setItem('proMessId', this.projectData.id);
           window.localStorage.setItem('projectData', JSON.stringify(this.projectData));//小阳哥写的
           this.$http.get(`${config.urlList.getOrder}?projectId=${res.data.result.id}&adOrderCode=${adOrderCode}`).then((res)=>{
+              if (res.data.errorCode == 0) {
+
+              }
+
               if(res.data.result.resultList.length==0){
-                this.noOrder=true
-              }else{
+                this.noOrder=true;
+              }
+              else
+              {
                 this.createCharts([],[],[])
                 setTimeout(()=>{
                   this.showMes.value2=""
@@ -373,53 +384,6 @@ export default {
                    this.editOrder=false
                 }
                 //获取排期信息
-                this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
-                  if(res.data.errorCode === 0) {
-                    this.tableDatas=res.data.result
-                    for(let i=0;i<this.tableDatas.length;i++){//处理总数据
-                      this.priceArr.totalBuy=this.tableDatas[i].monthPrice4001+this.priceArr.totalBuy
-                      this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
-                    }
-                    if(this.priceArr.totalBuy!=0&&this.priceArr.totalDelivery!=0){
-                      this.priceArr.rate="1："+(this.priceArr.totalBuy/this.priceArr.totalDelivery).toFixed(1)
-                    }else if(this.priceArr.totalDelivery==0){
-                      this.priceArr.rate="0：0"
-                    }else if(this.priceArr.totalDelivery!=0&&this.priceArr.totalBuy==0){
-                      this.priceArr.rate="1：0"
-                    }
-                  }
-                  else {
-                    this.$Modal.info({
-                        title: '提示',
-                        content: res.data.errorMsg
-                    });
-                  }
-                  }).catch((err) => {
-                    console.log(err);
-                })
-
-                this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
-                  if(res.data.errorCode === 0) {
-                    //创建echars
-                    this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);
-                    //处理数据表里面的值
-                    this.dataTable.tbodyData.uvSum=(parseInt(res.data.result.uvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
-                    this.dataTable.tbodyData.pvSum=(parseInt(res.data.result.pvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
-                    if(this.dataTable.tbodyData.uvSum==0){
-                      this.dataTable.tbodyData.clickRate=0
-                    }else{
-                      this.dataTable.tbodyData.clickRate=(res.data.result.uvSum/res.data.result.pvSum).toFixed(2)
-                    }
-
-                  }
-                  else {
-                    this.$Modal.info({
-                        title: '提示',
-                        content: res.data.errorMsg
-                    });
-                  }
-                  }).catch((err) => {
-                })
               }
             }).catch((err) => {
               console.log(err);
@@ -436,11 +400,64 @@ export default {
       })
 
       //获取订单中广告信息
+
+      this.$http.get(config.urlList.getAdOrderDetailUnite+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
+        if(res.data.errorCode === 0) {
+          this.tableDatas=res.data.result
+          for(let i=0;i<this.tableDatas.length;i++){//处理总数据
+            this.priceArr.totalBuy=this.tableDatas[i].monthPrice4001+this.priceArr.totalBuy
+            this.priceArr.totalDelivery=this.tableDatas[i].monthPrice4003+this.priceArr.totalDelivery
+          }
+          if(this.priceArr.totalBuy!=0&&this.priceArr.totalDelivery!=0){
+            this.priceArr.rate="1："+(this.priceArr.totalBuy/this.priceArr.totalDelivery).toFixed(1)
+          }else if(this.priceArr.totalDelivery==0){
+            this.priceArr.rate="0：0"
+          }else if(this.priceArr.totalDelivery!=0&&this.priceArr.totalBuy==0){
+            this.priceArr.rate="1：0"
+          }
+        }
+        else {
+          this.$Modal.info({
+              title: '提示',
+              content: res.data.errorMsg
+          });
+        }
+        }).catch((err) => {
+          console.log(err);
+      })
+
+      this.$http.get(config.urlList.getDSPOrderFlow+"?adOrderCode="+this.adverMes.adOrderCode).then((res) => {
+        if(res.data.errorCode === 0) {
+          //创建echars
+          this.createCharts(res.data.result.dateArray,res.data.result.pvArray,res.data.result.uvArray);
+          //处理数据表里面的值
+          this.dataTable.tbodyData.uvSum=(parseInt(res.data.result.uvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
+          this.dataTable.tbodyData.pvSum=(parseInt(res.data.result.pvSum)+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')
+          if(this.dataTable.tbodyData.uvSum==0){
+            this.dataTable.tbodyData.clickRate=0
+          }else{
+            this.dataTable.tbodyData.clickRate=(res.data.result.uvSum/res.data.result.pvSum).toFixed(2)
+          }
+
+        }
+        else {
+          this.$Modal.info({
+              title: '提示',
+              content: res.data.errorMsg
+          });
+        }
+        }).catch((err) => {
+      })
     },
     mounted() {
         let adOrderCode = this.$router.currentRoute.query.adOrderCode;
         let taskId = this.$router.currentRoute.query.taskId;
+        let action = this.$router.currentRoute.query.action;
         this.taskId = taskId;
+
+        if (action) {
+            this.action = action;
+        }
 
         if (adOrderCode) {
             this.$http.get(`/isp-kongming/audit/his/orderId/${adOrderCode}`).then((res) => {
@@ -567,7 +584,7 @@ export default {
         },0)
       },
       edit(){
-        let id=this.$router.currentRoute.query.id
+        let id = this.$router.currentRoute.query.id || this.projectData.id;
         this.$router.push({path:"createPro", query: {id: id}})
       },
       showCollapse1(){
@@ -594,6 +611,19 @@ export default {
           }).catch((err) => {
               console.log(err);
           })
+      },
+      initStatus(n) {
+          if (n == -1) {
+              return '待审核';
+          }
+
+          if (n == 0) {
+              return '审批驳回';
+          }
+
+          if (n == 1) {
+              return '审批通过';
+          }
       },
       selCommit(n) {
           if (n == '0') {
@@ -633,8 +663,6 @@ export default {
       handleReset() {
            this.$router.push('auditList');
       }
-
-
     }
 }
 

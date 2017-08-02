@@ -201,6 +201,14 @@ export default {
         padding: 50px 30px;
         background: #F9FAFC;
 
+
+        .info-text {
+            width: 400px;
+            word-break: break-all;
+            //border: 1px solid #ccc;
+
+        }
+
         .info-list {
             font-size: 12px;
             color: #7B8497;
@@ -215,13 +223,6 @@ export default {
                 //     max-width: 400px;
                 //     word-break: break-all;
                 // }
-
-                .info-text {
-                    width: 400px;
-                    word-break: break-all;
-                    //border: 1px solid #ccc;
-
-                }
 
                 // &:nth-child(2n) {
                 //     margin-left: 50px;

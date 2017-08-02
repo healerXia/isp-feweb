@@ -4,7 +4,7 @@
           <div class="formTop clear">
               <div class="item fl">
                   <Form-item label="单据名称:" prop="name">
-                      <Select v-model="searchInfo.processType" class='txt'>
+                      <Select v-model="searchInfo.processType" clearable="true" class='txt'>
                           <Option v-for="item in chainList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                       </Select>
                   </Form-item>
@@ -18,6 +18,7 @@
                   <Form-item label="申请部门:" prop="name">
                       <Select
                           v-model="searchInfo.deptId"
+                          clearable="true"
                           filterable
                           remote
                           :remote-method="remoteMethod"
@@ -72,7 +73,7 @@
                    审批通过
                </Menu-item>
            </Menu>
-           
+
            <p v-if='totalCount == 0' class='noRes'>无查询结果！</p>
            <div class="tableBox"  v-if='totalCount != 0'>
                <table v-if='searchInfo.totalCount != 0' cellspacing="1" cellpadding="0" class="user">
@@ -96,7 +97,8 @@
                            <td>{{initDate(i.applyDate)}}</td>
                            <td>{{statusTxt}}</td>
                            <td  class="clear">
-                               <a href="javascrip:void(0);" class="fl" @click='edit(i, index)'>处理</a>
+                               <a href="javascrip:void(0);" class="fl" @click='edit(i, index)' v-if='statusTxt == "待处理"'>处理</a>
+                               <a href="javascrip:void(0);" class="fl" @click='view(i, index)' v-if='statusTxt != "待处理"'>查看</a>
                            </td>
                        </tr>
                    </tbody>
@@ -177,7 +179,13 @@ export default {
             this.initTable();
         },
         edit(data) {
-            this.$router.push({path: 'details', query:{taskId: data.taskId, adOrderCode: data.orderId}});
+            this.$router.push({path: 'details', query: {taskId: data.taskId, adOrderCode: data.orderId}});
+        },
+        view(data) {
+            this.$router.push({path: 'details', query: {taskId: data.taskId, adOrderCode: data.orderId, action: 1}});
+        },
+        addZero(n) {
+            return n < 10 ? `0${n}`: n;
         },
         menuSel(name) {
             //通过1 驳回0
@@ -191,6 +199,7 @@ export default {
 
             if (name == 1) {
                 this.statusTxt = '待处理';
+                delete this.searchInfo.status
 
                 this.$http.post('/isp-kongming/audit/tasks', this.searchInfo).then((res) => {
                     if (res.data.errorCode == 0) {
@@ -243,6 +252,11 @@ export default {
             }
             if (this.searchInfo.applyDatTo) {
                 this.searchInfo.applyDatTo = this.initTime(this.searchInfo.applyDatTo);
+            }
+
+            let submit = Object.assign({}, this.searchInfo);
+            if (submit.orderId) {
+                submit.orderId = this.searchInfo.orderId.trim();
             }
             this.$http.post('/isp-kongming/audit/tasks', this.searchInfo).then((res) => {
                 if (res.data.errorCode == 0) {
@@ -345,8 +359,8 @@ export default {
         initTime(date) {
             let time = new Date(date);
             let year = time.getFullYear();
-            let month = time.getMonth() + 1;
-            let day = time.getDate();
+            let month = this.addZero(time.getMonth() + 1);
+            let day = this.addZero(time.getDate());
 
             return `${year}-${month}-${day}`;
         },

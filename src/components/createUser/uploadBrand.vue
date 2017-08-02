@@ -12,7 +12,7 @@
             <tr v-for="item in storeEditDate">
               <td v-for="key in tableKey">
               <span v-if="key=='createTime'">{{formatDate(new Date())}}</span>
-              <span v-else>{{item[key]}}</span>              
+              <span v-else>{{item[key]}}</span>
               </td>
               <td><span @click="showPic(item.salve)" class="salve">查看</span></td>
             </tr>
@@ -29,7 +29,7 @@
               <Select class="fl posi"
               :clearable="true"
               placeholder="请选择授权品牌"
-              :label-in-value="true"              
+              :label-in-value="true"
                v-model="uploadBrand.brandId"
               :loading="brandLoad"
               filterable
@@ -45,28 +45,28 @@
           </Form-item>
           <div class="upload">
             <span class="label">附件:</span>
-            <Upload 
+            <Upload
                action="/isp-kongming/cust/imgUpdate"
               :format="['jpg','jpeg','png']"
-              :max-size="10240"
+              :max-size="1024"
               :on-format-error="handleFormatError"
               :on-exceeded-size="handleMaxSize"
               :on-success="fileUploadSuccess"
               >
               <Button type="ghost" class="btn bg4373F3">上传文件</Button>
-              <span  class="ML15">请上传1M以内的文件</span> 
+              <span  class="ML15">请上传1M以内的文件</span>
             </Upload>
             <div class="uperror" v-show="uploadImg.show">
               <span>{{uploadImg.name}}</span><span class="del" @click="removeImg">删除</span>
-            </div>            
+            </div>
             <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
-          </div> 
+          </div>
           <Form-item>
             <Button type="primary" class="btn bg4373F3" @click="submit('uploadBrand')">提交</Button >
             <Button type="primary" class="btn bgCancle ML15" @click="cancel('uploadBrand')">取消</Button>
-          </Form-item>      
-        </Form> 
-        <div slot="footer" class="footer">             
+          </Form-item>
+        </Form>
+        <div slot="footer" class="footer">
         </div>
     </Modal>
   </div>
@@ -169,9 +169,9 @@ export default {
                 setTimeout(()=>{
                   this.cancel(name)
                 },0)
-                
+
               }
-              
+
           } else {
             this.$Modal.error({
                 title: '提示',
@@ -203,28 +203,28 @@ export default {
        this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
        this.judgeErr.uploadErrShow=true
     },
-    handleMaxSize (file) {           
+    handleMaxSize (file) {
       this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
       this.judgeErr.uploadErrShow=true
     },
-    fileUploadSuccess(response, file, fileList){       
+    fileUploadSuccess(response, file, fileList){
         let reg=/(\.com\/)([\w.]+)/;
         var arr=response.result.match(reg)
         this.uploadImg.name=arr[2];
         this.uploadImg.show=true;
         this.uploadBrand.salve=response.result;
     },
-    formatTen(num) { 
-      return num > 9 ? (num + "") : ("0" + num); 
+    formatTen(num) {
+      return num > 9 ? (num + "") : ("0" + num);
     },
     formatDate(date) { //时间格式的转换 标准->正常
-      var year = date.getFullYear(); 
-      var month = date.getMonth() + 1; 
-      var day = date.getDate(); 
-      var hour = date.getHours(); 
-      var minute = date.getMinutes(); 
-      var second = date.getSeconds(); 
-      return year + "-" + this.formatTen(month) + "-" + this.formatTen(day); 
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+      return year + "-" + this.formatTen(month) + "-" + this.formatTen(day);
     }
   },
   watch:{
@@ -245,7 +245,7 @@ export default {
 .brandDialog {
   .ivu-select{width:350px;}
   .ivu-upload-list{display:none}
-  .ivu-modal{width:700px !important; height:500px;} 
+  .ivu-modal{width:700px !important; height:500px;}
    display: inline-block;
    input{width:350px}
   .upload{
@@ -279,7 +279,7 @@ export default {
   .footer{text-align:center;}
 }
 .upBtn{
-  text-align: center; 
+  text-align: center;
   display: inline-block;
   width: 120px !important;
   height: 38px !important;
@@ -291,7 +291,7 @@ export default {
   color: #4373F3;
   cursor: pointer
 }
-.brand{ 
+.brand{
    overflow: hidden;
   .mess_show{
       background: #F9FAFC;
@@ -336,7 +336,7 @@ export default {
               text-align: center
             }
           }
-          
+
         }
       }
   }

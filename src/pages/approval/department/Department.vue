@@ -1,5 +1,6 @@
 <template lang="html">
 <div id="department">
+    <Button type="primary" class='add' @click='jump'>新增部门</Button>
     <div class="listBox clear">
         <div v-for='(list, index) in treeData' class="listItem fl">
             <p class='title'>{{titleList[index]}}级部门</p>
@@ -78,6 +79,9 @@ export default {
             }).catch((err) => {
                 console.log(err);
             })
+        },
+        jump() {
+            this.$router.push('setUpDepartment');
         },
         initTree(data) {
             let status = true;
@@ -188,9 +192,15 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #department {
     padding: 50px 30px;
+
+    .add {
+        width: 120px;
+        height: 38px;
+        margin-bottom: 30px;
+    }
 
     .listBox {
         padding: 20px 0 20px;
