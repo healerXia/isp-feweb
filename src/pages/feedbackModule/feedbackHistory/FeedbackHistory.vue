@@ -77,7 +77,8 @@ import config from './config.js';
           feedbackMess:{
             createName:"",
             feedback:"",
-            createTime:""
+            createTime:"",
+            salve:[]
           },
           callbackArr:[],
           callbackMess:{
@@ -110,8 +111,15 @@ import config from './config.js';
           ).then((res)=>{//获取登录人即操作人
             if(res.data.errorCode===0){
              for(let item in res.data.result.resultList[0]){
-              this.feedbackMess[item]=res.data.result.resultList[0][item]
+              if(item=='salve'){
+                console.log(111)
+                this.feedbackMess[item]=res.data.result.resultList[0][item].split(',')
+              }else{
+                this.feedbackMess[item]=res.data.result.resultList[0][item]
+              }
+              
              }
+             console.log(this.feedbackMess)
             }
             else {
               this.$Modal.info({

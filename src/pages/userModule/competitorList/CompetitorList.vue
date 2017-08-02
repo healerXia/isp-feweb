@@ -155,7 +155,7 @@
             notes:[{type: 'string', max: 200, message: '不能超过200个汉字', trigger: 'blur'}]
           },
           tableObj:{
-            tableHead:["竞媒名称","签约版本","签约周期","版本价格","实付价格","折扣","合作类型","签约方式","备注","操作"],
+            tableHead:["竞媒名称","签约版本","签约周期","版本价格(元)","实付价格(元)","折扣(折)","合作类型","签约方式","备注","操作"],
             tableKey:['name','signName','time','price','realPrice','discount','typeName','patternName','notes'],
             tableData:[]
           },
@@ -185,9 +185,11 @@
             {pageSize:1,pageIndex:1,custId:this.$router.currentRoute.query.id}
             ).then((res)=>{
               if(res.data.errorCode===0){
-                this.tableObj.tableData=res.data.result.resultList
-                this.competitorId=this.tableObj.tableData[0].competitorId
-                this.dealTableDate()
+                if(res.data.result.resultList.length>=1){
+                  this.tableObj.tableData=res.data.result.resultList
+                  this.competitorId=this.tableObj.tableData[0].competitorId
+                  this.dealTableDate()
+                }                
               }
               else {
                 this.$Modal.info({
@@ -198,6 +200,7 @@
           }).catch((res)=>{})
         },
         addMess(){
+          this.reset('addComMess')
           this.showDialog=true
         },
         getSubmitObj(){
@@ -272,8 +275,7 @@
                               title: '提示',
                               content: "添加成功"
                           });
-                          this.showDialog=false
-                          this.$refs[name].resetFields();
+                          this.reset(name)
                           this.getTableData()
                         }
                         else {
@@ -297,9 +299,7 @@
                               content: "编辑成功"
                           });
 
-                          this.showDialog=false
-                          this.id=""
-                          this.$refs[name].resetFields();
+                          this.reset(name)
                           this.getTableData()
                         }
                         else {
@@ -321,7 +321,7 @@
           })
         },
         lastCheck(){
-            let reg=/^(\d+)\.{0,1}(\d+)$/g;
+            let reg=/(^(\d+)(\.{0,1}(\d+))$)|^\d+$/g;
             //时间,开始不能大于结束
             if(this.addComMess.beginTime==""&&this.addComMess.endTime){
               this.errorMess.dateErr="请填写签约周期"
@@ -399,6 +399,7 @@
           }
           this.id=""
           this.showDialog=false
+          this.addComMess.pattern=[]
           this.$refs[name].resetFields();
         },
         dealTableDate(){
