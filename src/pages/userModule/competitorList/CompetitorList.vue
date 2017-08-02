@@ -200,6 +200,7 @@
           }).catch((res)=>{})
         },
         addMess(){
+          this.reset('addComMess')
           this.showDialog=true
         },
         getSubmitObj(){
@@ -399,6 +400,7 @@
           }
           this.id=""
           this.showDialog=false
+          this.addComMess.pattern=[]
           this.$refs[name].resetFields();
         },
         dealTableDate(){
