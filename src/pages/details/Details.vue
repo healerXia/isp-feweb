@@ -211,7 +211,7 @@
                 <textarea name="name" rows="8" cols="80" v-model='comment' :placeholder="placeholderTxt"></textarea>
             </div>
             <div class="submitList">
-                <Button type="primary" @click.stop="handleSubmit(1)" class="saveNext fl" :disabled='submitStatus'>提交并继续</Button>
+                <!-- <Button type="primary" @click.stop="handleSubmit(1)" class="saveNext fl" :disabled='submitStatus'>提交并继续</Button> -->
                 <Button type="primary" @click.stop="handleSubmit(2)" class="save fl" :disabled='submitStatus'>提交</Button>
                 <Button type="ghost" @click.stop="handleReset()"  class="cancel fl">取消</Button>
             </div>
@@ -656,7 +656,7 @@ export default {
               if (res.data.errorCode == 0) {
                   if (n  == 1) {
                       this.$Message.success('提交成功!');
-                      //this.$router.push('auditList');
+                      //this.$router.go(0);
                   }
                   else {
                       this.$Message.success('提交成功!');
@@ -672,7 +672,6 @@ export default {
       }
     }
 }
-
 </script>
 <style lang='scss'>
 @import '../../assets/css/pageCss/details.scss';

@@ -62,6 +62,7 @@ const shoppingCart = (resolve) => require(['../pages/shoppingCart/shoppingCart']
 
 const ViewPercenter = (resolve) =>  require(['../pages/personalCenter/view/View'], resolve);
 const EditPercenter = (resolve) =>  require(['../pages/personalCenter/editInfo/editInfo'], resolve);
+const EditUser = (resolve) => require(['../pages/personalCenter/editUser/EditUser'], resolve);
 
 
 // demo
@@ -244,6 +245,11 @@ const routes = [
                 path: 'createFeedback',
                 name: 'createFeedback',
                 component: CreateFeedback
+            },
+            {
+                path: 'editUser',
+                name: 'editUser',
+                component: EditUser
             }
         ]
     },

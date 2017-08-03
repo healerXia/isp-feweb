@@ -212,7 +212,7 @@ export default {
         .info-list {
             font-size: 12px;
             color: #7B8497;
-            line-height: 20px;
+            line-height: 26px;
             width: 500px;
             margin-right: 20px;
 
