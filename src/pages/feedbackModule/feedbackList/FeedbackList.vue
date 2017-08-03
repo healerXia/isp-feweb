@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="feedback">
-    <div class="title MT20 MB20">反馈建议管理</div>
     <div class="searchOrder">
       <ul>
         <li>
@@ -46,7 +45,10 @@
         <tbody>
           <tr v-for="data in feedbackMess.tableArr">
             <td v-for="key in feedbackMess.tableKey">
-              <span v-if="key=='time'">{{data.beginTime.substring(0,10)}}至{{data.endTime.substring(0,10)}}</span>
+              <span v-if="key=='createName'" class='href' @click="showContactPeople(data.id)">
+                {{data[key]}}
+              </span>
+              <span v-else-if="key=='time'">{{data.beginTime.substring(0,10)}}至{{data.endTime.substring(0,10)}}</span>
               <p v-else-if="key=='feedback'" :title="data[key]">{{data[key]}}</p>
               <span v-else>{{data[key]}}</span>
             </td>
@@ -138,6 +140,22 @@ import config from './config.js';
         }).catch((res)=>{})  
       },
       methods:{
+        showContactPeople(id){
+          // this.$http.post(config.urlList.selectUserFeedbackReply,
+          //   {id:id},
+          //   {emulateJSON:true}
+          // ).then((res)=>{//获取登录人即操作人
+          //     if(res.data.errorCode===0){
+          //       console.log(res.data.result)
+          //     }
+          //     else {
+          //       this.$Modal.info({
+          //           title: '提示',
+          //           content: res.data.errorMsg
+          //       });
+          //     }
+          // }).catch((res)=>{})  
+        },
         getSearchMess(){
           let obj={}
           for(let item in this.feedbackSearch){
