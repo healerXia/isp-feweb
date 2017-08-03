@@ -39,6 +39,7 @@ body {
 .ML30{margin-left: 30px }
 .ML40{margin-left: 40px}
 .ML53{margin-left: 53px }
+.ML650{margin-left: 650px }
 .MR10{margin-right: 10px}
 .MR11{margin-right: 11px}
 .MR15{margin-right: 15px}
@@ -198,7 +199,7 @@ body {
 
 //表格样式重置
 
-.listPages .ivu-table:after {
+.listPages .ivu-table:after ,.staffmanage .ivu-table:after{
   width: 0;
 }
 
