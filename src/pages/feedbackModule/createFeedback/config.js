@@ -1,7 +1,6 @@
 const urlList = {
-	selCompetitorLog:'/isp-kongming/cust/selCompetitorLog',
-	insertCompetitorLog:'/isp-kongming/cust/insertCompetitorLog',
-	updateCompetitorLog:'/isp-kongming/cust/updateCompetitorLog'
+	insertUserFeedback:'isp-kongming/cust/insertUserFeedback',//添加意见反馈
+	login:"/isp-kongming/ad/login",//登录
 }
 
 

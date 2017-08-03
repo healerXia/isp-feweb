@@ -10,8 +10,11 @@
           </thead>
           <tbody>
             <tr v-for="item in storeEditDate">
-              <td v-for="key in tableKey">{{item[key]}}</td>
-              <td><span @click="showPic" class="salve">查看</span></td>
+              <td v-for="key in tableKey">
+              <span v-if="key=='createTime'">{{formatDate(new Date())}}</span>
+              <span v-else>{{item[key]}}</span>
+              </td>
+              <td><span @click="showPic(item.salve)" class="salve">查看</span></td>
             </tr>
           </tbody>
         </table>
@@ -23,10 +26,10 @@
        >
         <Form ref="uploadBrand" :model="uploadBrand" :rules="checkValue" :label-width="120">
           <Form-item label="授权品牌:" prop="brandId">
-              <Select class="fl"
+              <Select class="fl posi"
               :clearable="true"
               placeholder="请选择授权品牌"
-              :label-in-value="true"              
+              :label-in-value="true"
                v-model="uploadBrand.brandId"
               :loading="brandLoad"
               filterable
@@ -42,25 +45,28 @@
           </Form-item>
           <div class="upload">
             <span class="label">附件:</span>
-            <Upload 
-               action="//jsonplaceholder.typicode.com/posts/"
+            <Upload
+               action="/isp-kongming/cust/imgUpdate"
               :format="['jpg','jpeg','png']"
-              :max-size="10240"
+              :max-size="1024"
               :on-format-error="handleFormatError"
               :on-exceeded-size="handleMaxSize"
               :on-success="fileUploadSuccess"
               >
-              <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-              <span  class="ML15">请上传1M以内的文件</span> 
+              <Button type="ghost" class="btn bg4373F3">上传文件</Button>
+              <span  class="ML15">请上传1M以内的文件</span>
             </Upload>
+            <div class="uperror" v-show="uploadImg.show">
+              <span>{{uploadImg.name}}</span><span class="del" @click="removeImg">删除</span>
+            </div>
             <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
-          </div> 
+          </div>
           <Form-item>
             <Button type="primary" class="btn bg4373F3" @click="submit('uploadBrand')">提交</Button >
             <Button type="primary" class="btn bgCancle ML15" @click="cancel('uploadBrand')">取消</Button>
-          </Form-item>      
-        </Form> 
-        <div slot="footer" class="footer">             
+          </Form-item>
+        </Form>
+        <div slot="footer" class="footer">
         </div>
     </Modal>
   </div>
@@ -92,9 +98,13 @@ export default {
           validTime: [{required: true,message:'请选择有效期',trigger:'change',type:"date"}],
         },
         storeEditDate:[],
-        tableKey:["brandName","validTime","validTime"],
+        tableKey:["brandName","validTime","createTime"],
         brandOption:[],
-        brandLoad:true
+        brandLoad:true,
+        uploadImg:{
+          name:"111",
+          show:false
+        }
     }
   },
   created(){
@@ -121,8 +131,13 @@ export default {
     }
   },
   methods: {
-    showPic(){
-      this.$emit('showPic',"pic")
+    removeImg(){
+      this.uploadBrand.salve=""
+      this.uploadImg.name="";
+      this.uploadImg.show=false
+    },
+    showPic(data){
+      this.$emit('showPic',data)
     },
     brandChange(value){
       this.uploadBrand.brandName=value.label;
@@ -142,14 +157,21 @@ export default {
       }).catch((err) => {})
     },
     openDialog(){
-      this.modal1=true   
+      this.modal1=true
     },
     submit (name) {
       this.$refs[name].validate((valid) => {
           if (valid) {
-              this.uploadBrand.custId=this.$router.currentRoute.query.id;
-              this.$emit('uploadbrand',this.uploadBrand,'upload')
-              this.modal1=false
+              let salve_check=this.salveCheck();//附件
+              if(salve_check){
+                this.uploadBrand.custId=this.$router.currentRoute.query.id;
+                this.$emit('uploadbrand',this.uploadBrand,'upload');
+                setTimeout(()=>{
+                  this.cancel(name)
+                },0)
+
+              }
+
           } else {
             this.$Modal.error({
                 title: '提示',
@@ -159,30 +181,50 @@ export default {
       })
     },
     cancel (name) {
+      this.uploadBrand.salve=""
+      this.uploadImg.name="";
+      this.uploadImg.show=false
       this.$refs[name].resetFields();
       this.modal1=false
+    },
+    salveCheck(){
+      if(this.uploadBrand.salve==""){
+        this.errorCon.uploadErr='请上传附件'
+        this.judgeErr.uploadErrShow=true
+        this.$Modal.error({
+          title: '提示',
+          content: "表单验证失败！"
+        })
+        return false
+      }
+      return true;
     },
     handleFormatError(file){
        this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
        this.judgeErr.uploadErrShow=true
     },
-    handleMaxSize (file) {           
+    handleMaxSize (file) {
       this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
       this.judgeErr.uploadErrShow=true
     },
-    fileUploadSuccess(response, file, fileList){       
+    fileUploadSuccess(response, file, fileList){
+        let reg=/(\.com\/)([\w.]+)/;
+        var arr=response.result.match(reg)
+        this.uploadImg.name=arr[2];
+        this.uploadImg.show=true;
+        this.uploadBrand.salve=response.result;
     },
-    formatTen(num) { 
-      return num > 9 ? (num + "") : ("0" + num); 
+    formatTen(num) {
+      return num > 9 ? (num + "") : ("0" + num);
     },
     formatDate(date) { //时间格式的转换 标准->正常
-      var year = date.getFullYear(); 
-      var month = date.getMonth() + 1; 
-      var day = date.getDate(); 
-      var hour = date.getHours(); 
-      var minute = date.getMinutes(); 
-      var second = date.getSeconds(); 
-      return year + "-" + this.formatTen(month) + "-" + this.formatTen(day); 
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+      return year + "-" + this.formatTen(month) + "-" + this.formatTen(day);
     }
   },
   watch:{
@@ -202,7 +244,8 @@ export default {
 <style lang="scss">
 .brandDialog {
   .ivu-select{width:350px;}
-  .ivu-modal{width:700px !important; height:500px;} 
+  .ivu-upload-list{display:none}
+  .ivu-modal{width:700px !important; height:500px;}
    display: inline-block;
    input{width:350px}
   .upload{
@@ -210,7 +253,7 @@ export default {
     padding-bottom: 20px;
     .label{
       display:inline-block;
-      width:130px;
+      width:116px;
       height: 38px;
       line-height: 38px;
       text-align:right;
@@ -228,12 +271,15 @@ export default {
     .ivu-upload{
       display:inline-block;
     }
-    .uperror{padding-left:130px;width:100%;display:block}
+    .uperror{
+      padding-left:119px;width:100%;display:block;margin-top:10px;
+      .del{color:#4373F3;margin-left:100px;cursor:pointer}
+    }
   }
   .footer{text-align:center;}
 }
 .upBtn{
-  text-align: center; 
+  text-align: center;
   display: inline-block;
   width: 120px !important;
   height: 38px !important;
@@ -245,7 +291,7 @@ export default {
   color: #4373F3;
   cursor: pointer
 }
-.brand{ 
+.brand{
    overflow: hidden;
   .mess_show{
       background: #F9FAFC;
@@ -260,7 +306,7 @@ export default {
         border-bottom:1px solid #ccc;
         text-align:center;
       }
-      .salve{font-size:12px;color:blue;cursor:pointer}
+      .salve{font-size:12px;color:#4373F3;cursor:pointer}
       .mess_con{
         width: 100%;
         padding: 10px 20px;
@@ -290,9 +336,17 @@ export default {
               text-align: center
             }
           }
-          
+
         }
       }
+  }
+}
+.posi{
+  position:relative;
+  .ivu-select-dropdown{
+    position:absolute !important;
+    top: 38px !important;
+    left:0 !important
   }
 }
 

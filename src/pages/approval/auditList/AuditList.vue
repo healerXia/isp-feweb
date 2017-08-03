@@ -3,30 +3,32 @@
       <Form :label-width="80" class='searchBox'>
           <div class="formTop clear">
               <div class="item fl">
-                  <Form-item label="流程类型:" prop="name">
-                      <Select v-model="searchInfo.processType" class='txt'>
+                  <Form-item label="单据名称:" prop="name">
+                      <Select v-model="searchInfo.processType" clearable="true" class='txt'>
                           <Option v-for="item in chainList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                       </Select>
                   </Form-item>
               </div>
               <div class="item fl">
-                  <Form-item label="流程编号:" prop="name">
-                      <Input v-model="searchInfo.orderId" placeholder="请输入流程编号" class='txt'></Input>
+                  <Form-item label="单据编号:" prop="name">
+                      <Input v-model="searchInfo.orderId" placeholder="请输入单据编号" class='txt'></Input>
                   </Form-item>
               </div>
-              <div class="item fl">
+              <div class="item fl depSel">
                   <Form-item label="申请部门:" prop="name">
                       <Select
                           v-model="searchInfo.deptId"
+                          clearable="true"
                           filterable
                           remote
                           :remote-method="remoteMethod"
                           :loading="loading"
+                          max-length="200"
                           @on-change='selDept'
                           class='txt fl'>
                           <Option v-for="item in deptList" :value="item.id" :key="item.id">{{item.name}}</Option>
                       </Select>
-                      <Checkbox v-model="single" class='fl childDept'>包含子部门</Checkbox>
+                      <!-- <Checkbox v-model="single" class='fl childDept'>包含子部门</Checkbox> -->
                   </Form-item>
               </div>
           </div>
@@ -36,7 +38,7 @@
                       <Date-picker type="date" placeholder="选择日期" :options="date1" v-model="searchInfo.applyDateFrom" class='dateItem fl'></Date-picker>
                       <span class='fl line'></span>
 
-                      <Date-picker type="date" placeholder="选择日期" :options="date2" v-model="searchInfo.applyDatTo" class='dateItem fl'></Date-picker>
+                      <Date-picker type="date" placeholder="选择日期" :options="date2" v-model="searchInfo.applyDateTo" class='dateItem fl'></Date-picker>
                   </Form-item>
               </div>
 
@@ -60,8 +62,7 @@
           </div>
       </Form>
 
-      <p v-if='totalCount == 0' class='noRes'>无查询结果！</p>
-      <div class="tableList" v-if='totalCount != 0'>
+      <div class="tableList">
            <Menu mode="horizontal" :theme="theme1" active-name="1" @on-select = 'menuSel'>
                <Menu-item name="1">
                    待处理
@@ -74,12 +75,13 @@
                </Menu-item>
            </Menu>
 
-           <div class="tableBox">
+           <p v-if='totalCount == 0' class='noRes'>无查询结果！</p>
+           <div class="tableBox"  v-if='totalCount != 0'>
                <table v-if='searchInfo.totalCount != 0' cellspacing="1" cellpadding="0" class="user">
                    <thead>
                        <tr>
-                           <td>流程名称</td>
-                           <td>流程编号</td>
+                           <td>单据名称</td>
+                           <td>单据编号</td>
                            <td>申请部门</td>
                            <td>申请人</td>
                            <td>申请日期</td>
@@ -96,7 +98,8 @@
                            <td>{{initDate(i.applyDate)}}</td>
                            <td>{{statusTxt}}</td>
                            <td  class="clear">
-                               <a href="javascrip:void(0);" class="fl" @click='edit(i, index)'>处理</a>
+                               <a href="javascrip:void(0);" class="fl" @click='edit(i, index)' v-if='statusTxt == "待处理"'>处理</a>
+                               <a href="javascrip:void(0);" class="fl" @click='view(i, index)' v-if='statusTxt != "待处理"'>查看</a>
                            </td>
                        </tr>
                    </tbody>
@@ -123,11 +126,12 @@ export default {
                 "deptId":"",
                 "application":"",
                 "applyDateFrom":"",
-                "applyDatTo": "",
+                "applyDateTo": "",
                 "orderId": "",
                 "pageNo":1,
                 "pageSize":10
             },
+            name: '',
             menuIndex: 1,
             totalCount: 0,
             statusTxt: '待处理',
@@ -174,23 +178,52 @@ export default {
             })
         },
         search() {
+            this.searchInfo.pageIndex = 1;
             this.initTable();
         },
         edit(data) {
-            this.$router.push({path: 'details', query:{taskId: data.taskId, adOrderCode: data.orderId}});
+            this.$router.push({path: 'details', query: {taskId: data.taskId, adOrderCode: data.orderId}});
+        },
+        view(data) {
+            this.$router.push({path: 'details', query: {taskId: data.taskId, adOrderCode: data.orderId, action: 1}});
+        },
+        addZero(n) {
+            return n < 10 ? `0${n}`: n;
         },
         menuSel(name) {
             //通过1 驳回0
-
+            this.name = name;
+            let oldName = name;
             if (this.searchInfo.applyDateFrom) {
                 this.searchInfo.applyDateFrom = this.initTime(this.searchInfo.applyDateFrom);
             }
-            if (this.searchInfo.applyDatTo) {
-                this.searchInfo.applyDatTo = this.initTime(this.searchInfo.applyDatTo);
+            if (this.searchInfo.applyDateTo) {
+                this.searchInfo.applyDateTo = this.initTime(this.searchInfo.applyDateTo);
             }
 
             if (name == 1) {
                 this.statusTxt = '待处理';
+                delete this.searchInfo.status
+
+                this.$http.post('/isp-kongming/audit/tasks', this.searchInfo).then((res) => {
+                    if (res.data.errorCode == 0) {
+                        if (oldName == this.name) {
+                            this.tableList = res.data.result.resultList;
+                            this.totalCount = res.data.result.totalCount;
+                        }
+                    }
+                    else {
+                        this.$Modal.info({
+                            title: '提示',
+                            content: res.data.errorMsg,
+                            onOk: ()=> {
+
+                            }
+                        });
+                    }
+                })
+
+                return false;
             }
 
             if (name == 2) {
@@ -203,10 +236,12 @@ export default {
                 this.statusTxt = '审批通过';
             }
 
-            this.$http.post('/isp-kongming-audit/audit/his/assignee', this.searchInfo).then((res) => {
+            this.$http.post('/isp-kongming/audit/his/assignee', this.searchInfo).then((res) => {
                 if (res.data.errorCode == 0) {
-                    this.tableList = res.data.result.resultList;
-                    this.totalCount = res.data.result.totalCount;
+                    if (oldName == this.name) {
+                        this.tableList = res.data.result.resultList;
+                        this.totalCount = res.data.result.totalCount;
+                    }
                 }
                 else {
                     this.$Modal.info({
@@ -223,10 +258,15 @@ export default {
             if (this.searchInfo.applyDateFrom) {
                 this.searchInfo.applyDateFrom = this.initTime(this.searchInfo.applyDateFrom);
             }
-            if (this.searchInfo.applyDatTo) {
-                this.searchInfo.applyDatTo = this.initTime(this.searchInfo.applyDatTo);
+            if (this.searchInfo.applyDateTo) {
+                this.searchInfo.applyDateTo = this.initTime(this.searchInfo.applyDateTo);
             }
-            this.$http.post('/isp-kongming-audit/audit/tasks', this.searchInfo).then((res) => {
+
+            let submit = Object.assign({}, this.searchInfo);
+            if (submit.orderId) {
+                submit.orderId = this.searchInfo.orderId.trim();
+            }
+            this.$http.post('/isp-kongming/audit/tasks', submit).then((res) => {
                 if (res.data.errorCode == 0) {
                     this.tableList = res.data.result.resultList;
                     this.totalCount = res.data.result.totalCount;
@@ -270,9 +310,18 @@ export default {
                     if (res.data.errorCode == 0) {
                         let data = Object.assign([], res.data.result.resultList);
                         this.deptList = data.map(item => {
+                            let name = item.fullPath.split(',');
+                            let deptName = '';
+                            if (name.length > 1) {
+                                deptName = name.join(' - ');
+                            }
+                            else {
+                                deptName = item.fullPath;
+                            }
+
                             return {
                                 id: `${item.id}`,
-                                name: item.fullPath,
+                                name: deptName,
                                 deptName: item.deptName
                             }
                         })
@@ -327,8 +376,8 @@ export default {
         initTime(date) {
             let time = new Date(date);
             let year = time.getFullYear();
-            let month = time.getMonth() + 1;
-            let day = time.getDate();
+            let month = this.addZero(time.getMonth() + 1);
+            let day = this.addZero(time.getDate());
 
             return `${year}-${month}-${day}`;
         },
@@ -368,6 +417,11 @@ export default {
         &:hover {
             opacity: 0.9;
         }
+    }
+
+    .depSel {
+        width: 100%;
+        min-width: 260px;
     }
 
     .formTop {

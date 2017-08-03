@@ -30,8 +30,15 @@
                   <li class="itemHeight"><span>地址({{index+1}})：</span><span>{{item.address}}</span></li>
                 </ul>
               </li>
-               <li class="item">
-                <span>附件：</span><span class="salve" @click="showPic">1111</span>
+               <li v-if="storeEditDate.salve">
+                <ul>
+                  <li class="itemHeight" v-for="(item,index) in storeEditDate.salve">
+                    <span>附件({{index+1}})：</span>
+                    <span class="salve" @click="showPic(index)">
+                      {{item?item.replace('http://d1.test.yiche.com/',""):""}}
+                    </span>
+                  </li>
+                </ul>
               </li>
             </ul>
           </div>
@@ -49,7 +56,7 @@
               </Form-item>
               <div class="accountOpenInfo">
                 <div class="header">
-                  <span class="colorRed">*</span><span> 开户信息</span>
+                  <span> 开户信息</span>
                   <span @click="addGroup" class="add"> 添加一组</span>
                 </div>
                 <Form ref="formValidate" :model="formDynamic" :rules="checkValue" :label-width="80">
@@ -59,9 +66,9 @@
                       <span v-show="item.errShow.bank_err_show" class="colorRed ML5">
                         {{item.errMess.bank_err}}
                       </span>
-                    </Form-item> 
+                    </Form-item>
                     <Form-item class="positions":label="'开户账号' + (index + 1)">
-                      <Input v-model="item.bankAccount" placeholder="请填写开户账号" class='fl' 
+                      <Input v-model="item.bankAccount" placeholder="请填写开户账号" class='fl'
                       @on-focus="showAccount(index)"
                       @on-blur="hideAccount(index)"
                       ></Input>
@@ -71,41 +78,46 @@
                       <span v-show="item.errShow.bankAccount_err_show" class="colorRed ML5">
                         {{item.errMess.bankAccount_err}}
                       </span>
-                    </Form-item> 
+                    </Form-item>
                     <Form-item :label="'电话' + (index + 1)">
                       <Input v-model="item.phone" placeholder="请填写电话" class='fl'></Input>
                       <span v-show="item.errShow.phone_err_show" class="colorRed ML5">
                         {{item.errMess.phone_err}}
                       </span>
-                    </Form-item> 
+                    </Form-item>
                     <Form-item :label="'地址' + (index + 1)">
                       <Input v-model="item.address" placeholder="请填写地址" class='fl'></Input>
                       <span v-show="item.errShow.address_err_show" class="colorRed ML5">
                         {{item.errMess.address_err}}
                       </span>
-                    </Form-item>                  
+                    </Form-item>
                   </div>
-                </Form>              
+                </Form>
               </div>
               <div class="upload">
                 <span class="label">附件:</span>
-                <Upload 
-                   action="//jsonplaceholder.typicode.com/posts/"
+                <Upload
+                  action="/isp-kongming/cust/imgUpdate"
                   :format="['jpg','jpeg','png']"
-                  :max-size="10240"
+                  :max-size="1024"
                   :on-format-error="handleFormatError"
                   :on-exceeded-size="handleMaxSize"
                   :on-success="fileUploadSuccess"
                   >
-                  <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                  <span  class="ML15">请上传1M以内的文件</span> 
+                  <Button type="ghost" class="btn bg4373F3">上传文件</Button>
+                  <span  class="ML15">请上传1M以内的文件</span>
                 </Upload>
+                <div class="uperror" v-show="uploadImg.show">
+                  <div v-for="(item,index) in uploadImg.name" class="underLine">
+                    <span>{{item}}</span><span class="del" @click="removeImg(index)">删除</span>
+                  </div>
+                </div>
                 <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
-              </div> 
+              </div>
               <Form-item>
                 <Button type="primary" class="btn bg4373F3" @click="submit('uploadPay')">提交</Button >
                 <Button type="primary" class="btn bgCancle ML15" @click="cancel('uploadPay')">取消</Button>
-              </Form-item>   
+              </Form-item>
             </Form>
             <div slot="footer" class="footer">
             </div>
@@ -122,7 +134,7 @@ export default {
           modal1: false,
           uploadPay:{
             taxCode:"",//纳税人识别号
-            salve: "",//营业执照附件
+            salve: [],//营业执照附件
             custBankAccountList:[]//开户行
           },
           judgeErr:{
@@ -161,6 +173,10 @@ export default {
             ]
           },
           storeEditDate:{},
+          uploadImg:{
+            name:[],
+            show:true
+          }
         }
     },
     created(){
@@ -170,8 +186,14 @@ export default {
       }
     },
     methods: {
-      showPic(){
-        this.$emit('showPic',"pic1")
+      removeImg(index){
+        this.uploadImg.name.splice(index,1);
+        if(this.uploadImg.name.length==0){
+          this.uploadImg.show=false
+        }
+      },
+      showPic(index){
+        this.$emit('showPic',this.storeEditDate.salve[index])
       },
       getCustBankAccountList(){
         let arr=[]
@@ -185,13 +207,14 @@ export default {
         }
         this.uploadPay.custBankAccountList=arr
       },
-      open(){//相当于弹出层初始化      
+      open(){//相当于弹出层初始化
         //如果是接口
         //进来，先判断纳税人识别号是不是空，如果是空，隐藏框子
         //如果不是打开框子
         //然后看开户信息， 有几条显示几条，没有的话就显示一行空的
         if(this.storeEditDate.taxCode){//进行回填数据
           this.uploadPay.taxCode=this.storeEditDate.taxCode
+          this.uploadPay.salve=this.storeEditDate.salve
           this.accMessArr=[];
           for(let i=0;i<this.storeEditDate.custBankAccountList.length;i++){
             let obj={}
@@ -213,11 +236,16 @@ export default {
               address_err:""
             }
             this.accMessArr.push(obj);
+            this.uploadImg.name=this.storeEditDate.salve.slice(0)
+            for(let i=0;i<this.uploadImg.name.length;i++){
+              this.uploadImg.name[i]=this.uploadImg.name[i].replace('http://d1.test.yiche.com/',"")
+            }
+            this.uploadImg.show=true
           }
         }
         setTimeout(()=>{
           this.modal1=true
-        },0)        
+        },0)
       },
       resetValue(){//弹出层进来时重置
         this.modal1=false
@@ -358,20 +386,20 @@ export default {
             this.accMessArr[i].errMess.phone_err=""
             resultArr.push(true)
           }
-        } 
+        }
         for(let i=0;i<resultArr.length;i++){
           if(resultArr[i]==false){
             lastRetun=false
             return false
           }
         }
-       
+
         if(lastRetun){
           return true
-        }         
-      },     
+        }
+      },
       addGroup(){
-        let oneGroup={          
+        let oneGroup={
             bank:"",//开户银行
             bankAccount:"",//银行账号
             phone:"",//电话
@@ -384,32 +412,50 @@ export default {
             errMess:{
               bankAccount_err:"",
               phone_err:""
-            }              
+            }
         }
         this.accMessArr.push(oneGroup)
+      },
+      salveCheck(){
+        if(this.uploadPay.salve.length==0){
+          this.errorCon.uploadErr='请上传附件'
+          this.judgeErr.uploadErrShow=true
+          this.$Modal.error({
+            title: '提示',
+            content: "表单验证失败！"
+          })
+          return false
+        }
+        return true;
       },
       handleFormatError(file){
          this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
          this.judgeErr.uploadErrShow=true
       },
-      handleMaxSize (file) {           
+      handleMaxSize (file) {
         this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
         this.judgeErr.uploadErrShow=true
       },
       fileUploadSuccess(response, file, fileList){
+        let reg=/(\.com\/)([\w.]+)/;
+        var arr=response.result.match(reg)
+        this.uploadImg.name.push(arr[2]);
+        this.uploadImg.show=true;
+        this.uploadPay.salve.push(response.result);
       },
       submit (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
               let check_account=this.accountMessCheck()
               let check_tax=this.taxCodeCheck()
-              if(check_account&&check_tax){
+              let salve_check=this.salveCheck();//附件
+              if(check_account&&check_tax&&salve_check){
                 this.getCustBankAccountList();
-                this.uploadPay.custId=this.$router.currentRoute.query.id;    
-                this.$emit('uploadpay',this.uploadPay,"upload")   
+                this.uploadPay.custId=this.$router.currentRoute.query.id;
+                this.$emit('uploadpay',this.uploadPay,"upload")
                 this.modal1=false
               }
-             
+
           } else {
             this.$Modal.error({
                 title: '提示',
@@ -452,24 +498,11 @@ export default {
         border-bottom:1px solid #ccc;
         text-align:center;
       }
-      .salve{font-size:12px;color:blue;cursor:pointer}
+      .salve{font-size:12px;color:#4373F3;cursor:pointer}
       .mess_con{
         width: 100%;
         overflow: hidden;
         padding: 10px 20px;
-        // ul{
-        //   width:100%;
-        //   li{
-        //     float: left;
-        //     width: 100%;
-        //     span{
-        //       max-width: 250px;
-        //       display:block;
-        //       float:left;
-        //     }
-        //   }
-        //   .liHeight{height:23px}
-        // }
         .liHeight{height:23px}
         .item{
         width: 100%;
@@ -484,13 +517,13 @@ export default {
           float: left;
           overflow: hidden;
           span:first-child{height:27px;display:inline-block;float:left;line-height:27px}
-          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px}
+          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px;word-wrap:break-word}
         }
       }
   }
 }
 .upBtn{
-  text-align: center; 
+  text-align: center;
   display: inline-block;
   width: 120px !important;
   height: 38px !important;
@@ -503,16 +536,29 @@ export default {
   cursor: pointer
 }
 .payDialog {
+    .ivu-upload-list{display:none}
     .ivu-modal-content{
       position: relative;
       z-index: 1000;
-    }  
-    .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px} 
+    }
+    .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px}
     display: inline-block;
     input,.ivu-input-wrapper{width:350px}
     .accountOpenInfo{
       .header{
+        span:first-child{
+          &::before {
+            content: '*';
+            display: inline-block;
+            line-height: 1;
+            font-family: SimSun;
+            font-size: 12px;
+            color: #ed3f14;
+          }
+        }
         .add{
+          color:#4373F3;
+          margin-left: 200px;
           cursor: pointer
         }
       }
@@ -535,7 +581,7 @@ export default {
             left:1px;
             overflow: hidden;
           }
-        } 
+        }
       }
     }
     .upload{
@@ -543,7 +589,7 @@ export default {
       padding-bottom: 20px;
       .label{
         display:inline-block;
-        width:130px;
+        width:116px;
         height: 38px;
         line-height: 38px;
         text-align:right;
@@ -561,7 +607,32 @@ export default {
       .ivu-upload{
         display:inline-block;
       }
-      .uperror{padding-left:130px;width:100%;display:block}
+      .underLine{
+        overflow: hidden;
+        span:first-child{
+          width:200px;
+          display: inline-block;
+          float: left;
+          word-wrap:break-word
+        }
+        span:last-child{
+          float: left;
+          text-align: right;
+          width:100px;
+          display: inline-block;
+          float: left;
+          word-wrap:break-word
+        }
+        width: 360px;
+        padding:12px 0 12px 20px;
+        border-bottom:1px solid #DEE1E5
+      }
+      .uperror{
+        span{color:#7B8497}
+        width: 360px;
+        padding-left:119px;display:block;margin-top:10px;
+        .del{color:#4373F3;cursor:pointer}
+      }
     }
 }
 </style>

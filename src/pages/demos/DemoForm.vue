@@ -1,96 +1,109 @@
 <template lang="html">
-    <div class="" style="height:2000px;">
-        <select id="select2_sample" name="sample" style="width:75%" class="js-example-basic-multiple">
-        </select>
-        <button type="button" name="button" @click='fn'>获取</button>
-        <button type="button" name="button" @click='clear'>清空</button>
+    <div class="">
+        <Select
+               ref='demo'
+               v-model="model"
+               filterable
+               remote
+               :remote-method="remoteMethod"
+               :loading="loading">
+               <Option v-for="option in options" :value="option.id" :key="option.id">{{option.deptName}}</Option>
+           </Select>
+
+           <button type="button" name="button" @click='clear'>清空</button>
+           <button type="button" name="button" @click='edit'>回填</button>
+
+           <Radio-group v-model="phone">
+                <Radio label="0">
+                    <Icon type="social-apple"></Icon>
+                    <span>Apple</span>
+                </Radio>
+                <Radio label="-1">
+                    <Icon type="social-android"></Icon>
+                    <span>Android</span>
+                </Radio>
+                <Radio label="1">
+                    <Icon type="social-windows"></Icon>
+                    <span>Windows</span>
+                </Radio>
+            </Radio-group>
     </div>
 </template>
 
 <script>
-import $ from 'jquery';
-import 'select2';
-import 'select2/dist/css/select2.css';
-import 'select2-bootstrap-theme/dist/select2-bootstrap.css';
-import axios from 'axios';
 export default {
+    data() {
+        return {
+            loading: false,
+            model: [],
+            options: [],
+            phone: ''
+        }
+    },
     mounted() {
-        setTimeout(() => {
-            var data = //下拉列表中的数据项
-            $("#select2_sample").select2({
-                allowClear:true,
-                placeholder: '请选择',
-                theme: "bootstrap",
-                data: [
-                    {
-                        name:"zxy",
-                        id: 1,
-                        text: 'text'
-                    }
-                ],
-                // ajax: {
-                //     transport: function(params, success, failure) {
-                //         if (!params.data.term) {
-                //             let data = [
-                //                 {
-                //                     id: 1,
-                //                     name: '默认选项',
-                //                     text: 'text'
-                //                 }
-                //             ]
-                //             success(data);
-                //             return false;
-                //         }
-                //         axios.get('mock/resource',{
-                //             name: '',
-                //             modelId: 0
-                //         }).then((res)=> {
-                //             console.log(1);
-                //             success();
-                //         }).catch((err) => {
-                //             failure();
-                //         })
-                //
-                //
-                //     },
-                //     processResults: function (data, params) {
-                //       // parse the results into the format expected by Select2
-                //       // since we are using custom formatting functions we do not need to
-                //       // alter the remote JSON data, except to indicate that infinite
-                //       // scrolling can be used
-                //       return {
-                //           results: data
-                //       };
-                //     },
-                // },
-                escapeMarkup: function (markup) { return markup; },
-                //minimumInputLength: 1,
-                // templateSelection(repo) {
-                //     if (repo.loading){
-                //
-                //     }
-                //     var markup = "<span>"+repo.name+"</span>";
-                //     return markup;
-                // },
-                templateResult(repo) {
-                    if (repo.loading) {
-                        // $("#select2_sample").select2({
-                        //     data: [{id:0, text:'text',name: '无结果'}]
-                        // })
-                    };
-                    var markup = "<span>"+repo.name+"</span>";
-                    return markup;
-                }
-            });
+        this.$http.get('/isp-process-server/depart/getList', {
+            params: {
+                deptName: '',
+                pageIndex: 1,
+                pageSize: 10
+            }
+        }).then((res) => {
+            this.loading = false;
+            if (res.data.errorCode == 0) {
+                this.options = res.data.result.resultList;
+
+                return this.$http.get('/isp-process-server/depart/getList');
+            }
+        }).then((res) => {
+            console.log(res);
+        }).catch((err) => {
+
         })
     },
     methods: {
-        fn() {
-            console.log($("#select2_sample").select2("data"));
+        remoteMethod(query) {
+            console.log(query);
+            // if (query !== '') {
+            //     this.loading = true;
+            //     this.$http.get('/isp-process-server/depart/getList', {
+            //         params: {
+            //             deptName: query,
+            //             pageIndex: 1,
+            //             pageSize: 10
+            //         }
+            //     }).then((res) => {
+            //         this.loading = false;
+            //         if (res.data.errorCode == 0) {
+            //             this.options = res.data.result.resultList;
+            //
+            //             return this.$http.get('/isp-process-server/depart/getList');
+            //         }
+            //     }).then((res) => {
+            //         console.log(res);
+            //     }).catch((err) => {
+            //
+            //     })
+            // } else {
+            //     //this.options = [];
+            // }
+        },
+        edit() {
+            this.options = [];
+            this.options.push({
+                id: 751,
+                deptName: 'DSA事业部'
+            })
+
+            setTimeout(() => {
+                this.model = 751;
+                this.$refs.demo.selectedSingle = 'DSA事业部';
+            })
         },
         clear() {
-            console.log('清空');
-            $("#select2_sample").val(null).trigger("change");
+            console.log(this.$refs.demo)
+            // this.$refs.demo.selectedMultiple = [];
+            // this.options = [];
+            // this.model = [];
         }
     }
 }
@@ -98,81 +111,3 @@ export default {
 
 <style lang="css">
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <template>
-    <Row>
-        <Col span="12">
-            <Date-picker  :editable = 'false' v-model='startTime'  @on-change="chooseStartTime"  type="month" :options="date1" placeholder="选择日期"></Date-picker>
-        </Col>
-        <Col span="12">
-            <Date-picker  :editable = 'false'   @on-change="chooseEndTime"  type="month" :options="date2" placeholder="选择日期"></Date-picker>
-        </Col>
-
-    </Row>
-</template>
-<script>
-    export default {
-        data() {
-            return  {
-                startTime: '',
-                endTime: '',
-                date1: {
-                    disabledDate: this.disStart
-                },
-                date2: {
-                    disabledDate: this.disEnd
-                }
-            }
-        },
-        methods: {
-            disStart(date) {
-                let year = new Date().getFullYear();
-                let month = new Date().getMonth();
-                return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
-            },
-            disEnd(date) {
-                if (this.startTime) {
-                    let year = this.startTime.split('-')[0];
-                    let month = this.startTime.split('-')[1];
-                    return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year, 11, 30).getTime();
-                }
-                else {
-                    let year = new Date().getFullYear();
-                    let month = new Date().getMonth();
-                    return date && date.valueOf() < new Date(year, month).getTime() || date && date.valueOf() > new Date(year + 1, 11, 30).getTime();
-                }
-            },
-            chooseStartTime(date) {
-                this.startTime = date;
-            },
-            chooseEndTime(date) {
-                this.endTime = date;
-            }
-
-        }
-    }
-</script> -->

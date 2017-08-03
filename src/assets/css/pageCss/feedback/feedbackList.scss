@@ -1,6 +1,11 @@
 .feedback{
 	$height: 38px;
 	$formWidth:280px;
+	.title{
+		font-size: 14px;
+		color: #333;
+		padding-left:30px;
+  	}
     .searchOrder{
 		background-color: #F9FAFC;
 		padding: 50px 0 50px 30px;
@@ -80,6 +85,9 @@
 			border-radius: 2px;
 			color: #fff;
 			cursor: pointer;
+			a{
+				color: #fff
+			}
 		}
 		table{
 			margin-top: 30px;

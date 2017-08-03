@@ -8,7 +8,7 @@
                 <span>统一社会信用码：</span><span>{{storeEditDate.licenseNumber}}</span>
               </div>
               <div class="item">
-                <span>注册资本：</span><span>{{storeEditDate.registeredCapital}}(万元)</span>
+                <span>注册资本：</span><span>{{storeEditDate.registeredCapital}}万元</span>
               </div>
               <div class="item">
                 <span>营业期限：</span><span>{{storeEditDate.time}}</span>
@@ -28,8 +28,11 @@
               <div class="item" v-if="storeEditDate.custName">
                 <span>客户名称：</span><span>{{storeEditDate.custName}}</span>
               </div>
-              <div class="item itemLH">
-                <span>附件：</span><span class="salve" @click="showPic">111</span>
+              <div class="itemHeight">
+                <span>附件：</span><span class="salve" @click="showPic(storeEditDate.salve)">
+                  查看
+                  <!-- {{storeEditDate.salve?storeEditDate.salve.replace('http://d1.test.yiche.com/',""):""}} -->
+                </span>
               </div>
           </div>
         </div>
@@ -44,7 +47,7 @@
               </Form-item>
               <Form-item label="注册资本:" prop="registeredCapital">
                 <Input v-model="uploadBusi.registeredCapital" placeholder="请填写注册资本" class='fl'></Input>
-                <span class="ML5">万元</span>
+                <span class="ML5 fl">万元</span>
                 <span v-show="judgeErr.reg_cap_err_show" class="colorRed ML5">
                   {{errorCon.reg_cap_err}}
                 </span>
@@ -57,7 +60,7 @@
                   </Form-item>
                   <span class="space">-</span>
                   <Form-item prop="endTime">
-                    <Date-picker type="date" placeholder="选择结束日期"  v-model="uploadBusi.endTime" 
+                    <Date-picker type="date" placeholder="选择结束日期"  v-model="uploadBusi.endTime"
                     :editable="false" @on-change="endDateChange"></Date-picker>
                   </Form-item>
                   <Checkbox v-model="forever" @on-change="foreverChange">
@@ -80,26 +83,29 @@
               </Form-item>
               <div class="upload">
                 <span class="label">附件:</span>
-                <Upload 
-                  action="http://dev-isp.yiche.com:8081/cust/fileUpload2"
+                <Upload
+                  action="/isp-kongming/cust/imgUpdate"
                   :format="['jpg','jpeg','png']"
-                  :max-size="10240"
+                  :max-size="1024"
                   :on-format-error="handleFormatError"
                   :on-exceeded-size="handleMaxSize"
                   :on-success="fileUploadSuccess"
                   >
-                  <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-                  <span  class="ML15">请上传1M以内的文件</span> 
+                  <Button type="ghost" class="btn bg4373F3">上传文件</Button>
+                  <span  class="ML15">请上传1M以内的文件</span>
                 </Upload>
+                <div class="uperror" v-show="uploadImg.show">
+                  <span>{{uploadImg.name}}</span><span class="del" @click="removeImg">删除</span>
+                </div>
                 <span v-if="judgeErr.uploadErrShow"  class="colorRed uperror">{{errorCon.uploadErr}}</span>
-              </div> 
+              </div>
               <Form-item>
                 <Button type="primary" class="btn bg4373F3" @click="submit('uploadBusi')">提交</Button >
                 <Button type="primary" class="btn bgCancle ML15" @click="cancel('uploadBusi')">取消</Button>
-              </Form-item>              
+              </Form-item>
             </Form>
-            <div slot="footer" class="footer">   
-            </div> 
+            <div slot="footer" class="footer">
+            </div>
         </Modal>
     </div>
 </template>
@@ -164,6 +170,10 @@ export default {
         custName: "",//客户名称
         salve: ""//营业执照附件
       },
+      uploadImg:{
+        name:"",
+        show:false
+      }
     }
   },
   created(){
@@ -173,22 +183,26 @@ export default {
     }
   },
   methods: {
+      removeImg(){
+        this.uploadImg.name="";
+        this.uploadBusi.salve="";
+        this.uploadImg.show=false
+      },
       endDateChange(data){//选了结束时间把永久去掉
         if(data!=""&&this.forever){
           this.forever=false
         }
       },
       foreverChange(data){//选了永久吧结束时间去掉
-        console.log(data)
         if(data&&this.uploadBusi.endTime!=""){
           this.uploadBusi.endTime=""
         }
       },
-      showPic(){
-        this.$emit('showPic',"pic2")
+      showPic(data){
+        this.$emit('showPic',data)
       },
       openDialog(){
-        this.modal1=true      
+        this.modal1=true
         if(this.storeEditDate.licenseNumber){//进行回填数据
           this.uploadBusi.registeredCapital=this.storeEditDate.registeredCapital
           this.uploadBusi.beginTime=new Date(this.storeEditDate.beginTime)
@@ -197,12 +211,15 @@ export default {
             this.uploadBusi.endTime=""
           }else if(this.storeEditDate.endTime!="永久"){
             this.uploadBusi.endTime=new Date(this.storeEditDate.endTime)
-          }        
+          }
           this.uploadBusi.licenseNumber=this.storeEditDate.licenseNumber;
           this.uploadBusi.createTime=new Date(this.storeEditDate.createTime)
           this.uploadBusi.legalPerson=this.storeEditDate.legalPerson
           this.uploadBusi.businessAddress=this.storeEditDate.businessAddress
           this.uploadBusi.organizationCode=this.storeEditDate.organizationCode
+          this.uploadBusi.salve=this.storeEditDate.salve
+          this.uploadImg.name= this.uploadBusi.salve.replace('http://d1.test.yiche.com/',"");
+          this.uploadImg.show=true
         }
       },
       submit (name) {
@@ -210,7 +227,8 @@ export default {
             if (valid) {
                 let check_result=this.valueCheck()//注册资本为数字
                 let data_check=this.dateChange();//时间区间的错误提示
-                if(check_result&&data_check){
+                let salve_check=this.salveCheck();//附件
+                if(check_result&&data_check&&salve_check){
                   this.uploadBusi.custId=this.$router.currentRoute.query.id;
                   if(this.uploadBusi.endTime==""){
                     this.uploadBusi.endTime="永久"
@@ -218,7 +236,7 @@ export default {
                   }
                   this.$emit('uploadbus',this.uploadBusi,'upload')
                   this.modal1=false
-                }               
+                }
             } else {
                 let data_check=this.dateChange();//时间区间的错误提示
                 this.$Modal.error({
@@ -232,8 +250,19 @@ export default {
         if(this.storeEditDate.licenseNumber){
           this.$refs[name].resetFields();
         }
-        
         this.modal1=false
+      },
+      salveCheck(){
+        if(this.uploadBusi.salve==""){
+          this.errorCon.uploadErr='请上传附件'
+          this.judgeErr.uploadErrShow=true
+          this.$Modal.error({
+            title: '提示',
+            content: "表单验证失败！"
+          })
+          return false
+        }
+        return true;
       },
       valueCheck(){
         //验证注册资本
@@ -281,23 +310,28 @@ export default {
          this.errorCon.uploadErr='文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
          this.judgeErr.uploadErrShow=true
       },
-      handleMaxSize (file) {           
+      handleMaxSize (file) {
         this.errorCon.uploadErr='文件 ' + file.name + ' 太大，不能超过1M。'
         this.judgeErr.uploadErrShow=true
       },
       fileUploadSuccess(response, file, fileList){
+        let reg=/(\.com\/)([\w.]+)/;
+        var arr=response.result.match(reg)
+        this.uploadImg.name=arr[2];
+        this.uploadImg.show=true;
+        this.uploadBusi.salve=response.result;
       },
-      formatTen(num) { 
-        return num > 9 ? (num + "") : ("0" + num); 
+      formatTen(num) {
+        return num > 9 ? (num + "") : ("0" + num);
       },
       formatDate(date) { //时间格式的转换 标准->正常
-        var year = date.getFullYear(); 
-        var month = date.getMonth() + 1; 
-        var day = date.getDate(); 
-        var hour = date.getHours(); 
-        var minute = date.getMinutes(); 
-        var second = date.getSeconds(); 
-        return year + "-" + this.formatTen(month) + "-" + this.formatTen(day); 
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var second = date.getSeconds();
+        return year + "-" + this.formatTen(month) + "-" + this.formatTen(day);
       }
   },
   watch:{
@@ -316,12 +350,12 @@ export default {
 </script>
 
 <style lang="scss">
-.business{ 
+.business{
   .mess_show{
       background: #F9FAFC;
       margin-top: 20px;
       width:400px;
-      height: 240px;
+      height: 250px;
       overflow: auto;
       border-radius: 2px;
       .mess_title{
@@ -331,7 +365,7 @@ export default {
         border-bottom:1px solid #ccc;
         text-align:center;
       }
-      .salve{font-size:12px;color:blue;cursor:pointer}
+      .salve{font-size:12px;color:#4373F3;cursor:pointer}
       .mess_con{
         width: 100%;
         padding: 10px 20px;
@@ -348,27 +382,28 @@ export default {
           width: 100%;
           float: left;
           overflow: hidden;
-          span:first-child{height:27px;display:inline-block;float:left;line-height:27px}
-          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px}
+          span:first-child{height:27px;display:inline-block;float:left;line-height:27px;}
+          span:last-child{display:inline-block;float:left;width:240px;line-height:20px;margin-top:3px;word-wrap:break-word}
         }
       }
   }
 }
- .upBtn{
-    text-align: center; 
+.upBtn{
+  text-align: center;
+  display: inline-block;
+  width: 120px !important;
+  height: 38px !important;
+  background-color:white !important;
+  border: 1px solid #4373F3;
+  line-height: 38px !important;
+  border-radius:2px;
+  font-size: 14px;
+  color: #4373F3;
+  cursor: pointer
+}
+.businessDialog {
+   .ivu-upload-list{display:none}
     display: inline-block;
-    width: 120px !important;
-    height: 38px !important;
-    background-color:white !important;
-    border: 1px solid #4373F3;
-    line-height: 38px !important;
-    border-radius:2px;
-    font-size: 14px;
-    color: #4373F3;
-    cursor: pointer
-  }
-.businessDialog {  
-    display: inline-block; 
     .ivu-input-type,input{width:350px}
     .dateInput {
       .ivu-form-item{display:inline-block;width:174px !important;float: left
@@ -381,7 +416,7 @@ export default {
       padding-bottom: 20px;
       .label{
         display:inline-block;
-        width:130px;
+        width:125px;
         height: 38px;
         line-height: 38px;
         text-align:right;
@@ -399,9 +434,12 @@ export default {
       .ivu-upload{
         display:inline-block;
       }
-      .uperror{padding-left:130px;width:100%;display:block}
+      .uperror{
+        padding-left:117px;width:100%;display:block;margin-top:10px;
+        .del{color:#4373F3;margin-left:100px;cursor:pointer}
+      }
     }
-    .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px} 
+    .ivu-modal{width:700px !important; height:500px;overflow:auto;top:30px}
     .footer{text-align:center;}
 }
 

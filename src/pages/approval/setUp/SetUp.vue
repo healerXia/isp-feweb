@@ -6,7 +6,7 @@
         <Form-item label="部门名称" prop="name">
             <Input v-model="formValidate.name" placeholder="请输入部门名称" class='text fl'></Input>
         </Form-item>
-        <Form-item label="上级部门" prop="manage">
+        <Form-item label="上级部门">
             <Select
                 v-model="formValidate.manage"
                 filterable
@@ -15,7 +15,7 @@
                 :clearable = "true"
                 :loading="loading1"
                 class='text fl'>
-                <Option v-for="option in options1" :value="option.value" :key="new Date()">{{option.label}}</Option>
+                <Option v-for="option in options1" :value="option.id" :key="new Date()">{{option.deptName}}</Option>
             </Select>
         </Form-item>
         <Form-item label="部门负责人" prop="personal">
@@ -27,7 +27,7 @@
                 :clearable = "true"
                 :loading="loading1"
                 class='text fl'>
-                <Option v-for="option in options2" :value="option.value" :key="new Date()">{{option.label}}</Option>
+                <Option v-for="option in options2" :value="option.employeeId" :key="new Date()">{{option.displayName}}</Option>
             </Select>
         </Form-item>
         <Form-item>
@@ -53,6 +53,7 @@ export default {
             }
         };
         return {
+            id: '',
             formValidate: {
                 name: '',
                 manage: '',
@@ -86,7 +87,38 @@ export default {
         }
     },
     mounted() {
-        this.initMagagement();
+        let id = this.$router.currentRoute.query.id;
+        this.id = id;
+        if (id) {
+            this.$http.get('/isp-process-server/depart/getModel', {
+                params: {
+                    id: id
+                }
+            }).then((res) => {
+                if (res.data.errorCode == 0) {
+                    this.formValidate.name = res.data.result.deptName;
+
+                    if (res.data.result.managerId) {
+                        setTimeout(() => {
+                            this.formValidate.personal = res.data.result.managerId;
+                        })
+                        this.loading1 = false;
+                        this.options2 = [{employeeId: res.data.result.managerId, displayName: res.data.result.managerName}];
+                    }
+
+                    if (res.data.result.pid) {
+                        setTimeout(() => {
+                            this.formValidate.manage = res.data.result.pid;
+                        })
+                        this.loading1 = false;
+                        this.options1 = [{id: res.data.result.pid, deptName: res.data.result.pName}];
+                    }
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
+
     },
     methods: {
         handleSubmit (name, status) {
@@ -98,6 +130,9 @@ export default {
             }
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                    if (this.id) {
+                        this.submitData.id = this.id;
+                    }
                     this.$http.post("/isp-process-server/depart/add", this.submitData).then((res) => {
                         if (res.data.errorCode == 0) {
                             this.$Message.success('保存成功');
@@ -110,7 +145,7 @@ export default {
                             }
                             else {
                                 setTimeout(() => {
-                                    //this.$router.push('setUpDepartment');
+                                    this.$router.push('department');
                                     this.$refs[name].resetFields();
                                     this.submitData = {};
                                 }, 1000)
@@ -136,14 +171,14 @@ export default {
                 content: '是否取消当前操作并跳转至列表页？',
                 cancel: '取消',
                 onOk: () => {
-                    this.$router.push('docManagemengt');
+                    this.$router.push('department');
                 },
                 onCancel: () => {
                     //this.$Message.info('点击了取消');
                 }
             });
         },
-        initMagagement() {
+        initMagagement(data) {
             // 初始化部门
             this.$http.get('/isp-process-server/depart/getList').then((res) => {
                 if (res.data.errorCode == 0) {
@@ -151,8 +186,6 @@ export default {
                     for(let i = 0; i < this.upList.length; i++) {
                         this.upList[i].id = this.upList[i].id.toString();
                     }
-
-
                 }
             }).catch((err) => {
                 console.log(err);
@@ -170,16 +203,24 @@ export default {
         remoteMethod1 (query) {
             if (query !== '') {
                 this.loading1 = true;
-                setTimeout(() => {
+                this.$http.get('/isp-process-server/depart/getList', {
+                    params: {
+                        deptName: query,
+                        pageIndex: 1,
+                        pageSize: 10
+                    }
+                }).then((res) => {
                     this.loading1 = false;
-                    const list = this.upList.map(item => {
-                        return {
-                            label: item.deptName,
-                            value: item.id
-                        };
-                    });
-                    this.options1 = list.filter(item => item.label.indexOf(query) > -1).slice(0, 5);
-                }, 200);
+                    if (res.data.errorCode == 0) {
+                        this.options1 = res.data.result.resultList;
+                    }
+                    else {
+
+                    }
+                }).catch((err) => {
+
+                })
+
             } else {
                 this.options1 = [];
             }
@@ -187,16 +228,35 @@ export default {
         remoteMethod2 (query) {
             if (query !== '') {
                 this.loading1 = true;
-                setTimeout(() => {
+                this.$http.get('/isp-process-server/employee/getPageList', {
+                    params: {
+                        displayName: query,
+                        pageIndex: 1,
+                        pageSize: 10
+                    }
+                }).then((res) => {
                     this.loading1 = false;
-                    const list = this.personalList.map(item => {
-                        return {
-                            label: item.displayName,
-                            value: item.employeeId
-                        };
-                    });
-                    this.options2 = list.filter(item => item.label.indexOf(query) > -1).slice(0, 5);
-                }, 200);
+                    if (res.data.errorCode == 0) {
+                        this.options2 = res.data.result.resultList;
+                    }
+                    else {
+
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+
+
+                // setTimeout(() => {
+                //     this.loading1 = false;
+                //     const list = this.personalList.map(item => {
+                //         return {
+                //             label: item.displayName,
+                //             value: item.employeeId
+                //         };
+                //     });
+                //     this.options2 = list.filter(item => item.label.indexOf(query) > -1).slice(0, 5);
+                // }, 200);
             } else {
                 this.options2 = [];
             }

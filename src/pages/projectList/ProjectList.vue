@@ -23,10 +23,10 @@
                 </div>
                 <div class="inputBox ML30">
                   <span class="formLabel">创建时间</span>
-                 <Date-picker type="date"  placeholder="选择日期"  class="fLest" v-model="beginTime" 
+                 <Date-picker type="date"  placeholder="选择日期"  class="fLest" v-model="beginTime"
                  :editable="false" :options="disB" @on-change="bDateChange"></Date-picker>
                  <span class="space">到</span>
-                  <Date-picker type="date" placeholder="选择日期"  class="fLest" v-model="endTime" 
+                  <Date-picker type="date" placeholder="选择日期"  class="fLest" v-model="endTime"
                   :editable="false" :options="disE" @on-change="eDateChange"></Date-picker>
                 </div>
                 <div class="inputBox ML53 ">
@@ -54,7 +54,7 @@
                   <span v-if="key!='projectName'&&key!='expectUvCount'&&key!='expectPvCount'">{{tbodyData[key]}}</span>
                   <span v-else-if="key=='expectUvCount'||key=='expectPvCount'">{{(tbodyData[key]+"").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,')}}</span>
                    <router-link
-                    :to="{path:'details',query: {id:tbodyData.id}}"
+                    :to="{path:'details',query: {id:tbodyData.id, action: 1}}"
                     v-else-if="key=='projectName'">
                       {{tbodyData[key]}}
                     </router-link>

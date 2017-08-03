@@ -10,62 +10,64 @@
                 </div>
             </div>
 
-            <div class="info">
+            <div class="info clear">
                 <p class="title">基本信息</p>
-                <ul class="info-list clear">
-                    <li class="fl">
+                <div class="info-list fl">
+                    <div class="clear">
                         <label for="" class="fl">域账号：</label>
-                        <span class="fl">{{info.username}}</span>
-                    </li>
-                    <li class="fl">
-                        <label for="" class="fl">员工编号：</label>
-                        <span class="fl">{{info.employeeId}}</span>
-                    </li>
-                    <li class="fl">
+                        <span class="fl info-text">{{info.username}}</span>
+                    </div>
+                    <div class="clear">
                         <label for="" class="fl">员工姓名：</label>
-                        <span class="fl">{{info.displayName}}</span>
-                    </li>
-                    <li class="fl">
-                        <label for="" class="fl">员工上级：</label>
-                        <span class="fl">{{info.managerName}}</span>
-                    </li>
-                    <li class="fl">
+                        <span class="fl info-text">{{info.displayName}}</span>
+                    </div>
+                    <div class="clear">
                         <label for="" class="fl">所属部门：</label>
-                        <span class="fl">{{info.fullPath}}</span>
-                    </li>
-                    <li class="fl">
-                        <label for="" class="fl">员工状态：</label>
-                        <span class="fl">{{info.statusStr}}</span>
-                    </li>
-                    <li class="fl">
+                        <span class="fl info-text">{{initFullPath(info.fullPath)}}</span>
+                    </div>
+                    <div class="clear">
                         <label for="" class="fl">职位：</label>
-                        <span class="fl">{{info.position}}</span>
-                    </li>
-                    <li class="fl">
-                        <label for="" class="fl">员工分类：</label>
-                        <span class="fl">{{info.employeeType}}</span>
-                    </li>
-                    <li class="fl">
+                        <span class="fl info-text">{{info.position}}</span>
+                    </div>
+                    <div class="clear">
                         <label for="" class="fl">业务线：</label>
-                        <span class="fl">{{info.businessLine}}</span>
-                    </li>
-                    <li class="fl">
-                        <label for="" class="fl">性别：</label>
-                        <span class="fl">{{info.sexStr}}</span>
-                    </li>
-                    <li class="fl">
+                        <span class="fl info-text">{{info.businessLine}}</span>
+                    </div>
+                    <div class="clear">
                         <label for="" class="fl">联系电话：</label>
-                        <span class="fl">{{info.phone}}</span>
-                    </li>
-                    <li class="fl">
-                        <label for="" class="fl">移动电话：</label>
-                        <span class="fl">{{info.mobile}}</span>
-                    </li>
-                    <li class="fl">
+                        <span class="fl info-text">{{info.phone}}</span>
+                    </div>
+                    <div class="clear">
                         <label for="" class="fl">代理审批人：</label>
-                        <span class="fl">{{info.agentStr}}</span>
-                    </li>
-                </ul>
+                        <span class="fl info-text">{{info.agentStr}}</span>
+                    </div>
+                </div>
+                <div class="info-list fl">
+                    <div class="clear">
+                        <label for="" class="fl">员工编号：</label>
+                        <span class="fl info-text">{{info.employeeId}}</span>
+                    </div>
+                    <div class="clear">
+                        <label for="" class="fl">员工上级：</label>
+                        <span class="fl info-text">{{info.managerName}}</span>
+                    </div>
+                    <div class="clear">
+                        <label for="" class="fl">员工状态：</label>
+                        <span class="fl info-text">{{info.statusStr}}</span>
+                    </div>
+                    <div class="clear">
+                        <label for="" class="fl">员工分类：</label>
+                        <span class="fl info-text">{{info.employeeType}}</span>
+                    </div>
+                    <div class="clear">
+                        <label for="" class="fl">性别：</label>
+                        <span class="fl info-text">{{info.sexStr}}</span>
+                    </div>
+                    <div class="clear">
+                        <label for="" class="fl">移动电话：</label>
+                        <span class="fl info-text">{{info.mobile}}</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -80,7 +82,7 @@
                         <td>{{list.username}}</td>
                         <td>{{list.employeeId}}</td>
                         <td>{{list.displayName}}</td>
-                        <td>{{list.fullPath.split(',').join('-')}}</td>
+                        <td>{{initFullPath(list.fullPath)}}</td>
                         <td>{{list.position}}</td>
                         <td>{{list.employeeType}}</td>
                         <td>{{list.mobile}}</td>
@@ -133,6 +135,14 @@ export default {
             }).catch((err) => {
                 console.log(err);
             });
+        },
+        initFullPath(data) {
+            if (!data) return;
+            let arr = data.split(',');
+            if (arr.length > 0) {
+                return arr.join('-');
+            }
+            return data;
         },
         initTable() {
             this.$http.get('/isp-process-server/employee/getPageList', {
@@ -191,22 +201,32 @@ export default {
         padding: 50px 30px;
         background: #F9FAFC;
 
+
+        .info-text {
+            width: 400px;
+            word-break: break-all;
+            //border: 1px solid #ccc;
+
+        }
+
         .info-list {
             font-size: 12px;
             color: #7B8497;
-            line-height: 20px;
+            line-height: 26px;
+            width: 500px;
+            margin-right: 20px;
 
             li {
                 width: 500px;
 
-                span {
-                    max-width: 400px;
-                    word-break: break-all;
-                }
+                // span {
+                //     max-width: 400px;
+                //     word-break: break-all;
+                // }
 
-                &:nth-child(2n) {
-                    margin-left: 50px;
-                }
+                // &:nth-child(2n) {
+                //     margin-left: 50px;
+                // }
             }
         }
     }

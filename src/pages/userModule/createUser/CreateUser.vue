@@ -142,6 +142,7 @@
                 <Form-item label="主营品牌:" prop="brandId"
                   v-if="formValidate.typeId!=2||formValidate.typeId==''">
                     <Select
+                    ref="brand"
                     multiple
                     :clearable="true"
                     placeholder="请选择主营品牌"
@@ -197,7 +198,7 @@
                     >
                      <Option :value="option.value" v-for="option in optionArr.areaOption" :key="new Date()" >{{option.name}}</Option>
                   </Select>
-                  <span v-show="judgeShow.areaErrShow" class="colorRed ML5">{{errorMess.areaErr}}</span>
+                  <span v-show="judgeShow.areaErrShow" class="colorRed">{{errorMess.areaErr}}</span>
                 </Form-item>
               </div>
               <div :class="showNeed.foursId_show">
@@ -222,7 +223,7 @@
                   <Input v-model="formValidate.address" placeholder="请填写客户地址" class='createInput fl'></Input>
                 </Form-item>
               </div>
-              <div :class="showNeed.map_show">
+              <div class="hasneed">
                 <Form-item label="地图:" prop="map" 
                  v-if="formValidate.typeId==5&&formValidate.subclassId==''">
                   <DialogMap 
@@ -230,7 +231,7 @@
                   </DialogMap>
                 </Form-item>
               </div>
-              <div :class="showNeed.map_show">
+              <div class="hasneed">
                 <Form-item label="地图:" prop="map" 
                  v-if="formValidate.typeId==5&&formValidate.subclassId==1">
                   <DialogMap 
@@ -241,7 +242,7 @@
                   </span>
                 </Form-item>
               </div>
-              <div :class="showNeed.map_show">
+              <div class="hasneed">
                 <Form-item label="地图:" prop="map" 
                  v-if="formValidate.typeId==5&&formValidate.subclassId==2">
                   <DialogMap 
@@ -252,7 +253,7 @@
                   </span>
                 </Form-item>
               </div>
-              <div :class="showNeed.map_show">
+              <div class="hasneed">
                 <Form-item label="地图:" prop="map" 
                  v-if="formValidate.typeId==5&&formValidate.subclassId==3">
                   <DialogMap 
@@ -263,22 +264,22 @@
                   </span>
                 </Form-item>
               </div>
-              <div :class="showNeed.vendorCode_show">
+              <div :class="showNeed.vendorCode_show" class="noIcon">
                 <Form-item label="厂商代码:" prop="vendorCode"
                   v-if="formValidate.typeId==5&&formValidate.subclassId!=''">
-                  <Input v-model="formValidate.vendorCode" placeholder="请填写厂商代码" maxlength="20" class='createInput fl'></Input>
+                  <Input v-model="formValidate.vendorCode" placeholder="请填写厂商代码" class='createInput fl'></Input>
                 </Form-item>
               </div>
-              <div :class="showNeed.companypro_show">
+              <div :class="showNeed.companypro_show" class="noIcon">
                 <Form-item label="企业简介:" prop="companypro"
                  v-if="formValidate.typeId==5&&formValidate.subclassId!=''">
-                  <Input v-model="formValidate.companypro" type="textarea" :autosize="{minRows: 2,maxRows: 6}" placeholder="请输入企业简介" maxlength="500" ></Input>
+                  <Input v-model="formValidate.companypro" type="textarea" :autosize="{minRows: 2,maxRows: 6}" placeholder="请输入企业简介" ></Input>
                 </Form-item>
               </div>
-              <div :class="showNeed.notes_show">
+              <div :class="showNeed.notes_show" class="noIcon">
                 <Form-item label="备注:" prop="notes"
                    v-if="formValidate.typeId==5&&formValidate.subclassId!=''">
-                  <Input v-model="formValidate.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注" maxlength="200" ></Input>
+                  <Input v-model="formValidate.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="请输入备注"></Input>
                 </Form-item>
               </div>
               <div v-if="formValidate.typeId!=5&&judgeShow.showUpload">
@@ -320,7 +321,7 @@
       v-model="showSalve"
       title="附件显示"
       >
-      <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="showSalve" style="width: 100%">
+      <img :src="imgPath" v-if="showSalve" style="width: 100%">
       <div slot="footer" class="footer">             
       </div>
     </Modal>
@@ -344,6 +345,7 @@
       },
       data () {
         return {
+          loginName:"",//登录人名字
           uploadBrandLength:0,
           showSalve:false,
           imgPath:"",
@@ -435,6 +437,8 @@
             provinceId:"",//省+
             cityId:"",//市+
             countyId:"",//区+
+            createUser:"",
+            logName:""
           },
           ruleValidate: {//验证
             custName: [
@@ -466,7 +470,16 @@
             ],
             salenet:[
               {required: false}
-            ]
+            ],
+            vendorCode:[
+            {max:20, message:'不能超过20个汉字',trigger:'blur'}
+            ],  
+            companypro:[
+            {max:500, message:'不能超过500个汉字',trigger:'blur'}
+            ], 
+            notes:[
+            {max:200, message:'不能超过200个汉字',trigger:'blur'}
+            ]      
           },
           judgeShow:{//错误是否显示
             submitClick:false,//是否可以点击保存
@@ -546,6 +559,17 @@
           }
           }).catch((res)=>{
         })
+        this.$http.get(config.urlList.login).then((res)=>{//获取登录人即操作人
+          if(res.data.errorCode===0){
+            this.loginName=res.data.result.username;
+          }
+          else {
+            this.$Modal.info({
+                title: '提示',
+                content: res.data.errorMsg
+            });
+          }
+        }).catch((res)=>{})
         /******编辑区域**********/
         setTimeout(()=>{
           if(id){
@@ -581,6 +605,7 @@
       methods:{
         showPicDialog(data){
           this.showSalve=true
+          this.imgPath=data;
         },
         /*******组件的信息接收*******/
         getCheckArea(data){//组件 获取选择的地区
@@ -647,7 +672,6 @@
             }
           }
           obj.time=obj.forever?obj.beginTime+"至永久":obj.beginTime+"至"+obj.endTime
-
           obj1['licenseNumber']=data.licenseNumber
           obj1['registeredCapital']=data.registeredCapital
           obj1['createTime']=obj.createTime
@@ -659,6 +683,7 @@
           obj1['salve']=data.salve;
           this.submitBusiObj=obj1;
           this.uploadBusiObj=obj
+
         },
         getUploadBrand(data,key){//组件 获取上传品牌授权书
           this.isUpload.brand=key
@@ -690,7 +715,7 @@
           }
           obj.taxCode=data.taxCode;
           obj.custBankAccountList=data.custBankAccountList
-          obj.salve=data.salve
+          obj.salve=data.salve.join(',')
           this.submitPayObj=obj;
         },
         /*********编辑与新建的时候下拉的回填************/
@@ -816,6 +841,7 @@
           //所属集团,所属厂商,所属4S,所属经销商,主营品牌  下拉做特殊处理，不需要自己回填
           let submitData={};
           //公共都有的
+          this.formValidate.createUser=data.createUser
           this.formValidate.typeId=parseInt(data.typeId);//客户类别
           this.formValidate.custName=data.custName//客户名称
           this.formValidate.abbrName=data.abbrName//客户简称
@@ -876,6 +902,7 @@
                   }
                 }   
                 res.data.result.custBankAccountList=arr
+                res.data.result.salve=res.data.result.salve.split(',')
                 this.getUploadPay(res.data.result,"")
               }
               else {
@@ -941,6 +968,9 @@
                   let lastCheck=this.checkValue()
                   if (lastCheck&&this.formValidate.countyId) {
                     let submitData=this.operSubmitData();
+                    submitData.sign=0;
+                    submitData.createUser=this.loginName;
+                    submitData.logName=this.loginName;
                     if(!this.$router.currentRoute.query.id){
                       this.$http.post(config.urlList.addCustInfo,//新增加
                        submitData,
@@ -1027,12 +1057,12 @@
             this.$http.post('/isp-kongming/cust/adBusinessLicense',
               this.submitBusiObj,
               ).then((res) => {
-                if(res.data.errorCode===0){
+                if(res.data.errorCode===0){ 
                 }else {
                 }
             }).catch((err) => {})
           }
-        
+          
           if(this.uploadBrandArr.length>=1&&this.isUpload.brand=="upload"){
             let arr=[];
             if(this.uploadBrandLength==0){
@@ -1050,7 +1080,6 @@
                 }
             }).catch((err) => {})
           }
-          
           if(this.submitPayObj.taxCode&&this.submitPayObj.taxCode!=""&&this.isUpload.bank=="upload"){
             this.$http.post('/isp-kongming/cust/adCustBankAccount',
               this.submitPayObj,
@@ -1071,6 +1100,9 @@
                 let lastCheck=this.checkValue()
                 if (lastCheck&&this.formValidate.countyId) {
                   let submitData=this.operSubmitData();
+                  submitData.sign=1
+                  submitData.createUser=this.formValidate.createUser?this.formValidate.createUser:this.loginName;
+                  submitData.logName=this.loginName;
                   if(!this.$router.currentRoute.query.id){
                     this.$http.post(config.urlList.addCustInfo,//新增加
                      submitData,
@@ -1081,7 +1113,7 @@
                         setTimeout(()=>{
                           this.$Modal.info({
                             title: '提示',
-                            content: '添加成功',
+                            content: '提交成功',
                             onOk:()=>{
                               this.$router.push({path:"custDetail",query:{id:res.data.result}})
                             }
@@ -1111,7 +1143,7 @@
                           setTimeout(()=>{
                             this.$Modal.info({
                               title: '提示',
-                              content: '编辑成功',
+                              content: '提交成功',
                               onOk:()=>{
                                 this.$router.push({path:"custDetail",query:{id:this.$router.currentRoute.query.id}})
                               }
@@ -1266,18 +1298,11 @@
             }
           }
           if(this.formValidate.typeId==5){//门店-->客户简称,地图
-            if(this.formValidate.abbrName.length>8){
-              this.judgeShow.abbrName_err_show=true;
-              this.errorMess.abbrName_err="不能超过8个汉字"
-              return false
-            }
-            else{
               this.mapCheck()
               if(this.judgeShow.mapErr_show===true){
                 return false
               }
               return true
-            }
           }
           return true
         },
@@ -1385,6 +1410,7 @@
                 this.formValidate.address=res.data.result.address
                 let brandnameArr=[];
                 let brandidArr=[];
+                this.$refs.brand.selectedMultiple=[]
                 for(let i=0;i<res.data.result.custBrandMapList.length;i++){
                   brandnameArr.push(res.data.result.custBrandMapList[i].brandName)
                   brandidArr.push(res.data.result.custBrandMapList[i].brandId)
@@ -1716,7 +1742,7 @@
 
             this.ruleValidate.provinceId=[
               {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
-            ]; this.showNeed.provinceId_show="hasneed"         
+            ]; this.showNeed.provinceId_show="hasneed"    
           }
           if(this.formValidate.typeId==4&&this.formValidate.subclassId==2){
             for(let item in this.ruleValidate){
@@ -1753,7 +1779,7 @@
 
             this.ruleValidate.provinceId=[
               {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
-            ]; this.showNeed.provinceId_show="hasneed"   
+            ]; this.showNeed.provinceId_show="hasneed"        
           }
           if(this.formValidate.typeId==4&&this.formValidate.subclassId==3){
             for(let item in this.ruleValidate){
@@ -1785,7 +1811,7 @@
             ]; this.showNeed.industryId_show="hasneed";
             this.ruleValidate.provinceId=[
               {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
-            ]; this.showNeed.provinceId_show="hasneed" ;    
+            ]; this.showNeed.provinceId_show="hasneed" ; 
           }
           if(this.formValidate.typeId==5&&this.formValidate.subclassId!=""){
             for(let item in this.ruleValidate){
@@ -1811,11 +1837,6 @@
                 {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ]; this.showNeed.custName_show="hasneed"; 
 
-            this.ruleValidate.abbrName=[
-                {required: true, message:'请填写客户简称',trigger:'blur'},
-                {max:15, message:'不能超过15个汉字',trigger:'blur'}
-            ];  this.showNeed.abbrName_show="hasneed";
-
             this.ruleValidate.provinceId=[
               {required: true, message:'请选择客户地区',trigger:'change',type:"number"},
             ]; this.showNeed.provinceId_show="hasneed" ;
@@ -1824,6 +1845,16 @@
               {required: true, message:'请填写客户地址',trigger:'blur'},
               {max:50, message:'不能超过50个汉字',trigger:'blur'}
             ]; this.showNeed.address_show="hasneed";
+
+            this.ruleValidate.vendorCode=[
+              {max:20, message:'不能超过20个汉字',trigger:'blur'}
+            ];  this.showNeed.vendorCode_show="hasneed";
+            this.ruleValidate.companypro=[
+              {max:500, message:'不能超过500个汉字',trigger:'blur'}
+            ];  this.showNeed.companypro_show="hasneed";
+            this.ruleValidate.notes=[
+              {max:200, message:'不能超过200个汉字',trigger:'blur'}
+            ];   this.showNeed.notes_show="hasneed";       
 
             if(this.formValidate.subclassId==1||this.formValidate.subclassId==2){
               this.ruleValidate.brandId=[
@@ -1949,7 +1980,6 @@
 
             }          
           }
-
           return this.formValidate.typeId
         }
       }

@@ -10,15 +10,15 @@
                     <Option :value="i.formTypeName" v-for='i in dataList' :key='new Date()'>{{i.formTypeName}}</Option>
                 </Select>
             </Form-item>
-            <Form-item label="流程分类" prop="chainType" v-if ='orderNameList.length > 0'>
+            <Form-item label="流程分类" prop="orderType" v-if ='orderType.length > 0'>
+                <Checkbox-group  v-model="formValidate.orderType" class='fl'>
+                    <Checkbox :label="i" v-for='i in orderType' :key='new Date()'></Checkbox>
+                </Checkbox-group>
+            </Form-item>
+            <Form-item label="流程条件"  prop="chainType" v-if ='orderNameList.length > 0'>
                 <Checkbox-group v-model="formValidate.chainType"  class='fl'>
                     <Checkbox :label="i" v-for='i in orderNameList' :key='new Date()'></Checkbox>
                 </Checkbox-group>
-            </Form-item>
-            <Form-item label="流程条件" prop="orderType" v-if ='orderType.length > 0'>
-                 <Checkbox-group  v-model="formValidate.orderType" class='fl'>
-                     <Checkbox :label="i" v-for='i in orderType' :key='new Date()'></Checkbox>
-                 </Checkbox-group>
             </Form-item>
             <div class="tableList">
                 <table cellspacing="1" cellpadding="0" class="user">
@@ -119,10 +119,10 @@ export default {
                     { required: true, message: '请选择流程名称', trigger: 'change' }
                 ],
                 chainType: [
-                    {required: true, type: 'array', message: '请选择流程类型', trigger: 'change'}
+                    {required: true, type: 'array', message: '请选择流程条件', trigger: 'change'}
                 ],
                 orderType: [
-                    {required: true, type: 'array', message: '请选择业务类型', trigger: 'change'}
+                    {required: true, type: 'array', message: '请选择流程分类', trigger: 'change'}
                 ]
             },
             dataList: [],
@@ -388,23 +388,28 @@ export default {
             });
         },
         checkProcess(data) {
-            console.log(1);
+            console.log(data);
             let datas = {};
             for (let i = 0; i < this.dataList.length; i++) {
                 if (this.dataList[i].formTypeName == data.value) {
                     datas = Object.assign({}, this.dataList[i]);
                     this.formTypeId = this.dataList[i].id;
+
+                    console.log(datas);
                 }
             }
             if (datas.formVariable) {
                 this.orderNameList = datas.formVariable.split(',');
+            }
+            else {
+                this.orderNameList = [];
             }
 
             if (datas.subFormType) {
                 this.orderType = datas.subFormType.split(',');
             }
             else {
-                this.orderNameList = [];
+                this.orderType = [];
             }
         }
     }

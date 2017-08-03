@@ -37,16 +37,16 @@
                             <td>
                                 <select :id="'employee' + index" name="sample" style="width:80%;height:38px;" class="js-example-basic-multiple">
                                     <option value=""></option>
-                                    <option v-for='i in employeeListAll' :value="i.id" :id="i.id">{{i.name}}</option>
+                                    <option v-for='i in employeeListAll' :value="i.id" :id="i.id">{{i.name}}({{i.managerId}}) <span class='fr'>{{i.deptName}}</span></option>
                                 </select>
                             </td>
-                            <td @click='clickTd(index)'>
-                                <Date-picker type="date" placeholder="选择日期" :options="date1" v-model="i.startDate"></Date-picker>
+                            <td @click='clickTd(index)' style="min-width:400px;">
+                                <Date-picker type="date" placeholder="选择日期" :options="date1" v-model="i.startDate" style="width: 40%"></Date-picker>
                                 <span>-</span>
-                                <Date-picker type="date" placeholder="选择日期" :options="date2" v-model="i.endDate"></Date-picker>
+                                <Date-picker type="date" placeholder="选择日期" :options="date2" v-model="i.endDate" style="width: 40%"></Date-picker>
                             </td>
                             <td>
-                                <Select v-model="i.formTypeId"  style="width:260px" clearable="true">
+                                <Select v-model="i.formTypeId"  style="width:80%; height: 38px;" clearable="true">
                                     <Option v-for="item in formTypeList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                 </Select>
                             </td>
@@ -176,18 +176,34 @@ export default {
                 // 初始化代理审批人
                 let agentList = data.agentBeanList;
                 this.tableList = [];
-                for (let i = 0; i < agentList.length; i++) {
+
+                if (agentList.length == 0) {
                     this.tableList.push({
                         // 代理人工号
-                        agentEmployeeId: agentList[i].agentEmployeeId,
+                        agentEmployeeId: '',
                         // 开始时间
-                        startDate: agentList[i].startDateStr,
+                        startDate: '',
                         // 结束时间
-                        endDate: agentList[i].endDateStr,
+                        endDate: '',
                         // 流程类型id
-                        formTypeId: agentList[i].formTypeId
+                        formTypeId: ''
                     })
                 }
+                else {
+                    for (let i = 0; i < agentList.length; i++) {
+                        this.tableList.push({
+                            // 代理人工号
+                            agentEmployeeId: agentList[i].agentEmployeeId,
+                            // 开始时间
+                            startDate: agentList[i].startDateStr,
+                            // 结束时间
+                            endDate: agentList[i].endDateStr,
+                            // 流程类型id
+                            formTypeId: agentList[i].formTypeId
+                        })
+                    }
+                }
+
 
                 setTimeout(() => {
                     for (let i = 0; i < agentList.length; i++) {
@@ -227,6 +243,9 @@ export default {
             this.tdIndex = index;
         },
         initTime(date) {
+            if (!date) {
+                return '';
+            }
             let time = new Date(date);
             let year = time.getFullYear();
             let month = time.getMonth() + 1;
@@ -264,6 +283,16 @@ export default {
                 console.log(err);
             })
         },
+        initDeptName(data) {
+            console.log(data);
+            if (data) {
+                let arr = data.split(',');
+                if (arr.length > 0) {
+                    return arr.join('-');
+                }
+                return data;
+            }
+        },
         initDept() {
             this.$http.get('/isp-process-server/depart/getList', {
                 params: {
@@ -276,7 +305,7 @@ export default {
                     this.deptListAll = data.map(item => {
                         return {
                             id: `${item.id}`,
-                            name: item.fullPath,
+                            name: this.initDeptName(item.fullPath),
                             deptName: item.deptName
                         }
                     });
@@ -331,7 +360,9 @@ export default {
                     this.employeeListAll = data.map(item => {
                         return {
                             id: item.employeeId,
-                            name: item.displayName
+                            name: item.displayName,
+                            managerId: item.employeeId,
+                            deptName: item.fullPath.split(',')[0]
                         }
                     })
 
@@ -385,7 +416,7 @@ export default {
                 }
             },
         handleSubmit (name, status) {
-
+            // delAgent
             this.$refs[name].validate((valid) => {
                 if (valid) {
 
@@ -395,54 +426,69 @@ export default {
                         return false;
                     }
 
+
+                    for (let i = 0; i < this.tableList.length; i++) {
+                        let data = $(`#employee${i}`).select2('data')[0];
+                        console.log(data);
+                        if (data.text) {
+                            if(!this.tableList[i].startDate || !this.tableList[i].endDate) {
+                                this.$Modal.info({
+                                    title: '提示',
+                                    content: '请填写有效时间',
+                                    onOk: ()=> {
+
+                                    }
+                                });
+                                return false;
+                            }
+                            else {
+                                this.tableList[i].agentEmployeeId = data.id;
+                            }
+                        }
+                        else {
+                            this.tableList[i].agentEmployeeId = '';
+                        }
+
+                    }
+
                     if (this.submitStatus) {
                         return false;
                     }
 
                     this.submitStatus = true;
 
-                    for (let i = 0; i < this.tableList.length; i++) {
-                        let data = $(`#employee${i}`).select2('data')[0];
-                        if (!data.text) {
-                            this.submitStatus = false;
-                            this.$Modal.info({
-                                title: '提示',
-                                content: '请填写代理审批人',
-                                onOk: ()=> {
-
-                                }
-                            });
-                            return false;
-                        }
-                        else {
-                            this.tableList[i].agentEmployeeId = data.id;
-                        }
-                    }
-
-
                     // 验证通过
 
                     // 代理审批人
-                    let emList = this.tableList.map(item => {
-                        return {
-                            employeeId: this.employeeId,
-                            // 代理人工号
-                            agentEmployeeId: item.agentEmployeeId,
-                            // 开始时间
-                            startDate: this.initTime(item.startDate),
-                            // 结束时间
-                            endDate: this.initTime(item.endDate),
-                            // 流程类型id
-                            formTypeId: item.formTypeId
+                    let emList = [];
+                    for (let i = 0; i < this.tableList.length; i++) {
+                        let item = this.tableList[i];
+                        if (item.agentEmployeeId) {
+                            emList.push({
+                                employeeId: this.employeeId,
+                                // 代理人工号
+                                agentEmployeeId: item.agentEmployeeId,
+                                // 开始时间
+                                startDate: this.initTime(item.startDate),
+                                // 结束时间
+                                endDate: this.initTime(item.endDate),
+                                // 流程类型id
+                                formTypeId: item.formTypeId
+                            })
                         }
-                    })
+                    }
+
+                    let delAgent = false;
+                    if (emList.length == 0) {
+                        delAgent = true;
+                    }
 
                     let submitData = {
                         "username": this.formValidate.username,
                         "phone": this.formValidate.phone,
                         "mobile": this.formValidate.mobile,
                         "deptId": this.formValidate.deptId,
-                        "delAgent":false,
+                        "delAgent": delAgent,
                         "agentBeanList": emList
                     };
 
@@ -511,7 +557,6 @@ export default {
             })
         },
         selDept(data) {
-            console.log(data);
             for (let i = 0; i < this.deptListAll.length; i++) {
                 if (data == this.deptListAll[i].id) {
                     this.deptName = this.deptListAll[i].deptName;
@@ -520,11 +565,12 @@ export default {
             }
         },
         // 日期判断
-        disStart(date){
-            return date && date.valueOf() >new Date(this.tableList[this.tdIndex].endDate);
+        disStart(date) {
+            return date && date.valueOf() > new Date(this.tableList[this.tdIndex].endDate);
         },
-        disEnd(date){
-            return date && date.valueOf()< new Date(this.tableList[this.tdIndex].startDate);
+        disEnd(date) {
+            let n = this.initTime(this.tableList[this.tdIndex].startDate);
+            return date && new Date(this.initTime(date)) < new Date(n);
         }
     }
 }
@@ -533,7 +579,6 @@ export default {
 <style lang="scss" scoped>
 #edit {
     padding: 50px 30px;
-    min-width: 1200px;
 
     .title {
         font-size: 14px;
