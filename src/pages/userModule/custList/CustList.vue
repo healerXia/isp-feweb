@@ -4,8 +4,8 @@
       <Form-item label="客户名称" prop="custName">
         <input class="descripive" v-model="formItem.custName" filterable placeholder="请输入客户名称"></input>
       </Form-item>
-      <Form-item label="客户编号" prop="custId">
-        <input class="descripive" v-model="formItem.custId" placeholder="请输入客户编号"></input>
+      <Form-item label="客户编号" prop="custCode">
+        <input class="descripive" v-model="formItem.custCode" placeholder="请输入客户编号"></input>
       </Form-item>
       <Form-item label="主营品牌" prop="serviceList">    
         <Select 
@@ -81,7 +81,7 @@
       <Table stripe disabled-hover :columns="columns" :data="tableData" @on-selection-change="selectChange"></Table>
       <Page :total="pageObj.total" class="MT30" size="small"
         :current="pageObj.pageNo"
-        :page-size-opts="pageSizeOpts"
+        :page-size-opts="[20,50,100]"
         :page-size="20"
         show-elevator
         show-sizer
@@ -100,21 +100,22 @@
   export default {
     data () {
       return {
+        pageSize:20,
         loading:true,
         pageObj:{
           tatal:0,
-          pageSize:1
+          pageSize:20,
+          pageIndex:1
         },
         indeterminate: false,
         checkAll: false,
         pageSizeOpts:[20],
         totalPages:0,
         formItem:{
-          single: false,
           pageIndex:1,
           pageSize:20,
           custName:'',//客户名称
-          custId:'',//客户编号
+          custCode:'',//客户编号
           brandName:'',//主营品牌
           serviceList: [],//主营品牌list
           area:'',//客户地区
@@ -194,12 +195,6 @@
             value:4
           }
         ],
-        /*tableData:{
-          theadKey:['custName','typeName','brandName','Rstatus'],
-          thead:[
-          "客户名称","客户类别","主营品牌","审核状态","操作"],
-          tableData:[]
-        },*/
         columns:[
           {
             type: 'selection',
@@ -276,26 +271,6 @@
         }
         }).catch((res)=>{
       })
-
-      this.$http.post(config.urlList.getCustList,
-        {pageIndex:1,pageSize:20},
-        {emulateJSON:true}
-        ).then((res)=>{//获取列表
-          if(res.data.errorCode===0){
-            this.pageObj.total=res.data.result.totalCount
-            this.pageObj.pageNo=res.data.result.pageNo
-            this.tableData=res.data.result.resultList;
-            this.dealMess();
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((res)=>{
-      })
-      
       this.$http.get(config.urlList.getBrand+'?pageSize=10').then((res) => {//投放品牌
         if(res.data.errorCode===0){
           this.selectedBrand = res.data.result;
@@ -308,11 +283,49 @@
           });
         }
         }).catch((err) => {
-      })
+      }) 
+      this.getTableData();
     },
+   
     beforeMount(){      
     },
     methods:{
+      getSelectObj(){
+        let obj={}
+        for(let item in this.formItem){
+          if(this.formItem[item] instanceof Array){
+            if(this.formItem[item].length>=1){
+              obj[item]=this.formItem[item].slice(0)
+            }
+          }else{
+            if(this.formItem[item]){          
+              obj[item]=this.formItem[item]         
+            }
+          }
+        }
+        return obj
+      },
+      getTableData(){
+        let obj=this.getSelectObj();
+        this.$http.post(config.urlList.getCustList,
+          obj,
+          {emulateJSON:true}
+          ).then((res)=>{//获取列表
+            if(res.data.errorCode===0){
+              this.pageObj.total=res.data.result.totalCount
+              this.pageObj.pageNo=res.data.result.pageNo
+              this.tableData=res.data.result.resultList;
+              this.dealMess();
+            }
+            else {
+              this.$Modal.info({
+                  title: '提示',
+                  content: res.data.errorMsg
+              });
+            }
+            }).catch((res)=>{
+        })
+      },
       searchBrand(query){
         this.loading=true
         this.$http.get(config.urlList.getBrand+'?pageSize=10&name='+query).then((res) => {//投放品牌
@@ -375,93 +388,27 @@
         }
       },
       pageSizeChange(value){
+        this.pageSize = value;
+        this.formItem.pageIndex=1;
+        this.formItem.pageSize=value;
+        this.getTableData()
       },
       pageChange(num){
-        this.$http.post(config.urlList.getCustList,
-        {pageIndex:num,pageSize:20},
-        {emulateJSON:true}
-        ).then((res)=>{//获取列表
-          if(res.data.errorCode===0){
-            this.pageObj.total=res.data.result.totalCount
-            this.pageObj.pageNo=res.data.result.pageNo
-            this.tableData=res.data.result.resultList;
-            this.dealMess();
-          }
-          else {
-            this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-            });
-          }
-          }).catch((res)=>{
-        })
-      },
-      toParam(objs){
-        var str=""
-        for(let item in objs){
-          if(objs[item]){
-            let a=objs[item]
-            a=(a+"").replace(/(^\s*)|(\s*$)/g,"")
-            str=str+item+"="+a+'&';
-          }
-        }
-        str=str.substring(0,str.length-1) ;
-        return str;
+        this.formItem.pageIndex=num
+        this.formItem.pageSize=this.pageSize?this.pageSize:20;
+        this.getTableData()
       },
       searchMess(){
         this.formItem.pageIndex=1
-        this.formItem.pageSize=20
-        let str=this.toParam(this.formItem);
-        let obj ={}
-        if(this.formItem.typeId!=""){
-          obj.typeId=this.formItem.typeId
-        }
-        if(this.formItem.custName!=""){
-          obj.custName=this.formItem.custName
-        }
-        if(this.formItem.status!=""){
-          obj.status=this.formItem.status
-        }
-        if(this.formItem.custId!=""){
-          obj.custCode=this.formItem.custId
-        }
-        if(this.formItem.provinceId!=""){
-          obj.provinceId=this.formItem.provinceId
-        }
-        if(this.formItem.countyId!=""){
-          obj.countyId=this.formItem.countyId
-        }
-        if(this.formItem.serviceList.length>0){
-          obj.serviceList=this.formItem.serviceList
-        }
-
-        obj.pageSize=20;
-        obj.pageIndex=1;
-        this.$http.post(config.urlList.getCustList,
-          obj,
-          {emulateJSON:true}).then((res)=>{
-            if(res.data.errorCode===0){
-              this.pageObj.total=res.data.result.totalCount
-              this.pageObj.pageNo=res.data.result.pageNo
-              this.totalPages=res.data.result.totalCount;
-              this.tableData=res.data.result.resultList;
-              this.dealMess()
-            }
-            else {
-              this.$Modal.info({
-                title: '提示',
-                content: res.data.errorMsg
-              });
-            }
-          });
+        this.formItem.pageSize=this.pageSize?this.pageSize:20;
+        this.getTableData()
       },
       //重置
       reset (name) {
         this.$refs.brand.selectedMultiple=[];
         this.formItem = {
-          single: false,
           custName:'',//客户名称
-          custId:'',//客户编号
+          custCode:'',//客户编号
           brandName:'',//主营品牌
           serviceList: [],//主营品牌list
           area:'',//客户地区
@@ -491,8 +438,8 @@
               }
               else {
                 this.$Modal.info({
-                    title: '提示',
-                    content: res.data.errorMsg
+                  title: '提示',
+                  content: res.data.errorMsg
                 });
               }
           }).catch((res)=>{})
@@ -516,20 +463,7 @@
             }
           }).catch((res)=>{})
         }
-      },
-      InfoList(value){
-        this.$http.get(config.urlList.getCustList+"?pId="+value+"&pageSize=100"). then((res)=>{
-            if(res.data.errorCode===0){
-              this.tableData = res.data.result ;            
-            }
-            else {
-              this.$Modal.info({
-                  title: '提示',
-                  content: res.data.errorMsg
-              });
-            }
-          }).catch((res)=>{})
-      },
+      }
     }
   }
 </script>
